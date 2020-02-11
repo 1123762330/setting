@@ -1,0 +1,174 @@
+server:
+  port: 8982
+  compression:
+    enabled: true
+    min-response-size: 1
+    mime-types:
+    - image/png
+    - image/jpeg
+    - image/jpg
+    - text/html
+    - application/javascript
+    - text/css
+    - application/octet-stream
+    - application/json
+---
+spring:
+  application:
+    name: bmpos-api-eth
+---
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    prefer-ip-address: true
+  client:
+    registryFetchIntervalSeconds: 5
+    service-url:
+      defaultZone: http://172.17.49.223:9601/eureka/
+      #defaultZone: http://172.17.49.223:9601/eureka/
+---
+spring:
+  datasource:
+    multiplenames: ds2
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 特别注意：java 9以后需要将com.mysql.jdbc.Driver  改为  com.mysql.cj.jdbc.Driver即可
+      # 否则报错：Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      #基本属性
+      url: jdbc:mysql://127.0.0.1:3306/bpos_eth?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      #url: jdbc:mysql://59.110.233.3:43306/bpos_eth?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      username: root
+      #password: xO2UQ1yqZ54fR8M0
+      password: ethmaridb#$66kk
+      #配置初始化大小/最小/最大[仅用于测试，生成环境需要修改哦]
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      #指定获取连接时连接校验的sql查询语句
+      validation-query: SELECT 'x'
+      #验证连接的有效性
+      test-while-idle: true
+      #获取连接时候验证，会影响性能（不建议true）
+      test-on-borrow: false
+      #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+    ds2:
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        # 特别注意：java 9以后需要将com.mysql.jdbc.Driver  改为  com.mysql.cj.jdbc.Driver即可
+        # 否则报错：Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        #基本属性
+        url: jdbc:mysql://47.110.139.160:3306/bpos?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+        username: root
+        password: mysql#cbQbmp
+        #配置初始化大小/最小/最大[仅用于测试，生成环境需要修改哦]
+        initial-size: 1
+        min-idle: 1
+        max-active: 20
+        #获取连接等待超时时间
+        max-wait: 60000
+        #间隔多久进行一次检测，检测需要关闭的空闲连接
+        time-between-eviction-runs-millis: 60000
+        #一个连接在池中最小生存的时间
+        min-evictable-idle-time-millis: 300000
+        #指定获取连接时连接校验的sql查询语句
+        validation-query: SELECT 'x'
+        #验证连接的有效性
+        test-while-idle: true
+        #获取连接时候验证，会影响性能（不建议true）
+        test-on-borrow: false
+        #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+        pool-prepared-statements: false
+        max-pool-prepared-statement-per-connection-size: 20
+---
+#mybatis:
+ # mapper-locations: classpath:mapper/*Mapper.xml
+  #type-aliases-package: com.xn.bmpos.api.bmposapi.domain.model
+---
+spring:
+  redis: #数据源1
+    host: 47.110.139.160
+    port: 6379
+    password: root123
+    database: 0
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: -1
+        max-idle: 16
+        min-idle: 8
+    timeout: 90000ms
+  redis2: #数据源2
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 1
+---
+feign:
+  hystrix:
+    enabled: true //feign开启hystrix支持
+hystrix:
+  threadpool:
+    default:
+      coreSize: 200 #并发执行的最大线程数，默认10
+      maxQueueSize: 1000 #BlockingQueue的最大队列数
+      queueSizeRejectionThreshold: 800 #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: THREAD
+          semaphore:
+            maxConcurrentRequests: 1000
+          thread:
+            timeoutInMilliseconds: 300000
+#ribbon的超时时间, 防止feign调用超时
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 15000
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  OkToRetryOnAllOperations: false  #是否所有操作都重试
+---
+http:
+  maxTotal: 100
+  defaultMaxPerRoute: 50
+  connectTimeout: 1000
+  connectionRequestTimeout: 500
+  socketTimeout: 10000
+  staleConnectionCheckEnabled: true
+---
+httpClient:
+   reward-api:  http://192.168.0.122:8981
+   account-ip:  http://192.168.0.44:8766
+---
+#pagehelper分页插件配置
+pagehelper:
+  auto-dialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: countSql
+---
+#配置springboot缓存
+spring:
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:/ehcache.xml
+#是否开启节点2 on/off
+isOffjiedian2: off
+#连接高刚的程序rpc_name
+AccountSharesAPI:
+  Name: stream-statistics-read-ltc
+StreamBmposAPI:
+  Name: stream-bmpos-api-ltc

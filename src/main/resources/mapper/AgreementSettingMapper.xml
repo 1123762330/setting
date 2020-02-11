@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.AgreementSettingMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.AgreementSetting">
+    <!--@mbg.generated-->
+    <!--@Table agreement_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="agreementName" jdbcType="VARCHAR" property="agreementname" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, agreementName, `path`, isDelete, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from agreement_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from agreement_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting">
+    <!--@mbg.generated-->
+    insert into agreement_setting (id, agreementName, `path`, 
+      isDelete, createTime, updateTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{agreementname,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting">
+    <!--@mbg.generated-->
+    insert into agreement_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="agreementname != null">
+        agreementName,
+      </if>
+      <if test="path != null">
+        `path`,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="agreementname != null">
+        #{agreementname,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting">
+    <!--@mbg.generated-->
+    update agreement_setting
+    <set>
+      <if test="agreementname != null">
+        agreementName = #{agreementname,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        `path` = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting">
+    <!--@mbg.generated-->
+    update agreement_setting
+    set agreementName = #{agreementname,jdbcType=VARCHAR},
+      `path` = #{path,jdbcType=VARCHAR},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  软删除-->
+  <update id="updateById">
+    update agreement_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  按照条件搜索列表-->
+  <select id="selectByOther" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from agreement_setting
+    <where>
+      isDelete = 0
+      <if test="keyWord != null">
+        AND (agreementName like #{keyWord} or `path` like #{keyWord})
+      </if>
+    </where>
+  </select>
+
+  <!--  根据厂房ID查询矿机架列表-->
+  <select id="selectAgreementMap" resultType="java.util.HashMap">
+    select id,agreementName FROM agreement_setting where  isDelete=0
+  </select>
+</mapper>

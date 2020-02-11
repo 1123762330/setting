@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.WorkerbrandSetting">
+    <!--@mbg.generated-->
+    <!--@Table workerbrand_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="workerName" jdbcType="VARCHAR" property="workername" />
+    <result column="workerType" jdbcType="VARCHAR" property="workertype" />
+    <result column="business" jdbcType="VARCHAR" property="business" />
+    <result column="workerSize" jdbcType="VARCHAR" property="workersize" />
+    <result column="powerWaste" jdbcType="VARCHAR" property="powerwaste" />
+    <result column="difficulty" jdbcType="VARCHAR" property="difficulty" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, workerName, workerType, business, workerSize, powerWaste, difficulty, isDelete, 
+    createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from workerbrand_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from workerbrand_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerbrandSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into workerbrand_setting (workerName, workerType, business, 
+      workerSize, powerWaste, difficulty, 
+      isDelete, createTime, updateTime
+      )
+    values (#{workername,jdbcType=VARCHAR}, #{workertype,jdbcType=VARCHAR}, #{business,jdbcType=VARCHAR}, 
+      #{workersize,jdbcType=VARCHAR}, #{powerwaste,jdbcType=VARCHAR}, #{difficulty,jdbcType=VARCHAR}, 
+      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerbrandSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into workerbrand_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workername != null">
+        workerName,
+      </if>
+      <if test="workertype != null">
+        workerType,
+      </if>
+      <if test="business != null">
+        business,
+      </if>
+      <if test="workersize != null">
+        workerSize,
+      </if>
+      <if test="powerwaste != null">
+        powerWaste,
+      </if>
+      <if test="difficulty != null">
+        difficulty,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workername != null">
+        #{workername,jdbcType=VARCHAR},
+      </if>
+      <if test="workertype != null">
+        #{workertype,jdbcType=VARCHAR},
+      </if>
+      <if test="business != null">
+        #{business,jdbcType=VARCHAR},
+      </if>
+      <if test="workersize != null">
+        #{workersize,jdbcType=VARCHAR},
+      </if>
+      <if test="powerwaste != null">
+        #{powerwaste,jdbcType=VARCHAR},
+      </if>
+      <if test="difficulty != null">
+        #{difficulty,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.WorkerbrandSetting">
+    <!--@mbg.generated-->
+    update workerbrand_setting
+    <set>
+      <if test="workername != null">
+        workerName = #{workername,jdbcType=VARCHAR},
+      </if>
+      <if test="workertype != null">
+        workerType = #{workertype,jdbcType=VARCHAR},
+      </if>
+      <if test="business != null">
+        business = #{business,jdbcType=VARCHAR},
+      </if>
+      <if test="workersize != null">
+        workerSize = #{workersize,jdbcType=VARCHAR},
+      </if>
+      <if test="powerwaste != null">
+        powerWaste = #{powerwaste,jdbcType=VARCHAR},
+      </if>
+      <if test="difficulty != null">
+        difficulty = #{difficulty,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.WorkerbrandSetting">
+    <!--@mbg.generated-->
+    update workerbrand_setting
+    set workerName = #{workername,jdbcType=VARCHAR},
+      workerType = #{workertype,jdbcType=VARCHAR},
+      business = #{business,jdbcType=VARCHAR},
+      workerSize = #{workersize,jdbcType=VARCHAR},
+      powerWaste = #{powerwaste,jdbcType=VARCHAR},
+      difficulty = #{difficulty,jdbcType=VARCHAR},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+<!--  软删除-->
+  <update id="updateById">
+    update workerbrand_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  根据条件查询矿机品牌-->
+  <select id="selectByOther" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from workerbrand_setting
+    <where>
+      isDelete = 0
+      <if test="keyWord != null">
+        AND (workerName like #{keyWord} or `workerType` like #{keyWord} or `business` like #{keyWord}
+            or `workerSize` like #{keyWord} or `powerWaste` like #{keyWord} or difficulty like #{keyWord})
+      </if>
+    </where>
+  </select>
+</mapper>

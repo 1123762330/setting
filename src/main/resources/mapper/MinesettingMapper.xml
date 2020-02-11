@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.MineSettingMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.MineSetting">
+    <!--@mbg.generated-->
+    <!--@Table mine_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mineName" jdbcType="VARCHAR" property="minename" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, mineName, description, isDelete, updateTime, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from mine_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from mine_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into mine_setting (mineName, description, isDelete, 
+      updateTime, createTime)
+    values (#{minename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into mine_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="minename != null">
+        mineName,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="minename != null">
+        #{minename,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.MineSetting">
+    <!--@mbg.generated-->
+    update mine_setting
+    <set>
+      <if test="minename != null">
+        mineName = #{minename,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.MineSetting">
+    <!--@mbg.generated-->
+    update mine_setting
+    set mineName = #{minename,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  软删除-->
+  <update id="updateById">
+    update mine_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  根据搜索条件查询列表-->
+  <select id="selectByOther" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mine_setting
+    <where>
+      isDelete = 0
+      <if test="keyWord != null">
+        AND (poolName like #{keyWord} or `description` like #{keyWord})
+      </if>
+    </where>
+  </select>
+</mapper>

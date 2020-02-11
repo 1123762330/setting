@@ -1,0 +1,80 @@
+package com.xnpool.setting.controller;
+
+import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.pojo.PowerSetting;
+import com.xnpool.setting.service.PowerSettingService;
+import com.xnpool.setting.utils.ResponseResult;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+
+/**
+ * 电费设置
+ *
+ * @author zly
+ * @version 1.0
+ * @date 2020/2/6 14:15
+ */
+@RestController
+@Slf4j
+@RequestMapping("/api/v1/powerSetting")
+public class PowerSettingController extends BaseController {
+    @Autowired
+    private PowerSettingService powerSettingService;
+
+    /**
+     * @return
+     * @Description 添加电费
+     * @Author zly
+     * @Date 15:28 2020/2/6
+     * @Param
+     */
+    @PostMapping("/addPowerRate")
+    public ResponseResult addPowerRate(PowerSetting powerSetting) {
+        powerSettingService.insertSelective(powerSetting);
+        return new ResponseResult(SUCCESS);
+    }
+
+    /**
+     * @return
+     * @Description 修改电费
+     * @Author zly
+     * @Date 15:33 2020/2/6
+     * @Param
+     */
+    @PutMapping("/updatePowerRate")
+    public ResponseResult updatePowerRate(PowerSetting powerSetting) {
+        powerSettingService.updateByPrimaryKeySelective(powerSetting);
+        return new ResponseResult(SUCCESS);
+    }
+
+    /**
+     * @return
+     * @Description 删除电费
+     * @Author zly
+     * @Date 15:34 2020/2/6
+     * @Param
+     */
+    @DeleteMapping("/deletePowerRateById")
+    public ResponseResult deletePowerRateById(int id) {
+        //删除电费之前应该先查查有没有应用到这个电费的地方
+        powerSettingService.updateById(id);
+        return new ResponseResult(SUCCESS);
+    }
+
+    /**
+     * @return
+     * @Description 查询电费列表
+     * @Author zly
+     * @Date 15:52 2020/2/6
+     * @Param
+     */
+    @GetMapping("/selectPowerRateList")
+    public ResponseResult selectFrameList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        PageInfo<PowerSetting> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize);
+        return new ResponseResult(SUCCESS, pageInfo);
+    }
+}

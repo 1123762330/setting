@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.FeeSettingMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.FeeSetting">
+    <!--@mbg.generated-->
+    <!--@Table fee_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="feePrice" jdbcType="DOUBLE" property="feeprice" />
+    <result column="feeName" jdbcType="VARCHAR" property="feename" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, feePrice, feeName, isDelete, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from fee_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from fee_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FeeSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into fee_setting (feePrice, feeName, isDelete, 
+      createTime, updateTime)
+    values (#{feeprice,jdbcType=DOUBLE}, #{feename,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FeeSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into fee_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="feeprice != null">
+        feePrice,
+      </if>
+      <if test="feename != null">
+        feeName,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="feeprice != null">
+        #{feeprice,jdbcType=DOUBLE},
+      </if>
+      <if test="feename != null">
+        #{feename,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.FeeSetting">
+    <!--@mbg.generated-->
+    update fee_setting
+    <set>
+      <if test="feeprice != null">
+        feePrice = #{feeprice,jdbcType=DOUBLE},
+      </if>
+      <if test="feename != null">
+        feeName = #{feename,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.FeeSetting">
+    <!--@mbg.generated-->
+    update fee_setting
+    set feePrice = #{feeprice,jdbcType=DOUBLE},
+      feeName = #{feename,jdbcType=VARCHAR},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--  软删除-->
+  <update id="updateById">
+    update fee_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--  根据条件进行查询-->
+  <select id="selectByOther" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from fee_setting
+    <where>
+      isDelete = 0
+      <if test="keyWord != null">
+        AND (feePrice like #{keyWord} or `feeName` like #{keyWord})
+      </if>
+    </where>
+  </select>
+</mapper>

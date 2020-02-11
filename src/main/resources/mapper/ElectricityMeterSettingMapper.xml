@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.ElectricityMeterSettingMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.ElectricityMeterSetting">
+    <!--@mbg.generated-->
+    <!--@Table electricity_meter_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="electricity_meter_Name" jdbcType="VARCHAR" property="electricityMeterName" />
+    <result column="mineId" jdbcType="INTEGER" property="mineid" />
+    <result column="factoryId" jdbcType="INTEGER" property="factoryid" />
+    <result column="customerId" jdbcType="INTEGER" property="customerid" />
+    <result column="electricityStart" jdbcType="VARCHAR" property="electricitystart" />
+    <result column="line_loss" jdbcType="DOUBLE" property="lineLoss" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, electricity_meter_Name, mineId, factoryId, customerId, electricityStart, line_loss, 
+    isDelete, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from electricity_meter_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from electricity_meter_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into electricity_meter_setting (electricity_meter_Name, mineId, factoryId, 
+      customerId, electricityStart, line_loss, 
+      isDelete, createTime, updateTime
+      )
+    values (#{electricityMeterName,jdbcType=VARCHAR}, #{mineid,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, 
+      #{customerid,jdbcType=INTEGER}, #{electricitystart,jdbcType=VARCHAR}, #{lineLoss,jdbcType=DOUBLE}, 
+      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into electricity_meter_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="electricityMeterName != null">
+        electricity_meter_Name,
+      </if>
+      <if test="mineid != null">
+        mineId,
+      </if>
+      <if test="factoryid != null">
+        factoryId,
+      </if>
+      <if test="customerid != null">
+        customerId,
+      </if>
+      <if test="electricitystart != null">
+        electricityStart,
+      </if>
+      <if test="lineLoss != null">
+        line_loss,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="electricityMeterName != null">
+        #{electricityMeterName,jdbcType=VARCHAR},
+      </if>
+      <if test="mineid != null">
+        #{mineid,jdbcType=INTEGER},
+      </if>
+      <if test="factoryid != null">
+        #{factoryid,jdbcType=INTEGER},
+      </if>
+      <if test="customerid != null">
+        #{customerid,jdbcType=INTEGER},
+      </if>
+      <if test="electricitystart != null">
+        #{electricitystart,jdbcType=VARCHAR},
+      </if>
+      <if test="lineLoss != null">
+        #{lineLoss,jdbcType=DOUBLE},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting">
+    <!--@mbg.generated-->
+    update electricity_meter_setting
+    <set>
+      <if test="electricityMeterName != null">
+        electricity_meter_Name = #{electricityMeterName,jdbcType=VARCHAR},
+      </if>
+      <if test="mineid != null">
+        mineId = #{mineid,jdbcType=INTEGER},
+      </if>
+      <if test="factoryid != null">
+        factoryId = #{factoryid,jdbcType=INTEGER},
+      </if>
+      <if test="customerid != null">
+        customerId = #{customerid,jdbcType=INTEGER},
+      </if>
+      <if test="electricitystart != null">
+        electricityStart = #{electricitystart,jdbcType=VARCHAR},
+      </if>
+      <if test="lineLoss != null">
+        line_loss = #{lineLoss,jdbcType=DOUBLE},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting">
+    <!--@mbg.generated-->
+    update electricity_meter_setting
+    set electricity_meter_Name = #{electricityMeterName,jdbcType=VARCHAR},
+      mineId = #{mineid,jdbcType=INTEGER},
+      factoryId = #{factoryid,jdbcType=INTEGER},
+      customerId = #{customerid,jdbcType=INTEGER},
+      electricityStart = #{electricitystart,jdbcType=VARCHAR},
+      line_loss = #{lineLoss,jdbcType=DOUBLE},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--  软删除-->
+  <update id="updateById">
+    update electricity_meter_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+<!--  根据条件查询电表列表-->
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample">
+      SELECT
+      electricity_meter_setting.id,
+      electricity_meter_setting.electricity_meter_Name AS electricityMeterName,
+      electricity_meter_setting.mineId,
+      electricity_meter_setting.factoryId,
+      electricity_meter_setting.customerId,
+      electricity_meter_setting.electricityStart,
+      electricity_meter_setting.line_loss,
+      electricity_meter_setting.createTime,
+      electricity_meter_setting.updateTime,
+      mine_setting.mineName,
+      factory_house.factoryName,
+      customer_setting.userId
+      FROM
+      electricity_meter_setting,
+      mine_setting,
+      factory_house,
+      customer_setting
+      <where>
+        electricity_meter_setting.isDelete = 0
+        <if test="keyWord != null">
+          AND (electricity_meter_setting.electricity_meter_Name like #{keyWord} )
+        </if>
+        AND electricity_meter_setting.mineId = mine_setting.id
+        AND electricity_meter_setting.factoryId = factory_house.id
+        AND electricity_meter_setting.customerId = customer_setting.id
+      </where>
+    </select>
+</mapper>

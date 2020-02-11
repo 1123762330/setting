@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.FactoryHouseMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.FactoryHouse">
+    <!--@mbg.generated-->
+    <!--@Table factory_house-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="factoryName" jdbcType="VARCHAR" property="factoryname" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="mineId" jdbcType="INTEGER" property="mineid" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, factoryName, description, mineId, createTime, updateTime, isDelete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from factory_house
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from factory_house
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FactoryHouse" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into factory_house (factoryName, description, mineId, 
+      createTime, updateTime, isDelete
+      )
+    values (#{factoryname,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{mineid,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{isdelete,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FactoryHouse" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into factory_house
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="factoryname != null">
+        factoryName,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="mineid != null">
+        mineId,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="factoryname != null">
+        #{factoryname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="mineid != null">
+        #{mineid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.FactoryHouse">
+    <!--@mbg.generated-->
+    update factory_house
+    <set>
+      <if test="factoryname != null">
+        factoryName = #{factoryname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="mineid != null">
+        mineId = #{mineid,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.FactoryHouse">
+    <!--@mbg.generated-->
+    update factory_house
+    set factoryName = #{factoryname,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      mineId = #{mineid,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      isDelete = #{isdelete,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  软删除厂房-->
+  <update id="updateById">
+    update factory_house set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  根据条件进行查询-->
+  <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.FactoryHouseExample">
+    select
+    f.id,f.factoryName,f.description,f.mineId,f.createTime,f.updateTime,m.poolName
+    FROM
+    factory_house AS f
+    JOIN mine_setting AS m
+    <where>
+      f.isDelete = 0
+      <if test="keyWord != null">
+      AND ( f.factoryName like #{keyWord} or f.description like #{keyWord})
+      </if>
+      AND f.mineId = m.id
+    </where>
+  </select>
+
+<!--  根据矿场ID查询厂房-->
+  <select id="selectByMineId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from factory_house
+    where mineId = #{mineId,jdbcType=INTEGER} AND isDelete=0
+  </select>
+
+<!--  根据矿场ID查询厂房列表-->
+  <select id="selectFactoryNameByMineId" resultType="hashmap">
+    select id,factoryName FROM factory_house where mineId=#{mineId} AND isDelete=0
+  </select>
+</mapper>
