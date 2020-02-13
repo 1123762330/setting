@@ -146,7 +146,7 @@
       frame_setting.createTime,
       frame_setting.updateTime,
       factory_house.factoryName,
-      mine_setting.poolName
+      mine_setting.mineName
     FROM
       frame_setting,
       factory_house,

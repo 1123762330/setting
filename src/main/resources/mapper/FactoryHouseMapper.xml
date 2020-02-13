@@ -125,17 +125,23 @@
 
 <!--  根据条件进行查询-->
   <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.FactoryHouseExample">
-    select
-    f.id,f.factoryName,f.description,f.mineId,f.createTime,f.updateTime,m.poolName
+    SELECT
+    factory_house.id,
+    factory_house.factoryName,
+    factory_house.description,
+    factory_house.mineId,
+    factory_house.createTime,
+    factory_house.updateTime,
+    mine_setting.mineName
     FROM
-    factory_house AS f
-    JOIN mine_setting AS m
+    factory_house,
+    mine_setting
     <where>
-      f.isDelete = 0
-      <if test="keyWord != null">
-      AND ( f.factoryName like #{keyWord} or f.description like #{keyWord})
-      </if>
-      AND f.mineId = m.id
+    factory_house.isDelete = 0
+    <if test="keyWord != null">
+    AND ( factory_house.factoryName like #{keyWord} or factory_house.description like #{keyWord})
+    </if>
+    AND factory_house.mineId = mine_setting.id
     </where>
   </select>
 

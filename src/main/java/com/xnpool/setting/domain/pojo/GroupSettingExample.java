@@ -79,11 +79,6 @@ public class GroupSettingExample implements Serializable {
     private String framename;
 
     /**
-     * 是否删除,0:否,1:是
-     */
-    private Integer isdelete;
-
-    /**
      * 创建时间
      */
     private Date createtime;

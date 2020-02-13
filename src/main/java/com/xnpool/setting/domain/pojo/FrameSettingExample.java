@@ -34,6 +34,16 @@ public class FrameSettingExample implements Serializable {
     private Integer factoryid;
 
     /**
+     * 厂房名称
+     */
+    private String factoryname;
+
+    /**
+     * 矿场名称
+     */
+    private String minename;
+
+    /**
     * 矿场Id
     */
     private Integer mineid;
@@ -47,19 +57,4 @@ public class FrameSettingExample implements Serializable {
     * 修改时间
     */
     private Date updatetime;
-
-    /**
-    * 是否删除,0:否,1:是
-    */
-    private Integer isdelete;
-
-    /**
-     * 所属厂房
-     */
-    private String factoryname;
-
-    /**
-     * 所属矿场
-     */
-    private String poolName;
 }

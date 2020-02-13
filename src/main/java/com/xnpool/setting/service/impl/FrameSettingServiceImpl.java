@@ -103,10 +103,10 @@ public class FrameSettingServiceImpl implements FrameSettingService {
             HashMap<Integer, String> resultMap = new HashMap<>();
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                StringBuffer  frameName = (StringBuffer) hashMap.get("frameName");
-                StringBuffer number = (StringBuffer) hashMap.get("number");
-                String resultStr=frameName.append(" 1-"+number+"层").toString();
-                resultMap.put(id, resultStr);
+                StringBuffer  frameName = new StringBuffer(hashMap.get("frameName").toString());
+                StringBuffer number = new StringBuffer(hashMap.get("number").toString());
+                StringBuffer resultStr=frameName.append(" 1-"+number+"层");
+                resultMap.put(id, resultStr.toString());
             });
             return resultMap;
         }

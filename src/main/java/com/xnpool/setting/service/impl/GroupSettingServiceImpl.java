@@ -103,6 +103,7 @@ public class GroupSettingServiceImpl implements GroupSettingService {
         List<GroupSettingExample> groupSettings = groupSettingMapper.selectByOther(keyWord);
         //查询IP字段Map
         HashMap<Integer, String> ipStartMap = ipSettingService.selectByIPStart();
+        System.out.println(ipStartMap);
         //解決包含多个属性集合
         groupSettings.forEach(groupSettingExample -> {
             //包含多个IP
@@ -111,7 +112,7 @@ public class GroupSettingServiceImpl implements GroupSettingService {
                 //如果包含多个IP
                 String[] split = ipid.split(",");
                 for (int i = 0; i < split.length; i++) {
-                    String ipStr = ipStartMap.get(split[i]);
+                    String ipStr = ipStartMap.get(Integer.valueOf(split[i]));
                     if (groupSettingExample.getIpStr() != null) {
                         String manyIPStart = groupSettingExample.getIpStr() + "," + ipStr;
                         groupSettingExample.setIpStr(manyIPStart);

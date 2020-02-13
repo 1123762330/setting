@@ -142,7 +142,7 @@
 
 <!--  软删除-->
   <update id="updateById">
-    update group_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+    update group_setting set isDelete = 1 where groupId = #{id,jdbcType=INTEGER}
   </update>
 
 <!--  根据条件查询列表-->
