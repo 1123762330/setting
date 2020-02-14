@@ -1,8 +1,13 @@
 package com.xnpool.setting;
 import java.util.Date;
+import java.util.List;
 
+import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.controller.MineSettingController;
+import com.xnpool.setting.domain.mapper.IpSettingMapper;
+import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +20,21 @@ public class SettingApplicationTests {
     @Autowired
     private MineSettingController minesettingController;
 
+    @Autowired
+    private ApiContext apiContext;
+
+    @Autowired
+    private IpSettingMapper ipSettingMapper;
+
+    @Before
+    public void before() {
+        // 在上下文中设置当前服务商的ID
+        apiContext.setTenantId(112233L);
+    }
     @Test
     public void addMineSetting() {
-        MineSetting minesetting = new MineSetting();
-        minesetting.setMinename("小鸟一号");
-        minesetting.setDescription("新疆");
-        minesetting.setIsdelete(0);
-        minesetting.setUpdatetime(new Date());
-        minesetting.setCreatetime(new Date());
-        minesettingController.addMineSetting(minesetting);
+        List<IpSetting> ipSettings = ipSettingMapper.selectByOther(null);
+        System.out.println(ipSettings);
     }
 
     @Test

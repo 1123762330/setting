@@ -29,9 +29,9 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into mine_setting (mineName, description, isDelete, 
+    insert into mine_setting (mineName, description, isDelete,
       updateTime, createTime)
-    values (#{minename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
+    values (#{minename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER},
       #{updatetime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">

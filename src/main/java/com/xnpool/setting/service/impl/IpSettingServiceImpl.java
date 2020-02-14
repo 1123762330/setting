@@ -2,6 +2,8 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.config.ApiContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.pojo.IpSetting;
@@ -20,8 +22,11 @@ import java.util.List;
 @Service
 public class IpSettingServiceImpl implements IpSettingService {
 
-    @Resource
+    @Autowired
     private IpSettingMapper ipSettingMapper;
+
+    @Autowired
+    private ApiContext apiContext;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -64,6 +69,7 @@ public class IpSettingServiceImpl implements IpSettingService {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum,pageSize);
+        apiContext.setTenantId(112233L);
         List<IpSetting> ipSettings = ipSettingMapper.selectByOther(keyWord);
         PageInfo<IpSetting> pageInfo = new PageInfo<>(ipSettings);
         return pageInfo;

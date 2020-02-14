@@ -5,6 +5,7 @@ import com.xnpool.setting.common.PassToken;
 import com.xnpool.setting.common.UserLoginToken;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -25,6 +26,10 @@ import java.lang.reflect.Method;
 @Slf4j
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
+
+	@Autowired
+	private ApiContext apiContext;
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object){
 		response.setCharacterEncoding("UTF-8");
@@ -34,6 +39,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 		String token = request.getHeader("token");// 从 http 请求头中取出 token
+		//从登录用户的token中获取企业ID,
+		apiContext.setTenantId(112233L);
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){
 			return true;

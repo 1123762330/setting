@@ -1,6 +1,14 @@
 server:
   port: 8765
 ---
+logging:
+  level:
+    com:
+     xnpool:
+      setting:
+       domain:
+        mapper: debug
+---
 spring:
   application:
     name: setting
@@ -39,9 +47,29 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
 ---
 #mybatis配置
-mybatis:
- mapper-locations: classpath:mapper/*Mapper.xml
- type-aliases-package: com.xnpool.setting.domain
+#mybatis:
+#  mapper-locations: classpath:mapper/*Mapper.xml
+#  type-aliases-package: com.xnpool.setting.domain
+#  configuration:
+#    map-underscore-to-camel-case: true
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  typeAliasesPackage:   com.xnpool.setting.domain
+  global-config:
+    db-config:
+      id-type: AUTO
+      field-strategy: not_empty
+      column-underline: true
+      #capital-mode: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      db-type: mysql
+    refresh: true
+#开启注解,过滤某些不需要启用多租户的方法
+    sql-parser-cache: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
 ---
 spring:
   redis: #数据源1
