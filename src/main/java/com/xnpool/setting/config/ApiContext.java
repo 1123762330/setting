@@ -15,8 +15,8 @@ public class ApiContext {
     private static final String KEY_CURRENT_TENANT_ID = "KEY_CURRENT_TENANT_ID";
     private static final Map<String, Object> mContext = new HashMap<>();
 
-    public void setTenantId(Long providerId) {
-        mContext.put(KEY_CURRENT_TENANT_ID, providerId);
+    public void setTenantId(Long tenantId) {
+        mContext.put(KEY_CURRENT_TENANT_ID, tenantId);
     }
 
     public Long getTenantId() {
