@@ -12,10 +12,13 @@
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
     <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="detailed" jdbcType="VARCHAR" property="detailed" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, frameName, `number`, factoryId, mineId, createTime, updateTime, isDelete
+    id, frameName, `number`, factoryId, mineId, createTime, updateTime, isDelete, tenant_id, 
+    detailed
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -33,10 +36,12 @@
     <!--@mbg.generated-->
     insert into frame_setting (frameName, `number`, factoryId, 
       mineId, createTime, updateTime, 
-      isDelete)
+      isDelete, tenant_id, detailed
+      )
     values (#{framename,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, 
       #{mineid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
-      #{isdelete,jdbcType=INTEGER})
+      #{isdelete,jdbcType=INTEGER}, #{tenantId,jdbcType=BIGINT}, #{detailed,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FrameSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -63,6 +68,12 @@
       <if test="isdelete != null">
         isDelete,
       </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="detailed != null">
+        detailed,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="framename != null">
@@ -85,6 +96,12 @@
       </if>
       <if test="isdelete != null">
         #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="detailed != null">
+        #{detailed,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -113,6 +130,12 @@
       <if test="isdelete != null">
         isDelete = #{isdelete,jdbcType=INTEGER},
       </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="detailed != null">
+        detailed = #{detailed,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -125,7 +148,9 @@
       mineId = #{mineid,jdbcType=INTEGER},
       createTime = #{createtime,jdbcType=TIMESTAMP},
       updateTime = #{updatetime,jdbcType=TIMESTAMP},
-      isDelete = #{isdelete,jdbcType=INTEGER}
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      detailed = #{detailed,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

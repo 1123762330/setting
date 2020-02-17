@@ -158,8 +158,7 @@
     group_setting.updateTime,
     mine_setting.mineName,
     factory_house.factoryName,
-    frame_setting.frameName,
-    frame_setting.number,
+    frame_setting.detailed AS framenameDetailed,
     ip_setting.startIP,
     ip_setting.endIP
     FROM

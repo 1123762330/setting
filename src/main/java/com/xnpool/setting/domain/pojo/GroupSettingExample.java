@@ -69,14 +69,9 @@ public class GroupSettingExample implements Serializable {
     private String frameid;
 
     /**
-     * 机架层数
+     * 所属机架详细信息
      */
-    private Integer number;
-
-    /**
-     * 所属机架名称
-     */
-    private String framename;
+    private String framenameDetailed;
 
     /**
      * 创建时间

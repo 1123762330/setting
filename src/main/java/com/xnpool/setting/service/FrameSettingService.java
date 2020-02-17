@@ -29,10 +29,11 @@ public interface FrameSettingService {
 
     int updateById(int id);
 
-    PageInfo<FrameSettingExample> selectByOther(String keyWord,int pageNum,int pageSize);
+    PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
     HashMap<Integer, String> selectFrameNameByFactoryId(Integer factoryId);
 
     HashMap<Integer, String> selectFrameNameToGruop(Integer factoryId);
 }
+
 

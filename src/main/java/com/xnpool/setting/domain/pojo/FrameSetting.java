@@ -7,11 +7,10 @@ import lombok.Data;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/6 13:19
+ * @date 2020/2/17 10:53
  */
 @Data
 public class FrameSetting implements Serializable {
-    private static final long serialVersionUID = -5775048747646394409L;
     /**
      * 机架Id
      */
@@ -51,4 +50,16 @@ public class FrameSetting implements Serializable {
      * 是否删除,0:否,1:是
      */
     private Integer isdelete;
+
+    /**
+     * 企业id
+     */
+    private Long tenantId;
+
+    /**
+     * 矿机详细信息
+     */
+    private String detailed;
+
+    private static final long serialVersionUID = 1L;
 }

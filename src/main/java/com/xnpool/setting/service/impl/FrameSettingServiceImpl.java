@@ -37,6 +37,10 @@ public class FrameSettingServiceImpl implements FrameSettingService {
 
     @Override
     public int insertSelective(FrameSetting record) {
+        String framename = record.getFramename();
+        Integer number = record.getNumber();
+        String detailed =framename + " 1-" + number + "层";
+        record.setDetailed(detailed);
         return frameSettingMapper.insertSelective(record);
     }
 
@@ -47,6 +51,10 @@ public class FrameSettingServiceImpl implements FrameSettingService {
 
     @Override
     public int updateByPrimaryKeySelective(FrameSetting record) {
+        String framename = record.getFramename();
+        Integer number = record.getNumber();
+        String detailed =framename + " 1-" + number + "层";
+        record.setDetailed(detailed);
         return frameSettingMapper.updateByPrimaryKeySelective(record);
     }
 
@@ -62,7 +70,7 @@ public class FrameSettingServiceImpl implements FrameSettingService {
     }
 
     @Override
-    public PageInfo<FrameSettingExample> selectByOther(String keyWord,int pageNum,int pageSize) {
+    public PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -89,11 +97,11 @@ public class FrameSettingServiceImpl implements FrameSettingService {
     }
 
     /**
+     * @return
      * @Description 添加分组时需要用到的矿机架列表
      * @Author zly
      * @Date 15:29 2020/2/10
      * @Param
-     * @return
      */
     public HashMap<Integer, String> selectFrameNameToGruop(Integer factoryId) {
         List<HashMap> hashMaps = frameSettingMapper.selectFrameNameByFactoryId(factoryId);
@@ -103,9 +111,9 @@ public class FrameSettingServiceImpl implements FrameSettingService {
             HashMap<Integer, String> resultMap = new HashMap<>();
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                StringBuffer  frameName = new StringBuffer(hashMap.get("frameName").toString());
+                StringBuffer frameName = new StringBuffer(hashMap.get("frameName").toString());
                 StringBuffer number = new StringBuffer(hashMap.get("number").toString());
-                StringBuffer resultStr=frameName.append(" 1-"+number+"层");
+                StringBuffer resultStr = frameName.append(" 1-" + number + "层");
                 resultMap.put(id, resultStr.toString());
             });
             return resultMap;
@@ -113,4 +121,5 @@ public class FrameSettingServiceImpl implements FrameSettingService {
     }
 
 }
+
 

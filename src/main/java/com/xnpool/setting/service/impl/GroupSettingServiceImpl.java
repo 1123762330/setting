@@ -101,6 +101,7 @@ public class GroupSettingServiceImpl implements GroupSettingService {
 
         PageHelper.startPage(pageNum, pageSize);
         List<GroupSettingExample> groupSettings = groupSettingMapper.selectByOther(keyWord);
+        System.out.println(groupSettings);
         //查询IP字段Map
         HashMap<Integer, String> ipStartMap = ipSettingService.selectByIPStart();
         System.out.println(ipStartMap);
@@ -130,23 +131,18 @@ public class GroupSettingServiceImpl implements GroupSettingService {
             String frameid = groupSettingExample.getFrameid();
             if (frameid.contains(",")) {
                 //如果包含多个矿机架Id
-                groupSettingExample.setFramename(null);
+                groupSettingExample.setFramenameDetailed(null);
                 String[] split = frameid.split(",");
                 for (int i = 0; i < split.length; i++) {
                     FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(Integer.valueOf(split[i]));
-                    String framename = frameSetting.getFramename();
-                    Integer number = frameSetting.getNumber();
-                    framename = framename + " 1-" + number + "层";
-                    if (groupSettingExample.getFramename() != null) {
-                        String manyFramename = groupSettingExample.getFramename() + "," + framename;
-                        groupSettingExample.setFramename(manyFramename);
+                    String detailed = frameSetting.getDetailed();
+                    if (groupSettingExample.getFramenameDetailed() != null) {
+                        String manyFramename = groupSettingExample.getFramenameDetailed() + "," + detailed;
+                        groupSettingExample.setFramenameDetailed(manyFramename);
                     } else {
-                        groupSettingExample.setFramename(framename);
+                        groupSettingExample.setFramenameDetailed(detailed);
                     }
                 }
-            } else {
-                String framename = groupSettingExample.getFramename() + " 1-" + groupSettingExample.getNumber() + "层";
-                groupSettingExample.setFramename(framename);
             }
 
             //包含多个厂房Id
