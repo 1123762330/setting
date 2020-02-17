@@ -1,14 +1,6 @@
 server:
   port: 8765
 ---
-logging:
-  level:
-    com:
-     xnpool:
-      setting:
-       domain:
-        mapper: debug
----
 spring:
   application:
     name: setting
