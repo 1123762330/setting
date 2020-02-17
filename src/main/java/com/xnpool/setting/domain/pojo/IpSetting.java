@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class IpSetting implements Serializable {
+    private static final long serialVersionUID = -5641550594650593890L;
     /**
      * 编号
      */
@@ -41,5 +42,4 @@ public class IpSetting implements Serializable {
      */
     private Integer isdelete;
 
-    private static final long serialVersionUID = 1L;
 }

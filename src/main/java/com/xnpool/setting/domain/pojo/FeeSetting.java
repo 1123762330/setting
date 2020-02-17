@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class FeeSetting implements Serializable {
+    private static final long serialVersionUID = 8780220522404594124L;
     private Integer id;
 
     /**
@@ -38,5 +39,4 @@ public class FeeSetting implements Serializable {
     */
     private Date updatetime;
 
-    private static final long serialVersionUID = 1L;
 }

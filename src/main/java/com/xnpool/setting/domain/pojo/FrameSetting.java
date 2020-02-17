@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class FrameSetting implements Serializable {
+    private static final long serialVersionUID = 370100620632075204L;
     /**
      * 机架Id
      */
@@ -61,5 +62,4 @@ public class FrameSetting implements Serializable {
      */
     private String detailed;
 
-    private static final long serialVersionUID = 1L;
 }

@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class PowerSetting implements Serializable {
+    private static final long serialVersionUID = 2274485679294276734L;
     private Integer id;
 
     /**
@@ -38,5 +39,4 @@ public class PowerSetting implements Serializable {
     */
     private Date updatetime;
 
-    private static final long serialVersionUID = 1L;
 }

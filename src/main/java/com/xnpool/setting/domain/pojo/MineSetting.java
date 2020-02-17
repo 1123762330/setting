@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class MineSetting implements Serializable {
+    private static final long serialVersionUID = -3170853676349397757L;
     /**
      * 矿场编号
      */
@@ -41,5 +42,4 @@ public class MineSetting implements Serializable {
      */
     private Date createtime;
 
-    private static final long serialVersionUID = 1L;
 }

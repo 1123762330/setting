@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class CustomerSetting implements Serializable {
+    private static final long serialVersionUID = -794572431017283687L;
     /**
      * 编号
      */
@@ -66,5 +67,4 @@ public class CustomerSetting implements Serializable {
      */
     private Integer managerUserId;
 
-    private static final long serialVersionUID = 1L;
 }
