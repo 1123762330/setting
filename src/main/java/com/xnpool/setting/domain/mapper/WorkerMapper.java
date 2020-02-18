@@ -5,6 +5,7 @@ import com.xnpool.setting.domain.pojo.Worker;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,4 +27,10 @@ public interface WorkerMapper {
     int updateByPrimaryKey(Worker record);
 
     List<Worker> selectByOther(@Param("keyWord") String keyWord);
+
+    void updateComeInByid(@Param("list") List<Integer> list);
+
+    void updateById(@Param("list") List<Integer> list);
+
+    void updateMoveOutByid(@Param("list") List<Integer> list);
 }

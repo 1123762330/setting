@@ -28,5 +28,13 @@ public interface WorkerService {
 
     int updateByPrimaryKey(Worker record);
 
-    PageInfo<WorkerExample>  selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<WorkerExample>  selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
+
+    void updateComeInByid(String ids);
+
+    PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize);
+
+    void updateById(String ids);
+
+    void updateMoveOutByid(String ids);
 }

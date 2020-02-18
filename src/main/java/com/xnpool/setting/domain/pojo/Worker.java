@@ -76,9 +76,4 @@ public class Worker implements Serializable {
     * 更新时间
     */
     private Date updatetime;
-
-    /**
-    * 企业id
-    */
-    private Long tenantId;
 }

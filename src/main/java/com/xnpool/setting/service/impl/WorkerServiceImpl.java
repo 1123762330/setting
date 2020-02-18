@@ -66,8 +66,9 @@ public class WorkerServiceImpl implements WorkerService {
         return workerMapper.updateByPrimaryKey(record);
     }
 
+    //入库列表
     @Override
-    public PageInfo<WorkerExample> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -96,6 +97,69 @@ public class WorkerServiceImpl implements WorkerService {
         }
         PageInfo<WorkerExample> pageInfo = new PageInfo<>(result);
         return pageInfo;
+    }
+
+    //入库操作
+    @Override
+    public void updateComeInByid(String ids) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(ids.contains(",")){
+            //全部入库
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+            }
+        }else {
+            //单个入库
+            list.add(Integer.valueOf(ids));
+        }
+        workerMapper.updateComeInByid(list);
+    }
+
+    //出库列表
+    @Override
+    public PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
+        if (!StringUtils.isEmpty(keyWord)) {
+            keyWord = "%" + keyWord + "%";
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Worker> workers = workerMapper.selectByOther(keyWord);
+        PageInfo<Worker> pageInfo = new PageInfo<>(workers);
+        return pageInfo;
+    }
+
+    //软删除
+    @Override
+    public void updateById(String ids) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(ids.contains(",")){
+            //全部出库
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+            }
+        }else {
+            //单个出库
+            list.add(Integer.valueOf(ids));
+        }
+        workerMapper.updateById(list);
+    }
+
+    //出库操作
+    @Override
+    public void updateMoveOutByid(String ids) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(ids.contains(",")){
+            //全部出库
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+            }
+        }else {
+            //单个出库
+            list.add(Integer.valueOf(ids));
+        }
+        workerMapper.updateMoveOutByid(list);
     }
 
 }

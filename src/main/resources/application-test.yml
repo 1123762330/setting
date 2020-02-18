@@ -60,7 +60,7 @@ mybatis-plus:
 ---
 #mysql语句需要打印就true,不需要打印就false-->注入对应的Bean(打印sql)
   sql:
-  performanceInterceptor: false
+  performanceInterceptor: true
 ---
 spring:
   redis: #数据源1

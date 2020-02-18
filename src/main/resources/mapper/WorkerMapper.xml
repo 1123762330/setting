@@ -17,12 +17,11 @@
     <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
-    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, ip, miner, workerName, factoryName, frameName, groupName, is_onLine, is_come_in, 
-    remarks, isDelete, createTime, updateTime, tenant_id
+    remarks, isDelete, createTime, updateTime
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -41,13 +40,11 @@
     insert into worker (ip, miner, workerName, 
       factoryName, frameName, groupName, 
       is_onLine, is_come_in, remarks, 
-      isDelete, createTime, updateTime, 
-      tenant_id)
+      isDelete, createTime, updateTime)
     values (#{ip,jdbcType=VARCHAR}, #{miner,jdbcType=VARCHAR}, #{workername,jdbcType=VARCHAR}, 
       #{factoryname,jdbcType=VARCHAR}, #{framename,jdbcType=VARCHAR}, #{groupname,jdbcType=VARCHAR}, 
       #{isOnline,jdbcType=INTEGER}, #{isComeIn,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
-      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
-      #{tenantId,jdbcType=BIGINT})
+      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.Worker" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -89,9 +86,6 @@
       <if test="updatetime != null">
         updateTime,
       </if>
-      <if test="tenantId != null">
-        tenant_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ip != null">
@@ -128,10 +122,7 @@
         #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="tenantId != null">
-        #{tenantId,jdbcType=BIGINT},
+        #{updatetime,jdbcType=TIMESTAMP}
       </if>
     </trim>
   </insert>
@@ -173,10 +164,7 @@
         createTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="tenantId != null">
-        tenant_id = #{tenantId,jdbcType=BIGINT},
+        updateTime = #{updatetime,jdbcType=TIMESTAMP}
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -195,10 +183,11 @@
       remarks = #{remarks,jdbcType=VARCHAR},
       isDelete = #{isdelete,jdbcType=INTEGER},
       createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP},
-      tenant_id = #{tenantId,jdbcType=BIGINT}
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+<!--  矿机入库列表-->
   <select id="selectByOther" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -210,4 +199,31 @@
       </if>
     </where>
   </select>
+
+<!--  矿机入库-->
+  <update id="updateComeInByid" parameterType="java.util.List">
+    update worker set is_come_in = 1 where id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+<!--  矿机软删除-->
+  <update id="updateById">
+    update worker set isDelete = 1 where id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+<!--  矿机出库操作-->
+  <update id="updateMoveOutByid" parameterType="java.util.List">
+    update worker set is_come_in = 0 where id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
 </mapper>
