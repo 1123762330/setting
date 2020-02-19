@@ -5,6 +5,7 @@ import com.xnpool.setting.domain.pojo.Worker;
 import com.xnpool.setting.domain.pojo.WorkerExample;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,5 +37,5 @@ public interface WorkerService {
 
     void updateById(String ids);
 
-    void updateMoveOutByid(String ids);
+    void updateMoveOutByid(String ids, String reason, String token);
 }

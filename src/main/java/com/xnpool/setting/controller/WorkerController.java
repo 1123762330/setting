@@ -8,7 +8,11 @@ import com.xnpool.setting.service.WorkerService;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 矿机出入库操作
@@ -59,8 +63,9 @@ public class WorkerController extends BaseController {
      * @return
      */
     @PutMapping("/moveOut")
-    public ResponseResult moveOut(String ids) {
-        workerService.updateMoveOutByid(ids);
+    public ResponseResult moveOut(String ids, @RequestParam(value = "reason",required = false) String reason, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        workerService.updateMoveOutByid(ids,reason,token);
         return new ResponseResult(SUCCESS);
     }
 

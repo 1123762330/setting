@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.OperatorWorkerHistoryMapper">
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.OperatorWorkerHistory">
+        <!--@mbg.generated-->
+        <!--@Table operator_worker_history-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="workerId" jdbcType="INTEGER" property="workerid"/>
+        <result column="moveOutTime" jdbcType="TIMESTAMP" property="moveouttime"/>
+        <result column="comeInTime" jdbcType="TIMESTAMP" property="comeintime"/>
+        <result column="reason" jdbcType="VARCHAR" property="reason"/>
+        <result column="operator" jdbcType="INTEGER" property="operator"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, workerId, moveOutTime, comeInTime, reason, `operator`
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from operator_worker_history
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from operator_worker_history
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into operator_worker_history (workerId, moveOutTime, comeInTime,
+        reason, `operator`)
+        values (#{workerid,jdbcType=INTEGER}, #{moveouttime,jdbcType=TIMESTAMP}, #{comeintime,jdbcType=TIMESTAMP},
+        #{reason,jdbcType=VARCHAR}, #{operator,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into operator_worker_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workerid != null">
+                workerId,
+            </if>
+            <if test="moveouttime != null">
+                moveOutTime,
+            </if>
+            <if test="comeintime != null">
+                comeInTime,
+            </if>
+            <if test="reason != null">
+                reason,
+            </if>
+            <if test="operator != null">
+                `operator`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workerid != null">
+                #{workerid,jdbcType=INTEGER},
+            </if>
+            <if test="moveouttime != null">
+                #{moveouttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comeintime != null">
+                #{comeintime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reason != null">
+                #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                #{operator,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory">
+        <!--@mbg.generated-->
+        update operator_worker_history
+        <set>
+            <if test="workerid != null">
+                workerId = #{workerid,jdbcType=INTEGER},
+            </if>
+            <if test="moveouttime != null">
+                moveOutTime = #{moveouttime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comeintime != null">
+                comeInTime = #{comeintime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reason != null">
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                `operator` = #{operator,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory">
+        <!--@mbg.generated-->
+        update operator_worker_history
+        set workerId = #{workerid,jdbcType=INTEGER},
+        moveOutTime = #{moveouttime,jdbcType=TIMESTAMP},
+        comeInTime = #{comeintime,jdbcType=TIMESTAMP},
+        reason = #{reason,jdbcType=VARCHAR},
+        `operator` = #{operator,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--  修改入库记录时间-->
+    <update id="updateComeInTimeById">
+        <!--@mbg.generated-->
+        update operator_worker_history set comeInTime=now() where id in
+        <foreach collection="list" index="index" item="item"
+                 separator="," open="(" close=")">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <!--  批量记录矿机出库历史-->
+    <insert id="insertTobatch" parameterType="java.util.List">
+        insert into operator_worker_history (workerId, moveOutTime, reason, `operator`)
+        values
+        <foreach collection="list" item="operatorWorkerHistory" index="index" separator=",">
+            ( #{operatorWorkerHistory.workerid,jdbcType=INTEGER},
+            #{operatorWorkerHistory.moveouttime,jdbcType=TIMESTAMP},
+            #{operatorWorkerHistory.reason,jdbcType=VARCHAR},
+            #{operatorWorkerHistory.operator,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+<!--    出库记录-->
+    <select id="selectWorkerHistoryList" resultType="com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample">
+        SELECT
+            worker.id,
+            worker.factoryName,
+            worker.frameName,
+            worker.miner,
+            worker.workerName,
+            worker.groupName,
+            operator_worker_history.moveOutTime,
+            operator_worker_history.comeInTime,
+            operator_worker_history.reason,
+            operator_worker_history.operator
+        FROM
+            operator_worker_history,
+            worker
+        <where>
+            operator_worker_history.workerId = worker.id
+        <if test="keyWord != null">
+            AND operator_worker_history.moveOutTime like #{keyWord,jdbcType=TIMESTAMP}
+        </if>
+        </where>
+    </select>
+</mapper>

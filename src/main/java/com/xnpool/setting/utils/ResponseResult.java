@@ -41,7 +41,7 @@ public class ResponseResult<T> implements Serializable {
         this(status,message);
         setData(data);
     }
-    public ResponseResult(Integer status, Exception e) {
+    public ResponseResult(Integer status,Exception e) {
         this(status, e.getMessage());
     }
 

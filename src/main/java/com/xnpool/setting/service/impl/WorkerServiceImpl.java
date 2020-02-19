@@ -4,9 +4,11 @@ import java.util.Date;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;
 import com.xnpool.setting.domain.pojo.WorkerExample;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.service.IpSettingService;
+import com.xnpool.setting.service.OperatorWorkerHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.WorkerMapper;
 import com.xnpool.setting.domain.pojo.Worker;
 import com.xnpool.setting.service.WorkerService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -35,6 +38,9 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Autowired
     private IpSettingService ipSettingService;
+
+    @Autowired
+    private OperatorWorkerHistoryService operatorWorkerHistoryService;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -101,6 +107,7 @@ public class WorkerServiceImpl implements WorkerService {
 
     //入库操作
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateComeInByid(String ids) {
         ArrayList<Integer> list = new ArrayList<>();
         if(ids.contains(",")){
@@ -114,6 +121,8 @@ public class WorkerServiceImpl implements WorkerService {
             list.add(Integer.valueOf(ids));
         }
         workerMapper.updateComeInByid(list);
+        //修改记录表里的入库时间
+        operatorWorkerHistoryService.updateComeInTimeById(list);
     }
 
     //出库列表
@@ -147,19 +156,29 @@ public class WorkerServiceImpl implements WorkerService {
 
     //出库操作
     @Override
-    public void updateMoveOutByid(String ids) {
+    @Transactional(rollbackFor = Exception.class)
+    public void updateMoveOutByid(String ids,String reason,String token) {
         ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<OperatorWorkerHistory> operatorWorkerHistoryList = new ArrayList<>();
+        //从token中取出userid
+        int userId=12;
         if(ids.contains(",")){
             //全部出库
             String[] split = ids.split(",");
             for (int i = 0; i < split.length; i++) {
                 list.add(Integer.valueOf(split[i]));
+                OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(ids),new Date(),null,reason,userId);
+                operatorWorkerHistoryList.add(operatorWorkerHistory);
             }
         }else {
             //单个出库
             list.add(Integer.valueOf(ids));
+            OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(ids),new Date(),null,reason,userId);
+            operatorWorkerHistoryList.add(operatorWorkerHistory);
         }
         workerMapper.updateMoveOutByid(list);
+        //同时需要记录到历史表中
+        operatorWorkerHistoryService.insertTobatch(operatorWorkerHistoryList);
     }
 
 }
