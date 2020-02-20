@@ -27,7 +27,6 @@ public class ResponseResult<T> implements Serializable {
     public ResponseResult(Integer status) {
         super();
         setStatus(status);
-        setMessage("请求成功");
     }
 
 

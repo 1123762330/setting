@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 
+import static com.xnpool.setting.common.BaseController.FAIL;
 import static com.xnpool.setting.common.BaseController.SUCCESS;
-import static com.xnpool.setting.common.BaseController.fail;
 
 /**
  * @Description 文件上传工具类
@@ -68,10 +68,10 @@ public class UploadUtils {
                 uploadFile(file, file.getOriginalFilename(), path);
             } catch (FileNotFoundException e) {
                 log.info("文件上传异常:" + e.getMessage());
-                return new ResponseResult(fail, "文件上传出错,请重试!"+e.getMessage());
+                return new ResponseResult(FAIL, "文件上传出错,请重试!"+e.getMessage());
             } catch (IOException e) {
                 log.info("文件上传异常:" + e.getMessage());
-                return new ResponseResult(fail, "文件上传出错,请重试!"+e.getMessage());
+                return new ResponseResult(FAIL, "文件上传出错,请重试!"+e.getMessage());
             }
         }
         return null;

@@ -63,7 +63,7 @@ public class GroupSettingController extends BaseController {
         //需要去查询当前分组内是否有矿机IP
         int rows = groupSettingService.updateById(id);
         if (rows == -1) {
-            return new ResponseResult(fail, "该分组下存在有效IP,不允许删除!");
+            return new ResponseResult(FAIL, "该分组下存在有效IP,不允许删除!");
         }
         return new ResponseResult(SUCCESS);
     }

@@ -18,15 +18,15 @@ public interface MineSettingService {
 
     int insert(MineSetting record);
 
-    int insertSelective(MineSetting record);
+    void insertSelective(MineSetting record);
 
     MineSetting selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(MineSetting record);
+    void updateByPrimaryKeySelective(MineSetting record);
 
     int updateByPrimaryKey(MineSetting record);
 
-    int updateById(int id);
+    void updateById(int id);
 
     HashMap<Integer, String> selectPoolNameByOther();
 

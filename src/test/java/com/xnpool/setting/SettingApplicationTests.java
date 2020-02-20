@@ -1,4 +1,5 @@
 package com.xnpool.setting;
+
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import com.xnpool.setting.controller.MineSettingController;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.setting.utils.JedisUtil;
+import com.xnpool.setting.utils.PrimaryKeyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,9 @@ public class SettingApplicationTests {
     private MineSettingController minesettingController;
 
     @Autowired
+    private PrimaryKeyUtils primaryKeyUtils;
+
+    @Autowired
     private ApiContext apiContext;
 
     @Autowired
@@ -31,10 +37,16 @@ public class SettingApplicationTests {
         // 在上下文中设置当前服务商的ID
         apiContext.setTenantId(112233L);
     }
+
     @Test
     public void addMineSetting() {
-        List<IpSetting> ipSettings = ipSettingMapper.selectByOther(null);
-        System.out.println(ipSettings);
+        long startMillis = System.currentTimeMillis();
+        String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
+        System.out.println("orderIdPrefix=="+orderIdPrefix);
+        Long aLong = primaryKeyUtils.orderId(orderIdPrefix);
+        System.out.println(aLong);
+        long endMillis = System.currentTimeMillis();
+        System.out.println("生成速度:" + (endMillis - startMillis) + ",单位毫秒");
     }
 
     @Test

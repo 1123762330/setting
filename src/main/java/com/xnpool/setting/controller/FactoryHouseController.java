@@ -69,7 +69,7 @@ public class FactoryHouseController extends BaseController {
 
         HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(id);
         if (frameNameMap != null && !frameNameMap.isEmpty()) {
-            return new ResponseResult(fail, "该厂房下存在矿机架,请先移除该厂房下的矿机架");
+            return new ResponseResult(FAIL, "该厂房下存在矿机架,请先移除该厂房下的矿机架");
         } else {
             factoryHouseService.updateById(id);
             return new ResponseResult(SUCCESS);

@@ -34,7 +34,7 @@
     values (#{minename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER},
       #{updatetime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id"  parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into mine_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">

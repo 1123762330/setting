@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/mineSetting")
-public class MineSettingController extends BaseController {
+public class MineSettingController extends BaseController{
     @Autowired
     private MineSettingService mineSettingService;
 
@@ -71,7 +71,7 @@ public class MineSettingController extends BaseController {
             mineSettingService.updateById(id);
             return new ResponseResult(SUCCESS);
         } else {
-            return new ResponseResult(fail, "该矿场下面有厂房,请先删除该矿场下的所有厂房");
+            return new ResponseResult(FAIL, "该矿场下面有厂房,请先删除该矿场下的所有厂房");
         }
     }
 
