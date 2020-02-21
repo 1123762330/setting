@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;
 import com.xnpool.setting.domain.pojo.WorkerExample;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
@@ -31,7 +32,7 @@ import java.util.Map;
  * @date 2020/2/18 12:02
  */
 @Service
-public class WorkerServiceImpl implements WorkerService {
+public class WorkerServiceImpl extends BaseController implements WorkerService {
 
     @Resource
     private WorkerMapper workerMapper;
@@ -120,9 +121,12 @@ public class WorkerServiceImpl implements WorkerService {
             //单个入库
             list.add(Integer.valueOf(ids));
         }
-        workerMapper.updateComeInByid(list);
+        int rows = workerMapper.updateComeInByid(list);
         //修改记录表里的入库时间
         operatorWorkerHistoryService.updateComeInTimeById(list);
+        //批量入库数据同步到缓存里
+        batchComeIn(rows,"worker",list.toString());
+        batchComeIn(rows,"workerbrand_setting",list.toString());
     }
 
     //出库列表
@@ -151,7 +155,8 @@ public class WorkerServiceImpl implements WorkerService {
             //单个出库
             list.add(Integer.valueOf(ids));
         }
-        workerMapper.updateById(list);
+        int rows = workerMapper.updateById(list);
+        redisToBatchDelete(rows,"worker",list.toString());
     }
 
     //出库操作
@@ -176,9 +181,12 @@ public class WorkerServiceImpl implements WorkerService {
             OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(ids),new Date(),null,reason,userId);
             operatorWorkerHistoryList.add(operatorWorkerHistory);
         }
-        workerMapper.updateMoveOutByid(list);
+        int rows = workerMapper.updateMoveOutByid(list);
         //同时需要记录到历史表中
         operatorWorkerHistoryService.insertTobatch(operatorWorkerHistoryList);
+        //出库数据同步到缓存里
+        batchMoveOut(rows,"worker",operatorWorkerHistoryList.toString());
+        batchMoveOut(rows,"workerbrand_setting",operatorWorkerHistoryList.toString());
     }
 
 }

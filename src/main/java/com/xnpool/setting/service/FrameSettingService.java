@@ -19,15 +19,15 @@ public interface FrameSettingService {
 
     int insert(FrameSetting record);
 
-    int insertSelective(FrameSetting record);
+    void insertSelective(FrameSetting record);
 
     FrameSetting selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(FrameSetting record);
+    void updateByPrimaryKeySelective(FrameSetting record);
 
     int updateByPrimaryKey(FrameSetting record);
 
-    int updateById(int id);
+    void updateById(int id);
 
     PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 

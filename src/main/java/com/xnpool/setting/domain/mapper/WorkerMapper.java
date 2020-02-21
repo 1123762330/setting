@@ -28,9 +28,9 @@ public interface WorkerMapper {
 
     List<Worker> selectByOther(@Param("keyWord") String keyWord);
 
-    void updateComeInByid(@Param("list") List<Integer> list);
+    int updateComeInByid(@Param("list") List<Integer> list);
 
-    void updateById(@Param("list") List<Integer> list);
+    int updateById(@Param("list") List<Integer> list);
 
-    void updateMoveOutByid(@Param("list") List<Integer> list);
+    int updateMoveOutByid(@Param("list") List<Integer> list);
 }

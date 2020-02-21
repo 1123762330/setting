@@ -47,13 +47,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(MineSetting record) {
         int rows = minesettingMapper.insertSelective(record);
-        if (rows == 1) {
-            //入库成功,写缓存
-            record.setCreatetime(new Date());
-            insertRedis("mine_setting", INSERT, record.toString());
-        } else {
-            throw new InsertException("添加失败");
-        }
+        record.setCreatetime(new Date());
+        redisToInsert(rows,"mine_setting",record.toString());
     }
 
     @Override
@@ -65,13 +60,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(MineSetting record) {
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
-        if (rows == 1) {
-            //修改成功,写缓存
-            record.setUpdatetime(new Date());
-            insertRedis("mine_setting", UPDATE, record.toString());
-        } else {
-            throw new UpdateException("修改失败");
-        }
+        record.setUpdatetime(new Date());
+        redisToUpdate(rows,"mine_setting",record.toString());
     }
 
     @Override
@@ -83,15 +73,10 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         int rows = minesettingMapper.updateById(id);
-        if (rows == 1) {
-            //修改成功,写缓存
-            MineSetting record = new MineSetting();
-            record.setUpdatetime(new Date());
-            record.setId(id);
-            insertRedis("mine_setting", DELETE, record.toString());
-        } else {
-            throw new UpdateException("删除失败");
-        }
+        MineSetting record = new MineSetting();
+        record.setUpdatetime(new Date());
+        record.setId(id);
+        redisToDelete(rows,"mine_setting",record.toString());
     }
 
     @Override

@@ -2,15 +2,20 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.UpdateException;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.pojo.FrameSettingExample;
+import com.xnpool.setting.domain.pojo.MineSetting;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
 import com.xnpool.setting.domain.pojo.FrameSetting;
 import com.xnpool.setting.service.FrameSettingService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +25,7 @@ import java.util.List;
  * @date 2020/2/4 20:04
  */
 @Service
-public class FrameSettingServiceImpl implements FrameSettingService {
+public class FrameSettingServiceImpl extends BaseController implements FrameSettingService {
 
     @Resource
     private FrameSettingMapper frameSettingMapper;
@@ -36,12 +41,15 @@ public class FrameSettingServiceImpl implements FrameSettingService {
     }
 
     @Override
-    public int insertSelective(FrameSetting record) {
+    @Transactional(rollbackFor = Exception.class)
+    public void insertSelective(FrameSetting record) {
         String framename = record.getFramename();
         Integer number = record.getNumber();
         String detailed =framename + " 1-" + number + "层";
         record.setDetailed(detailed);
-        return frameSettingMapper.insertSelective(record);
+        int rows = frameSettingMapper.insertSelective(record);
+        record.setCreatetime(new Date());
+        redisToInsert(rows, "frame_setting",record.toString());
     }
 
     @Override
@@ -50,12 +58,15 @@ public class FrameSettingServiceImpl implements FrameSettingService {
     }
 
     @Override
-    public int updateByPrimaryKeySelective(FrameSetting record) {
+    @Transactional(rollbackFor = Exception.class)
+    public void updateByPrimaryKeySelective(FrameSetting record) {
         String framename = record.getFramename();
         Integer number = record.getNumber();
         String detailed =framename + " 1-" + number + "层";
         record.setDetailed(detailed);
-        return frameSettingMapper.updateByPrimaryKeySelective(record);
+        int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
+        record.setUpdatetime(new Date());
+        redisToUpdate(rows, "frame_setting",record.toString());
     }
 
     @Override
@@ -64,9 +75,13 @@ public class FrameSettingServiceImpl implements FrameSettingService {
     }
 
     @Override
-    public int updateById(int id) {
-
-        return frameSettingMapper.updateById(id);
+    @Transactional(rollbackFor = Exception.class)
+    public void updateById(int id) {
+        int rows = frameSettingMapper.updateById(id);
+        FrameSetting record = new FrameSetting();
+        record.setUpdatetime(new Date());
+        record.setId(id);
+        redisToDelete(rows,"frame_setting",record.toString());
     }
 
     @Override

@@ -18,15 +18,15 @@ public interface IpSettingService {
 
     int insert(IpSetting record);
 
-    int insertSelective(IpSetting record);
+    void insertSelective(IpSetting record);
 
     IpSetting selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(IpSetting record);
+    void updateByPrimaryKeySelective(IpSetting record);
 
     int updateByPrimaryKey(IpSetting record);
 
-    int updateById(int id);
+    void updateById(int id);
 
     PageInfo<IpSetting> selectByOther(String keyWord,int pageNum,int pageSize);
 

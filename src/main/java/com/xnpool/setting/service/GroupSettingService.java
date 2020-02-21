@@ -18,15 +18,15 @@ public interface GroupSettingService {
 
     int insert(GroupSetting record);
 
-    int insertSelective(GroupSetting record);
+    void insertSelective(GroupSetting record);
 
     GroupSetting selectByPrimaryKey(Integer groupid);
 
-    int updateByPrimaryKeySelective(GroupSetting record);
+    void updateByPrimaryKeySelective(GroupSetting record);
 
     int updateByPrimaryKey(GroupSetting record);
 
-    int updateById(int id);
+    void updateById(int id);
 
     PageInfo<GroupSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 }

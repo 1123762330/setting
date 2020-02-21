@@ -2,15 +2,19 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.pojo.FactoryHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
 import com.xnpool.setting.service.IpSettingService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +24,7 @@ import java.util.List;
  * @date 2020/2/5 12:38
  */
 @Service
-public class IpSettingServiceImpl implements IpSettingService {
+public class IpSettingServiceImpl extends BaseController implements IpSettingService {
 
     @Autowired
     private IpSettingMapper ipSettingMapper;
@@ -39,8 +43,11 @@ public class IpSettingServiceImpl implements IpSettingService {
     }
 
     @Override
-    public int insertSelective(IpSetting record) {
-        return ipSettingMapper.insertSelective(record);
+    @Transactional(rollbackFor = Exception.class)
+    public void insertSelective(IpSetting record) {
+        int rows = ipSettingMapper.insertSelective(record);
+        record.setCreatetime(new Date());
+        redisToInsert(rows,"ip_setting",record.toString());
     }
 
     @Override
@@ -49,8 +56,11 @@ public class IpSettingServiceImpl implements IpSettingService {
     }
 
     @Override
-    public int updateByPrimaryKeySelective(IpSetting record) {
-        return ipSettingMapper.updateByPrimaryKeySelective(record);
+    @Transactional(rollbackFor = Exception.class)
+    public void updateByPrimaryKeySelective(IpSetting record) {
+        int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
+        record.setUpdatetime(new Date());
+        redisToUpdate(rows,"ip_setting",record.toString());
     }
 
     @Override
@@ -59,8 +69,13 @@ public class IpSettingServiceImpl implements IpSettingService {
     }
 
     @Override
-    public int updateById(int id) {
-        return ipSettingMapper.updateById(id);
+    @Transactional(rollbackFor = Exception.class)
+    public void updateById(int id) {
+        int rows = ipSettingMapper.updateById(id);
+        IpSetting record = new IpSetting();
+        record.setUpdatetime(new Date());
+        record.setId(id);
+        redisToDelete(rows,"ip_setting",record.toString());
     }
 
     @Override

@@ -19,15 +19,15 @@ public interface FactoryHouseService {
 
     int insert(FactoryHouse record);
 
-    int insertSelective(FactoryHouse record);
+    void insertSelective(FactoryHouse record);
 
     FactoryHouse selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(FactoryHouse record);
+    void updateByPrimaryKeySelective(FactoryHouse record);
 
     int updateByPrimaryKey(FactoryHouse record);
 
-    int updateById(int id);
+    void updateById(int id);
 
     PageInfo<FactoryHouseExample> selectByOther(String keyWord,int pageNum,int pageSize);
 

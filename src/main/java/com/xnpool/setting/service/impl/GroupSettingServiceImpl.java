@@ -2,6 +2,9 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.DeleteException;
+import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
@@ -15,8 +18,10 @@ import javax.annotation.Resource;
 
 import com.xnpool.setting.domain.mapper.GroupSettingMapper;
 import com.xnpool.setting.service.GroupSettingService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +32,7 @@ import java.util.Set;
  * @date 2020/2/5 15:36
  */
 @Service
-public class GroupSettingServiceImpl implements GroupSettingService {
+public class GroupSettingServiceImpl  extends BaseController implements GroupSettingService {
 
     @Resource
     private GroupSettingMapper groupSettingMapper;
@@ -50,8 +55,11 @@ public class GroupSettingServiceImpl implements GroupSettingService {
     }
 
     @Override
-    public int insertSelective(GroupSetting record) {
-        return groupSettingMapper.insertSelective(record);
+    @Transactional(rollbackFor = Exception.class)
+    public void insertSelective(GroupSetting record) {
+        int rows = groupSettingMapper.insertSelective(record);
+        record.setCreatetime(new Date());
+        redisToInsert(rows,"group_setting",record.toString());
     }
 
     @Override
@@ -60,8 +68,11 @@ public class GroupSettingServiceImpl implements GroupSettingService {
     }
 
     @Override
-    public int updateByPrimaryKeySelective(GroupSetting record) {
-        return groupSettingMapper.updateByPrimaryKeySelective(record);
+    @Transactional(rollbackFor = Exception.class)
+    public void updateByPrimaryKeySelective(GroupSetting record) {
+        int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
+        record.setUpdatetime(new Date());
+        redisToUpdate(rows,"group_setting",record.toString());
     }
 
     @Override
@@ -70,7 +81,8 @@ public class GroupSettingServiceImpl implements GroupSettingService {
     }
 
     @Override
-    public int updateById(int id) {
+    @Transactional(rollbackFor = Exception.class)
+    public void updateById(int id) {
         //需要去查询当前分组内是否有矿机IP,首先查到IP字段Map集合
         HashMap<Integer, String> ipStart = ipSettingService.selectByIPStart();
         Set<Integer> keySet = ipStart.keySet();
@@ -81,16 +93,20 @@ public class GroupSettingServiceImpl implements GroupSettingService {
             String[] split = ipid.split(",");
             for (int i = 0; i < split.length; i++) {
                 if (keySet.contains(split[i])) {
-                    return -1;
+                    throw new DeleteException("该分组下存在有效IP,不允许删除!");
                 }
             }
         } else {
             //单个IP
             if (keySet.contains(ipStart)) {
-                return -1;
+                throw new DeleteException("该分组下存在有效IP,不允许删除!");
             }
         }
-        return groupSettingMapper.updateById(id);
+        int rows = groupSettingMapper.updateById(id);
+        GroupSetting record = new GroupSetting();
+        record.setUpdatetime(new Date());
+        record.setGroupid(id);
+        redisToDelete(rows,"group_setting",record.toString());
     }
 
     @Override

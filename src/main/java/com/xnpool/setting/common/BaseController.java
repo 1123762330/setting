@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Description 当前项目中所有控制器类基类
@@ -87,6 +88,102 @@ public abstract class BaseController {
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw new InsertException("添加缓存失败");
+		}
+	}
+
+	/**
+	 * @Description 新增数据
+	 * @Author zly
+	 * @Date 15:22 2020/2/21
+	 * @Param
+	 * @return
+	 */
+	public void redisToInsert(Integer rows,String table,String record){
+		if (rows == 1) {
+			//入库成功,写缓存
+			insertRedis(table, INSERT, record);
+		} else {
+			throw new InsertException("添加失败");
+		}
+	}
+
+	/**
+	 * @Description	修改数据
+	 * @Author zly
+	 * @Date 15:26 2020/2/21
+	 * @Param
+	 * @return
+	 */
+	public void redisToUpdate(Integer rows,String table,String record){
+		if (rows == 1) {
+			//操作数据库成功,写缓存
+			insertRedis(table, UPDATE, record);
+		} else {
+			throw new UpdateException("修改失败");
+		}
+	}
+
+	/**
+	 * @Description	删除数据
+	 * @Author zly
+	 * @Date 15:28 2020/2/21
+	 * @Param
+	 * @return
+	 */
+	public void redisToDelete(Integer rows,String table,String record){
+		if (rows == 1) {
+			//操作数据库成功,写缓存
+			insertRedis(table, DELETE, record);
+		} else {
+			throw new UpdateException("修改失败");
+		}
+	}
+
+	/**
+	 * @Description 批量出库数据
+	 * @Author zly
+	 * @Date 15:32 2020/2/21
+	 * @Param
+	 * @return
+	 */
+	public void batchComeIn(Integer rows, String table, String recordList){
+		if (rows !=0) {
+			//操作数据库成功,写缓存
+			insertRedis(table, BATCHUPDATE, recordList);
+		} else {
+			throw new UpdateException("批量入库失败");
+		}
+	}
+
+	/**
+	 * @Description	批量入库数据
+	 * @Author zly
+	 * @Date 15:35 2020/2/21
+	 * @Param
+	 * @return
+	 */
+	public void batchMoveOut(Integer rows, String table,String recordList){
+		if (rows !=0) {
+			//操作数据库成功,写缓存
+			insertRedis(table, BATCHUPDATE, recordList);
+		} else {
+			throw new UpdateException("批量出库失败");
+		}
+	}
+
+	/**
+	 * @Description	批量删除数据
+	 * @Author zly
+	 * @Date 15:37 2020/2/21
+	 * @Param
+	 * @return
+	 */
+	public void redisToBatchDelete(Integer rows, String table, String recordList){
+		if (rows !=0) {
+			//操作数据库成功,写缓存
+			insertRedis(table, BATCHUPDATE, recordList);
+		} else {
+			throw new DeleteException("批量删除失败");
 		}
 	}
 
