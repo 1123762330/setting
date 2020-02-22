@@ -16,11 +16,11 @@ public interface CustomerSettingService {
 
     int insert(CustomerSetting record);
 
-    int insertSelective(CustomerSetting record);
+    void insertSelective(CustomerSetting record);
 
     CustomerSetting selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(CustomerSetting record);
+    void updateByPrimaryKeySelective(CustomerSetting record);
 
     int updateByPrimaryKey(CustomerSetting record);
 

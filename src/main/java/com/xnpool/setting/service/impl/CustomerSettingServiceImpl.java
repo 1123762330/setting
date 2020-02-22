@@ -2,8 +2,10 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.CustomerSettingExample;
 import com.xnpool.setting.domain.pojo.FactoryHouseExample;
+import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.service.AgreementSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,11 @@ import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.CustomerSettingMapper;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.service.CustomerSettingService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +29,7 @@ import java.util.List;
  * @date 2020/2/10 10:35
  */
 @Service
-public class CustomerSettingServiceImpl implements CustomerSettingService {
+public class CustomerSettingServiceImpl extends BaseController implements CustomerSettingService {
 
     @Resource
     private CustomerSettingMapper customerSettingMapper;
@@ -44,8 +48,11 @@ public class CustomerSettingServiceImpl implements CustomerSettingService {
     }
 
     @Override
-    public int insertSelective(CustomerSetting record) {
-        return customerSettingMapper.insertSelective(record);
+    @Transactional(rollbackFor = Exception.class)
+    public void insertSelective(CustomerSetting record) {
+        int rows = customerSettingMapper.insertSelective(record);
+        record.setCreatetime(new Date());
+        redisToInsert(rows,"customer_setting",record.toString());
     }
 
     @Override
@@ -54,8 +61,11 @@ public class CustomerSettingServiceImpl implements CustomerSettingService {
     }
 
     @Override
-    public int updateByPrimaryKeySelective(CustomerSetting record) {
-        return customerSettingMapper.updateByPrimaryKeySelective(record);
+    @Transactional(rollbackFor = Exception.class)
+    public void updateByPrimaryKeySelective(CustomerSetting record) {
+        int rows = customerSettingMapper.updateByPrimaryKeySelective(record);
+        record.setUpdatetime(new Date());
+        redisToUpdate(rows,"customer_setting",record.toString());
     }
 
     @Override
@@ -64,8 +74,13 @@ public class CustomerSettingServiceImpl implements CustomerSettingService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
-        customerSettingMapper.updateById(id);
+        int rows = customerSettingMapper.updateById(id);
+        CustomerSetting record = new CustomerSetting();
+        record.setUpdatetime(new Date());
+        record.setId(id);
+        redisToDelete(rows,"customer_setting",record.toString());
     }
 
     @Override

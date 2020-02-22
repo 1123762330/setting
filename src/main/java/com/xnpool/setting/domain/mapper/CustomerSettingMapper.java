@@ -20,7 +20,7 @@ public interface CustomerSettingMapper {
 
     int updateByPrimaryKey(CustomerSetting record);
 
-    void updateById(int id);
+    int updateById(int id);
 
     List<CustomerSettingExample> selectByOther(@Param("keyWord") String keyWord, @Param("managerUserId") int managerUserId);
 

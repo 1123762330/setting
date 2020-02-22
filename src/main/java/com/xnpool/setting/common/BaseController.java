@@ -30,7 +30,8 @@ public abstract class BaseController {
 	public static final String UPDATE = "update";
 	public static final String DELETE = "delete";
 	public static final String BATCHINSERT = "batchInsert";
-	public static final String BATCHUPDATE = "batchUpdate";
+	public static final String BATCHCOMEIN = "batchComeIn";
+	public static final String BATCHMOVEOUT = "batchMoveOut";
 	public static final String BATCHDELETE = "batchDelete";
 
 	@Autowired
@@ -149,7 +150,10 @@ public abstract class BaseController {
 	public void batchComeIn(Integer rows, String table, String recordList){
 		if (rows !=0) {
 			//操作数据库成功,写缓存
-			insertRedis(table, BATCHUPDATE, recordList);
+			HashMap<String, Object> hashMap = new HashMap<>();
+			hashMap.put("list",recordList);
+			hashMap.put("updateTime",new Date());
+			insertRedis(table, BATCHMOVEOUT, hashMap.toString());
 		} else {
 			throw new UpdateException("批量入库失败");
 		}
@@ -165,7 +169,10 @@ public abstract class BaseController {
 	public void batchMoveOut(Integer rows, String table,String recordList){
 		if (rows !=0) {
 			//操作数据库成功,写缓存
-			insertRedis(table, BATCHUPDATE, recordList);
+			HashMap<String, Object> hashMap = new HashMap<>();
+			hashMap.put("list",recordList);
+			hashMap.put("updateTime",new Date());
+			insertRedis(table, BATCHCOMEIN, hashMap.toString());
 		} else {
 			throw new UpdateException("批量出库失败");
 		}
@@ -181,7 +188,10 @@ public abstract class BaseController {
 	public void redisToBatchDelete(Integer rows, String table, String recordList){
 		if (rows !=0) {
 			//操作数据库成功,写缓存
-			insertRedis(table, BATCHUPDATE, recordList);
+			HashMap<String, Object> hashMap = new HashMap<>();
+			hashMap.put("list",recordList);
+			hashMap.put("updateTime",new Date());
+			insertRedis(table, BATCHDELETE, hashMap.toString());
 		} else {
 			throw new DeleteException("批量删除失败");
 		}

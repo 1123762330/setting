@@ -143,6 +143,7 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
 
     //软删除
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateById(String ids) {
         ArrayList<Integer> list = new ArrayList<>();
         if(ids.contains(",")){
@@ -172,7 +173,7 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
             String[] split = ids.split(",");
             for (int i = 0; i < split.length; i++) {
                 list.add(Integer.valueOf(split[i]));
-                OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(ids),new Date(),null,reason,userId);
+                OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(split[i]),new Date(),null,reason,userId);
                 operatorWorkerHistoryList.add(operatorWorkerHistory);
             }
         }else {
