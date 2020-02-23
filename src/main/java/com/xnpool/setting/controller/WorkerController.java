@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 /**
  * 矿机出入库操作
@@ -37,8 +38,8 @@ public class WorkerController extends BaseController {
     @GetMapping("/selectComeInWorkerList")
     public ResponseResult selectComeInWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<WorkerExample> workerExamplePageInfo = workerService.selectComeInWorkerList(keyWord, pageNum, pageSize);
-        return new ResponseResult(SUCCESS, workerExamplePageInfo);
+        //PageInfo<WorkerExample> workerExamplePageInfo = workerService.selectComeInWorkerList(keyWord, pageNum, pageSize);
+        return new ResponseResult(SUCCESS);
     }
 
     /**
@@ -93,5 +94,12 @@ public class WorkerController extends BaseController {
     public ResponseResult deleteWorker(String ids) {
         workerService.updateById(ids);
         return new ResponseResult(SUCCESS);
+    }
+
+    @GetMapping("/selectWorkerList")
+    public ResponseResult selectWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        HashMap<Integer, String> workerList = workerService.selectWorkerList(keyWord);
+        return new ResponseResult(SUCCESS,workerList);
     }
 }

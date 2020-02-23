@@ -2,78 +2,52 @@ package com.xnpool.setting.domain.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * @author  zly
- * @date  2020/2/18 12:02
+ * @author zly
  * @version 1.0
+ * @date 2020/2/23 11:28
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Worker implements Serializable {
-    private static final long serialVersionUID = 29326523138337215L;
+    private static final long serialVersionUID = 1645763191139334232L;
     /**
-    * 矿机id
-    */
+     * 矿机id
+     */
     private Integer id;
 
     /**
-    * IP
-    */
-    private String ip;
-
-    /**
-    * 矿工名
-    */
+     * 矿工名
+     */
     private String miner;
 
     /**
-    * 矿机名称
-    */
+     * 矿机名
+     */
     private String workername;
 
     /**
-    * 所属厂房
-    */
-    private String factoryname;
+     * 矿机ip
+     */
+    private String workerIp;
 
     /**
-    * 所属机架
-    */
-    private String framename;
-
-    /**
-    * 所属分组
-    */
-    private String groupname;
-
-    /**
-    * 是否在线
-    */
-    private Integer isOnline;
-
-    /**
-    * 是否入库
-    */
-    private Integer isComeIn;
-
-    /**
-    * 备注
-    */
-    private String remarks;
-
-    /**
-    * 是否删除,0:否,1:是
-    */
-    private Integer isdelete;
-
-    /**
-    * 创建时间
-    */
+     * 创建时间
+     */
     private Date createtime;
 
     /**
-    * 更新时间
-    */
+     * 更新时间
+     */
     private Date updatetime;
+
+    /**
+     * 是否删除,0:否,1;是
+     */
+    private Integer isdelete;
 }

@@ -5,23 +5,16 @@
     <!--@mbg.generated-->
     <!--@Table worker-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="ip" jdbcType="VARCHAR" property="ip" />
     <result column="miner" jdbcType="VARCHAR" property="miner" />
     <result column="workerName" jdbcType="VARCHAR" property="workername" />
-    <result column="factoryName" jdbcType="VARCHAR" property="factoryname" />
-    <result column="frameName" jdbcType="VARCHAR" property="framename" />
-    <result column="groupName" jdbcType="VARCHAR" property="groupname" />
-    <result column="is_onLine" jdbcType="INTEGER" property="isOnline" />
-    <result column="is_come_in" jdbcType="INTEGER" property="isComeIn" />
-    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="worker_ip" jdbcType="VARCHAR" property="workerIp" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, ip, miner, workerName, factoryName, frameName, groupName, is_onLine, is_come_in, 
-    remarks, isDelete, createTime, updateTime
+    id, miner, workerName, worker_ip, createTime, updateTime, isDelete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -37,48 +30,25 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.Worker" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into worker (ip, miner, workerName, 
-      factoryName, frameName, groupName, 
-      is_onLine, is_come_in, remarks, 
-      isDelete, createTime, updateTime)
-    values (#{ip,jdbcType=VARCHAR}, #{miner,jdbcType=VARCHAR}, #{workername,jdbcType=VARCHAR}, 
-      #{factoryname,jdbcType=VARCHAR}, #{framename,jdbcType=VARCHAR}, #{groupname,jdbcType=VARCHAR}, 
-      #{isOnline,jdbcType=INTEGER}, #{isComeIn,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
-      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+    insert into worker (miner, workerName, worker_ip, 
+      createTime, updateTime, isDelete
+      )
+    values (#{miner,jdbcType=VARCHAR}, #{workername,jdbcType=VARCHAR}, #{workerIp,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{isdelete,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.Worker" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into worker
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="ip != null">
-        ip,
-      </if>
       <if test="miner != null">
         miner,
       </if>
       <if test="workername != null">
         workerName,
       </if>
-      <if test="factoryname != null">
-        factoryName,
-      </if>
-      <if test="framename != null">
-        frameName,
-      </if>
-      <if test="groupname != null">
-        groupName,
-      </if>
-      <if test="isOnline != null">
-        is_onLine,
-      </if>
-      <if test="isComeIn != null">
-        is_come_in,
-      </if>
-      <if test="remarks != null">
-        remarks,
-      </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="workerIp != null">
+        worker_ip,
       </if>
       <if test="createtime != null">
         createTime,
@@ -86,43 +56,28 @@
       <if test="updatetime != null">
         updateTime,
       </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="ip != null">
-        #{ip,jdbcType=VARCHAR},
-      </if>
       <if test="miner != null">
         #{miner,jdbcType=VARCHAR},
       </if>
       <if test="workername != null">
         #{workername,jdbcType=VARCHAR},
       </if>
-      <if test="factoryname != null">
-        #{factoryname,jdbcType=VARCHAR},
-      </if>
-      <if test="framename != null">
-        #{framename,jdbcType=VARCHAR},
-      </if>
-      <if test="groupname != null">
-        #{groupname,jdbcType=VARCHAR},
-      </if>
-      <if test="isOnline != null">
-        #{isOnline,jdbcType=INTEGER},
-      </if>
-      <if test="isComeIn != null">
-        #{isComeIn,jdbcType=INTEGER},
-      </if>
-      <if test="remarks != null">
-        #{remarks,jdbcType=VARCHAR},
-      </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="workerIp != null">
+        #{workerIp,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null">
         #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP}
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -130,41 +85,23 @@
     <!--@mbg.generated-->
     update worker
     <set>
-      <if test="ip != null">
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
       <if test="miner != null">
         miner = #{miner,jdbcType=VARCHAR},
       </if>
       <if test="workername != null">
         workerName = #{workername,jdbcType=VARCHAR},
       </if>
-      <if test="factoryname != null">
-        factoryName = #{factoryname,jdbcType=VARCHAR},
-      </if>
-      <if test="framename != null">
-        frameName = #{framename,jdbcType=VARCHAR},
-      </if>
-      <if test="groupname != null">
-        groupName = #{groupname,jdbcType=VARCHAR},
-      </if>
-      <if test="isOnline != null">
-        is_onLine = #{isOnline,jdbcType=INTEGER},
-      </if>
-      <if test="isComeIn != null">
-        is_come_in = #{isComeIn,jdbcType=INTEGER},
-      </if>
-      <if test="remarks != null">
-        remarks = #{remarks,jdbcType=VARCHAR},
-      </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="workerIp != null">
+        worker_ip = #{workerIp,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP}
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null">
+        isDelete = #{isdelete,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -172,18 +109,12 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.Worker">
     <!--@mbg.generated-->
     update worker
-    set ip = #{ip,jdbcType=VARCHAR},
-      miner = #{miner,jdbcType=VARCHAR},
+    set miner = #{miner,jdbcType=VARCHAR},
       workerName = #{workername,jdbcType=VARCHAR},
-      factoryName = #{factoryname,jdbcType=VARCHAR},
-      frameName = #{framename,jdbcType=VARCHAR},
-      groupName = #{groupname,jdbcType=VARCHAR},
-      is_onLine = #{isOnline,jdbcType=INTEGER},
-      is_come_in = #{isComeIn,jdbcType=INTEGER},
-      remarks = #{remarks,jdbcType=VARCHAR},
-      isDelete = #{isdelete,jdbcType=INTEGER},
+      worker_ip = #{workerIp,jdbcType=VARCHAR},
       createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      isDelete = #{isdelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -203,8 +134,7 @@
 <!--  矿机入库-->
   <update id="updateComeInByid" parameterType="java.util.List">
     update worker set is_come_in = 1 where id in
-    <foreach collection="list" index="index" item="item"
-             separator="," open="(" close=")">
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>
   </update>
@@ -212,8 +142,7 @@
 <!--  矿机软删除-->
   <update id="updateById">
     update worker set isDelete = 1 where id in
-    <foreach collection="list" index="index" item="item"
-             separator="," open="(" close=")">
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>
   </update>
@@ -221,8 +150,7 @@
 <!--  矿机出库操作-->
   <update id="updateMoveOutByid" parameterType="java.util.List">
     update worker set is_come_in = 0 where id in
-    <foreach collection="list" index="index" item="item"
-             separator="," open="(" close=")">
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>
   </update>

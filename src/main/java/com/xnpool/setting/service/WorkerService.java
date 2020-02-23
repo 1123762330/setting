@@ -29,7 +29,7 @@ public interface WorkerService {
 
     int updateByPrimaryKey(Worker record);
 
-    PageInfo<WorkerExample>  selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
+   // PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
 
     void updateComeInByid(String ids);
 
@@ -38,4 +38,7 @@ public interface WorkerService {
     void updateById(String ids);
 
     void updateMoveOutByid(String ids, String reason, String token);
+
+    HashMap<Integer, String> selectWorkerList(String keyWord);
 }
+
