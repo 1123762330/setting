@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
@@ -59,7 +60,8 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     public void insertSelective(GroupSetting record) {
         int rows = groupSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        redisToInsert(rows,"group_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToInsert(rows,"group_setting",jsonString,record.getMineid());
     }
 
     @Override
@@ -72,7 +74,8 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     public void updateByPrimaryKeySelective(GroupSetting record) {
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        redisToUpdate(rows,"group_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToUpdate(rows,"group_setting",jsonString,record.getMineid());
     }
 
     @Override
@@ -106,7 +109,8 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         GroupSetting record = new GroupSetting();
         record.setUpdatetime(new Date());
         record.setGroupid(id);
-        redisToDelete(rows,"group_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToDelete(rows,"group_setting",jsonString,record.getMineid());
     }
 
     @Override

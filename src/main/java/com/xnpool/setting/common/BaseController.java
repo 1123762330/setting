@@ -1,10 +1,14 @@
 package com.xnpool.setting.common;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.xnpool.setting.common.exception.*;
+import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @Description 当前项目中所有控制器类基类
@@ -39,6 +42,9 @@ public abstract class BaseController {
 
 	@Autowired
 	private JedisUtil jedisUtil;
+
+	@Autowired
+	private ApiContext apiContext;
 
 
 	@ExceptionHandler({ServiceException.class})
@@ -77,15 +83,20 @@ public abstract class BaseController {
 	}
 
 	//执行添加数据到缓存里面
-	public void insertRedis(String table, String user, String record) {
+	public void insertRedis(String table, String user, String record,Integer mineId) {
 		HashMap<String, String> hashMap = new HashMap<>();
 		hashMap.put("table", table);
 		hashMap.put("use", user);
 		hashMap.put("data", record);
+		String jsonString = JSON.toJSONString(hashMap, true);
 		try {
 			String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
 			Long global_id = primaryKeyUtils.orderId(orderIdPrefix);
-			jedisUtil.zadd("syncing", Double.valueOf(global_id), hashMap.toString());
+			if (mineId==null){
+				jedisUtil.zadd("syncing:"+apiContext.getTenantId(), Double.valueOf(global_id), jsonString);
+			}else {
+				jedisUtil.zadd("syncing:"+apiContext.getTenantId()+":"+mineId, Double.valueOf(global_id), jsonString);
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw new InsertException("添加缓存失败");
@@ -99,10 +110,10 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void redisToInsert(Integer rows,String table,String record){
+	public void redisToInsert(Integer rows,String table,String record,Integer mineId){
 		if (rows == 1) {
 			//入库成功,写缓存
-			insertRedis(table, INSERT, record);
+			insertRedis(table, INSERT, record,mineId);
 		} else {
 			throw new InsertException("添加失败");
 		}
@@ -115,10 +126,10 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void redisToUpdate(Integer rows,String table,String record){
+	public void redisToUpdate(Integer rows,String table,String record,Integer mineId){
 		if (rows == 1) {
 			//操作数据库成功,写缓存
-			insertRedis(table, UPDATE, record);
+			insertRedis(table, UPDATE, record,mineId);
 		} else {
 			throw new UpdateException("修改失败");
 		}
@@ -131,10 +142,10 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void redisToDelete(Integer rows,String table,String record){
+	public void redisToDelete(Integer rows,String table,String record,Integer mineId){
 		if (rows == 1) {
 			//操作数据库成功,写缓存
-			insertRedis(table, DELETE, record);
+			insertRedis(table, DELETE, record,mineId);
 		} else {
 			throw new UpdateException("修改失败");
 		}
@@ -147,13 +158,13 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void batchComeIn(Integer rows, String table, String recordList){
+	public void batchComeIn(Integer rows, String table, String recordList,Integer mineId){
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			hashMap.put("list",recordList);
 			hashMap.put("updateTime",new Date());
-			insertRedis(table, BATCHMOVEOUT, hashMap.toString());
+			insertRedis(table, BATCHMOVEOUT, hashMap.toString(),mineId);
 		} else {
 			throw new UpdateException("批量入库失败");
 		}
@@ -166,13 +177,13 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void batchMoveOut(Integer rows, String table,String recordList){
+	public void batchMoveOut(Integer rows, String table,String recordList,Integer mineId){
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			hashMap.put("list",recordList);
 			hashMap.put("updateTime",new Date());
-			insertRedis(table, BATCHCOMEIN, hashMap.toString());
+			insertRedis(table, BATCHCOMEIN, hashMap.toString(),mineId);
 		} else {
 			throw new UpdateException("批量出库失败");
 		}
@@ -185,13 +196,13 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void redisToBatchDelete(Integer rows, String table, String recordList){
+	public void redisToBatchDelete(Integer rows, String table, String recordList,Integer mineId){
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			hashMap.put("list",recordList);
 			hashMap.put("updateTime",new Date());
-			insertRedis(table, BATCHDELETE, hashMap.toString());
+			insertRedis(table, BATCHDELETE, hashMap.toString(),mineId);
 		} else {
 			throw new DeleteException("批量删除失败");
 		}

@@ -46,10 +46,12 @@ public class PrimaryKeyUtils {
      * @return
      */
     public Long orderId(String prefix) {
-        String key = "GLOBAL_ID_" + prefix;
+        String prefix_month = prefix.substring(0, 8);
+        String key = "GLOBAL_ID_" + prefix_month;
         String orderId = null;
         try {
             Long increment = jedisUtil.incrBy(key,1L);
+            jedisUtil.expire(key,3*24*3600);
             //往前补6位
             orderId=prefix+String.format("%1$06d",increment);
         } catch (Exception e) {

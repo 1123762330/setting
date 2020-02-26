@@ -73,6 +73,16 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         return workerMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public void updateComeInByid(String ids) {
+
+    }
+
+    @Override
+    public PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
+        return null;
+    }
+
 //    //入库列表
 //    @Override
 //    public PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize) {
@@ -107,39 +117,39 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
 //    }
 
     //入库操作
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateComeInByid(String ids) {
-        ArrayList<Integer> list = new ArrayList<>();
-        if (ids.contains(",")) {
-            //全部入库
-            String[] split = ids.split(",");
-            for (int i = 0; i < split.length; i++) {
-                list.add(Integer.valueOf(split[i]));
-            }
-        } else {
-            //单个入库
-            list.add(Integer.valueOf(ids));
-        }
-        int rows = workerMapper.updateComeInByid(list);
-        //修改记录表里的入库时间
-        operatorWorkerHistoryService.updateComeInTimeById(list);
-        //批量入库数据同步到缓存里
-        batchComeIn(rows, "worker", list.toString());
-        batchComeIn(rows, "workerbrand_setting", list.toString());
-    }
-
-    //出库列表
-    @Override
-    public PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
-        if (!StringUtils.isEmpty(keyWord)) {
-            keyWord = "%" + keyWord + "%";
-        }
-        PageHelper.startPage(pageNum, pageSize);
-        List<Worker> workers = workerMapper.selectByOther(keyWord);
-        PageInfo<Worker> pageInfo = new PageInfo<>(workers);
-        return pageInfo;
-    }
+//    @Override
+//    @Transactional(rollbackFor = Exception.class)
+//    public void updateComeInByid(String ids) {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        if (ids.contains(",")) {
+//            //全部入库
+//            String[] split = ids.split(",");
+//            for (int i = 0; i < split.length; i++) {
+//                list.add(Integer.valueOf(split[i]));
+//            }
+//        } else {
+//            //单个入库
+//            list.add(Integer.valueOf(ids));
+//        }
+//        int rows = workerMapper.updateComeInByid(list);
+//        //修改记录表里的入库时间
+//        operatorWorkerHistoryService.updateComeInTimeById(list);
+//        //批量入库数据同步到缓存里
+//        batchComeIn(rows, "worker", list.toString());
+//        batchComeIn(rows, "workerbrand_setting", list.toString());
+//    }
+//
+//    //出库列表
+//    @Override
+//    public PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
+//        if (!StringUtils.isEmpty(keyWord)) {
+//            keyWord = "%" + keyWord + "%";
+//        }
+//        PageHelper.startPage(pageNum, pageSize);
+//        List<Worker> workers = workerMapper.selectByOther(keyWord);
+//        PageInfo<Worker> pageInfo = new PageInfo<>(workers);
+//        return pageInfo;
+//    }
 
     //软删除
     @Override
@@ -157,7 +167,7 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
             list.add(Integer.valueOf(ids));
         }
         int rows = workerMapper.updateById(list);
-        redisToBatchDelete(rows, "worker", list.toString());
+        redisToBatchDelete(rows, "worker", list.toString(),null);
     }
 
     //出库操作
@@ -186,8 +196,8 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         //同时需要记录到历史表中
         operatorWorkerHistoryService.insertTobatch(operatorWorkerHistoryList);
         //出库数据同步到缓存里
-        batchMoveOut(rows, "worker", operatorWorkerHistoryList.toString());
-        batchMoveOut(rows, "workerbrand_setting", operatorWorkerHistoryList.toString());
+        //batchMoveOut(rows, "worker", operatorWorkerHistoryList.toString());
+        //batchMoveOut(rows, "workerbrand_setting", operatorWorkerHistoryList.toString());
     }
 
     /**

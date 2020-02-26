@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
@@ -47,7 +48,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void insertSelective(IpSetting record) {
         int rows = ipSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        redisToInsert(rows,"ip_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToInsert(rows,"ip_setting",jsonString,null);
     }
 
     @Override
@@ -60,7 +62,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void updateByPrimaryKeySelective(IpSetting record) {
         int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        redisToUpdate(rows,"ip_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToUpdate(rows,"ip_setting",jsonString,null);
     }
 
     @Override
@@ -75,7 +78,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
         IpSetting record = new IpSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        redisToDelete(rows,"ip_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToDelete(rows,"ip_setting",jsonString,null);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
@@ -52,7 +53,8 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void insertSelective(CustomerSetting record) {
         int rows = customerSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        redisToInsert(rows,"customer_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToInsert(rows,"customer_setting",jsonString,null);
     }
 
     @Override
@@ -65,7 +67,8 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void updateByPrimaryKeySelective(CustomerSetting record) {
         int rows = customerSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        redisToUpdate(rows,"customer_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToUpdate(rows,"customer_setting",jsonString,null);
     }
 
     @Override
@@ -80,7 +83,8 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         CustomerSetting record = new CustomerSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        redisToDelete(rows,"customer_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToDelete(rows,"customer_setting",jsonString,null);
     }
 
     @Override

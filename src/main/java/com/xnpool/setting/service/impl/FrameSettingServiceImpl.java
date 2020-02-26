@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
@@ -49,7 +50,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        redisToInsert(rows, "frame_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToInsert(rows, "frame_setting",jsonString,record.getMineid());
     }
 
     @Override
@@ -66,7 +68,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        redisToUpdate(rows, "frame_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToUpdate(rows, "frame_setting",jsonString,record.getMineid());
     }
 
     @Override
@@ -81,7 +84,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         FrameSetting record = new FrameSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        redisToDelete(rows,"frame_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToDelete(rows,"frame_setting",jsonString,record.getMineid());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
@@ -43,7 +44,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void insertSelective(FactoryHouse record) {
         int rows = factoryHouseMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        redisToInsert(rows,"factory_house",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToInsert(rows,"factory_house",jsonString,record.getMineid());
     }
 
     @Override
@@ -56,7 +58,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void updateByPrimaryKeySelective(FactoryHouse record) {
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        redisToUpdate(rows,"factory_house",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToUpdate(rows,"factory_house",jsonString,record.getMineid());
     }
 
     @Override
@@ -71,7 +74,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
         FactoryHouse record = new FactoryHouse();
         record.setUpdatetime(new Date());
         record.setId(id);
-        redisToDelete(rows,"factory_house",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToDelete(rows,"factory_house",jsonString,record.getMineid());
     }
 
     @Override

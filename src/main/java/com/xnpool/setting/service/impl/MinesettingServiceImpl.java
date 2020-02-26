@@ -1,12 +1,11 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.common.exception.InsertException;
-import com.xnpool.setting.common.exception.UpdateException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,7 +47,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void insertSelective(MineSetting record) {
         int rows = minesettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        redisToInsert(rows,"mine_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToInsert(rows,"mine_setting",jsonString,record.getId());
     }
 
     @Override
@@ -61,7 +61,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void updateByPrimaryKeySelective(MineSetting record) {
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        redisToUpdate(rows,"mine_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToUpdate(rows,"mine_setting",jsonString,record.getId());
     }
 
     @Override
@@ -76,7 +77,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         MineSetting record = new MineSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        redisToDelete(rows,"mine_setting",record.toString());
+        String jsonString = JSON.toJSONString(record, true);
+        redisToDelete(rows,"mine_setting",jsonString,record.getId());
     }
 
     @Override
