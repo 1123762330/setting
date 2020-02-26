@@ -167,7 +167,7 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
             list.add(Integer.valueOf(ids));
         }
         int rows = workerMapper.updateById(list);
-        redisToBatchDelete(rows, "worker", list.toString(),null);
+        redisToBatchDelete(rows, "worker", list,null);
     }
 
     //出库操作

@@ -60,8 +60,7 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     public void insertSelective(GroupSetting record) {
         int rows = groupSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToInsert(rows,"group_setting",jsonString,record.getMineid());
+        redisToInsert(rows,"group_setting",record,record.getMineid());
     }
 
     @Override
@@ -74,8 +73,7 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     public void updateByPrimaryKeySelective(GroupSetting record) {
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToUpdate(rows,"group_setting",jsonString,record.getMineid());
+        redisToUpdate(rows,"group_setting",record,record.getMineid());
     }
 
     @Override
@@ -109,8 +107,7 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         GroupSetting record = new GroupSetting();
         record.setUpdatetime(new Date());
         record.setGroupid(id);
-        String jsonString = JSON.toJSONString(record, true);
-        redisToDelete(rows,"group_setting",jsonString,record.getMineid());
+        redisToDelete(rows,"group_setting",record,record.getMineid());
     }
 
     @Override

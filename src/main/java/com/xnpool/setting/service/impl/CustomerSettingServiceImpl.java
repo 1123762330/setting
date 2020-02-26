@@ -53,8 +53,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void insertSelective(CustomerSetting record) {
         int rows = customerSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToInsert(rows,"customer_setting",jsonString,null);
+        //redisToInsert(rows,"customer_setting",record,null);
     }
 
     @Override
@@ -67,8 +66,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void updateByPrimaryKeySelective(CustomerSetting record) {
         int rows = customerSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToUpdate(rows,"customer_setting",jsonString,null);
+        //redisToUpdate(rows,"customer_setting",record,null);
     }
 
     @Override
@@ -83,8 +81,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         CustomerSetting record = new CustomerSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        String jsonString = JSON.toJSONString(record, true);
-        redisToDelete(rows,"customer_setting",jsonString,null);
+        //redisToDelete(rows,"customer_setting",record,null);
     }
 
     @Override

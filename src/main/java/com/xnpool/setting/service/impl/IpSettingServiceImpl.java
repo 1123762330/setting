@@ -48,8 +48,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void insertSelective(IpSetting record) {
         int rows = ipSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToInsert(rows,"ip_setting",jsonString,null);
+        redisToInsert(rows,"ip_setting",record,null);
     }
 
     @Override
@@ -62,8 +61,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void updateByPrimaryKeySelective(IpSetting record) {
         int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToUpdate(rows,"ip_setting",jsonString,null);
+        redisToUpdate(rows,"ip_setting",record,null);
     }
 
     @Override
@@ -78,8 +76,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
         IpSetting record = new IpSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        String jsonString = JSON.toJSONString(record, true);
-        redisToDelete(rows,"ip_setting",jsonString,null);
+        redisToDelete(rows,"ip_setting",record,null);
     }
 
     @Override

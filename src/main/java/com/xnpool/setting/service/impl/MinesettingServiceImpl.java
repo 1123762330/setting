@@ -47,8 +47,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void insertSelective(MineSetting record) {
         int rows = minesettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToInsert(rows,"mine_setting",jsonString,record.getId());
+        redisToInsert(rows,"mine_setting",record,record.getId());
     }
 
     @Override
@@ -61,8 +60,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void updateByPrimaryKeySelective(MineSetting record) {
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToUpdate(rows,"mine_setting",jsonString,record.getId());
+        redisToUpdate(rows,"mine_setting",record,record.getId());
     }
 
     @Override
@@ -78,7 +76,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         record.setUpdatetime(new Date());
         record.setId(id);
         String jsonString = JSON.toJSONString(record, true);
-        redisToDelete(rows,"mine_setting",jsonString,record.getId());
+        redisToDelete(rows,"mine_setting",record,record.getId());
     }
 
     @Override

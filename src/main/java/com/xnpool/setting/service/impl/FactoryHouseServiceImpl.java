@@ -44,8 +44,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void insertSelective(FactoryHouse record) {
         int rows = factoryHouseMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToInsert(rows,"factory_house",jsonString,record.getMineid());
+        redisToInsert(rows,"factory_house",record,record.getMineid());
     }
 
     @Override
@@ -58,8 +57,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void updateByPrimaryKeySelective(FactoryHouse record) {
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToUpdate(rows,"factory_house",jsonString,record.getMineid());
+        redisToUpdate(rows,"factory_house",record,record.getMineid());
     }
 
     @Override
@@ -74,8 +72,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
         FactoryHouse record = new FactoryHouse();
         record.setUpdatetime(new Date());
         record.setId(id);
-        String jsonString = JSON.toJSONString(record, true);
-        redisToDelete(rows,"factory_house",jsonString,record.getMineid());
+        redisToDelete(rows,"factory_house",record,record.getMineid());
     }
 
     @Override

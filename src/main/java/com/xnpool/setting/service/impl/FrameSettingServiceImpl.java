@@ -50,8 +50,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.insertSelective(record);
         record.setCreatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToInsert(rows, "frame_setting",jsonString,record.getMineid());
+        redisToInsert(rows, "frame_setting",record,record.getMineid());
     }
 
     @Override
@@ -68,8 +67,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdatetime(new Date());
-        String jsonString = JSON.toJSONString(record, true);
-        redisToUpdate(rows, "frame_setting",jsonString,record.getMineid());
+        redisToUpdate(rows, "frame_setting",record,record.getMineid());
     }
 
     @Override
@@ -84,8 +82,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         FrameSetting record = new FrameSetting();
         record.setUpdatetime(new Date());
         record.setId(id);
-        String jsonString = JSON.toJSONString(record, true);
-        redisToDelete(rows,"frame_setting",jsonString,record.getMineid());
+        redisToDelete(rows,"frame_setting",record,record.getMineid());
     }
 
     @Override

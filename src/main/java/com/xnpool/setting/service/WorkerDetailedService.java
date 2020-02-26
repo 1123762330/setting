@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.Worker;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;
 import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
+import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
 
 /**
  * @author zly
@@ -26,4 +27,8 @@ public interface WorkerDetailedService {
     int updateByPrimaryKey(WorkerDetailed record);
 
     PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize);
+
+    void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam);
 }
+
+

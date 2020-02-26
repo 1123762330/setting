@@ -1,171 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xnpool.setting.domain.mapper.WorkerDetailedMapper">
-    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.WorkerDetailed">
-        <!--@mbg.generated-->
-        <!--@Table worker_detailed-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="workerId" jdbcType="INTEGER" property="workerid"/>
-        <result column="factoryId" jdbcType="INTEGER" property="factoryid"/>
-        <result column="frameId" jdbcType="INTEGER" property="frameid"/>
-        <result column="frameNumber" jdbcType="INTEGER" property="framenumber"/>
-        <result column="groupId" jdbcType="INTEGER" property="groupid"/>
-        <result column="is_come_in" jdbcType="INTEGER" property="isComeIn"/>
-        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
-        <result column="isDelete" jdbcType="INTEGER" property="isdelete"/>
-        <result column="createTime" jdbcType="TIMESTAMP" property="createtime"/>
-        <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, workerId, factoryId, frameId, frameNumber, groupId, is_come_in, remarks, isDelete,
-        createTime, updateTime
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from worker_detailed
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from worker_detailed
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into worker_detailed (workerId, factoryId, frameId,
-        frameNumber, groupId, is_come_in,
-        remarks, isDelete, createTime,
-        updateTime)
-        values (#{workerid,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, #{frameid,jdbcType=INTEGER},
-        #{framenumber,jdbcType=INTEGER}, #{groupid,jdbcType=INTEGER}, #{isComeIn,jdbcType=INTEGER},
-        #{remarks,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP},
-        #{updatetime,jdbcType=TIMESTAMP})
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into worker_detailed
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="workerid != null">
-                workerId,
-            </if>
-            <if test="factoryid != null">
-                factoryId,
-            </if>
-            <if test="frameid != null">
-                frameId,
-            </if>
-            <if test="framenumber != null">
-                frameNumber,
-            </if>
-            <if test="groupid != null">
-                groupId,
-            </if>
-            <if test="isComeIn != null">
-                is_come_in,
-            </if>
-            <if test="remarks != null">
-                remarks,
-            </if>
-            <if test="isdelete != null">
-                isDelete,
-            </if>
-            <if test="createtime != null">
-                createTime,
-            </if>
-            <if test="updatetime != null">
-                updateTime,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="workerid != null">
-                #{workerid,jdbcType=INTEGER},
-            </if>
-            <if test="factoryid != null">
-                #{factoryid,jdbcType=INTEGER},
-            </if>
-            <if test="frameid != null">
-                #{frameid,jdbcType=INTEGER},
-            </if>
-            <if test="framenumber != null">
-                #{framenumber,jdbcType=INTEGER},
-            </if>
-            <if test="groupid != null">
-                #{groupid,jdbcType=INTEGER},
-            </if>
-            <if test="isComeIn != null">
-                #{isComeIn,jdbcType=INTEGER},
-            </if>
-            <if test="remarks != null">
-                #{remarks,jdbcType=VARCHAR},
-            </if>
-            <if test="isdelete != null">
-                #{isdelete,jdbcType=INTEGER},
-            </if>
-            <if test="createtime != null">
-                #{createtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updatetime != null">
-                #{updatetime,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed">
-        <!--@mbg.generated-->
-        update worker_detailed
-        <set>
-            <if test="workerid != null">
-                workerId = #{workerid,jdbcType=INTEGER},
-            </if>
-            <if test="factoryid != null">
-                factoryId = #{factoryid,jdbcType=INTEGER},
-            </if>
-            <if test="frameid != null">
-                frameId = #{frameid,jdbcType=INTEGER},
-            </if>
-            <if test="framenumber != null">
-                frameNumber = #{framenumber,jdbcType=INTEGER},
-            </if>
-            <if test="groupid != null">
-                groupId = #{groupid,jdbcType=INTEGER},
-            </if>
-            <if test="isComeIn != null">
-                is_come_in = #{isComeIn,jdbcType=INTEGER},
-            </if>
-            <if test="remarks != null">
-                remarks = #{remarks,jdbcType=VARCHAR},
-            </if>
-            <if test="isdelete != null">
-                isDelete = #{isdelete,jdbcType=INTEGER},
-            </if>
-            <if test="createtime != null">
-                createTime = #{createtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updatetime != null">
-                updateTime = #{updatetime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed">
-        <!--@mbg.generated-->
-        update worker_detailed
-        set workerId = #{workerid,jdbcType=INTEGER},
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.WorkerDetailed">
+    <!--@mbg.generated-->
+    <!--@Table worker_detailed-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="workerId" jdbcType="INTEGER" property="workerid" />
+    <result column="factoryId" jdbcType="INTEGER" property="factoryid" />
+    <result column="frameId" jdbcType="INTEGER" property="frameid" />
+    <result column="frameNumber" jdbcType="INTEGER" property="framenumber" />
+    <result column="groupId" jdbcType="INTEGER" property="groupid" />
+    <result column="mineId" jdbcType="INTEGER" property="mineid" />
+    <result column="is_come_in" jdbcType="INTEGER" property="isComeIn" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, workerId, factoryId, frameId, frameNumber, groupId, mineId, is_come_in, isDelete, 
+    createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from worker_detailed
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from worker_detailed
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into worker_detailed (workerId, factoryId, frameId, 
+      frameNumber, groupId, mineId, 
+      is_come_in, isDelete, createTime, 
+      updateTime)
+    values (#{workerid,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, #{frameid,jdbcType=INTEGER}, 
+      #{framenumber,jdbcType=INTEGER}, #{groupid,jdbcType=INTEGER}, #{mineid,jdbcType=INTEGER}, 
+      #{isComeIn,jdbcType=INTEGER}, #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into worker_detailed
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workerid != null">
+        workerId,
+      </if>
+      <if test="factoryid != null">
+        factoryId,
+      </if>
+      <if test="frameid != null">
+        frameId,
+      </if>
+      <if test="framenumber != null">
+        frameNumber,
+      </if>
+      <if test="groupid != null">
+        groupId,
+      </if>
+      <if test="mineid != null">
+        mineId,
+      </if>
+      <if test="isComeIn != null">
+        is_come_in,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workerid != null">
+        #{workerid,jdbcType=INTEGER},
+      </if>
+      <if test="factoryid != null">
+        #{factoryid,jdbcType=INTEGER},
+      </if>
+      <if test="frameid != null">
+        #{frameid,jdbcType=INTEGER},
+      </if>
+      <if test="framenumber != null">
+        #{framenumber,jdbcType=INTEGER},
+      </if>
+      <if test="groupid != null">
+        #{groupid,jdbcType=INTEGER},
+      </if>
+      <if test="mineid != null">
+        #{mineid,jdbcType=INTEGER},
+      </if>
+      <if test="isComeIn != null">
+        #{isComeIn,jdbcType=INTEGER},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed">
+    <!--@mbg.generated-->
+    update worker_detailed
+    <set>
+      <if test="workerid != null">
+        workerId = #{workerid,jdbcType=INTEGER},
+      </if>
+      <if test="factoryid != null">
         factoryId = #{factoryid,jdbcType=INTEGER},
+      </if>
+      <if test="frameid != null">
         frameId = #{frameid,jdbcType=INTEGER},
+      </if>
+      <if test="framenumber != null">
         frameNumber = #{framenumber,jdbcType=INTEGER},
+      </if>
+      <if test="groupid != null">
         groupId = #{groupid,jdbcType=INTEGER},
+      </if>
+      <if test="mineid != null">
+        mineId = #{mineid,jdbcType=INTEGER},
+      </if>
+      <if test="isComeIn != null">
         is_come_in = #{isComeIn,jdbcType=INTEGER},
-        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
         isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
-        updateTime = #{updatetime,jdbcType=TIMESTAMP}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed">
+    <!--@mbg.generated-->
+    update worker_detailed
+    set workerId = #{workerid,jdbcType=INTEGER},
+      factoryId = #{factoryid,jdbcType=INTEGER},
+      frameId = #{frameid,jdbcType=INTEGER},
+      frameNumber = #{framenumber,jdbcType=INTEGER},
+      groupId = #{groupid,jdbcType=INTEGER},
+      mineId = #{mineid,jdbcType=INTEGER},
+      is_come_in = #{isComeIn,jdbcType=INTEGER},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 
 <!--    出库列表-->
     <select id="selectMoveOutList" resultType="com.xnpool.setting.domain.pojo.WorkerDetailedExample">
@@ -198,4 +196,14 @@
             AND worker_detailed.groupId = group_setting.groupId
         </where>
     </select>
+
+<!--    批量更新-->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into worker_detailed (workerId, factoryId, frameId,frameNumber, groupId, mineId,createTime)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.workerid},#{item.factoryid},#{item.frameid},#{item.framenumber},
+            #{item.groupid},#{item.mineid},#{item.createtime})
+        </foreach>
+    </insert>
 </mapper>
