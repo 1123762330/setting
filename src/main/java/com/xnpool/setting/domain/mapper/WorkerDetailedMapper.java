@@ -32,7 +32,7 @@ public interface WorkerDetailedMapper {
 
     int updateComeInByid(ArrayList<Integer> list);
 
-    List<Integer> selectComeInlist();
+    List<Integer> selectWorkerIdlist(@Param("is_come_in") Integer is_come_in);
 
     List<WorkerMineVO> selectByWorkerId(List<Integer> list);
 }

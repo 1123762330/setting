@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.mapper.WorkerMapper;
 import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.service.IpSettingService;
@@ -96,14 +97,33 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer framenumber = workerDetailedParam.getFramenumber();
         Integer groupid = workerDetailedParam.getGroupid();
         Integer mineId = workerDetailedParam.getMineId();
+        List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(null);
         ArrayList<WorkerDetailed> list = new ArrayList<>();
         if (workerid.contains(",")) {
             //批量添加
             String[] split = workerid.split(",");
             for (int i = 0; i < split.length; i++) {
-                String workerId = split[i];
+                if (workerIdList.contains(split[i])){
+                    throw new InsertException("该矿机已经添加过!");
+                }else {
+                    String workerId = split[i];
+                    WorkerDetailed workerDetailed = new WorkerDetailed();
+                    workerDetailed.setWorkerid(Integer.valueOf(workerId));
+                    workerDetailed.setFactoryid(factoryid);
+                    workerDetailed.setFrameid(frameid);
+                    workerDetailed.setFramenumber(framenumber);
+                    workerDetailed.setGroupid(groupid);
+                    workerDetailed.setMineid(mineId);
+                    workerDetailed.setCreatetime(new Date());
+                    list.add(workerDetailed);
+                }
+            }
+        } else {
+            if (workerIdList.contains(workerid)){
+                throw new InsertException("该矿机已经添加过!");
+            }else {
                 WorkerDetailed workerDetailed = new WorkerDetailed();
-                workerDetailed.setWorkerid(Integer.valueOf(workerId));
+                workerDetailed.setWorkerid(Integer.valueOf(workerid));
                 workerDetailed.setFactoryid(factoryid);
                 workerDetailed.setFrameid(frameid);
                 workerDetailed.setFramenumber(framenumber);
@@ -112,23 +132,11 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerDetailed.setCreatetime(new Date());
                 list.add(workerDetailed);
             }
-        } else {
-            WorkerDetailed workerDetailed = new WorkerDetailed();
-            workerDetailed.setWorkerid(Integer.valueOf(workerid));
-            workerDetailed.setFactoryid(factoryid);
-            workerDetailed.setFrameid(frameid);
-            workerDetailed.setFramenumber(framenumber);
-            workerDetailed.setGroupid(groupid);
-            workerDetailed.setMineid(mineId);
-            workerDetailed.setCreatetime(new Date());
-            list.add(workerDetailed);
         }
+
         //批量入管理仓库
         int rows = workerDetailedMapper.batchInsert(list);
         //批量入缓存
-        //Map<Integer, List<WorkerDetailed>> groupBy = list.stream().collect(Collectors.groupingBy(WorkerDetailed::getMineid));
-        //String jsonString = JSONArray.toJSONString(groupBy);
-        //System.out.println(jsonString);
         redisToBatchInsert(rows, "worker_detailed", list, mineId);
     }
 
@@ -154,7 +162,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         List<Worker> workers = workerMapper.selectByOther(keyWord);
 
         //已经入库的矿机Id
-        List<Integer> comeInlist = workerDetailedMapper.selectComeInlist();
+        List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
 
         //遍历list集合,setIP所属区间进去
         for (Worker worker : workers) {
