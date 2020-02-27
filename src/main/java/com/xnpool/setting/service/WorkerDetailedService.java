@@ -32,6 +32,8 @@ public interface WorkerDetailedService {
     void updateMoveOutByid(String ids, String reason, String token);
 
     void updateComeInByid(String ids);
+
+    void updateById(String ids);
 }
 
 

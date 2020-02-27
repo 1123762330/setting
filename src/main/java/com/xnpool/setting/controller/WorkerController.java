@@ -56,19 +56,6 @@ public class WorkerController extends BaseController {
         return new ResponseResult(SUCCESS, workerExamplePageInfo);
     }
 
-    /**
-     * @Description 删除矿机
-     * @Author zly
-     * @Date 16:36 2020/2/18
-     * @Param
-     * @return
-     */
-    @DeleteMapping("/deleteWorker")
-    public ResponseResult deleteWorker(String ids) {
-        //workerService.updateById(ids);
-        return new ResponseResult(SUCCESS);
-    }
-
     @GetMapping("/selectWorkerList")
     public ResponseResult selectWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

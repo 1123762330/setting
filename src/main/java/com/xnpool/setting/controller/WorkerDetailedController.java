@@ -96,4 +96,17 @@ public class WorkerDetailedController extends BaseController {
     }
 
 
+    /**
+     * @Description 删除矿机
+     * @Author zly
+     * @Date 16:36 2020/2/18
+     * @Param
+     * @return
+     */
+    @DeleteMapping("/deleteWorker")
+    public ResponseResult deleteWorker(String ids) {
+        workerDetailedService.updateById(ids);
+        return new ResponseResult(SUCCESS);
+    }
+
 }

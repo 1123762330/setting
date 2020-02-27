@@ -83,30 +83,6 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         return null;
     }
 
-    //入库操作
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    public void updateComeInByid(String ids) {
-//        ArrayList<Integer> list = new ArrayList<>();
-//        if (ids.contains(",")) {
-//            //全部入库
-//            String[] split = ids.split(",");
-//            for (int i = 0; i < split.length; i++) {
-//                list.add(Integer.valueOf(split[i]));
-//            }
-//        } else {
-//            //单个入库
-//            list.add(Integer.valueOf(ids));
-//        }
-//        int rows = workerMapper.updateComeInByid(list);
-//        //修改记录表里的入库时间
-//        operatorWorkerHistoryService.updateComeInTimeById(list);
-//        //批量入库数据同步到缓存里
-//        batchComeIn(rows, "worker", list.toString());
-//        batchComeIn(rows, "workerbrand_setting", list.toString());
-//    }
-
-
     /**
      * @return
      * @Description 矿机列表

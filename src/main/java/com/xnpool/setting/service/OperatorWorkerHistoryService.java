@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/19 11:34
+ * @author zly
  * @version 1.0
+ * @date 2020/2/19 11:34
  */
-public interface OperatorWorkerHistoryService{
+public interface OperatorWorkerHistoryService {
 
 
     int deleteByPrimaryKey(Integer id);
@@ -29,9 +29,11 @@ public interface OperatorWorkerHistoryService{
 
     int updateByPrimaryKey(OperatorWorkerHistory record);
 
-    int  updateComeInTimeById(List<Integer> list);
+    int updateComeInTimeById(List<Integer> list);
 
-    void insertTobatch(List<OperatorWorkerHistory> operatorWorkerHistoryList);
+    int insertTobatch(List<Integer> list,String reason,Integer mineid,Integer operatorId);
 
     PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String keyWord, int pageNum, int pageSize);
 }
+
+

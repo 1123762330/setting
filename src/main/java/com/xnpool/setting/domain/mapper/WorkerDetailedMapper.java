@@ -1,6 +1,8 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.pojo.WorkerDetailedExample;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
+import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
+import com.xnpool.setting.domain.pojo.WorkerMineVO;
+import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,4 +33,6 @@ public interface WorkerDetailedMapper {
     int updateComeInByid(ArrayList<Integer> list);
 
     List<Integer> selectComeInlist();
+
+    List<WorkerMineVO> selectByWorkerId(List<Integer> list);
 }

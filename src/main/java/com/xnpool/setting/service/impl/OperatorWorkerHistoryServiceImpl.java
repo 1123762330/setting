@@ -65,8 +65,8 @@ public class OperatorWorkerHistoryServiceImpl implements OperatorWorkerHistorySe
     }
 
     @Override
-    public void insertTobatch(List<OperatorWorkerHistory> operatorWorkerHistoryList) {
-        operatorWorkerHistoryMapper.insertTobatch(operatorWorkerHistoryList);
+    public int insertTobatch(List<Integer> list,String reason,Integer mineid,Integer operatorId) {
+        return operatorWorkerHistoryMapper.insertTobatch(list,reason,mineid,operatorId);
     }
 
     @Override
@@ -105,3 +105,5 @@ public class OperatorWorkerHistoryServiceImpl implements OperatorWorkerHistorySe
     }
 
 }
+
+

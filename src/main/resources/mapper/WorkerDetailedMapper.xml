@@ -217,7 +217,7 @@
 
   <!--  矿机入库-->
   <update id="updateComeInByid" parameterType="java.util.List">
-    update worker set is_come_in = 1 where id in
+    update worker_detailed set is_come_in = 1 where id in
     <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>
@@ -226,5 +226,13 @@
   <!--矿机管理表的入库列表-->
   <select id="selectComeInlist" resultType="integer">
     select workerId FROM worker_detailed where isDelete=0 AND is_come_in=1
+  </select>
+
+  <!--矿机矿场列表-->
+  <select id="selectByWorkerId" resultType="com.xnpool.setting.domain.pojo.WorkerMineVO">
+    select workerId,mineId FROM worker_detailed where isDelete=0 AND workerId in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
   </select>
 </mapper>

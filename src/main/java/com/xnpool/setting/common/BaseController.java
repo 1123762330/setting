@@ -38,6 +38,7 @@ public abstract class BaseController {
 	public static final String BATCHCOMEIN = "batchComeIn";
 	public static final String BATCHMOVEOUT = "batchMoveOut";
 	public static final String BATCHDELETE = "batchDelete";
+	public static final String BATCHUPDATE = "batchupdate";
 
 	@Autowired
 	private PrimaryKeyUtils primaryKeyUtils;
@@ -113,7 +114,7 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public void insertRedisToBatch(String table, String user, HashMap<String, Object> data,Integer mineId) {
+	private void insertRedisToBatch(String table, String user, HashMap<String, Object> data,Integer mineId) {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		hashMap.put("table", table);
 		hashMap.put("use", user);
@@ -195,14 +196,14 @@ public abstract class BaseController {
 			HashMap<String, Object> hashMap = new HashMap<>();
 			hashMap.put("list",recordList);
 			hashMap.put("updateTime",new Date());
-			insertRedis(table, BATCHMOVEOUT, hashMap.toString(),mineId);
+			insertRedis(table, BATCHCOMEIN, hashMap.toString(),mineId);
 		} else {
 			throw new UpdateException("批量入库失败");
 		}
 	}
 
 	/**
-	 * @Description	批量入库数据
+	 * @Description	批量出库数据
 	 * @Author zly
 	 * @Date 15:35 2020/2/21
 	 * @Param
@@ -214,7 +215,7 @@ public abstract class BaseController {
 			HashMap<String, Object> hashMap = new HashMap<>();
 			hashMap.put("list",recordList);
 			hashMap.put("updateTime",new Date());
-			insertRedisToBatch(table, BATCHCOMEIN, hashMap,mineId);
+			insertRedisToBatch(table, BATCHMOVEOUT, hashMap,mineId);
 		} else {
 			throw new UpdateException("批量出库失败");
 		}
@@ -255,6 +256,25 @@ public abstract class BaseController {
 			insertRedisToBatch(table, BATCHINSERT, hashMap,mineId);
 		} else {
 			throw new DeleteException("批量添加失败");
+		}
+	}
+
+	/**
+	 * @Description	批量更新操作
+	 * @Author zly
+	 * @Date 16:03 2020/2/26
+	 * @Param
+	 * @return
+	 */
+	public void redisToBatchUpdate(Integer rows, String table, Object recordList, Integer mineId){
+		if (rows !=0) {
+			//操作数据库成功,写缓存
+			HashMap<String, Object> hashMap = new HashMap<>();
+			hashMap.put("list",recordList);
+			hashMap.put("updateTime",new Date());
+			insertRedisToBatch(table, BATCHUPDATE, hashMap,mineId);
+		} else {
+			throw new DeleteException("批量更新失败");
 		}
 	}
 

@@ -1,16 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;
-import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.Date;
-import java.util.List;
+import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/19 11:34
+ * @author zly
  * @version 1.0
+ * @date 2020/2/27 14:16
  */
 public interface OperatorWorkerHistoryMapper {
     int deleteByPrimaryKey(Integer id);
@@ -27,7 +22,7 @@ public interface OperatorWorkerHistoryMapper {
 
     int updateComeInTimeById(@Param("list") List<Integer> list);
 
-    void insertTobatch(@Param("list")List<OperatorWorkerHistory> operatorWorkerHistoryList);
+    int insertTobatch(@Param("list")List<Integer> list,@Param("reason") String reason,@Param("mineid")  Integer mineid,@Param("operatorId")  Integer operatorId);
 
     List<OperatorWorkerHistoryExample> selectWorkerHistoryList(@Param("keyWord") String keyWord);
 }

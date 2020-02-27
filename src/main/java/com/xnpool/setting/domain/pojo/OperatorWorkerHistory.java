@@ -7,42 +7,48 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author  zly
- * @date  2020/2/19 11:34
+ * @author zly
  * @version 1.0
+ * @date 2020/2/27 14:16
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OperatorWorkerHistory implements Serializable {
-    private static final long serialVersionUID = 5395070134288427685L;
     /**
-    * 编号
-    */
+     * 编号
+     */
     private Integer id;
 
     /**
-    * 矿机表id
-    */
+     * 矿场Id
+     */
+    private Integer mineid;
+
+    /**
+     * 矿机表id
+     */
     private Integer workerid;
 
     /**
-    * 出库时间
-    */
+     * 出库时间
+     */
     private Date moveouttime;
 
     /**
-    * 入库时间
-    */
+     * 入库时间
+     */
     private Date comeintime;
 
     /**
-    * 出库原因
-    */
+     * 出库原因
+     */
     private String reason;
 
     /**
-    * 出库员
-    */
-    private Integer operator;
+     * 出库员
+     */
+    private Integer operatorid;
+
+    private static final long serialVersionUID = 1L;
 }

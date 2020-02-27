@@ -1,5 +1,7 @@
 package com.xnpool.setting.service.impl;
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -10,6 +12,7 @@ import com.xnpool.setting.service.IpSettingService;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
@@ -126,7 +129,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //Map<Integer, List<WorkerDetailed>> groupBy = list.stream().collect(Collectors.groupingBy(WorkerDetailed::getMineid));
         //String jsonString = JSONArray.toJSONString(groupBy);
         //System.out.println(jsonString);
-        redisToBatchInsert(rows,"worker_detailed",list,mineId);
+        redisToBatchInsert(rows, "worker_detailed", list, mineId);
     }
 
     //入库列表
@@ -159,10 +162,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             String substring = worker.getWorkerip().substring(0, lastIndexOf);
             String ip_quJian = ipMap.get(substring);
             //这里需要做个判断,判断这个矿机有没有入库,如果入库列表里有那就是1,如果没有就是0
-            if (comeInlist.contains(worker.getId())){
+            if (comeInlist.contains(worker.getId())) {
                 WorkerExample workerExample = new WorkerExample(worker.getId(), worker.getWorkerip(), ip_quJian, worker.getIsonline(), 1);
                 result.add(workerExample);
-            }else {
+            } else {
                 WorkerExample workerExample = new WorkerExample(worker.getId(), worker.getWorkerip(), ip_quJian, worker.getIsonline(), 0);
                 result.add(workerExample);
             }
@@ -174,31 +177,44 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     //出库操作
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMoveOutByid(String ids,String reason,String token) {
+    public void updateMoveOutByid(String ids, String reason, String token) {
         ArrayList<Integer> list = new ArrayList<>();
         ArrayList<OperatorWorkerHistory> operatorWorkerHistoryList = new ArrayList<>();
         //从token中取出userid
-        int userId=12;
-        if(ids.contains(",")){
+        int userId = 12;
+        if (ids.contains(",")) {
             //全部出库
             String[] split = ids.split(",");
             for (int i = 0; i < split.length; i++) {
                 list.add(Integer.valueOf(split[i]));
-                OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(split[i]),new Date(),null,reason,userId);
-                operatorWorkerHistoryList.add(operatorWorkerHistory);
             }
-        }else {
+        } else {
             //单个出库
             list.add(Integer.valueOf(ids));
-            OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(ids),new Date(),null,reason,userId);
-            operatorWorkerHistoryList.add(operatorWorkerHistory);
         }
-        int rows = workerDetailedMapper.updateMoveOutByid(list);
-        //同时需要记录到历史表中
-        operatorWorkerHistoryService.insertTobatch(operatorWorkerHistoryList);
-        //出库数据同步到缓存里
-        redisToBatchInsert(rows,"operator_worker_history",operatorWorkerHistoryList,null);
-        batchMoveOut(rows,"worker_detailed",operatorWorkerHistoryList,null);
+        workerDetailedMapper.updateMoveOutByid(list);
+
+        List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
+        Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
+        System.out.println(groupByMineId);
+        for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
+            //同时需要记录到历史表中
+            List<Integer> workerIdList = new ArrayList<>();
+            //将该矿场下的矿机id提取到集合中
+            List<WorkerMineVO> WorkerMineVOList = entry.getValue();
+            for (WorkerMineVO workerMineVO : WorkerMineVOList) {
+                Integer workerId = workerMineVO.getWorkerId();
+                workerIdList.add(workerId);
+            }
+            int rows = operatorWorkerHistoryService.insertTobatch(workerIdList, reason, entry.getKey(), userId);
+            //出库数据同步到缓存里
+            HashMap<String, Object> operatorWorkerData = new HashMap<>();
+            operatorWorkerData.put("workerIdList", workerIdList);
+            operatorWorkerData.put("reason", reason);
+            operatorWorkerData.put("reason", userId);
+            redisToBatchInsert(rows, "operator_worker_histkory", operatorWorkerData, entry.getKey());
+            batchMoveOut(rows, "worker_detailed", workerIdList, entry.getKey());
+        }
     }
 
     //入库操作
@@ -206,24 +222,74 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Transactional(rollbackFor = Exception.class)
     public void updateComeInByid(String ids) {
         ArrayList<Integer> list = new ArrayList<>();
-        if(ids.contains(",")){
+        if (ids.contains(",")) {
             //全部入库
             String[] split = ids.split(",");
             for (int i = 0; i < split.length; i++) {
                 list.add(Integer.valueOf(split[i]));
             }
-        }else {
+        } else {
             //单个入库
             list.add(Integer.valueOf(ids));
         }
         int rows = workerDetailedMapper.updateComeInByid(list);
         //修改记录表里的入库时间
         operatorWorkerHistoryService.updateComeInTimeById(list);
-        //批量入库数据同步到缓存里
-        batchComeIn(rows,"operator_worker_histkory",list,null);
-        batchComeIn(rows,"worker_detailed",list,null);
+
+        //根据批量更新的id去库里面查询矿场id
+        List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
+        Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
+        System.out.println(groupByMineId);
+        for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
+            //同时需要记录到历史表中
+            List<Integer> workerIdList = new ArrayList<>();
+            //将该矿场下的矿机id提取到集合中
+            List<WorkerMineVO> WorkerMineVOList = entry.getValue();
+            for (WorkerMineVO workerMineVO : WorkerMineVOList) {
+                Integer workerId = workerMineVO.getWorkerId();
+                workerIdList.add(workerId);
+            }
+            //批量入库数据同步到缓存里
+            redisToBatchUpdate(rows, "operator_worker_histkory", workerIdList, entry.getKey());
+            batchComeIn(rows, "worker_detailed", workerIdList, entry.getKey());
+        }
     }
 
+    //软删除
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateById(String ids) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (ids.contains(",")) {
+            //全部出库
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+            }
+        } else {
+            //单个出库
+            list.add(Integer.valueOf(ids));
+        }
+        int rows = workerMapper.updateById(list);
+
+        //根据批量更新的id去库里面查询矿场id
+        List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
+        Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
+        System.out.println(groupByMineId);
+        for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
+            //同时需要记录到历史表中
+            List<Integer> workerIdList = new ArrayList<>();
+            //将该矿场下的矿机id提取到集合中
+            List<WorkerMineVO> WorkerMineVOList = entry.getValue();
+            for (WorkerMineVO workerMineVO : WorkerMineVOList) {
+                Integer workerId = workerMineVO.getWorkerId();
+                workerIdList.add(workerId);
+            }
+            //批量入库数据同步到缓存里
+            redisToBatchDelete(rows, "worker_detailed", workerIdList, entry.getKey());
+        }
+
+    }
 
 }
 
