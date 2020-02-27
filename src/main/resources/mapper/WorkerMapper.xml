@@ -7,14 +7,15 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="miner" jdbcType="VARCHAR" property="miner" />
     <result column="workerName" jdbcType="VARCHAR" property="workername" />
-    <result column="worker_ip" jdbcType="VARCHAR" property="workerIp" />
+    <result column="workerIp" jdbcType="VARCHAR" property="workerip" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="isOnLine" jdbcType="INTEGER" property="isonline" />
     <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, miner, workerName, worker_ip, createTime, updateTime, isDelete
+    id, miner, workerName, workerIp, createTime, updateTime, isOnLine, isDelete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -30,12 +31,12 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.Worker" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into worker (miner, workerName, worker_ip, 
-      createTime, updateTime, isDelete
-      )
-    values (#{miner,jdbcType=VARCHAR}, #{workername,jdbcType=VARCHAR}, #{workerIp,jdbcType=VARCHAR}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{isdelete,jdbcType=INTEGER}
-      )
+    insert into worker (miner, workerName, workerIp, 
+      createTime, updateTime, isOnLine, 
+      isDelete)
+    values (#{miner,jdbcType=VARCHAR}, #{workername,jdbcType=VARCHAR}, #{workerip,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{isonline,jdbcType=INTEGER}, 
+      #{isdelete,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.Worker" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -47,14 +48,17 @@
       <if test="workername != null">
         workerName,
       </if>
-      <if test="workerIp != null">
-        worker_ip,
+      <if test="workerip != null">
+        workerIp,
       </if>
       <if test="createtime != null">
         createTime,
       </if>
       <if test="updatetime != null">
         updateTime,
+      </if>
+      <if test="isonline != null">
+        isOnLine,
       </if>
       <if test="isdelete != null">
         isDelete,
@@ -67,14 +71,17 @@
       <if test="workername != null">
         #{workername,jdbcType=VARCHAR},
       </if>
-      <if test="workerIp != null">
-        #{workerIp,jdbcType=VARCHAR},
+      <if test="workerip != null">
+        #{workerip,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null">
         #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatetime != null">
         #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isonline != null">
+        #{isonline,jdbcType=INTEGER},
       </if>
       <if test="isdelete != null">
         #{isdelete,jdbcType=INTEGER},
@@ -91,14 +98,17 @@
       <if test="workername != null">
         workerName = #{workername,jdbcType=VARCHAR},
       </if>
-      <if test="workerIp != null">
-        worker_ip = #{workerIp,jdbcType=VARCHAR},
+      <if test="workerip != null">
+        workerIp = #{workerip,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="updatetime != null">
         updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isonline != null">
+        isOnLine = #{isonline,jdbcType=INTEGER},
       </if>
       <if test="isdelete != null">
         isDelete = #{isdelete,jdbcType=INTEGER},
@@ -111,9 +121,10 @@
     update worker
     set miner = #{miner,jdbcType=VARCHAR},
       workerName = #{workername,jdbcType=VARCHAR},
-      worker_ip = #{workerIp,jdbcType=VARCHAR},
+      workerIp = #{workerip,jdbcType=VARCHAR},
       createTime = #{createtime,jdbcType=TIMESTAMP},
       updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      isOnLine = #{isonline,jdbcType=INTEGER},
       isDelete = #{isdelete,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -126,30 +137,14 @@
     <where>
       isDelete = 0
       <if test="keyWord != null">
-        AND (ip like #{keyWord} or `miner` like #{keyWord} or `workerName` like #{keyWord} or `frameName` like #{keyWord})
+        AND (workerIp like #{keyWord} or `miner` like #{keyWord} or `workerName` like #{keyWord})
       </if>
     </where>
   </select>
 
-<!--  矿机入库-->
-  <update id="updateComeInByid" parameterType="java.util.List">
-    update worker set is_come_in = 1 where id in
-    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
-      #{item,jdbcType=BIGINT}
-    </foreach>
-  </update>
-
 <!--  矿机软删除-->
   <update id="updateById">
     update worker set isDelete = 1 where id in
-    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
-      #{item,jdbcType=BIGINT}
-    </foreach>
-  </update>
-
-<!--  矿机出库操作-->
-  <update id="updateMoveOutByid" parameterType="java.util.List">
-    update worker set is_come_in = 0 where id in
     <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>

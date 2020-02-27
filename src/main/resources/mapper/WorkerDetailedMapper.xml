@@ -206,4 +206,25 @@
             #{item.groupid},#{item.mineid},#{item.createtime})
         </foreach>
     </insert>
+
+  <!--  矿机出库操作-->
+  <update id="updateMoveOutByid" parameterType="java.util.List">
+    update worker_detailed set is_come_in = 0 where id in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--  矿机入库-->
+  <update id="updateComeInByid" parameterType="java.util.List">
+    update worker set is_come_in = 1 where id in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--矿机管理表的入库列表-->
+  <select id="selectComeInlist" resultType="integer">
+    select workerId FROM worker_detailed where isDelete=0 AND is_come_in=1
+  </select>
 </mapper>

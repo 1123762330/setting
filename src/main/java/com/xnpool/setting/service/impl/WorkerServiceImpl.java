@@ -83,39 +83,6 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         return null;
     }
 
-//    //入库列表
-//    @Override
-//    public PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize) {
-//        if (!StringUtils.isEmpty(keyWord)) {
-//            keyWord = "%" + keyWord + "%";
-//        }
-//
-//        //取IP字段区间Map,便于后面取值
-//        HashMap<Integer, String> selectByIPStart = ipSettingService.selectByIPStart();
-//        List<WorkerExample> result = new ArrayList<>();
-//        HashMap<String, String> ipMap = new HashMap<>();
-//        for (Map.Entry<Integer, String> entry : selectByIPStart.entrySet()) {
-//            String value = entry.getValue();
-//            String[] split = value.split("-");
-//            String ipStart = split[0];
-//            int lastIndexOf = ipStart.lastIndexOf(".");
-//            String key = ipStart.substring(0, lastIndexOf);
-//            ipMap.put(key, value);
-//        }
-//        PageHelper.startPage(pageNum, pageSize);
-//        List<Worker> workers = workerMapper.selectByOther(keyWord);
-//        //遍历list集合,setIP所属区间进去
-//        for (Worker worker : workers) {
-//            int lastIndexOf = worker.getIp().lastIndexOf(".");
-//            String substring = worker.getIp().substring(0, lastIndexOf);
-//            String ip_quJian = ipMap.get(substring);
-//            WorkerExample workerExample = new WorkerExample(worker.getId(), worker.getIp(), ip_quJian, worker.getIsOnline(), worker.getIsComeIn());
-//            result.add(workerExample);
-//        }
-//        PageInfo<WorkerExample> pageInfo = new PageInfo<>(result);
-//        return pageInfo;
-//    }
-
     //入库操作
 //    @Override
 //    @Transactional(rollbackFor = Exception.class)
@@ -138,74 +105,14 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
 //        batchComeIn(rows, "worker", list.toString());
 //        batchComeIn(rows, "workerbrand_setting", list.toString());
 //    }
-//
-//    //出库列表
-//    @Override
-//    public PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
-//        if (!StringUtils.isEmpty(keyWord)) {
-//            keyWord = "%" + keyWord + "%";
-//        }
-//        PageHelper.startPage(pageNum, pageSize);
-//        List<Worker> workers = workerMapper.selectByOther(keyWord);
-//        PageInfo<Worker> pageInfo = new PageInfo<>(workers);
-//        return pageInfo;
-//    }
 
-    //软删除
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateById(String ids) {
-        ArrayList<Integer> list = new ArrayList<>();
-        if (ids.contains(",")) {
-            //全部出库
-            String[] split = ids.split(",");
-            for (int i = 0; i < split.length; i++) {
-                list.add(Integer.valueOf(split[i]));
-            }
-        } else {
-            //单个出库
-            list.add(Integer.valueOf(ids));
-        }
-        int rows = workerMapper.updateById(list);
-        redisToBatchDelete(rows, "worker", list,null);
-    }
-
-    //出库操作
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateMoveOutByid(String ids, String reason, String token) {
-        ArrayList<Integer> list = new ArrayList<>();
-        ArrayList<OperatorWorkerHistory> operatorWorkerHistoryList = new ArrayList<>();
-        //从token中取出userid
-        int userId = 12;
-        if (ids.contains(",")) {
-            //全部出库
-            String[] split = ids.split(",");
-            for (int i = 0; i < split.length; i++) {
-                list.add(Integer.valueOf(split[i]));
-                OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, Integer.valueOf(split[i]), new Date(), null, reason, userId);
-                operatorWorkerHistoryList.add(operatorWorkerHistory);
-            }
-        } else {
-            //单个出库
-            list.add(Integer.valueOf(ids));
-            OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, Integer.valueOf(ids), new Date(), null, reason, userId);
-            operatorWorkerHistoryList.add(operatorWorkerHistory);
-        }
-        int rows = workerMapper.updateMoveOutByid(list);
-        //同时需要记录到历史表中
-        operatorWorkerHistoryService.insertTobatch(operatorWorkerHistoryList);
-        //出库数据同步到缓存里
-        //batchMoveOut(rows, "worker", operatorWorkerHistoryList.toString());
-        //batchMoveOut(rows, "workerbrand_setting", operatorWorkerHistoryList.toString());
-    }
 
     /**
+     * @return
      * @Description 矿机列表
      * @Author zly
      * @Date 12:07 2020/2/23
      * @Param
-     * @return
      */
     @Override
     public HashMap<Integer, String> selectWorkerList(String keyWord) {
@@ -214,10 +121,11 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         for (Worker worker : workers) {
             Integer id = worker.getId();
             String workername = worker.getWorkername();
-            resultMap.put(id,workername);
+            resultMap.put(id, workername);
         }
         return resultMap;
     }
 
 }
+
 

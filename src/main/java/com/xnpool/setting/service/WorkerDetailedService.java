@@ -1,10 +1,7 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.Worker;
-import com.xnpool.setting.domain.pojo.WorkerDetailed;
-import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
-import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
+import com.xnpool.setting.domain.pojo.*;
 
 /**
  * @author zly
@@ -29,6 +26,12 @@ public interface WorkerDetailedService {
     PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize);
 
     void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam);
+
+    PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
+
+    void updateMoveOutByid(String ids, String reason, String token);
+
+    void updateComeInByid(String ids);
 }
 
 

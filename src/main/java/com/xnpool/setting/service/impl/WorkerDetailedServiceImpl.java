@@ -1,25 +1,21 @@
 package com.xnpool.setting.service.impl;
-import java.util.Date;
+import java.util.*;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.Worker;
-import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
-import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
+import com.xnpool.setting.domain.mapper.WorkerMapper;
+import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.service.IpSettingService;
+import com.xnpool.setting.service.OperatorWorkerHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import com.xnpool.setting.domain.pojo.WorkerDetailed;
+
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
 import com.xnpool.setting.service.WorkerDetailedService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author zly
@@ -31,6 +27,15 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
     @Resource
     private WorkerDetailedMapper workerDetailedMapper;
+
+    @Resource
+    private WorkerMapper workerMapper;
+
+    @Autowired
+    private IpSettingService ipSettingService;
+
+    @Autowired
+    private OperatorWorkerHistoryService operatorWorkerHistoryService;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -123,6 +128,102 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //System.out.println(jsonString);
         redisToBatchInsert(rows,"worker_detailed",list,mineId);
     }
+
+    //入库列表
+    @Override
+    public PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize) {
+        if (!StringUtils.isEmpty(keyWord)) {
+            keyWord = "%" + keyWord + "%";
+        }
+        //取IP字段区间Map,便于后面取值
+        HashMap<Integer, String> selectByIPStart = ipSettingService.selectByIPStart();
+        List<WorkerExample> result = new ArrayList<>();
+        HashMap<String, String> ipMap = new HashMap<>();
+        for (Map.Entry<Integer, String> entry : selectByIPStart.entrySet()) {
+            String value = entry.getValue();
+            String[] split = value.split("-");
+            String ipStart = split[0];
+            int lastIndexOf = ipStart.lastIndexOf(".");
+            String key = ipStart.substring(0, lastIndexOf);
+            ipMap.put(key, value);
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Worker> workers = workerMapper.selectByOther(keyWord);
+
+        //已经入库的矿机Id
+        List<Integer> comeInlist = workerDetailedMapper.selectComeInlist();
+
+        //遍历list集合,setIP所属区间进去
+        for (Worker worker : workers) {
+            int lastIndexOf = worker.getWorkerip().lastIndexOf(".");
+            String substring = worker.getWorkerip().substring(0, lastIndexOf);
+            String ip_quJian = ipMap.get(substring);
+            //这里需要做个判断,判断这个矿机有没有入库,如果入库列表里有那就是1,如果没有就是0
+            if (comeInlist.contains(worker.getId())){
+                WorkerExample workerExample = new WorkerExample(worker.getId(), worker.getWorkerip(), ip_quJian, worker.getIsonline(), 1);
+                result.add(workerExample);
+            }else {
+                WorkerExample workerExample = new WorkerExample(worker.getId(), worker.getWorkerip(), ip_quJian, worker.getIsonline(), 0);
+                result.add(workerExample);
+            }
+        }
+        PageInfo<WorkerExample> pageInfo = new PageInfo<>(result);
+        return pageInfo;
+    }
+
+    //出库操作
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateMoveOutByid(String ids,String reason,String token) {
+        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<OperatorWorkerHistory> operatorWorkerHistoryList = new ArrayList<>();
+        //从token中取出userid
+        int userId=12;
+        if(ids.contains(",")){
+            //全部出库
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+                OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(split[i]),new Date(),null,reason,userId);
+                operatorWorkerHistoryList.add(operatorWorkerHistory);
+            }
+        }else {
+            //单个出库
+            list.add(Integer.valueOf(ids));
+            OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null,Integer.valueOf(ids),new Date(),null,reason,userId);
+            operatorWorkerHistoryList.add(operatorWorkerHistory);
+        }
+        int rows = workerDetailedMapper.updateMoveOutByid(list);
+        //同时需要记录到历史表中
+        operatorWorkerHistoryService.insertTobatch(operatorWorkerHistoryList);
+        //出库数据同步到缓存里
+        redisToBatchInsert(rows,"operator_worker_history",operatorWorkerHistoryList,null);
+        batchMoveOut(rows,"worker_detailed",operatorWorkerHistoryList,null);
+    }
+
+    //入库操作
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateComeInByid(String ids) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(ids.contains(",")){
+            //全部入库
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+            }
+        }else {
+            //单个入库
+            list.add(Integer.valueOf(ids));
+        }
+        int rows = workerDetailedMapper.updateComeInByid(list);
+        //修改记录表里的入库时间
+        operatorWorkerHistoryService.updateComeInTimeById(list);
+        //批量入库数据同步到缓存里
+        batchComeIn(rows,"operator_worker_histkory",list,null);
+        batchComeIn(rows,"worker_detailed",list,null);
+    }
+
 
 }
 

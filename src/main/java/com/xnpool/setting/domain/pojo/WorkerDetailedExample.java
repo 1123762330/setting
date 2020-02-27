@@ -63,6 +63,11 @@ public class WorkerDetailedExample implements Serializable {
     private Integer isComeIn;
 
     /**
+     * 在线离线
+     */
+    private Integer isOnLine;
+
+    /**
     * 备注
     */
     private String remarks;

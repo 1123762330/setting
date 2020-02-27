@@ -57,33 +57,6 @@ public class WorkerController extends BaseController {
     }
 
     /**
-     * @Description 出库操作
-     * @Author zly
-     * @Date 15:43 2020/2/18
-     * @Param
-     * @return
-     */
-    @PutMapping("/moveOut")
-    public ResponseResult moveOut(String ids, @RequestParam(value = "reason",required = false) String reason, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        workerService.updateMoveOutByid(ids,reason,token);
-        return new ResponseResult(SUCCESS);
-    }
-
-    /**
-     * @Description 入库操作
-     * @Author zly
-     * @Date 16:48 2020/2/18
-     * @Param
-     * @return
-     */
-    @PutMapping("/comeIn")
-    public ResponseResult comeIn(String ids) {
-        workerService.updateComeInByid(ids);
-        return new ResponseResult(SUCCESS);
-    }
-
-    /**
      * @Description 删除矿机
      * @Author zly
      * @Date 16:36 2020/2/18
@@ -92,7 +65,7 @@ public class WorkerController extends BaseController {
      */
     @DeleteMapping("/deleteWorker")
     public ResponseResult deleteWorker(String ids) {
-        workerService.updateById(ids);
+        //workerService.updateById(ids);
         return new ResponseResult(SUCCESS);
     }
 

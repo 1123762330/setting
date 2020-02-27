@@ -29,16 +29,13 @@ public interface WorkerService {
 
     int updateByPrimaryKey(Worker record);
 
-   // PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
+    // PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
 
     void updateComeInByid(String ids);
 
     PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize);
 
-    void updateById(String ids);
-
-    void updateMoveOutByid(String ids, String reason, String token);
-
     HashMap<Integer, String> selectWorkerList(String keyWord);
 }
+
 

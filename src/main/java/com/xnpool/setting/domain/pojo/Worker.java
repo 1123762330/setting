@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/23 11:28
+ * @date 2020/2/27 10:07
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Worker implements Serializable {
-    private static final long serialVersionUID = 1645763191139334232L;
     /**
      * 矿机id
      */
@@ -34,7 +33,7 @@ public class Worker implements Serializable {
     /**
      * 矿机ip
      */
-    private String workerIp;
+    private String workerip;
 
     /**
      * 创建时间
@@ -47,7 +46,14 @@ public class Worker implements Serializable {
     private Date updatetime;
 
     /**
+     * 是否在线,0:离线,1:在线
+     */
+    private Integer isonline;
+
+    /**
      * 是否删除,0:否,1;是
      */
     private Integer isdelete;
+
+    private static final long serialVersionUID = 1L;
 }

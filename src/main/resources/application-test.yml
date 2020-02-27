@@ -51,9 +51,10 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
       db-type: mysql
+      #开启注解,过滤某些不需要启用多租户的方法
+      #sql-parser-cache: true
     refresh: true
-#开启注解,过滤某些不需要启用多租户的方法
-    sql-parser-cache: true
+
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
