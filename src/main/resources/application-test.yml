@@ -93,9 +93,6 @@ pagehelper:
   supportMethodsArguments: true
   params: countSql
 ---
-#调用短信发信验证码
-sms:
-  ip: http://192.168.0.151:8768
 #配置springboot缓存
 spring:
   cache:
@@ -106,3 +103,8 @@ spring:
 config:
   filePath: /extPath/static/
   prifix: /upload/word/
+
+#多租户配置是否启用
+zlt:
+  tenant:
+    enable: false
