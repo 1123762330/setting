@@ -25,9 +25,6 @@ public interface WorkerMapper {
     //@SqlParser(filter = true)
     List<Worker> selectByOther(@Param("keyWord") String keyWord);
 
-    int updateComeInByid(@Param("list") List<Integer> list);
 
     int updateById(@Param("list") List<Integer> list);
-
-    //PageInfo<WorkerExample> selectWorkerList(String keyWord);
 }

@@ -118,42 +118,59 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <!--  修改入库记录时间-->
-
     <!--  批量记录矿机出库历史-->
     <insert id="insertTobatch" parameterType="java.util.List">
         insert into operator_worker_history (workerId, moveOutTime, reason, `operatorId`,mineId)
         values
-      <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
-        (#{item,jdbcType=BIGINT},now(),reason,operatorId,mineId)
+      <foreach collection="list" index="index" item="item" separator=",">
+        (#{item,jdbcType=BIGINT},now(),#{reason,jdbcType=VARCHAR},#{operatorId,jdbcType=INTEGER},#{mineId,jdbcType=INTEGER})
       </foreach>
     </insert>
 
 <!--    出库记录-->
     <select id="selectWorkerHistoryList" resultType="com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample">
-        SELECT
-            worker.id,
-            worker.factoryName,
-            worker.frameName,
-            worker.miner,
-            worker.workerName,
-            worker.groupName,
-            operator_worker_history.moveOutTime,
-            operator_worker_history.comeInTime,
-            operator_worker_history.reason,
-            operator_worker_history.operator
-        FROM
-            operator_worker_history,
-            worker
-        <where>
-            operator_worker_history.workerId = worker.id
-        <if test="keyWord != null">
-            AND operator_worker_history.moveOutTime like #{keyWord,jdbcType=TIMESTAMP}
+      SELECT
+      operator_worker_history.id,
+      factory_house.factoryName,
+      frame_setting.detailed,
+      worker_detailed.workerId,
+      worker.miner,
+      worker.workerName,
+      group_setting.groupName,
+      DATE_FORMAT( operator_worker_history.moveOutTime, '%Y-%m-%d %H:%i:%s' )AS moveouttime,
+      DATE_FORMAT( operator_worker_history.comeInTime, '%Y-%m-%d %H:%i:%s' )AS comeintime,
+      operator_worker_history.reason,
+      operator_worker_history.operatorId
+      FROM
+      operator_worker_history,
+      worker_detailed,
+      worker,
+      factory_house,
+      frame_setting,
+      group_setting
+      <where>
+        operator_worker_history.workerId = worker_detailed.workerId
+        AND worker_detailed.workerId = worker.id
+        AND worker_detailed.factoryId = factory_house.id
+        AND worker_detailed.frameId = frame_setting.id
+        AND worker_detailed.groupId = group_setting.groupId
+        <if test="startTime != null">
+          AND operator_worker_history.moveOutTime > #{startTime}
         </if>
-        </where>
+        <if test="endTime != null">
+          AND operator_worker_history.moveOutTime &lt; #{startTime}
+        </if>
+        <if test="keyword != null">
+          AND operator_worker_history.reason like #{keyword}
+        </if>
+      </where>
     </select>
   <!--修改入库时间-->
   <update id="updateComeInTimeById">
-
+    update operator_worker_history set  comeInTime = now() where  workerId in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+    AND comeInTime IS NULL
   </update>
 </mapper>

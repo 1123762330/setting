@@ -34,9 +34,12 @@ public class OperatorWorkerHistoryController extends BaseController {
      * @return
      */
     @GetMapping("/selectWorkerHistoryList")
-    public ResponseResult selectWorkerHistoryList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectWorkerHistoryList(@RequestParam(value = "startTime", required=false)String startTime,
+                                                  @RequestParam(value = "endTime", required=false)String endTime,
+                                                  @RequestParam(value = "keyWord", required=false)String keyWord,
+                                                  @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<OperatorWorkerHistoryExample> pageInfo = operatorWorkerHistoryService.selectWorkerHistoryList(keyWord, pageNum, pageSize);
+        PageInfo<OperatorWorkerHistoryExample> pageInfo = operatorWorkerHistoryService.selectWorkerHistoryList(startTime,endTime,keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);
     }
 }

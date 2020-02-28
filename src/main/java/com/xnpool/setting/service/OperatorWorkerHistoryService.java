@@ -5,6 +5,7 @@ import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;
 import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public interface OperatorWorkerHistoryService {
 
     int insertTobatch(List<Integer> list,String reason,Integer mineid,Integer operatorId);
 
-    PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String keyWord, int pageNum, int pageSize);
+    PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime,String endTime,String keyWord, int pageNum, int pageSize);
 }
 
 

@@ -1,23 +1,20 @@
 package com.xnpool.setting.common;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.google.gson.Gson;
 import com.xnpool.setting.common.exception.*;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @Description 当前项目中所有控制器类基类
@@ -80,6 +77,9 @@ public abstract class BaseController {
 		}else if(e instanceof NoMessageException){
 			//无需返回消息给前端异常
 			status= 201;
+		}else if(e instanceof ParseException){
+			//时间转换异常
+			status= 701;
 		}
 
 		return new ResponseResult<>(status,e);
@@ -196,7 +196,7 @@ public abstract class BaseController {
 			HashMap<String, Object> hashMap = new HashMap<>();
 			hashMap.put("list",recordList);
 			hashMap.put("updateTime",new Date());
-			insertRedis(table, BATCHCOMEIN, hashMap.toString(),mineId);
+			insertRedisToBatch(table, BATCHCOMEIN, hashMap,mineId);
 		} else {
 			throw new UpdateException("批量入库失败");
 		}

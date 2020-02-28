@@ -29,12 +29,6 @@ public interface WorkerService {
 
     int updateByPrimaryKey(Worker record);
 
-    // PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
-
-    void updateComeInByid(String ids);
-
-    PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize);
-
     HashMap<Integer, String> selectWorkerList(String keyWord);
 }
 

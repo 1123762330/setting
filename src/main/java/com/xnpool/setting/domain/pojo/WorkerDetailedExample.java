@@ -23,6 +23,11 @@ public class WorkerDetailedExample implements Serializable {
     private Integer id;
 
     /**
+     * 矿机id
+     */
+    private Integer workerId;
+
+    /**
      * 矿工名
      */
     private String miner;

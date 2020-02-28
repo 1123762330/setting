@@ -1,8 +1,6 @@
 package com.xnpool.setting.common.exception;
 
 public class NotActiveException extends ServiceException {
-
-
     private static final long serialVersionUID = -2090254862357095557L;
 
     public NotActiveException() {

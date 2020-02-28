@@ -28,34 +28,6 @@ public class WorkerController extends BaseController {
     @Autowired
     private WorkerService workerService;
 
-    /**
-     * @Description 矿机入库列表
-     * @Author zly
-     * @Date 15:42 2020/2/18
-     * @Param
-     * @return
-     */
-    @GetMapping("/selectComeInWorkerList")
-    public ResponseResult selectComeInWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        //PageInfo<WorkerExample> workerExamplePageInfo = workerService.selectComeInWorkerList(keyWord, pageNum, pageSize);
-        return new ResponseResult(SUCCESS);
-    }
-
-    /**
-     * @Description 矿机出库列表
-     * @Author zly
-     * @Date 16:09 2020/2/18
-     * @Param
-     * @return
-     */
-    @GetMapping("/selectMoveOutList")
-    public ResponseResult selectMoveOutList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<Worker> workerExamplePageInfo = workerService.selectMoveOutList(keyWord, pageNum, pageSize);
-        return new ResponseResult(SUCCESS, workerExamplePageInfo);
-    }
-
     @GetMapping("/selectWorkerList")
     public ResponseResult selectWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

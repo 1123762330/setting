@@ -28,9 +28,9 @@ public class OperatorWorkerHistoryExample implements Serializable {
     private String factoryName;
 
     /**
-     * 所属矿机架
+     * 所属详细矿机架
      */
-    private String frameName;
+    private String detailed;
 
     /**
      * 矿工名
@@ -51,12 +51,12 @@ public class OperatorWorkerHistoryExample implements Serializable {
     /**
     * 出库时间
     */
-    private Date moveouttime;
+    private String moveouttime;
 
     /**
     * 入库时间
     */
-    private Date comeintime;
+    private String comeintime;
 
     /**
      * 总耗时
@@ -71,5 +71,5 @@ public class OperatorWorkerHistoryExample implements Serializable {
     /**
     * 出库员
     */
-    private Integer operator;
+    private Integer operatorid;
 }

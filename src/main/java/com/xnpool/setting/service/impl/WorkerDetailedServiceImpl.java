@@ -6,11 +6,13 @@ import java.util.stream.Collectors;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.DeleteException;
 import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.mapper.WorkerMapper;
 import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.service.IpSettingService;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ import org.springframework.util.StringUtils;
  * @date 2020/2/23 12:52
  */
 @Service
+@Slf4j
 public class WorkerDetailedServiceImpl extends BaseController implements WorkerDetailedService {
 
     @Resource
@@ -98,13 +101,14 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer groupid = workerDetailedParam.getGroupid();
         Integer mineId = workerDetailedParam.getMineId();
         List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(null);
+        WorkerDetailedServiceImpl.log.info("库中已经存在的矿机ID:"+workerIdList);
         ArrayList<WorkerDetailed> list = new ArrayList<>();
         if (workerid.contains(",")) {
             //批量添加
             String[] split = workerid.split(",");
             for (int i = 0; i < split.length; i++) {
-                if (workerIdList.contains(split[i])){
-                    throw new InsertException("该矿机已经添加过!");
+                if (workerIdList.contains(Integer.valueOf(split[i]))){
+                    throw new InsertException("ID为"+split[i]+"的矿机已经添加过!");
                 }else {
                     String workerId = split[i];
                     WorkerDetailed workerDetailed = new WorkerDetailed();
@@ -187,7 +191,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Transactional(rollbackFor = Exception.class)
     public void updateMoveOutByid(String ids, String reason, String token) {
         ArrayList<Integer> list = new ArrayList<>();
-        ArrayList<OperatorWorkerHistory> operatorWorkerHistoryList = new ArrayList<>();
         //从token中取出userid
         int userId = 12;
         if (ids.contains(",")) {
@@ -204,7 +207,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
         List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
         Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
-        System.out.println(groupByMineId);
         for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
             //同时需要记录到历史表中
             List<Integer> workerIdList = new ArrayList<>();
@@ -219,7 +221,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             HashMap<String, Object> operatorWorkerData = new HashMap<>();
             operatorWorkerData.put("workerIdList", workerIdList);
             operatorWorkerData.put("reason", reason);
-            operatorWorkerData.put("reason", userId);
+            operatorWorkerData.put("operatorId", userId);
             redisToBatchInsert(rows, "operator_worker_histkory", operatorWorkerData, entry.getKey());
             batchMoveOut(rows, "worker_detailed", workerIdList, entry.getKey());
         }
@@ -242,8 +244,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         int rows = workerDetailedMapper.updateComeInByid(list);
         //修改记录表里的入库时间
-        operatorWorkerHistoryService.updateComeInTimeById(list);
-
+        int rows2 = operatorWorkerHistoryService.updateComeInTimeById(list);
+        if (rows==0||rows2==0){
+            throw new InsertException("矿机入库失败");
+        }
         //根据批量更新的id去库里面查询矿场id
         List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
         Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
@@ -283,7 +287,12 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //根据批量更新的id去库里面查询矿场id
         List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
         Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
-        System.out.println(groupByMineId);
+        log.info("矿机矿场ID列表:"+groupByMineId);
+
+        int rows2 = workerDetailedMapper.updateById(list);
+        if (rows==0||rows2==0){
+            throw new DeleteException("矿机删除失败");
+        }
         for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
             //同时需要记录到历史表中
             List<Integer> workerIdList = new ArrayList<>();
@@ -294,6 +303,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerIdList.add(workerId);
             }
             //批量入库数据同步到缓存里
+            redisToBatchDelete(rows, "worker", workerIdList, entry.getKey());
             redisToBatchDelete(rows, "worker_detailed", workerIdList, entry.getKey());
         }
 

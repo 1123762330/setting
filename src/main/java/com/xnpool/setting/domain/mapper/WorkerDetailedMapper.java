@@ -35,4 +35,6 @@ public interface WorkerDetailedMapper {
     List<Integer> selectWorkerIdlist(@Param("is_come_in") Integer is_come_in);
 
     List<WorkerMineVO> selectByWorkerId(List<Integer> list);
+
+    int updateById(ArrayList<Integer> list);
 }

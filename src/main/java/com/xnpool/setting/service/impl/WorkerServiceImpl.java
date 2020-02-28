@@ -73,16 +73,6 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         return workerMapper.updateByPrimaryKey(record);
     }
 
-    @Override
-    public void updateComeInByid(String ids) {
-
-    }
-
-    @Override
-    public PageInfo<Worker> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
-        return null;
-    }
-
     /**
      * @return
      * @Description 矿机列表
