@@ -20,17 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SettingApplicationTests {
-    @Autowired
-    private MineSettingController minesettingController;
-
-    @Autowired
-    private PrimaryKeyUtils primaryKeyUtils;
 
     @Autowired
     private ApiContext apiContext;
-
-    @Autowired
-    private IpSettingMapper ipSettingMapper;
 
     @Before
     public void before() {
@@ -40,29 +32,6 @@ public class SettingApplicationTests {
 
     @Test
     public void addMineSetting() {
-        long startMillis = System.currentTimeMillis();
-        String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
-        System.out.println("orderIdPrefix=="+orderIdPrefix);
-        Long aLong = primaryKeyUtils.orderId(orderIdPrefix);
-        System.out.println(aLong);
-        long endMillis = System.currentTimeMillis();
-        System.out.println("生成速度:" + (endMillis - startMillis) + ",单位毫秒");
-    }
-
-    @Test
-    public void updateMineSettingList() {
-        MineSetting minesetting = new MineSetting();
-        minesetting.setId(8);
-        minesetting.setMinename("风铃花山号5号");
-        minesetting.setDescription("阿富汗");
-        minesetting.setIsdelete(0);
-        minesetting.setUpdatetime(new Date());
-        minesettingController.updateMineSetting(minesetting);
-    }
-
-    @Test
-    public void deleteMineSetting() {
-        minesettingController.deleteMineSetting(8);
     }
 
 }
