@@ -5,6 +5,35 @@ spring:
   application:
     name: setting
 ---
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+    prefer-ip-address: true
+  client:
+    registryFetchIntervalSeconds: 5
+    service-url:
+      #defaultZone: http://127.0.0.1:9601/eureka/
+      defaultZone: http://127.0.0.1:9601/eureka/
+---
+feign:
+  hystrix:
+    enabled: true #feign开启hystrix支持
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+#ribbon的超时时间, 防止feign调用超时
+ribbon:
+  ReadTimeout: 15000
+  ConnectTimeout: 15000
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他的实例最大重试次数,不包括首次调用
+  OkToRetryOnAllOperations: false  #是否所有操作都重试
+---
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
