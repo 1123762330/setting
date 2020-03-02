@@ -8,6 +8,7 @@ import com.xnpool.setting.domain.pojo.CustomerSettingExample;
 import com.xnpool.setting.domain.pojo.FactoryHouseExample;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.service.AgreementSettingService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ import java.util.List;
  * @date 2020/2/10 10:35
  */
 @Service
+@Slf4j
 public class CustomerSettingServiceImpl extends BaseController implements CustomerSettingService {
 
     @Resource
@@ -95,27 +97,40 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
-        HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
+        log.info("客户设置列表"+customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
             String agreementid = customerSettingExample.getAgreementid();
-            if (agreementid.contains(",")){
+            if (agreementid.contains(",")) {
+                HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
                 //多个协议ID,从协议IDMap集合里面取出相应的值,重新set进属性里面
                 String[] split = agreementid.split(",");
-                StringBuffer agreemmentNameStr=null;
+                StringBuffer agreemmentNameStr = null;
                 for (int i = 0; i < split.length; i++) {
-                     String agreemmentName = agreementMap.get(split[i]);
-                     if (agreemmentNameStr==null){
-                         agreemmentNameStr=agreemmentNameStr.append(agreemmentName);
-                     }else {
-                         agreemmentNameStr=agreemmentNameStr.append(",").append(agreemmentName);
-                     }
+                    String agreemmentName = agreementMap.get(Integer.valueOf(split[i]));
+                    if (agreemmentNameStr == null) {
+                        agreemmentNameStr = new StringBuffer().append(agreemmentName);
+                    } else {
+                        agreemmentNameStr = agreemmentNameStr.append(",").append(agreemmentName);
+                    }
                 }
                 customerSettingExample.setAgreementName(agreemmentNameStr.toString());
 
             }
             String menuid = customerSettingExample.getMenuid();
-            if (menuid.contains(",")){
+            if (menuid.contains(",")) {
                 //多个菜单栏ID,从菜单栏IDMap集合里面取出相应的值,重新set进属性里面
+                //HashMap<Integer, String> menuMap = agreementSettingService.selectAgreementMap();
+                //String[] split = agreementid.split(",");
+                //StringBuffer menuNameNameStr = null;
+                //for (int i = 0; i < split.length; i++) {
+                //    String menuName = menuMap.get(Integer.valueOf(split[i]));
+                //    if (menuNameNameStr == null) {
+                //        menuNameNameStr = new StringBuffer().append(menuName);
+                //    } else {
+                //        menuNameNameStr = menuNameNameStr.append(",").append(menuName);
+                //    }
+                //}
+                //customerSettingExample.setMenuName(menuNameNameStr.toString());
             }
         });
         PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
@@ -128,6 +143,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
 }
+
 
 
 

@@ -42,7 +42,7 @@ spring:
       # 否则报错：Loading class `com.mysql.jdbc.Driver'. This is deprecated.
       driver-class-name: com.mysql.cj.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://127.0.0.1:3306/setting?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://127.0.0.1:3306/xnpool_mine?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
       username: root
       password: root123
       #配置初始化大小/最小/最大[仅用于测试，生成环境需要修改哦]
@@ -88,7 +88,7 @@ mybatis-plus:
 ---
 #mysql语句需要打印就true,不需要打印就false-->注入对应的Bean(打印sql)
 sql:
-performanceInterceptor: false
+performanceInterceptor: true
 ---
 spring:
   redis: #数据源1

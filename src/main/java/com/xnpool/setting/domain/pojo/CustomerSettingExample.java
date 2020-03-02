@@ -20,11 +20,6 @@ public class CustomerSettingExample implements Serializable {
 
 
     /**
-     * 用户ID
-     */
-    private Integer userid;
-
-    /**
      * 客户名称
      */
     private String userName;
@@ -32,7 +27,7 @@ public class CustomerSettingExample implements Serializable {
     /**
      * 客户类型
      */
-    private String userType;
+    private String cusType;
 
     /**
      * 联系人
@@ -48,6 +43,11 @@ public class CustomerSettingExample implements Serializable {
      * 地址
      */
     private String address;
+
+    /**
+     * 用户自己的手机号
+     */
+    private String mobile;
 
     /**
      * 协议ID,包含多个

@@ -2,16 +2,19 @@ package com.xnpool.setting.domain.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/11 10:56
+ * @date 2020/3/2 13:44
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerSetting implements Serializable {
-    private static final long serialVersionUID = -794572431017283687L;
     /**
      * 编号
      */
@@ -21,6 +24,26 @@ public class CustomerSetting implements Serializable {
      * 用户ID
      */
     private Integer userid;
+
+    /**
+     * 客户类型
+     */
+    private String cusType;
+
+    /**
+     * 联系人
+     */
+    private String contactperson;
+
+    /**
+     * 联系人电话
+     */
+    private String contactpersonphone;
+
+    /**
+     * 地址
+     */
+    private String address;
 
     /**
      * 协议ID,包含多个
@@ -48,6 +71,11 @@ public class CustomerSetting implements Serializable {
     private Integer iswatch;
 
     /**
+     * 备注
+     */
+    private String remarks;
+
+    /**
      * 是否删除,0:否,1:是
      */
     private Integer isdelete;
@@ -67,4 +95,5 @@ public class CustomerSetting implements Serializable {
      */
     private Integer managerUserId;
 
+    private static final long serialVersionUID = 1L;
 }
