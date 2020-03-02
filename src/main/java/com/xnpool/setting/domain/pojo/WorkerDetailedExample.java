@@ -38,6 +38,11 @@ public class WorkerDetailedExample implements Serializable {
     private String workername;
 
     /**
+     * 矿机品牌
+     */
+    private String brandName;
+
+    /**
      * 矿机ip
      */
     private String workerIp;

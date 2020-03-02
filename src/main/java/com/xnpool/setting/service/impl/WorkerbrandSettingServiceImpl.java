@@ -9,6 +9,7 @@ import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
 import com.xnpool.setting.service.WorkerbrandSettingService;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,6 +67,20 @@ public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService{
         List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(keyWord);
         PageInfo<WorkerbrandSetting> pageInfo = new PageInfo<>(workerbrandSettingList);
         return pageInfo;
+    }
+
+    @Override
+    public HashMap<Integer, String> selectWorkerbrandMap() {
+        HashMap<Integer, String> workerbrandMap = new HashMap<>();
+        List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(null);
+        workerbrandSettingList.forEach(workerbrandSetting -> {
+            String workername = workerbrandSetting.getWorkername();
+            String difficulty = workerbrandSetting.getDifficulty();
+            String workerbrand=workername+" "+difficulty;
+            Integer id = workerbrandSetting.getId();
+            workerbrandMap.put(id,workerbrand);
+        });
+        return workerbrandMap;
     }
 
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/26 14:39
+ * @date 2020/3/2 16:16
  */
 @Data
 @AllArgsConstructor
@@ -24,6 +24,11 @@ public class WorkerDetailed implements Serializable {
      * 矿机ID
      */
     private Integer workerid;
+
+    /**
+     * 矿机品牌id
+     */
+    private Integer workerbrandId;
 
     /**
      * 所属厂房
@@ -54,6 +59,11 @@ public class WorkerDetailed implements Serializable {
      * 是否入库,0:未入库,1:已入库
      */
     private Integer isComeIn;
+
+    /**
+     * 备注
+     */
+    private String remarks;
 
     /**
      * 是否删除,0:否,1:是

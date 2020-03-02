@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 /**
  * 矿机品牌设置
  *
@@ -74,5 +76,18 @@ public class WorkerbrandSettingController extends BaseController {
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<WorkerbrandSetting> pageInfo = workerbrandSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);
+    }
+
+    /**
+     * @Description
+     * @Author zly
+     * @Date 16:34 2020/3/2
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectWorkerbrandMap")
+    public ResponseResult selectWorkerbrand(){
+        HashMap<Integer, String> workerbrandMap = workerbrandSettingService.selectWorkerbrandMap();
+        return new ResponseResult(SUCCESS, workerbrandMap);
     }
 }

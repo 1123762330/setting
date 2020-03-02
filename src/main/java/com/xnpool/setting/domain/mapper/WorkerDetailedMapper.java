@@ -1,15 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
-import com.xnpool.setting.domain.pojo.WorkerMineVO;
-import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.pojo.WorkerDetailedExample;import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;import java.util.List;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/26 14:39
+ * @date 2020/3/2 16:16
  */
 public interface WorkerDetailedMapper {
     int deleteByPrimaryKey(Integer id);
@@ -26,7 +22,7 @@ public interface WorkerDetailedMapper {
 
     List<WorkerDetailedExample> selectMoveOutList(@Param("keyWord") String keyWord);
 
-    int  batchInsert(List<WorkerDetailed> list);
+    int batchInsert(List<WorkerDetailed> list);
 
     int updateMoveOutByid(@Param("list") List<Integer> list);
 

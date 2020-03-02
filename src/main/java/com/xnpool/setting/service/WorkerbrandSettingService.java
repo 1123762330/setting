@@ -3,6 +3,7 @@ package com.xnpool.setting.service;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,4 +29,6 @@ public interface WorkerbrandSettingService {
     int updateById(int id);
 
     PageInfo<WorkerbrandSetting> selectByOther(String keyWord,int pageNum,int pageSize);
+
+    HashMap<Integer,String> selectWorkerbrandMap();
 }
