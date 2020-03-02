@@ -26,6 +26,11 @@ public class WorkerDetailed implements Serializable {
     private Integer workerid;
 
     /**
+     * 矿机ip
+     */
+    private String workerIp="";
+
+    /**
      * 矿机品牌id
      */
     private Integer workerbrandId;

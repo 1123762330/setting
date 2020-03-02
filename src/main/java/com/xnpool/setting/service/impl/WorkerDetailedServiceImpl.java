@@ -100,12 +100,14 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer framenumber = workerDetailedParam.getFramenumber();
         Integer groupid = workerDetailedParam.getGroupid();
         Integer mineId = workerDetailedParam.getMineId();
+        String workerIp = workerDetailedParam.getWorkerIp();
         List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(null);
         WorkerDetailedServiceImpl.log.info("库中已经存在的矿机ID:" + workerIdList);
         ArrayList<WorkerDetailed> list = new ArrayList<>();
         if (workerid.contains(",")) {
             //批量添加
             String[] split = workerid.split(",");
+            String[] split_ip = workerIp.split(",");
             for (int i = 0; i < split.length; i++) {
                 if (workerIdList.contains(Integer.valueOf(split[i]))) {
                     throw new InsertException("ID为" + split[i] + "的矿机已经添加过!");
@@ -113,6 +115,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     String workerId = split[i];
                     WorkerDetailed workerDetailed = new WorkerDetailed();
                     workerDetailed.setWorkerid(Integer.valueOf(workerId));
+                    workerDetailed.setWorkerIp(split_ip[i]);
                     workerDetailed.setFactoryid(factoryid);
                     workerDetailed.setFrameid(frameid);
                     workerDetailed.setFramenumber(framenumber);
@@ -128,6 +131,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             } else {
                 WorkerDetailed workerDetailed = new WorkerDetailed();
                 workerDetailed.setWorkerid(Integer.valueOf(workerid));
+                workerDetailed.setWorkerIp(workerIp);
                 workerDetailed.setFactoryid(factoryid);
                 workerDetailed.setFrameid(frameid);
                 workerDetailed.setFramenumber(framenumber);

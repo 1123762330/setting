@@ -87,7 +87,9 @@ public class WorkerServiceImpl extends BaseController implements WorkerService {
         for (Worker worker : workers) {
             Integer id = worker.getId();
             String workername = worker.getWorkername();
-            resultMap.put(id, workername);
+            String workerip = worker.getWorkerip();
+            String workernames = workername + " " + workerip;
+            resultMap.put(id, workernames);
         }
         return resultMap;
     }

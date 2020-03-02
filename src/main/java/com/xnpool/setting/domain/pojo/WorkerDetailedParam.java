@@ -24,6 +24,11 @@ public class WorkerDetailedParam implements Serializable {
     private String workerid;
 
     /**
+     * 矿机IP
+     */
+    private String workerIp;
+
+    /**
     * 所属厂房
     */
     private Integer factoryid;
