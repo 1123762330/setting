@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.GroupSetting;
 import com.xnpool.setting.domain.pojo.GroupSettingExample;
 
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * @author zly
@@ -29,6 +29,8 @@ public interface GroupSettingService {
     void updateById(int id);
 
     PageInfo<GroupSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
+
+    HashMap<Integer,String> selectGroupMap();
 }
 
 

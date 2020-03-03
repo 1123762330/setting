@@ -8,6 +8,7 @@ import com.xnpool.setting.domain.pojo.CustomerSettingExample;
 import com.xnpool.setting.domain.pojo.FactoryHouseExample;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.service.AgreementSettingService;
+import com.xnpool.setting.service.GroupSettingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Autowired
     private AgreementSettingService agreementSettingService;
+
+    @Autowired
+    private GroupSettingService groupSettingService;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -97,7 +101,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
-        log.info("客户设置列表"+customerSettingExamples);
+        log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
             String agreementid = customerSettingExample.getAgreementid();
             if (agreementid.contains(",")) {
@@ -116,21 +120,21 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
                 customerSettingExample.setAgreementName(agreemmentNameStr.toString());
 
             }
-            String menuid = customerSettingExample.getMenuid();
-            if (menuid.contains(",")) {
-                //多个菜单栏ID,从菜单栏IDMap集合里面取出相应的值,重新set进属性里面
-                //HashMap<Integer, String> menuMap = agreementSettingService.selectAgreementMap();
-                //String[] split = agreementid.split(",");
-                //StringBuffer menuNameNameStr = null;
-                //for (int i = 0; i < split.length; i++) {
-                //    String menuName = menuMap.get(Integer.valueOf(split[i]));
-                //    if (menuNameNameStr == null) {
-                //        menuNameNameStr = new StringBuffer().append(menuName);
-                //    } else {
-                //        menuNameNameStr = menuNameNameStr.append(",").append(menuName);
-                //    }
-                //}
-                //customerSettingExample.setMenuName(menuNameNameStr.toString());
+            String groupId = customerSettingExample.getGroupId();
+            if (groupId.contains(",")) {
+                //多个分组ID,从分组IDMap集合里面取出相应的值,重新set进属性里面
+                HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
+                String[] split = agreementid.split(",");
+                StringBuffer groupNameNameStr = null;
+                for (int i = 0; i < split.length; i++) {
+                    String groupName = groupNameHashMap.get(Integer.valueOf(split[i]));
+                    if (groupNameNameStr == null) {
+                        groupNameNameStr = new StringBuffer().append(groupName);
+                    } else {
+                        groupNameNameStr = groupNameNameStr.append(",").append(groupName);
+                    }
+                }
+                customerSettingExample.setGroupName(groupNameNameStr.toString());
             }
         });
         PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
@@ -143,6 +147,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
 }
+
 
 
 

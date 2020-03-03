@@ -184,6 +184,26 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         return pageInfo;
     }
 
+    /**
+     * @Description 分组名集合
+     * @Author zly
+     * @Date 11:15 2020/3/3
+     * @Param
+     * @return
+     */
+    @Override
+    public HashMap<Integer, String> selectGroupMap() {
+        HashMap<Integer, String> groupNameMap = new HashMap<>();
+        List<GroupSetting> groupSettings = groupSettingMapper.selectGroupMap();
+        System.out.println(groupSettings);
+        groupSettings.forEach(groupSettingExample -> {
+            Integer groupid = groupSettingExample.getGroupid();
+            String groupname = groupSettingExample.getGroupname();
+            groupNameMap.put(groupid,groupname);
+        });
+        return groupNameMap;
+    }
+
 }
 
 

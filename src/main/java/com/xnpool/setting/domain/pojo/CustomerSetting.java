@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/2 13:44
+ * @date 2020/3/3 10:54
  */
 @Data
 @AllArgsConstructor
@@ -51,9 +51,9 @@ public class CustomerSetting implements Serializable {
     private String agreementid;
 
     /**
-     * 分组ID,也就是菜单栏目ID,包含多个
+     * 分组ID,包含多个
      */
-    private String menuid;
+    private String groupId;
 
     /**
      * 角色ID,包含多个

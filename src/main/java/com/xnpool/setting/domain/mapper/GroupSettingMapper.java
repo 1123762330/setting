@@ -23,4 +23,6 @@ public interface GroupSettingMapper {
     int updateById(int id);
 
     List<GroupSettingExample> selectByOther(@Param("keyWord") String keyWord);
+
+    List<GroupSetting> selectGroupMap();
 }

@@ -1,230 +1,228 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xnpool.setting.domain.mapper.CustomerSettingMapper">
-    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <!--@mbg.generated-->
-        <!--@Table customer_setting-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="userId" jdbcType="INTEGER" property="userid"/>
-        <result column="cus_type" jdbcType="VARCHAR" property="cusType"/>
-        <result column="contactPerson" jdbcType="VARCHAR" property="contactperson"/>
-        <result column="contactPersonPhone" jdbcType="VARCHAR" property="contactpersonphone"/>
-        <result column="address" jdbcType="VARCHAR" property="address"/>
-        <result column="agreementId" jdbcType="VARCHAR" property="agreementid"/>
-        <result column="menuId" jdbcType="VARCHAR" property="menuid"/>
-        <result column="roleId" jdbcType="VARCHAR" property="roleid"/>
-        <result column="authentication" jdbcType="INTEGER" property="authentication"/>
-        <result column="isWatch" jdbcType="INTEGER" property="iswatch"/>
-        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
-        <result column="isDelete" jdbcType="INTEGER" property="isdelete"/>
-        <result column="createTime" jdbcType="TIMESTAMP" property="createtime"/>
-        <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime"/>
-        <result column="manager_user_id" jdbcType="INTEGER" property="managerUserId"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, userId, cus_type, contactPerson, contactPersonPhone, address, agreementId, menuId,
-        roleId, authentication, isWatch, remarks, isDelete, createTime, updateTime, manager_user_id
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from customer_setting
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from customer_setting
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into customer_setting (userId, cus_type, contactPerson,
-        contactPersonPhone, address, agreementId,
-        menuId, roleId, authentication,
-        isWatch, remarks, isDelete,
-        createTime, updateTime, manager_user_id
-        )
-        values (#{userid,jdbcType=INTEGER}, #{cusType,jdbcType=VARCHAR}, #{contactperson,jdbcType=VARCHAR},
-        #{contactpersonphone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{agreementid,jdbcType=VARCHAR},
-        #{menuid,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR}, #{authentication,jdbcType=INTEGER},
-        #{iswatch,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER},
-        #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{managerUserId,jdbcType=INTEGER}
-        )
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.xnpool.setting.domain.pojo.CustomerSetting" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into customer_setting
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userid != null">
-                userId,
-            </if>
-            <if test="cusType != null">
-                cus_type,
-            </if>
-            <if test="contactperson != null">
-                contactPerson,
-            </if>
-            <if test="contactpersonphone != null">
-                contactPersonPhone,
-            </if>
-            <if test="address != null">
-                address,
-            </if>
-            <if test="agreementid != null">
-                agreementId,
-            </if>
-            <if test="menuid != null">
-                menuId,
-            </if>
-            <if test="roleid != null">
-                roleId,
-            </if>
-            <if test="authentication != null">
-                authentication,
-            </if>
-            <if test="iswatch != null">
-                isWatch,
-            </if>
-            <if test="remarks != null">
-                remarks,
-            </if>
-            <if test="isdelete != null">
-                isDelete,
-            </if>
-            <if test="createtime != null">
-                createTime,
-            </if>
-            <if test="updatetime != null">
-                updateTime,
-            </if>
-            <if test="managerUserId != null">
-                manager_user_id,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userid != null">
-                #{userid,jdbcType=INTEGER},
-            </if>
-            <if test="cusType != null">
-                #{cusType,jdbcType=VARCHAR},
-            </if>
-            <if test="contactperson != null">
-                #{contactperson,jdbcType=VARCHAR},
-            </if>
-            <if test="contactpersonphone != null">
-                #{contactpersonphone,jdbcType=VARCHAR},
-            </if>
-            <if test="address != null">
-                #{address,jdbcType=VARCHAR},
-            </if>
-            <if test="agreementid != null">
-                #{agreementid,jdbcType=VARCHAR},
-            </if>
-            <if test="menuid != null">
-                #{menuid,jdbcType=VARCHAR},
-            </if>
-            <if test="roleid != null">
-                #{roleid,jdbcType=VARCHAR},
-            </if>
-            <if test="authentication != null">
-                #{authentication,jdbcType=INTEGER},
-            </if>
-            <if test="iswatch != null">
-                #{iswatch,jdbcType=INTEGER},
-            </if>
-            <if test="remarks != null">
-                #{remarks,jdbcType=VARCHAR},
-            </if>
-            <if test="isdelete != null">
-                #{isdelete,jdbcType=INTEGER},
-            </if>
-            <if test="createtime != null">
-                #{createtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updatetime != null">
-                #{updatetime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="managerUserId != null">
-                #{managerUserId,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <!--@mbg.generated-->
-        update customer_setting
-        <set>
-            <if test="userid != null">
-                userId = #{userid,jdbcType=INTEGER},
-            </if>
-            <if test="cusType != null">
-                cus_type = #{cusType,jdbcType=VARCHAR},
-            </if>
-            <if test="contactperson != null">
-                contactPerson = #{contactperson,jdbcType=VARCHAR},
-            </if>
-            <if test="contactpersonphone != null">
-                contactPersonPhone = #{contactpersonphone,jdbcType=VARCHAR},
-            </if>
-            <if test="address != null">
-                address = #{address,jdbcType=VARCHAR},
-            </if>
-            <if test="agreementid != null">
-                agreementId = #{agreementid,jdbcType=VARCHAR},
-            </if>
-            <if test="menuid != null">
-                menuId = #{menuid,jdbcType=VARCHAR},
-            </if>
-            <if test="roleid != null">
-                roleId = #{roleid,jdbcType=VARCHAR},
-            </if>
-            <if test="authentication != null">
-                authentication = #{authentication,jdbcType=INTEGER},
-            </if>
-            <if test="iswatch != null">
-                isWatch = #{iswatch,jdbcType=INTEGER},
-            </if>
-            <if test="remarks != null">
-                remarks = #{remarks,jdbcType=VARCHAR},
-            </if>
-            <if test="isdelete != null">
-                isDelete = #{isdelete,jdbcType=INTEGER},
-            </if>
-            <if test="createtime != null">
-                createTime = #{createtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updatetime != null">
-                updateTime = #{updatetime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="managerUserId != null">
-                manager_user_id = #{managerUserId,jdbcType=INTEGER},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <!--@mbg.generated-->
-        update customer_setting
-        set userId = #{userid,jdbcType=INTEGER},
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.CustomerSetting">
+    <!--@mbg.generated-->
+    <!--@Table customer_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="cus_type" jdbcType="VARCHAR" property="cusType" />
+    <result column="contactPerson" jdbcType="VARCHAR" property="contactperson" />
+    <result column="contactPersonPhone" jdbcType="VARCHAR" property="contactpersonphone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="agreementId" jdbcType="VARCHAR" property="agreementid" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="roleId" jdbcType="VARCHAR" property="roleid" />
+    <result column="authentication" jdbcType="INTEGER" property="authentication" />
+    <result column="isWatch" jdbcType="INTEGER" property="iswatch" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="manager_user_id" jdbcType="INTEGER" property="managerUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, userId, cus_type, contactPerson, contactPersonPhone, address, agreementId, group_id, 
+    roleId, authentication, isWatch, remarks, isDelete, createTime, updateTime, manager_user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from customer_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from customer_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_setting (userId, cus_type, contactPerson, 
+      contactPersonPhone, address, agreementId, 
+      group_id, roleId, authentication, 
+      isWatch, remarks, isDelete, 
+      createTime, updateTime, manager_user_id
+      )
+    values (#{userid,jdbcType=INTEGER}, #{cusType,jdbcType=VARCHAR}, #{contactperson,jdbcType=VARCHAR}, 
+      #{contactpersonphone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{agreementid,jdbcType=VARCHAR}, 
+      #{groupId,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR}, #{authentication,jdbcType=INTEGER}, 
+      #{iswatch,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{managerUserId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="cusType != null">
+        cus_type,
+      </if>
+      <if test="contactperson != null">
+        contactPerson,
+      </if>
+      <if test="contactpersonphone != null">
+        contactPersonPhone,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="agreementid != null">
+        agreementId,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="roleid != null">
+        roleId,
+      </if>
+      <if test="authentication != null">
+        authentication,
+      </if>
+      <if test="iswatch != null">
+        isWatch,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="isdelete != null">
+        isDelete,
+      </if>
+      <if test="createtime != null">
+        createTime,
+      </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="managerUserId != null">
+        manager_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="cusType != null">
+        #{cusType,jdbcType=VARCHAR},
+      </if>
+      <if test="contactperson != null">
+        #{contactperson,jdbcType=VARCHAR},
+      </if>
+      <if test="contactpersonphone != null">
+        #{contactpersonphone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementid != null">
+        #{agreementid,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null">
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="authentication != null">
+        #{authentication,jdbcType=INTEGER},
+      </if>
+      <if test="iswatch != null">
+        #{iswatch,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="managerUserId != null">
+        #{managerUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
+    <!--@mbg.generated-->
+    update customer_setting
+    <set>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="cusType != null">
         cus_type = #{cusType,jdbcType=VARCHAR},
+      </if>
+      <if test="contactperson != null">
         contactPerson = #{contactperson,jdbcType=VARCHAR},
+      </if>
+      <if test="contactpersonphone != null">
         contactPersonPhone = #{contactpersonphone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementid != null">
         agreementId = #{agreementid,jdbcType=VARCHAR},
-        menuId = #{menuid,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null">
         roleId = #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="authentication != null">
         authentication = #{authentication,jdbcType=INTEGER},
+      </if>
+      <if test="iswatch != null">
         isWatch = #{iswatch,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
         remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
         isDelete = #{isdelete,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
         createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
         updateTime = #{updatetime,jdbcType=TIMESTAMP},
-        manager_user_id = #{managerUserId,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+      <if test="managerUserId != null">
+        manager_user_id = #{managerUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
+    <!--@mbg.generated-->
+    update customer_setting
+    set userId = #{userid,jdbcType=INTEGER},
+      cus_type = #{cusType,jdbcType=VARCHAR},
+      contactPerson = #{contactperson,jdbcType=VARCHAR},
+      contactPersonPhone = #{contactpersonphone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      agreementId = #{agreementid,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      roleId = #{roleid,jdbcType=VARCHAR},
+      authentication = #{authentication,jdbcType=INTEGER},
+      isWatch = #{iswatch,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      isDelete = #{isdelete,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      manager_user_id = #{managerUserId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <!--  软删除-->
     <update id="updateById">
     update customer_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
@@ -233,32 +231,32 @@
     <!--  根据条件查询客户列表-->
     <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.CustomerSettingExample">
         SELECT
-        sys_user.username AS username,
-        customer_setting.id,
-        customer_setting.cus_type,
-        customer_setting.contactPerson,
-        customer_setting.contactPersonPhone,
-        customer_setting.address,
-        customer_setting.remarks,
-        customer_setting.agreementId,
-        customer_setting.menuId,
-        customer_setting.authentication,
-        customer_setting.isWatch,
-        sys_user.mobile AS mobile,
-        agreement_setting.agreementName,
-        sys_menu.`name` AS menuName,
-        sys_role.id AS roleId,
-        sys_role.`name` AS roleName
+            sys_user.username AS username,
+            customer_setting.id,
+            customer_setting.cus_type,
+            customer_setting.contactPerson,
+            customer_setting.contactPersonPhone,
+            customer_setting.address,
+            customer_setting.remarks,
+            customer_setting.agreementId,
+            customer_setting.group_id,
+            group_setting.groupName,
+            customer_setting.authentication,
+            customer_setting.isWatch,
+            sys_user.mobile AS mobile,
+            agreement_setting.agreementName,
+            sys_role.id AS roleId,
+            sys_role.`name` AS roleName
         FROM
-        customer_setting,
-        sys_user,
-        sys_menu,
-        sys_role,
-        agreement_setting
+            customer_setting,
+            sys_user,
+            group_setting,
+            sys_role,
+            agreement_setting
         <where>
             customer_setting.isDelete = 0
             AND customer_setting.userId = sys_user.id
-            AND customer_setting.menuId = sys_menu.id
+            AND customer_setting.group_id = group_setting.groupId
             AND customer_setting.roleId = sys_role.id
             AND customer_setting.agreementId = agreement_setting.id
             <if test="keyWord != null">

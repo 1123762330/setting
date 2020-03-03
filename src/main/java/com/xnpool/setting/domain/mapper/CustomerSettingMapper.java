@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.CustomerSetting;import com.xnpool.setting.
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/2 13:44
+ * @date 2020/3/3 10:54
  */
 public interface CustomerSettingMapper {
     int deleteByPrimaryKey(Integer id);

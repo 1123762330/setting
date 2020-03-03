@@ -178,4 +178,11 @@
       AND group_setting.ipId = ip_setting.id
     </where>
   </select>
+
+  <select id="selectGroupMap" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from group_setting
+    where isDelete=0
+  </select>
 </mapper>

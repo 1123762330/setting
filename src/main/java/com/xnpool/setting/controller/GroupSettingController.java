@@ -78,4 +78,17 @@ public class GroupSettingController extends BaseController {
         PageInfo<GroupSettingExample> groupSettingExamplePageInfo = groupSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, groupSettingExamplePageInfo);
     }
+
+    /**
+     * @return
+     * @Description 查询分组列表
+     * @Author zly
+     * @Date 14:58 2020/2/4
+     * @Param
+     */
+    @GetMapping("/selectGroupMap")
+    public ResponseResult selectGroupMap() {
+         groupSettingService.selectGroupMap();
+        return new ResponseResult(SUCCESS);
+    }
 }

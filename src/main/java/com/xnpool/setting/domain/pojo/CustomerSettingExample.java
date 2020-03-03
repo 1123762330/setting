@@ -59,14 +59,14 @@ public class CustomerSettingExample implements Serializable {
     private String agreementName;
 
     /**
-     * 分组ID,也就是菜单栏目ID,包含多个
+     * 分组ID,包含多个
      */
-    private String menuid;
+    private String groupId;
 
     /**
-     * 分组名称,也就是菜单栏目,包含多个
+     * 分组名称,包含多个
      */
-    private String menuName;
+    private String groupName;
 
     /**
      * 角色ID,包含多个
