@@ -1,5 +1,7 @@
 server:
   port: 8766
+  servlet:
+    context-path: /setting
 ---
 spring:
   application:

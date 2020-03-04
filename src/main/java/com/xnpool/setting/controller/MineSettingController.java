@@ -101,4 +101,18 @@ public class MineSettingController extends BaseController{
         HashMap<Integer, String> resultMap = mineSettingService.selectPoolNameByOther();
         return new ResponseResult(SUCCESS, resultMap);
     }
+
+
+    /**
+     * @Description 矿场厂房和机架集合
+     * @Author zly
+     * @Date 17:01 2020/3/3
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectMineFactoryAndFrame")
+    public ResponseResult selectMineFactoryAndFrame() {
+        HashMap<String, HashMap<Integer, String>> resultMap = mineSettingService.selectMineFactoryAndFrame();
+        return new ResponseResult(SUCCESS,resultMap);
+    }
 }

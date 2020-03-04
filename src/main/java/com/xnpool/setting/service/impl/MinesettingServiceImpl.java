@@ -98,8 +98,33 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         }
         PageHelper.startPage(pageNum, pageSize);
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(keyWord);
+        System.out.println(mineSettingList);
         PageInfo<MineSetting> pageInfo = new PageInfo<>(mineSettingList);
         return pageInfo;
+    }
+
+    @Override
+    public HashMap<String, HashMap<Integer, String>> selectMineFactoryAndFrame() {
+        List<HashMap> mineFactoryAndFrameList = minesettingMapper.selectMineFactoryAndFrame();
+        HashMap<Integer, String> mineMap = new HashMap<>();
+        HashMap<Integer, String> factroyMap = new HashMap<>();
+        HashMap<Integer, String> frameMap = new HashMap<>();
+        HashMap<String, HashMap<Integer, String>> resultMap = new HashMap<>();
+        for (HashMap hashMap : mineFactoryAndFrameList) {
+            Integer frameId = (Integer) hashMap.get("frameId");
+            String frameName = String.valueOf(hashMap.get("frameName"));
+            Integer factoryId = (Integer) hashMap.get("factoryId");
+            String factoryName = String.valueOf(hashMap.get("factoryName"));
+            Integer mineId = (Integer) hashMap.get("mineId");
+            String mineName = String.valueOf(hashMap.get("mineName"));
+            mineMap.put(mineId,mineName);
+            factroyMap.put(factoryId,factoryName+"-"+mineName);
+            frameMap.put(frameId,frameName+"-"+factoryName+"-"+mineName);
+        }
+        resultMap.put("mine",mineMap);
+        resultMap.put("factory",factroyMap);
+        resultMap.put("frame",frameMap);
+        return resultMap;
     }
 
 }

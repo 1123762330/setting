@@ -118,8 +118,27 @@
     <where>
       isDelete = 0
       <if test="keyWord != null">
-        AND (poolName like #{keyWord} or `description` like #{keyWord})
+        AND (mineName like #{keyWord} or `description` like #{keyWord})
       </if>
     </where>
   </select>
+
+  <select id="selectMineFactoryAndFrame" resultType="hashmap">
+    SELECT
+        frame_setting.id AS frameId,
+        frame_setting.frameName,
+        factory_house.id AS factoryId,
+        factory_house.factoryName,
+        mine_setting.id AS mineId,
+        mine_setting.mineName
+    FROM
+        frame_setting,
+        factory_house,
+        mine_setting
+    WHERE
+        frame_setting.factoryId = factory_house.id
+        AND frame_setting.mineId = mine_setting.id
+        AND frame_setting.isDelete=0
+  </select>
+
 </mapper>

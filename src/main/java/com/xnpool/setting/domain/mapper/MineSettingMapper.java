@@ -1,6 +1,9 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.MineSetting;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.MineSetting;import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author zly
@@ -23,4 +26,6 @@ public interface MineSettingMapper {
     int updateById(int id);
 
     List<MineSetting> selectByOther(@Param("keyWord") String keyWord);
+
+    List<HashMap> selectMineFactoryAndFrame();
 }
