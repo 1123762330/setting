@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/27 14:16
+ * @date 2020/3/5 13:32
  */
 @Data
 @AllArgsConstructor
@@ -23,22 +23,22 @@ public class OperatorWorkerHistory implements Serializable {
     /**
      * 矿场Id
      */
-    private Integer mineid;
+    private Integer mineId;
 
     /**
      * 矿机表id
      */
-    private Integer workerid;
+    private Integer workerId;
 
     /**
      * 出库时间
      */
-    private Date moveouttime;
+    private Date moveOutTime;
 
     /**
      * 入库时间
      */
-    private Date comeintime;
+    private Date comeInTime;
 
     /**
      * 出库原因
@@ -48,7 +48,7 @@ public class OperatorWorkerHistory implements Serializable {
     /**
      * 出库员
      */
-    private Integer operatorid;
+    private Integer operatorId;
 
     private static final long serialVersionUID = 1L;
 }

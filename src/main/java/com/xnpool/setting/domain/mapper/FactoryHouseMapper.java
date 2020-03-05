@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.FactoryHouse;import com.xnpool.setting.dom
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/6 13:18
+ * @date 2020/3/5 12:59
  */
 public interface FactoryHouseMapper {
     int deleteByPrimaryKey(Integer id);

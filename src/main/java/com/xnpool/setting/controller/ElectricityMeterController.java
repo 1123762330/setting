@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.AgreementSetting;
 import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.service.ElectricityMeterSettingService;
 import com.xnpool.setting.utils.ResponseResult;
@@ -75,7 +76,7 @@ public class ElectricityMeterController extends BaseController {
     @GetMapping("/selectElectricityMeter")
     public ResponseResult selectElectricityMeter(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<ElectricityMeterSetting> pageInfo = electricityMeterSettingService.selectByOther(keyWord, pageNum, pageSize);
+        PageInfo<ElectricityMeterSettingExample> pageInfo = electricityMeterSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS,pageInfo);
     }
 }

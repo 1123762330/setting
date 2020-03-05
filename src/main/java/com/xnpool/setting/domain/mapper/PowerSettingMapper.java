@@ -1,14 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.PowerSetting;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.xnpool.setting.domain.pojo.PowerSetting;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/6 14:13
+ * @author zly
  * @version 1.0
+ * @date 2020/3/5 13:34
  */
 public interface PowerSettingMapper {
     int deleteByPrimaryKey(Integer id);

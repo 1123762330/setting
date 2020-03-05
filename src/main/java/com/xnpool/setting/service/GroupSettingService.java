@@ -30,8 +30,9 @@ public interface GroupSettingService {
 
     PageInfo<GroupSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    HashMap<Integer,String> selectGroupMap();
+    HashMap<Integer, String> selectGroupMap();
 }
+
 
 
 

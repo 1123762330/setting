@@ -24,50 +24,40 @@ public class ElectricityMeterSettingExample implements Serializable {
     /**
      * 所属矿场
      */
-    private Integer mineid;
+    private Integer mineId;
 
     /**
      * 所属矿场名字
      */
-    private String minename;
+    private String mineName;
 
     /**
      * 所属厂房
      */
-    private Integer factoryid;
+    private Integer factoryId;
 
     /**
      * 所属厂房名字
      */
-    private String factoryname;
+    private String factoryName;
 
     /**
      * 所属客户
      */
-    private Integer customerid;
+    private Integer customerId;
 
     /**
-     * 所属客户
+     * 所属客户姓名
      */
-    private Integer userid;
+    private String userName;
 
     /**
      * 初始码数
      */
-    private String electricitystart;
+    private String electricityStart;
 
     /**
      * 线损
      */
-    private Double line_loss;
-
-    /**
-     * 创建时间
-     */
-    private Date createtime;
-
-    /**
-     * 修改时间
-     */
-    private Date updatetime;
+    private Double lineLoss;
 }

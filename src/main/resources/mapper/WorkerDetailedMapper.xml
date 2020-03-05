@@ -5,23 +5,23 @@
     <!--@mbg.generated-->
     <!--@Table worker_detailed-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="workerId" jdbcType="INTEGER" property="workerid" />
+    <result column="worker_id" jdbcType="INTEGER" property="workerId" />
     <result column="workerbrand_id" jdbcType="INTEGER" property="workerbrandId" />
-    <result column="factoryId" jdbcType="INTEGER" property="factoryid" />
-    <result column="frameId" jdbcType="INTEGER" property="frameid" />
-    <result column="frameNumber" jdbcType="INTEGER" property="framenumber" />
-    <result column="groupId" jdbcType="INTEGER" property="groupid" />
-    <result column="mineId" jdbcType="INTEGER" property="mineid" />
+    <result column="factory_id" jdbcType="INTEGER" property="factoryId" />
+    <result column="frame_id" jdbcType="INTEGER" property="frameId" />
+    <result column="frame_number" jdbcType="INTEGER" property="frameNumber" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
     <result column="is_come_in" jdbcType="INTEGER" property="isComeIn" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, workerId, workerbrand_id, factoryId, frameId, frameNumber, groupId, mineId, is_come_in, 
-    remarks, isDelete, createTime, updateTime
+    id, worker_id, workerbrand_id, factory_id, frame_id, frame_number, group_id, mine_id, 
+    is_come_in, remarks, is_delete, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -37,41 +37,41 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into worker_detailed (workerId, workerbrand_id, factoryId, 
-      frameId, frameNumber, groupId, 
-      mineId, is_come_in, remarks, 
-      isDelete, createTime, updateTime
+    insert into worker_detailed (worker_id, workerbrand_id, factory_id, 
+      frame_id, frame_number, group_id, 
+      mine_id, is_come_in, remarks, 
+      is_delete, create_time, update_time
       )
-    values (#{workerid,jdbcType=INTEGER}, #{workerbrandId,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, 
-      #{frameid,jdbcType=INTEGER}, #{framenumber,jdbcType=INTEGER}, #{groupid,jdbcType=INTEGER}, 
-      #{mineid,jdbcType=INTEGER}, #{isComeIn,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
-      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+    values (#{workerId,jdbcType=INTEGER}, #{workerbrandId,jdbcType=INTEGER}, #{factoryId,jdbcType=INTEGER}, 
+      #{frameId,jdbcType=INTEGER}, #{frameNumber,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, 
+      #{mineId,jdbcType=INTEGER}, #{isComeIn,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into worker_detailed
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="workerid != null">
-        workerId,
+      <if test="workerId != null">
+        worker_id,
       </if>
       <if test="workerbrandId != null">
         workerbrand_id,
       </if>
-      <if test="factoryid != null">
-        factoryId,
+      <if test="factoryId != null">
+        factory_id,
       </if>
-      <if test="frameid != null">
-        frameId,
+      <if test="frameId != null">
+        frame_id,
       </if>
-      <if test="framenumber != null">
-        frameNumber,
+      <if test="frameNumber != null">
+        frame_number,
       </if>
-      <if test="groupid != null">
-        groupId,
+      <if test="groupId != null">
+        group_id,
       </if>
-      <if test="mineid != null">
-        mineId,
+      <if test="mineId != null">
+        mine_id,
       </if>
       <if test="isComeIn != null">
         is_come_in,
@@ -79,37 +79,37 @@
       <if test="remarks != null">
         remarks,
       </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="isDelete != null">
+        is_delete,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="workerid != null">
-        #{workerid,jdbcType=INTEGER},
+      <if test="workerId != null">
+        #{workerId,jdbcType=INTEGER},
       </if>
       <if test="workerbrandId != null">
         #{workerbrandId,jdbcType=INTEGER},
       </if>
-      <if test="factoryid != null">
-        #{factoryid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        #{factoryId,jdbcType=INTEGER},
       </if>
-      <if test="frameid != null">
-        #{frameid,jdbcType=INTEGER},
+      <if test="frameId != null">
+        #{frameId,jdbcType=INTEGER},
       </if>
-      <if test="framenumber != null">
-        #{framenumber,jdbcType=INTEGER},
+      <if test="frameNumber != null">
+        #{frameNumber,jdbcType=INTEGER},
       </if>
-      <if test="groupid != null">
-        #{groupid,jdbcType=INTEGER},
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
       </if>
-      <if test="mineid != null">
-        #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
       </if>
       <if test="isComeIn != null">
         #{isComeIn,jdbcType=INTEGER},
@@ -117,14 +117,14 @@
       <if test="remarks != null">
         #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -132,26 +132,26 @@
     <!--@mbg.generated-->
     update worker_detailed
     <set>
-      <if test="workerid != null">
-        workerId = #{workerid,jdbcType=INTEGER},
+      <if test="workerId != null">
+        worker_id = #{workerId,jdbcType=INTEGER},
       </if>
       <if test="workerbrandId != null">
         workerbrand_id = #{workerbrandId,jdbcType=INTEGER},
       </if>
-      <if test="factoryid != null">
-        factoryId = #{factoryid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        factory_id = #{factoryId,jdbcType=INTEGER},
       </if>
-      <if test="frameid != null">
-        frameId = #{frameid,jdbcType=INTEGER},
+      <if test="frameId != null">
+        frame_id = #{frameId,jdbcType=INTEGER},
       </if>
-      <if test="framenumber != null">
-        frameNumber = #{framenumber,jdbcType=INTEGER},
+      <if test="frameNumber != null">
+        frame_number = #{frameNumber,jdbcType=INTEGER},
       </if>
-      <if test="groupid != null">
-        groupId = #{groupid,jdbcType=INTEGER},
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
       </if>
-      <if test="mineid != null">
-        mineId = #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
       </if>
       <if test="isComeIn != null">
         is_come_in = #{isComeIn,jdbcType=INTEGER},
@@ -159,14 +159,14 @@
       <if test="remarks != null">
         remarks = #{remarks,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -174,18 +174,18 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed">
     <!--@mbg.generated-->
     update worker_detailed
-    set workerId = #{workerid,jdbcType=INTEGER},
+    set worker_id = #{workerId,jdbcType=INTEGER},
       workerbrand_id = #{workerbrandId,jdbcType=INTEGER},
-      factoryId = #{factoryid,jdbcType=INTEGER},
-      frameId = #{frameid,jdbcType=INTEGER},
-      frameNumber = #{framenumber,jdbcType=INTEGER},
-      groupId = #{groupid,jdbcType=INTEGER},
-      mineId = #{mineid,jdbcType=INTEGER},
+      factory_id = #{factoryId,jdbcType=INTEGER},
+      frame_id = #{frameId,jdbcType=INTEGER},
+      frame_number = #{frameNumber,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      mine_id = #{mineId,jdbcType=INTEGER},
       is_come_in = #{isComeIn,jdbcType=INTEGER},
       remarks = #{remarks,jdbcType=VARCHAR},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -193,18 +193,18 @@
     <select id="selectMoveOutList" resultType="com.xnpool.setting.domain.pojo.WorkerDetailedExample">
         SELECT
         worker_detailed.id,
-        worker_detailed.workerId,
+        worker_detailed.worker_id,
         worker_detailed.is_come_in,
         worker_detailed.remarks,
-        worker_detailed.frameNumber,
+        worker_detailed.frame_number,
         worker.miner,
         worker.workerName,
         worker.workerIp,
         worker.isOnLine,
-        factory_house.factoryName,
-        frame_setting.frameName,
-        group_setting.groupName,
-        workerbrand_setting.workerName AS brandName
+        factory_house.factory_name,
+        frame_setting.frame_name,
+        group_setting.group_name,
+        workerbrand_setting.worker_name AS brandName
         FROM
         worker_detailed,
         worker,
@@ -213,25 +213,25 @@
         group_setting,
         workerbrand_setting
         <where>
-            worker_detailed.isDelete = 0
+            worker_detailed.is_delete = 0
             <if test="keyWord != null">
-                AND (groupName like #{keyWord})
+                AND (group_name like #{keyWord})
             </if>
-            AND worker_detailed.workerId = worker.id
-            AND worker_detailed.factoryId = factory_house.id
-            AND worker_detailed.frameId = frame_setting.id
-            AND worker_detailed.groupId = group_setting.groupId
+            AND worker_detailed.worker_id = worker.id
+            AND worker_detailed.factory_id = factory_house.id
+            AND worker_detailed.frame_id = frame_setting.id
+            AND worker_detailed.group_id = group_setting.groupId
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
         </where>
     </select>
 
     <!--    批量添加-->
     <insert id="batchInsert" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
-        insert into worker_detailed (workerId, factoryId, frameId,frameNumber, groupId, mineId,createTime)
+        insert into worker_detailed (worker_id, factory_id, frame_id,frame_number, group_id, mine_id,create_time)
         values
         <foreach collection="list" index="index" item="item" separator=",">
-            (#{item.workerid},#{item.factoryid},#{item.frameid},#{item.framenumber},
-            #{item.groupid},#{item.mineid},#{item.createtime})
+            (#{item.workerId},#{item.factoryId},#{item.frameId},#{item.frameNumber},
+            #{item.groupId},#{item.mineId},#{item.createTime})
         </foreach>
     </insert>
 
@@ -245,7 +245,7 @@
 
     <!--  矿机入库操作-->
     <update id="updateComeInByid" parameterType="java.util.List">
-        update worker_detailed set is_come_in = 1 where workerId in
+        update worker_detailed set is_come_in = 1 where worker_id in
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=BIGINT}
         </foreach>
@@ -254,9 +254,9 @@
 
     <!--矿机管理表的出入库矿机ID列表-->
     <select id="selectWorkerIdlist" resultType="integer">
-        select workerId FROM worker_detailed
+        select worker_id FROM worker_detailed
         <where>
-            isDelete=0
+            is_delete=0
             <if test="is_come_in != null">
                 AND is_come_in=#{is_come_in}
             </if>
@@ -265,7 +265,7 @@
 
     <!--矿机矿场列表-->
     <select id="selectByWorkerId" resultType="com.xnpool.setting.domain.pojo.WorkerMineVO">
-        select workerId,mineId FROM worker_detailed where isDelete=0 AND workerId in
+        select worker_id,mine_id FROM worker_detailed where is_delete=0 AND worker_id in
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=BIGINT}
         </foreach>
@@ -273,7 +273,7 @@
 
     <!--软删除-->
     <update id="updateById">
-        update worker_detailed set isDelete = 1 where workerId in
+        update worker_detailed set is_delete = 1 where worker_id in
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=BIGINT}
         </foreach>

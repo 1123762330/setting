@@ -52,7 +52,7 @@ public class CustomerSettingExample implements Serializable {
     /**
      * 协议ID,包含多个
      */
-    private String agreementid;
+    private String agreementId;
     /**
      * 协议名称,包含多个
      */

@@ -47,8 +47,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(IpSetting record) {
         int rows = ipSettingMapper.insertSelective(record);
-        record.setCreatetime(new Date());
-        redisToInsert(rows,"ip_setting",record,null);
+        record.setCreateTime(new Date());
+        redisToInsert(rows, "ip_setting", record, null);
     }
 
     @Override
@@ -60,8 +60,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(IpSetting record) {
         int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdatetime(new Date());
-        redisToUpdate(rows,"ip_setting",record,null);
+        record.setUpdateTime(new Date());
+        redisToUpdate(rows, "ip_setting", record, null);
     }
 
     @Override
@@ -74,17 +74,17 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void updateById(int id) {
         int rows = ipSettingMapper.updateById(id);
         IpSetting record = new IpSetting();
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows,"ip_setting",record,null);
+        redisToDelete(rows, "ip_setting", record, null);
     }
 
     @Override
-    public PageInfo<IpSetting> selectByOther(String keyWord,int pageNum,int pageSize) {
+    public PageInfo<IpSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         apiContext.setTenantId(112233L);
         List<IpSetting> ipSettings = ipSettingMapper.selectByOther(keyWord);
         PageInfo<IpSetting> pageInfo = new PageInfo<>(ipSettings);
@@ -98,9 +98,9 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
             HashMap<Integer, String> resultMap = new HashMap<>();
             ipSettings.forEach(ipSetting -> {
                 Integer id = ipSetting.getId();
-                String startip = ipSetting.getStartip();
-                String endip = ipSetting.getEndip();
-                String ipName = startip + "-" + endip;
+                String startIp = ipSetting.getStartIp();
+                String endIp = ipSetting.getEndIp();
+                String ipName = startIp + "-" + endIp;
                 resultMap.put(id, ipName);
             });
             return resultMap;
@@ -110,4 +110,5 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     }
 
 }
+
 

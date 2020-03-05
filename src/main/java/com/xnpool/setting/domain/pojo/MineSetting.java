@@ -2,16 +2,20 @@ package com.xnpool.setting.domain.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/10 14:49
+ * @date 2020/3/5 12:53
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MineSetting implements Serializable {
-    private static final long serialVersionUID = -3170853676349397757L;
+    private static final long serialVersionUID = -7977025821251310600L;
     /**
      * 矿场编号
      */
@@ -20,7 +24,7 @@ public class MineSetting implements Serializable {
     /**
      * 矿场名称
      */
-    private String minename;
+    private String mineName;
 
     /**
      * 备注
@@ -30,16 +34,16 @@ public class MineSetting implements Serializable {
     /**
      * 是否删除，0:否，1:是
      */
-    private Integer isdelete;
+    private Integer isDelete;
 
     /**
      * 修改时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 生成时间
      */
-    private Date createtime;
+    private Date createTime;
 
 }

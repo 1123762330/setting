@@ -13,12 +13,12 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/6 14:13
+ * @author zly
  * @version 1.0
+ * @date 2020/2/6 14:13
  */
 @Service
-public class PowerSettingServiceImpl implements PowerSettingService{
+public class PowerSettingServiceImpl implements PowerSettingService {
 
     @Resource
     private PowerSettingMapper powerSettingMapper;
@@ -63,10 +63,11 @@ public class PowerSettingServiceImpl implements PowerSettingService{
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         List<PowerSetting> powerSettings = powerSettingMapper.selectByOther(keyWord);
         PageInfo<PowerSetting> pageInfo = new PageInfo<>(powerSettings);
         return pageInfo;
     }
 
 }
+

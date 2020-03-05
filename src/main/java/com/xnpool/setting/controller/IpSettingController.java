@@ -31,7 +31,7 @@ public class IpSettingController extends BaseController {
      * @Date 12:59 2020/2/3
      * @Param
      */
-    @PostMapping("/addIP")
+    @PostMapping("/addIp")
     public ResponseResult addIP(IpSetting ipSetting) {
         ipSettingService.insertSelective(ipSetting);
         return new ResponseResult(SUCCESS);
@@ -44,7 +44,7 @@ public class IpSettingController extends BaseController {
      * @Date 11:26 2020/2/4
      * @Param
      */
-    @PutMapping("/updateIP")
+    @PutMapping("/updateIp")
     public ResponseResult updateIP(IpSetting ipSetting) {
         ipSettingService.updateByPrimaryKeySelective(ipSetting);
         return new ResponseResult(SUCCESS);
@@ -57,7 +57,7 @@ public class IpSettingController extends BaseController {
      * @Date 11:45 2020/2/4
      * @Param
      */
-    @DeleteMapping("/deleteIPById")
+    @DeleteMapping("/deleteIpById")
     public ResponseResult deleteIPById(int id) {
         ipSettingService.updateById(id);
         return new ResponseResult(SUCCESS);
@@ -70,7 +70,7 @@ public class IpSettingController extends BaseController {
      * @Date 14:58 2020/2/4
      * @Param
      */
-    @GetMapping("/selectIPList")
+    @GetMapping("/selectIpList")
     public ResponseResult selectIPList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<IpSetting> ipSettingPageInfo = ipSettingService.selectByOther(keyWord, pageNum, pageSize);
@@ -84,7 +84,7 @@ public class IpSettingController extends BaseController {
      * @Date 14:58 2020/2/4
      * @Param
      */
-    @GetMapping("/selectByIPStart")
+    @GetMapping("/selectByIpStart")
     public ResponseResult selectByIPStart() {
         HashMap<Integer, String> resultMap = ipSettingService.selectByIPStart();
         return new ResponseResult(SUCCESS, resultMap);

@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/7 9:42
+ * @author zly
  * @version 1.0
+ * @date 2020/2/7 9:42
  */
 @Service
-public class AgreementSettingServiceImpl implements AgreementSettingService{
+public class AgreementSettingServiceImpl implements AgreementSettingService {
 
     @Resource
     private AgreementSettingMapper agreementSettingMapper;
@@ -59,7 +59,7 @@ public class AgreementSettingServiceImpl implements AgreementSettingService{
     }
 
     @Override
-    public PageInfo<AgreementSetting> selectByOther(String keyWord,int pageNum,int pageSize) {
+    public PageInfo<AgreementSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -69,16 +69,17 @@ public class AgreementSettingServiceImpl implements AgreementSettingService{
         return pageInfo;
     }
 
-    public HashMap<Integer,String> selectAgreementMap(){
+    public HashMap<Integer, String> selectAgreementMap() {
         List<HashMap> hashMaps = agreementSettingMapper.selectAgreementMap();
         HashMap<Integer, String> resultMap = new HashMap<>();
         hashMaps.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
             String agreementName = hashMap.get("agreementName").toString();
-            resultMap.put(id,agreementName);
+            resultMap.put(id, agreementName);
         });
         return resultMap;
     }
 
 
 }
+

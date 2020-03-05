@@ -5,20 +5,20 @@
     <!--@mbg.generated-->
     <!--@Table electricity_meter_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="electricity_meter_Name" jdbcType="VARCHAR" property="electricityMeterName" />
-    <result column="mineId" jdbcType="INTEGER" property="mineid" />
-    <result column="factoryId" jdbcType="INTEGER" property="factoryid" />
-    <result column="customerId" jdbcType="INTEGER" property="customerid" />
-    <result column="electricityStart" jdbcType="VARCHAR" property="electricitystart" />
+    <result column="electricity_meter_name" jdbcType="VARCHAR" property="electricityMeterName" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
+    <result column="factory_id" jdbcType="INTEGER" property="factoryId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="electricity_start" jdbcType="VARCHAR" property="electricityStart" />
     <result column="line_loss" jdbcType="DOUBLE" property="lineLoss" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, electricity_meter_Name, mineId, factoryId, customerId, electricityStart, line_loss, 
-    isDelete, createTime, updateTime
+    id, electricity_meter_name, mine_id, factory_id, customer_id, electricity_start, 
+    line_loss, is_delete, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -34,13 +34,13 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into electricity_meter_setting (electricity_meter_Name, mineId, factoryId, 
-      customerId, electricityStart, line_loss, 
-      isDelete, createTime, updateTime
+    insert into electricity_meter_setting (electricity_meter_name, mine_id, factory_id, 
+      customer_id, electricity_start, line_loss, 
+      is_delete, create_time, update_time
       )
-    values (#{electricityMeterName,jdbcType=VARCHAR}, #{mineid,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, 
-      #{customerid,jdbcType=INTEGER}, #{electricitystart,jdbcType=VARCHAR}, #{lineLoss,jdbcType=DOUBLE}, 
-      #{isdelete,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+    values (#{electricityMeterName,jdbcType=VARCHAR}, #{mineId,jdbcType=INTEGER}, #{factoryId,jdbcType=INTEGER}, 
+      #{customerId,jdbcType=INTEGER}, #{electricityStart,jdbcType=VARCHAR}, #{lineLoss,jdbcType=DOUBLE}, 
+      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting" useGeneratedKeys="true">
@@ -48,60 +48,60 @@
     insert into electricity_meter_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="electricityMeterName != null">
-        electricity_meter_Name,
+        electricity_meter_name,
       </if>
-      <if test="mineid != null">
-        mineId,
+      <if test="mineId != null">
+        mine_id,
       </if>
-      <if test="factoryid != null">
-        factoryId,
+      <if test="factoryId != null">
+        factory_id,
       </if>
-      <if test="customerid != null">
-        customerId,
+      <if test="customerId != null">
+        customer_id,
       </if>
-      <if test="electricitystart != null">
-        electricityStart,
+      <if test="electricityStart != null">
+        electricity_start,
       </if>
       <if test="lineLoss != null">
         line_loss,
       </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="isDelete != null">
+        is_delete,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="electricityMeterName != null">
         #{electricityMeterName,jdbcType=VARCHAR},
       </if>
-      <if test="mineid != null">
-        #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="factoryid != null">
-        #{factoryid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        #{factoryId,jdbcType=INTEGER},
       </if>
-      <if test="customerid != null">
-        #{customerid,jdbcType=INTEGER},
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
       </if>
-      <if test="electricitystart != null">
-        #{electricitystart,jdbcType=VARCHAR},
+      <if test="electricityStart != null">
+        #{electricityStart,jdbcType=VARCHAR},
       </if>
       <if test="lineLoss != null">
         #{lineLoss,jdbcType=DOUBLE},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -110,31 +110,31 @@
     update electricity_meter_setting
     <set>
       <if test="electricityMeterName != null">
-        electricity_meter_Name = #{electricityMeterName,jdbcType=VARCHAR},
+        electricity_meter_name = #{electricityMeterName,jdbcType=VARCHAR},
       </if>
-      <if test="mineid != null">
-        mineId = #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="factoryid != null">
-        factoryId = #{factoryid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        factory_id = #{factoryId,jdbcType=INTEGER},
       </if>
-      <if test="customerid != null">
-        customerId = #{customerid,jdbcType=INTEGER},
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
       </if>
-      <if test="electricitystart != null">
-        electricityStart = #{electricitystart,jdbcType=VARCHAR},
+      <if test="electricityStart != null">
+        electricity_start = #{electricityStart,jdbcType=VARCHAR},
       </if>
       <if test="lineLoss != null">
         line_loss = #{lineLoss,jdbcType=DOUBLE},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -142,49 +142,51 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.ElectricityMeterSetting">
     <!--@mbg.generated-->
     update electricity_meter_setting
-    set electricity_meter_Name = #{electricityMeterName,jdbcType=VARCHAR},
-      mineId = #{mineid,jdbcType=INTEGER},
-      factoryId = #{factoryid,jdbcType=INTEGER},
-      customerId = #{customerid,jdbcType=INTEGER},
-      electricityStart = #{electricitystart,jdbcType=VARCHAR},
+    set electricity_meter_name = #{electricityMeterName,jdbcType=VARCHAR},
+      mine_id = #{mineId,jdbcType=INTEGER},
+      factory_id = #{factoryId,jdbcType=INTEGER},
+      customer_id = #{customerId,jdbcType=INTEGER},
+      electricity_start = #{electricityStart,jdbcType=VARCHAR},
       line_loss = #{lineLoss,jdbcType=DOUBLE},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!--  软删除-->
   <update id="updateById">
-    update electricity_meter_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+    update electricity_meter_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
 <!--  根据条件查询电表列表-->
     <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample">
       SELECT
       electricity_meter_setting.id,
-      electricity_meter_setting.electricity_meter_Name AS electricityMeterName,
-      electricity_meter_setting.mineId,
-      electricity_meter_setting.factoryId,
-      electricity_meter_setting.customerId,
-      electricity_meter_setting.electricityStart,
+      electricity_meter_setting.electricity_meter_Name,
+      electricity_meter_setting.mine_id,
+      electricity_meter_setting.factory_id,
+      electricity_meter_setting.customer_id,
+      electricity_meter_setting.electricity_start,
       electricity_meter_setting.line_loss,
-      electricity_meter_setting.createTime,
-      electricity_meter_setting.updateTime,
-      mine_setting.mineName,
-      factory_house.factoryName,
-      customer_setting.userId
+      electricity_meter_setting.create_time,
+      electricity_meter_setting.update_time,
+      mine_setting.mine_name,
+      factory_house.factory_name,
+      sys_user.username
       FROM
       electricity_meter_setting,
       mine_setting,
       factory_house,
-      customer_setting
+      customer_setting,
+      sys_user
       <where>
-        electricity_meter_setting.isDelete = 0
+        electricity_meter_setting.is_delete = 0
         <if test="keyWord != null">
           AND (electricity_meter_setting.electricity_meter_Name like #{keyWord} )
         </if>
-        AND electricity_meter_setting.mineId = mine_setting.id
-        AND electricity_meter_setting.factoryId = factory_house.id
-        AND electricity_meter_setting.customerId = customer_setting.id
+        AND electricity_meter_setting.mine_id = mine_setting.id
+        AND electricity_meter_setting.factory_id = factory_house.id
+        AND electricity_meter_setting.customer_id = customer_setting.id
+        AND customer_setting.user_id= sys_user.id
       </where>
     </select>
 </mapper>

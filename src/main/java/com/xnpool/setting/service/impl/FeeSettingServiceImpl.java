@@ -12,12 +12,12 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/6 16:05
+ * @author zly
  * @version 1.0
+ * @date 2020/2/6 16:05
  */
 @Service
-public class FeeSettingServiceImpl implements FeeSettingService{
+public class FeeSettingServiceImpl implements FeeSettingService {
 
     @Resource
     private FeeSettingMapper feeSettingMapper;
@@ -58,7 +58,7 @@ public class FeeSettingServiceImpl implements FeeSettingService{
     }
 
     @Override
-    public PageInfo<FeeSetting>  selectByOther(String keyWord,int pageNum,int pageSize) {
+    public PageInfo<FeeSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -69,3 +69,4 @@ public class FeeSettingServiceImpl implements FeeSettingService{
     }
 
 }
+

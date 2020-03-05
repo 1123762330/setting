@@ -27,5 +27,6 @@ public interface FeeSettingService {
 
     int updateById(int id);
 
-    PageInfo<FeeSetting> selectByOther(String keyWord,int pageNum,int pageSize);
+    PageInfo<FeeSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 }
+

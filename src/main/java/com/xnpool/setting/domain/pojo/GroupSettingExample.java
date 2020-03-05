@@ -16,17 +16,17 @@ public class GroupSettingExample implements Serializable {
     /**
      * 分组ID
      */
-    private Integer groupid;
+    private Integer id;
 
     /**
      * 组名
      */
-    private String groupname;
+    private String groupName;
 
     /**
      * 所属IP段,会有多个
      */
-    private String ipid;
+    private String ipId;
 
     /**
      * 所属IP段,会有多个
@@ -36,50 +36,40 @@ public class GroupSettingExample implements Serializable {
     /**
      * 起始IP
      */
-    private String startip;
+    private String startIp;
 
     /**
      * 终止IP
      */
-    private String endip;
+    private String endIp;
 
     /**
      * 所属厂房,会有多个
      */
-    private String factoryid;
+    private String factoryId;
 
     /**
      * 厂房名
      */
-    private String factoryname;
+    private String factoryName;
 
     /**
      * 所属矿场
      */
-    private Integer mineid;
+    private Integer mineId;
 
     /**
      * 矿场名
      */
-    private String minename;
+    private String mineName;
 
     /**
      * 所属机架
      */
-    private String frameid;
+    private String frameId;
 
     /**
      * 所属机架详细信息
      */
     private String framenameDetailed;
-
-    /**
-     * 创建时间
-     */
-    private Date createtime;
-
-    /**
-     * 修改时间
-     */
-    private Date updatetime;
 }

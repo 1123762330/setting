@@ -51,12 +51,12 @@ public class OperatorWorkerHistoryExample implements Serializable {
     /**
     * 出库时间
     */
-    private String moveouttime;
+    private String moveOutTime;
 
     /**
     * 入库时间
     */
-    private String comeintime;
+    private String comeInTime;
 
     /**
      * 总耗时
@@ -71,5 +71,5 @@ public class OperatorWorkerHistoryExample implements Serializable {
     /**
     * 出库员
     */
-    private Integer operatorid;
+    private Integer operatorId;
 }

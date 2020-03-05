@@ -5,16 +5,16 @@ import com.xnpool.setting.domain.pojo.GroupSetting;import com.xnpool.setting.dom
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/11 9:56
+ * @date 2020/3/5 19:50
  */
 public interface GroupSettingMapper {
-    int deleteByPrimaryKey(Integer groupid);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(GroupSetting record);
 
     int insertSelective(GroupSetting record);
 
-    GroupSetting selectByPrimaryKey(Integer groupid);
+    GroupSetting selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(GroupSetting record);
 

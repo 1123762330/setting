@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.FrameSetting;import com.xnpool.setting.dom
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/17 10:53
+ * @date 2020/3/5 13:03
  */
 public interface FrameSettingMapper {
     int deleteByPrimaryKey(Integer id);

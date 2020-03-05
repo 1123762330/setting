@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/2 16:16
+ * @date 2020/3/5 13:34
  */
 @Data
 @AllArgsConstructor
@@ -23,12 +23,7 @@ public class WorkerDetailed implements Serializable {
     /**
      * 矿机ID
      */
-    private Integer workerid;
-
-    /**
-     * 矿机ip
-     */
-    private String workerIp="";
+    private Integer workerId;
 
     /**
      * 矿机品牌id
@@ -38,27 +33,27 @@ public class WorkerDetailed implements Serializable {
     /**
      * 所属厂房
      */
-    private Integer factoryid;
+    private Integer factoryId;
 
     /**
      * 所属机架
      */
-    private Integer frameid;
+    private Integer frameId;
 
     /**
      * 矿机架层数
      */
-    private Integer framenumber;
+    private Integer frameNumber;
 
     /**
      * 所属分组
      */
-    private Integer groupid;
+    private Integer groupId;
 
     /**
      * 矿场id
      */
-    private Integer mineid;
+    private Integer mineId;
 
     /**
      * 是否入库,0:未入库,1:已入库
@@ -73,17 +68,18 @@ public class WorkerDetailed implements Serializable {
     /**
      * 是否删除,0:否,1:是
      */
-    private Integer isdelete;
+    private Integer isDelete;
 
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
-    private static final long serialVersionUID = 1L;
+    private String workerIp;
+
 }

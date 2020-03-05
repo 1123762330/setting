@@ -5,19 +5,18 @@
     <!--@mbg.generated-->
     <!--@Table frame_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="frameName" jdbcType="VARCHAR" property="framename" />
+    <result column="frame_name" jdbcType="VARCHAR" property="frameName" />
     <result column="number" jdbcType="INTEGER" property="number" />
-    <result column="factoryId" jdbcType="INTEGER" property="factoryid" />
-    <result column="mineId" jdbcType="INTEGER" property="mineid" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="factory_id" jdbcType="INTEGER" property="factoryId" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="detailed" jdbcType="VARCHAR" property="detailed" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, frameName, `number`, factoryId, mineId, createTime, updateTime, isDelete, tenant_id, 
+    id, frame_name, `number`, factory_id, mine_id, create_time, update_time, is_delete, 
     detailed
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -34,71 +33,63 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FrameSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into frame_setting (frameName, `number`, factoryId, 
-      mineId, createTime, updateTime, 
-      isDelete, tenant_id, detailed
-      )
-    values (#{framename,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{factoryid,jdbcType=INTEGER}, 
-      #{mineid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
-      #{isdelete,jdbcType=INTEGER}, #{tenantId,jdbcType=BIGINT}, #{detailed,jdbcType=VARCHAR}
-      )
+    insert into frame_setting (frame_name, `number`, factory_id, 
+      mine_id, create_time, update_time, 
+      is_delete, detailed)
+    values (#{frameName,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{factoryId,jdbcType=INTEGER}, 
+      #{mineId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=INTEGER}, #{detailed,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FrameSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into frame_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="framename != null">
-        frameName,
+      <if test="frameName != null">
+        frame_name,
       </if>
       <if test="number != null">
         `number`,
       </if>
-      <if test="factoryid != null">
-        factoryId,
+      <if test="factoryId != null">
+        factory_id,
       </if>
-      <if test="mineid != null">
-        mineId,
+      <if test="mineId != null">
+        mine_id,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="updateTime != null">
+        update_time,
       </if>
-      <if test="isdelete != null">
-        isDelete,
-      </if>
-      <if test="tenantId != null">
-        tenant_id,
+      <if test="isDelete != null">
+        is_delete,
       </if>
       <if test="detailed != null">
         detailed,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="framename != null">
-        #{framename,jdbcType=VARCHAR},
+      <if test="frameName != null">
+        #{frameName,jdbcType=VARCHAR},
       </if>
       <if test="number != null">
         #{number,jdbcType=INTEGER},
       </if>
-      <if test="factoryid != null">
-        #{factoryid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        #{factoryId,jdbcType=INTEGER},
       </if>
-      <if test="mineid != null">
-        #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
-      </if>
-      <if test="tenantId != null">
-        #{tenantId,jdbcType=BIGINT},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
       <if test="detailed != null">
         #{detailed,jdbcType=VARCHAR},
@@ -109,29 +100,26 @@
     <!--@mbg.generated-->
     update frame_setting
     <set>
-      <if test="framename != null">
-        frameName = #{framename,jdbcType=VARCHAR},
+      <if test="frameName != null">
+        frame_name = #{frameName,jdbcType=VARCHAR},
       </if>
       <if test="number != null">
         `number` = #{number,jdbcType=INTEGER},
       </if>
-      <if test="factoryid != null">
-        factoryId = #{factoryid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        factory_id = #{factoryId,jdbcType=INTEGER},
       </if>
-      <if test="mineid != null">
-        mineId = #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
-      </if>
-      <if test="tenantId != null">
-        tenant_id = #{tenantId,jdbcType=BIGINT},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
       <if test="detailed != null">
         detailed = #{detailed,jdbcType=VARCHAR},
@@ -142,52 +130,52 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.FrameSetting">
     <!--@mbg.generated-->
     update frame_setting
-    set frameName = #{framename,jdbcType=VARCHAR},
+    set frame_name = #{frameName,jdbcType=VARCHAR},
       `number` = #{number,jdbcType=INTEGER},
-      factoryId = #{factoryid,jdbcType=INTEGER},
-      mineId = #{mineid,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      tenant_id = #{tenantId,jdbcType=BIGINT},
+      factory_id = #{factoryId,jdbcType=INTEGER},
+      mine_id = #{mineId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=INTEGER},
       detailed = #{detailed,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
 <!--  软删除-->
   <update id="updateById">
-    update frame_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+    update frame_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
 
 <!--  按照条件查询矿机架列表-->
   <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.FrameSettingExample">
     SELECT
       frame_setting.id,
-      frame_setting.frameName,
+      frame_setting.frame_name,
       frame_setting.number,
-      frame_setting.factoryId,
-      frame_setting.mineId,
-      frame_setting.isDelete,
-      frame_setting.createTime,
-      frame_setting.updateTime,
-      factory_house.factoryName,
-      mine_setting.mineName
+      frame_setting.factory_id,
+      frame_setting.mine_id,
+      frame_setting.is_delete,
+      frame_setting.create_time,
+      frame_setting.update_time,
+      frame_setting.detailed,
+      factory_house.factory_name,
+      mine_setting.mine_name
     FROM
       frame_setting,
       factory_house,
       mine_setting
     <where>
-      frame_setting.isDelete = 0
+      frame_setting.is_delete = 0
       <if test="keyWord != null">
-        AND ( frame_setting.frameName like #{keyWord} or frame_setting.number like #{keyWord})
+        AND ( frame_setting.frame_name like #{keyWord} or frame_setting.number like #{keyWord})
       </if>
-      AND frame_setting.factoryId = factory_house.id
-      AND frame_setting.mineId = mine_setting.id
+      AND frame_setting.factory_id = factory_house.id
+      AND frame_setting.mine_id = mine_setting.id
     </where>
   </select>
 
 <!--  根据厂房ID查询矿机架列表-->
   <select id="selectFrameNameByFactoryId" resultType="java.util.HashMap">
-    select id,frameName,number FROM frame_setting where factoryId=#{factoryId} AND isDelete=0
+    select id,frame_name,number FROM frame_setting where factory_id=#{factoryId} AND is_delete=0
   </select>
 </mapper>

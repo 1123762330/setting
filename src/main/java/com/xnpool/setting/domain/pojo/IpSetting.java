@@ -2,16 +2,19 @@ package com.xnpool.setting.domain.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/6 13:21
+ * @date 2020/3/5 13:30
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class IpSetting implements Serializable {
-    private static final long serialVersionUID = -5641550594650593890L;
     /**
      * 编号
      */
@@ -20,26 +23,32 @@ public class IpSetting implements Serializable {
     /**
      * 起始IP
      */
-    private String startip;
+    private String startIp;
 
     /**
      * 结束IP
      */
-    private String endip;
+    private String endIp;
+
+    /**
+     * 矿场id
+     */
+    private Integer mineId;
 
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 是否删除,0:否,1:是
      */
-    private Integer isdelete;
+    private Integer isDelete;
 
+    private static final long serialVersionUID = 1L;
 }

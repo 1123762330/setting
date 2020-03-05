@@ -1,15 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.AgreementSetting;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.HashMap;
-import java.util.List;
+import com.xnpool.setting.domain.pojo.AgreementSetting;import org.apache.ibatis.annotations.Param;import java.util.HashMap;import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/7 9:42
+ * @author zly
  * @version 1.0
+ * @date 2020/3/5 12:49
  */
 public interface AgreementSettingMapper {
     int deleteByPrimaryKey(Integer id);
@@ -28,5 +24,5 @@ public interface AgreementSettingMapper {
 
     List<AgreementSetting> selectByOther(@Param("keyWord") String keyWord);
 
-   List<HashMap> selectAgreementMap();
+    List<HashMap> selectAgreementMap();
 }

@@ -2,16 +2,19 @@ package com.xnpool.setting.domain.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/11 10:36
+ * @date 2020/3/5 20:52
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ElectricityMeterSetting implements Serializable {
-    private static final long serialVersionUID = 6771745017499158125L;
     private Integer id;
 
     /**
@@ -22,22 +25,22 @@ public class ElectricityMeterSetting implements Serializable {
     /**
      * 所属矿场
      */
-    private Integer mineid;
+    private Integer mineId;
 
     /**
      * 所属厂房
      */
-    private Integer factoryid;
+    private Integer factoryId;
 
     /**
      * 所属客户
      */
-    private Integer customerid;
+    private Integer customerId;
 
     /**
      * 初始码数
      */
-    private String electricitystart;
+    private String electricityStart;
 
     /**
      * 线损
@@ -47,15 +50,17 @@ public class ElectricityMeterSetting implements Serializable {
     /**
      * 是否删除,0:否,1:是
      */
-    private Integer isdelete;
+    private Integer isDelete;
 
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    private Date updatetime;
+    private Date updateTime;
+
+    private static final long serialVersionUID = 1L;
 }

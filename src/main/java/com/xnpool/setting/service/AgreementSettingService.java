@@ -29,5 +29,7 @@ public interface AgreementSettingService {
     int updateById(int id);
 
     PageInfo<AgreementSetting> selectByOther(String keyWord, int pageNum, int pageSize);
-    HashMap<Integer,String>  selectAgreementMap();
+
+    HashMap<Integer, String> selectAgreementMap();
 }
+

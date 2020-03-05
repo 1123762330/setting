@@ -5,16 +5,16 @@
     <!--@mbg.generated-->
     <!--@Table operator_worker_history-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="mineId" jdbcType="INTEGER" property="mineid" />
-    <result column="workerId" jdbcType="INTEGER" property="workerid" />
-    <result column="moveOutTime" jdbcType="TIMESTAMP" property="moveouttime" />
-    <result column="comeInTime" jdbcType="TIMESTAMP" property="comeintime" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
+    <result column="worker_id" jdbcType="INTEGER" property="workerId" />
+    <result column="move_out_time" jdbcType="TIMESTAMP" property="moveOutTime" />
+    <result column="come_in_time" jdbcType="TIMESTAMP" property="comeInTime" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
-    <result column="operatorId" jdbcType="INTEGER" property="operatorid" />
+    <result column="operator_id" jdbcType="INTEGER" property="operatorId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, mineId, workerId, moveOutTime, comeInTime, reason, operatorId
+    id, mine_id, worker_id, move_out_time, come_in_time, reason, operator_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -30,54 +30,54 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into operator_worker_history (mineId, workerId, moveOutTime, 
-      comeInTime, reason, operatorId
+    insert into operator_worker_history (mine_id, worker_id, move_out_time, 
+      come_in_time, reason, operator_id
       )
-    values (#{mineid,jdbcType=INTEGER}, #{workerid,jdbcType=INTEGER}, #{moveouttime,jdbcType=TIMESTAMP}, 
-      #{comeintime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, #{operatorid,jdbcType=INTEGER}
+    values (#{mineId,jdbcType=INTEGER}, #{workerId,jdbcType=INTEGER}, #{moveOutTime,jdbcType=TIMESTAMP}, 
+      #{comeInTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, #{operatorId,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into operator_worker_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="mineid != null">
-        mineId,
+      <if test="mineId != null">
+        mine_id,
       </if>
-      <if test="workerid != null">
-        workerId,
+      <if test="workerId != null">
+        worker_id,
       </if>
-      <if test="moveouttime != null">
-        moveOutTime,
+      <if test="moveOutTime != null">
+        move_out_time,
       </if>
-      <if test="comeintime != null">
-        comeInTime,
+      <if test="comeInTime != null">
+        come_in_time,
       </if>
       <if test="reason != null">
         reason,
       </if>
-      <if test="operatorid != null">
-        operatorId,
+      <if test="operatorId != null">
+        operator_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="mineid != null">
-        #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="workerid != null">
-        #{workerid,jdbcType=INTEGER},
+      <if test="workerId != null">
+        #{workerId,jdbcType=INTEGER},
       </if>
-      <if test="moveouttime != null">
-        #{moveouttime,jdbcType=TIMESTAMP},
+      <if test="moveOutTime != null">
+        #{moveOutTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="comeintime != null">
-        #{comeintime,jdbcType=TIMESTAMP},
+      <if test="comeInTime != null">
+        #{comeInTime,jdbcType=TIMESTAMP},
       </if>
       <if test="reason != null">
         #{reason,jdbcType=VARCHAR},
       </if>
-      <if test="operatorid != null">
-        #{operatorid,jdbcType=INTEGER},
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -85,23 +85,23 @@
     <!--@mbg.generated-->
     update operator_worker_history
     <set>
-      <if test="mineid != null">
-        mineId = #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="workerid != null">
-        workerId = #{workerid,jdbcType=INTEGER},
+      <if test="workerId != null">
+        worker_id = #{workerId,jdbcType=INTEGER},
       </if>
-      <if test="moveouttime != null">
-        moveOutTime = #{moveouttime,jdbcType=TIMESTAMP},
+      <if test="moveOutTime != null">
+        move_out_time = #{moveOutTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="comeintime != null">
-        comeInTime = #{comeintime,jdbcType=TIMESTAMP},
+      <if test="comeInTime != null">
+        come_in_time = #{comeInTime,jdbcType=TIMESTAMP},
       </if>
       <if test="reason != null">
         reason = #{reason,jdbcType=VARCHAR},
       </if>
-      <if test="operatorid != null">
-        operatorId = #{operatorid,jdbcType=INTEGER},
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -109,12 +109,12 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.OperatorWorkerHistory">
     <!--@mbg.generated-->
     update operator_worker_history
-    set mineId = #{mineid,jdbcType=INTEGER},
-      workerId = #{workerid,jdbcType=INTEGER},
-      moveOutTime = #{moveouttime,jdbcType=TIMESTAMP},
-      comeInTime = #{comeintime,jdbcType=TIMESTAMP},
+    set mine_id = #{mineId,jdbcType=INTEGER},
+      worker_id = #{workerId,jdbcType=INTEGER},
+      move_out_time = #{moveOutTime,jdbcType=TIMESTAMP},
+      come_in_time = #{comeInTime,jdbcType=TIMESTAMP},
       reason = #{reason,jdbcType=VARCHAR},
-      operatorId = #{operatorid,jdbcType=INTEGER}
+      operator_id = #{operatorId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -131,16 +131,16 @@
     <select id="selectWorkerHistoryList" resultType="com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample">
       SELECT
       operator_worker_history.id,
-      factory_house.factoryName,
+      factory_house.factory_name,
       frame_setting.detailed,
-      worker_detailed.workerId,
+      worker_detailed.worker_id,
       worker.miner,
       worker.workerName,
-      group_setting.groupName,
-      DATE_FORMAT( operator_worker_history.moveOutTime, '%Y-%m-%d %H:%i:%s' )AS moveouttime,
-      DATE_FORMAT( operator_worker_history.comeInTime, '%Y-%m-%d %H:%i:%s' )AS comeintime,
+      group_setting.group_name,
+      DATE_FORMAT( operator_worker_history.move_out_time, '%Y-%m-%d %H:%i:%s' )AS moveOutTime,
+      DATE_FORMAT( operator_worker_history.come_in_time, '%Y-%m-%d %H:%i:%s' )AS comeInTime,
       operator_worker_history.reason,
-      operator_worker_history.operatorId
+      operator_worker_history.operator_id
       FROM
       operator_worker_history,
       worker_detailed,
@@ -149,16 +149,16 @@
       frame_setting,
       group_setting
       <where>
-        operator_worker_history.workerId = worker_detailed.workerId
-        AND worker_detailed.workerId = worker.id
-        AND worker_detailed.factoryId = factory_house.id
-        AND worker_detailed.frameId = frame_setting.id
-        AND worker_detailed.groupId = group_setting.groupId
+        operator_worker_history.worker_id = worker_detailed.worker_id
+        AND worker_detailed.worker_id = worker.id
+        AND worker_detailed.factory_id = factory_house.id
+        AND worker_detailed.frame_id = frame_setting.id
+        AND worker_detailed.group_id = group_setting.id
         <if test="startTime != null">
-          AND operator_worker_history.moveOutTime > #{startTime}
+          AND operator_worker_history.move_out_time &gt; #{startTime}
         </if>
         <if test="endTime != null">
-          AND operator_worker_history.moveOutTime &lt; #{startTime}
+          AND operator_worker_history.move_out_time &lt; #{startTime}
         </if>
         <if test="keyword != null">
           AND operator_worker_history.reason like #{keyword}
@@ -167,10 +167,10 @@
     </select>
   <!--修改入库时间-->
   <update id="updateComeInTimeById">
-    update operator_worker_history set  comeInTime = now() where  workerId in
+    update operator_worker_history set  come_in_time = now() where  worker_id in
     <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>
-    AND comeInTime IS NULL
+    AND come_in_time IS NULL
   </update>
 </mapper>

@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;import com.xnpool.se
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/27 14:16
+ * @date 2020/3/5 13:32
  */
 public interface OperatorWorkerHistoryMapper {
     int deleteByPrimaryKey(Integer id);
@@ -22,7 +22,7 @@ public interface OperatorWorkerHistoryMapper {
 
     int updateComeInTimeById(@Param("list") List<Integer> list);
 
-    int insertTobatch(@Param("list")List<Integer> list,@Param("reason") String reason,@Param("mineId")  Integer mineid,@Param("operatorId")  Integer operatorId);
+    int insertTobatch(@Param("list") List<Integer> list, @Param("reason") String reason, @Param("mineId") Integer mineid, @Param("operatorId") Integer operatorId);
 
-    List<OperatorWorkerHistoryExample> selectWorkerHistoryList(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("keyword")String keyword);
+    List<OperatorWorkerHistoryExample> selectWorkerHistoryList(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("keyword") String keyword);
 }

@@ -21,7 +21,7 @@ public class FrameSettingExample implements Serializable {
     /**
     * 机架名称
     */
-    private String framename;
+    private String frameName;
 
     /**
     * 机架层数
@@ -31,30 +31,25 @@ public class FrameSettingExample implements Serializable {
     /**
     * 厂房Id
     */
-    private Integer factoryid;
+    private Integer factoryId;
 
     /**
      * 厂房名称
      */
-    private String factoryname;
+    private String factoryName;
 
     /**
      * 矿场名称
      */
-    private String minename;
+    private String mineName;
 
     /**
     * 矿场Id
     */
-    private Integer mineid;
+    private Integer mineId;
 
     /**
-    * 创建时间
-    */
-    private Date createtime;
-
-    /**
-    * 修改时间
-    */
-    private Date updatetime;
+     * 矿机详细信息
+     */
+    private String detailed;
 }

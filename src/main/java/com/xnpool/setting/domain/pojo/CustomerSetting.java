@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/3 10:54
+ * @date 2020/3/5 13:24
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerSetting implements Serializable {
+    private static final long serialVersionUID = 5558152303511131448L;
     /**
      * 编号
      */
@@ -23,7 +24,7 @@ public class CustomerSetting implements Serializable {
     /**
      * 用户ID
      */
-    private Integer userid;
+    private Integer userId;
 
     /**
      * 客户类型
@@ -33,12 +34,12 @@ public class CustomerSetting implements Serializable {
     /**
      * 联系人
      */
-    private String contactperson;
+    private String contactPerson;
 
     /**
      * 联系人电话
      */
-    private String contactpersonphone;
+    private String contactPersonPhone;
 
     /**
      * 地址
@@ -48,7 +49,7 @@ public class CustomerSetting implements Serializable {
     /**
      * 协议ID,包含多个
      */
-    private String agreementid;
+    private String agreementId;
 
     /**
      * 分组ID,包含多个
@@ -58,7 +59,7 @@ public class CustomerSetting implements Serializable {
     /**
      * 角色ID,包含多个
      */
-    private String roleid;
+    private String roleId;
 
     /**
      * 认证,0:默认,1:通过,-1是不通过,2是申请
@@ -68,7 +69,7 @@ public class CustomerSetting implements Serializable {
     /**
      * 观察者,0:无权限,1:有权限
      */
-    private Integer iswatch;
+    private Integer isWatch;
 
     /**
      * 备注
@@ -78,22 +79,21 @@ public class CustomerSetting implements Serializable {
     /**
      * 是否删除,0:否,1:是
      */
-    private Integer isdelete;
+    private Integer isDelete;
 
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 管理员id
      */
     private Integer managerUserId;
 
-    private static final long serialVersionUID = 1L;
 }

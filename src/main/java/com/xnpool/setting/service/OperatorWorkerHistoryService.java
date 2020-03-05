@@ -32,9 +32,10 @@ public interface OperatorWorkerHistoryService {
 
     int updateComeInTimeById(List<Integer> list);
 
-    int insertTobatch(List<Integer> list,String reason,Integer mineid,Integer operatorId);
+    int insertTobatch(List<Integer> list, String reason, Integer mineid, Integer operatorId);
 
-    PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime,String endTime,String keyWord, int pageNum, int pageSize);
+    PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime, String endTime, String keyWord, int pageNum, int pageSize);
 }
+
 
 

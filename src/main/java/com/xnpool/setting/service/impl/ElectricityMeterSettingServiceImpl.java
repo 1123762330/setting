@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.AgreementSetting;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.ElectricityMeterSettingMapper;
@@ -59,17 +60,19 @@ public class ElectricityMeterSettingServiceImpl implements ElectricityMeterSetti
     }
 
     @Override
-    public PageInfo<ElectricityMeterSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<ElectricityMeterSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<ElectricityMeterSetting> agreementSettingList = electricityMeterSettingMapper.selectByOther(keyWord);
-        PageInfo<ElectricityMeterSetting> pageInfo = new PageInfo<>(agreementSettingList);
+        List<ElectricityMeterSettingExample> agreementSettingList = electricityMeterSettingMapper.selectByOther(keyWord);
+        PageInfo<ElectricityMeterSettingExample> pageInfo = new PageInfo<>(agreementSettingList);
         return pageInfo;
     }
 
 }
+
+
 
 
 

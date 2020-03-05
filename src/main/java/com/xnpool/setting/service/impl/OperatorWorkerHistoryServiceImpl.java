@@ -69,22 +69,22 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
     }
 
     @Override
-    public int insertTobatch(List<Integer> list,String reason,Integer mineid,Integer operatorId) {
-        return operatorWorkerHistoryMapper.insertTobatch(list,reason,mineid,operatorId);
+    public int insertTobatch(List<Integer> list, String reason, Integer mineid, Integer operatorId) {
+        return operatorWorkerHistoryMapper.insertTobatch(list, reason, mineid, operatorId);
     }
 
     @Override
-    public PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime,String endTime,String keyWord, int pageNum, int pageSize) {
+    public PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime, String endTime, String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<OperatorWorkerHistoryExample> operatorWorkerHistoryExamples = operatorWorkerHistoryMapper.selectWorkerHistoryList(startTime,endTime,keyWord);
+        List<OperatorWorkerHistoryExample> operatorWorkerHistoryExamples = operatorWorkerHistoryMapper.selectWorkerHistoryList(startTime, endTime, keyWord);
         for (OperatorWorkerHistoryExample operatorWorkerHistoryExample : operatorWorkerHistoryExamples) {
             SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//转换年月日
             try {
-                Date moveouttime = simpleDate.parse(operatorWorkerHistoryExample.getMoveouttime());
-                Date comeintime = simpleDate.parse(operatorWorkerHistoryExample.getComeintime());
+                Date moveouttime = simpleDate.parse(operatorWorkerHistoryExample.getMoveOutTime());
+                Date comeintime = simpleDate.parse(operatorWorkerHistoryExample.getComeInTime());
                 if (comeintime != null) {
                     long totalTime = (comeintime.getTime() - moveouttime.getTime()) / 1000;
                     String DateTimes = null;
@@ -106,7 +106,7 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
                     operatorWorkerHistoryExample.setTotalTime("--");
                 }
             } catch (ParseException e) {
-                log.error("时间转换异常!"+e.getMessage());
+                log.error("时间转换异常!" + e.getMessage());
             }
 
         }
@@ -115,5 +115,6 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
     }
 
 }
+
 
 

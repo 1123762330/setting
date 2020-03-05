@@ -28,8 +28,9 @@ public interface IpSettingService {
 
     void updateById(int id);
 
-    PageInfo<IpSetting> selectByOther(String keyWord,int pageNum,int pageSize);
+    PageInfo<IpSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 
     HashMap<Integer, String> selectByIPStart();
 }
+
 

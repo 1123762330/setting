@@ -7,13 +7,13 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, price, description, isDelete, createTime, updateTime
+    id, price, description, is_delete, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,10 +29,10 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.PowerSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into power_setting (price, description, isDelete, 
-      createTime, updateTime)
-    values (#{price,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+    insert into power_setting (price, description, is_delete, 
+      create_time, update_time)
+    values (#{price,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.PowerSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -44,14 +44,14 @@
       <if test="description != null">
         description,
       </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="isDelete != null">
+        is_delete,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -61,14 +61,14 @@
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -82,14 +82,14 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -99,9 +99,9 @@
     update power_setting
     set price = #{price,jdbcType=DOUBLE},
       description = #{description,jdbcType=VARCHAR},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!--  软删除-->
@@ -114,7 +114,7 @@
     <include refid="Base_Column_List" />
     from power_setting
     <where>
-      isDelete = 0
+      is_delete = 0
       <if test="keyWord != null">
         AND (price like #{keyWord} or `description` like #{keyWord})
       </if>

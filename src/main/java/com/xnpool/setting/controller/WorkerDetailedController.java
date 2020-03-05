@@ -2,7 +2,6 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.Worker;
 import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
 import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
 import com.xnpool.setting.domain.pojo.WorkerExample;

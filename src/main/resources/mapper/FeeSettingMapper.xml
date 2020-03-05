@@ -5,15 +5,15 @@
     <!--@mbg.generated-->
     <!--@Table fee_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="feePrice" jdbcType="DOUBLE" property="feeprice" />
-    <result column="feeName" jdbcType="VARCHAR" property="feename" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="fee_price" jdbcType="DOUBLE" property="feePrice" />
+    <result column="fee_name" jdbcType="VARCHAR" property="feeName" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, feePrice, feeName, isDelete, createTime, updateTime
+    id, fee_price, fee_name, is_delete, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,46 +29,46 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FeeSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into fee_setting (feePrice, feeName, isDelete, 
-      createTime, updateTime)
-    values (#{feeprice,jdbcType=DOUBLE}, #{feename,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+    insert into fee_setting (fee_price, fee_name, is_delete, 
+      create_time, update_time)
+    values (#{feePrice,jdbcType=DOUBLE}, #{feeName,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FeeSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into fee_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="feeprice != null">
-        feePrice,
+      <if test="feePrice != null">
+        fee_price,
       </if>
-      <if test="feename != null">
-        feeName,
+      <if test="feeName != null">
+        fee_name,
       </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="isDelete != null">
+        is_delete,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="feeprice != null">
-        #{feeprice,jdbcType=DOUBLE},
+      <if test="feePrice != null">
+        #{feePrice,jdbcType=DOUBLE},
       </if>
-      <if test="feename != null">
-        #{feename,jdbcType=VARCHAR},
+      <if test="feeName != null">
+        #{feeName,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -76,20 +76,20 @@
     <!--@mbg.generated-->
     update fee_setting
     <set>
-      <if test="feeprice != null">
-        feePrice = #{feeprice,jdbcType=DOUBLE},
+      <if test="feePrice != null">
+        fee_price = #{feePrice,jdbcType=DOUBLE},
       </if>
-      <if test="feename != null">
-        feeName = #{feename,jdbcType=VARCHAR},
+      <if test="feeName != null">
+        fee_name = #{feeName,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -97,17 +97,17 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.FeeSetting">
     <!--@mbg.generated-->
     update fee_setting
-    set feePrice = #{feeprice,jdbcType=DOUBLE},
-      feeName = #{feename,jdbcType=VARCHAR},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    set fee_price = #{feePrice,jdbcType=DOUBLE},
+      fee_name = #{feeName,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
   <!--  软删除-->
   <update id="updateById">
-    update fee_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+    update fee_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
 
   <!--  根据条件进行查询-->
@@ -116,9 +116,9 @@
     <include refid="Base_Column_List" />
     from fee_setting
     <where>
-      isDelete = 0
+      is_delete = 0
       <if test="keyWord != null">
-        AND (feePrice like #{keyWord} or `feeName` like #{keyWord})
+        AND (fee_price like #{keyWord} or `fee_name` like #{keyWord})
       </if>
     </where>
   </select>

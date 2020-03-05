@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.WorkerInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.WorkerInfo">
+    <!--@mbg.generated-->
+    <!--@Table worker_info-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="mine_type" jdbcType="VARCHAR" property="mineType" />
+    <result column="working_mode" jdbcType="VARCHAR" property="workingMode" />
+    <result column="cur_hashrate" jdbcType="VARCHAR" property="curHashrate" />
+    <result column="avg_hashrate" jdbcType="VARCHAR" property="avgHashrate" />
+    <result column="temperature" jdbcType="VARCHAR" property="temperature" />
+    <result column="fan_speed" jdbcType="VARCHAR" property="fanSpeed" />
+    <result column="startup_time" jdbcType="VARCHAR" property="startupTime" />
+    <result column="pool1" jdbcType="VARCHAR" property="pool1" />
+    <result column="worker1" jdbcType="VARCHAR" property="worker1" />
+    <result column="pool2" jdbcType="VARCHAR" property="pool2" />
+    <result column="worker2" jdbcType="VARCHAR" property="worker2" />
+    <result column="pool3" jdbcType="VARCHAR" property="pool3" />
+    <result column="worker3" jdbcType="VARCHAR" property="worker3" />
+    <result column="firmware_version" jdbcType="VARCHAR" property="firmwareVersion" />
+    <result column="software_version" jdbcType="VARCHAR" property="softwareVersion" />
+    <result column="hardware_version" jdbcType="VARCHAR" property="hardwareVersion" />
+    <result column="network_type" jdbcType="VARCHAR" property="networkType" />
+    <result column="mac" jdbcType="VARCHAR" property="mac" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="mine_id" jdbcType="BIGINT" property="mineId" />
+    <result column="ts" jdbcType="BIGINT" property="ts" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, ip, `state`, mine_type, working_mode, cur_hashrate, avg_hashrate, temperature, 
+    fan_speed, startup_time, pool1, worker1, pool2, worker2, pool3, worker3, firmware_version, 
+    software_version, hardware_version, network_type, mac, tenant_id, mine_id, ts, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from worker_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from worker_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into worker_info (ip, `state`, mine_type, 
+      working_mode, cur_hashrate, avg_hashrate, 
+      temperature, fan_speed, startup_time, 
+      pool1, worker1, pool2, 
+      worker2, pool3, worker3, 
+      firmware_version, software_version, hardware_version, 
+      network_type, mac, tenant_id, 
+      mine_id, ts, create_time, 
+      update_time)
+    values (#{ip,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{mineType,jdbcType=VARCHAR}, 
+      #{workingMode,jdbcType=VARCHAR}, #{curHashrate,jdbcType=VARCHAR}, #{avgHashrate,jdbcType=VARCHAR}, 
+      #{temperature,jdbcType=VARCHAR}, #{fanSpeed,jdbcType=VARCHAR}, #{startupTime,jdbcType=VARCHAR}, 
+      #{pool1,jdbcType=VARCHAR}, #{worker1,jdbcType=VARCHAR}, #{pool2,jdbcType=VARCHAR}, 
+      #{worker2,jdbcType=VARCHAR}, #{pool3,jdbcType=VARCHAR}, #{worker3,jdbcType=VARCHAR}, 
+      #{firmwareVersion,jdbcType=VARCHAR}, #{softwareVersion,jdbcType=VARCHAR}, #{hardwareVersion,jdbcType=VARCHAR}, 
+      #{networkType,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, 
+      #{mineId,jdbcType=BIGINT}, #{ts,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into worker_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="mineType != null">
+        mine_type,
+      </if>
+      <if test="workingMode != null">
+        working_mode,
+      </if>
+      <if test="curHashrate != null">
+        cur_hashrate,
+      </if>
+      <if test="avgHashrate != null">
+        avg_hashrate,
+      </if>
+      <if test="temperature != null">
+        temperature,
+      </if>
+      <if test="fanSpeed != null">
+        fan_speed,
+      </if>
+      <if test="startupTime != null">
+        startup_time,
+      </if>
+      <if test="pool1 != null">
+        pool1,
+      </if>
+      <if test="worker1 != null">
+        worker1,
+      </if>
+      <if test="pool2 != null">
+        pool2,
+      </if>
+      <if test="worker2 != null">
+        worker2,
+      </if>
+      <if test="pool3 != null">
+        pool3,
+      </if>
+      <if test="worker3 != null">
+        worker3,
+      </if>
+      <if test="firmwareVersion != null">
+        firmware_version,
+      </if>
+      <if test="softwareVersion != null">
+        software_version,
+      </if>
+      <if test="hardwareVersion != null">
+        hardware_version,
+      </if>
+      <if test="networkType != null">
+        network_type,
+      </if>
+      <if test="mac != null">
+        mac,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="mineId != null">
+        mine_id,
+      </if>
+      <if test="ts != null">
+        ts,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="mineType != null">
+        #{mineType,jdbcType=VARCHAR},
+      </if>
+      <if test="workingMode != null">
+        #{workingMode,jdbcType=VARCHAR},
+      </if>
+      <if test="curHashrate != null">
+        #{curHashrate,jdbcType=VARCHAR},
+      </if>
+      <if test="avgHashrate != null">
+        #{avgHashrate,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null">
+        #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="fanSpeed != null">
+        #{fanSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="startupTime != null">
+        #{startupTime,jdbcType=VARCHAR},
+      </if>
+      <if test="pool1 != null">
+        #{pool1,jdbcType=VARCHAR},
+      </if>
+      <if test="worker1 != null">
+        #{worker1,jdbcType=VARCHAR},
+      </if>
+      <if test="pool2 != null">
+        #{pool2,jdbcType=VARCHAR},
+      </if>
+      <if test="worker2 != null">
+        #{worker2,jdbcType=VARCHAR},
+      </if>
+      <if test="pool3 != null">
+        #{pool3,jdbcType=VARCHAR},
+      </if>
+      <if test="worker3 != null">
+        #{worker3,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareVersion != null">
+        #{firmwareVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="softwareVersion != null">
+        #{softwareVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareVersion != null">
+        #{hardwareVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="networkType != null">
+        #{networkType,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null">
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="mineId != null">
+        #{mineId,jdbcType=BIGINT},
+      </if>
+      <if test="ts != null">
+        #{ts,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.WorkerInfo">
+    <!--@mbg.generated-->
+    update worker_info
+    <set>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="mineType != null">
+        mine_type = #{mineType,jdbcType=VARCHAR},
+      </if>
+      <if test="workingMode != null">
+        working_mode = #{workingMode,jdbcType=VARCHAR},
+      </if>
+      <if test="curHashrate != null">
+        cur_hashrate = #{curHashrate,jdbcType=VARCHAR},
+      </if>
+      <if test="avgHashrate != null">
+        avg_hashrate = #{avgHashrate,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null">
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="fanSpeed != null">
+        fan_speed = #{fanSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="startupTime != null">
+        startup_time = #{startupTime,jdbcType=VARCHAR},
+      </if>
+      <if test="pool1 != null">
+        pool1 = #{pool1,jdbcType=VARCHAR},
+      </if>
+      <if test="worker1 != null">
+        worker1 = #{worker1,jdbcType=VARCHAR},
+      </if>
+      <if test="pool2 != null">
+        pool2 = #{pool2,jdbcType=VARCHAR},
+      </if>
+      <if test="worker2 != null">
+        worker2 = #{worker2,jdbcType=VARCHAR},
+      </if>
+      <if test="pool3 != null">
+        pool3 = #{pool3,jdbcType=VARCHAR},
+      </if>
+      <if test="worker3 != null">
+        worker3 = #{worker3,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareVersion != null">
+        firmware_version = #{firmwareVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="softwareVersion != null">
+        software_version = #{softwareVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareVersion != null">
+        hardware_version = #{hardwareVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="networkType != null">
+        network_type = #{networkType,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null">
+        mac = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=BIGINT},
+      </if>
+      <if test="ts != null">
+        ts = #{ts,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.WorkerInfo">
+    <!--@mbg.generated-->
+    update worker_info
+    set ip = #{ip,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=VARCHAR},
+      mine_type = #{mineType,jdbcType=VARCHAR},
+      working_mode = #{workingMode,jdbcType=VARCHAR},
+      cur_hashrate = #{curHashrate,jdbcType=VARCHAR},
+      avg_hashrate = #{avgHashrate,jdbcType=VARCHAR},
+      temperature = #{temperature,jdbcType=VARCHAR},
+      fan_speed = #{fanSpeed,jdbcType=VARCHAR},
+      startup_time = #{startupTime,jdbcType=VARCHAR},
+      pool1 = #{pool1,jdbcType=VARCHAR},
+      worker1 = #{worker1,jdbcType=VARCHAR},
+      pool2 = #{pool2,jdbcType=VARCHAR},
+      worker2 = #{worker2,jdbcType=VARCHAR},
+      pool3 = #{pool3,jdbcType=VARCHAR},
+      worker3 = #{worker3,jdbcType=VARCHAR},
+      firmware_version = #{firmwareVersion,jdbcType=VARCHAR},
+      software_version = #{softwareVersion,jdbcType=VARCHAR},
+      hardware_version = #{hardwareVersion,jdbcType=VARCHAR},
+      network_type = #{networkType,jdbcType=VARCHAR},
+      mac = #{mac,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      mine_id = #{mineId,jdbcType=BIGINT},
+      ts = #{ts,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--  矿机入库列表-->
+  <select id="selectByOther" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from work_info
+    <where>
+      <if test="keyWord != null">
+        AND (ip like #{keyWord} or `worker1` like #{keyWord})
+      </if>
+    </where>
+  </select>
+
+  <!--  矿机软删除-->
+  <update id="updateById">
+    update work_info set isDelete = 1 where id in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+</mapper>

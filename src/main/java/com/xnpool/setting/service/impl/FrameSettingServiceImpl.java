@@ -44,13 +44,13 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(FrameSetting record) {
-        String framename = record.getFramename();
+        String framename = record.getFrameName();
         Integer number = record.getNumber();
-        String detailed =framename + " 1-" + number + "层";
+        String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
         int rows = frameSettingMapper.insertSelective(record);
-        record.setCreatetime(new Date());
-        redisToInsert(rows, "frame_setting",record,record.getMineid());
+        record.setCreateTime(new Date());
+        redisToInsert(rows, "frame_setting", record, record.getMineId());
     }
 
     @Override
@@ -61,13 +61,13 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(FrameSetting record) {
-        String framename = record.getFramename();
+        String framename = record.getFrameName();
         Integer number = record.getNumber();
-        String detailed =framename + " 1-" + number + "层";
+        String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
         int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdatetime(new Date());
-        redisToUpdate(rows, "frame_setting",record,record.getMineid());
+        record.setUpdateTime(new Date());
+        redisToUpdate(rows, "frame_setting", record, record.getMineId());
     }
 
     @Override
@@ -80,9 +80,9 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     public void updateById(int id) {
         int rows = frameSettingMapper.updateById(id);
         FrameSetting record = new FrameSetting();
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows,"frame_setting",record,record.getMineid());
+        redisToDelete(rows, "frame_setting", record, record.getMineId());
     }
 
     @Override
@@ -129,7 +129,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
                 StringBuffer frameName = new StringBuffer(hashMap.get("frameName").toString());
                 StringBuffer number = new StringBuffer(hashMap.get("number").toString());
-                StringBuffer resultStr = frameName.append(" 1-" + number + "层");
+                StringBuffer resultStr = frameName.append("  1-" + number + "层");
                 resultMap.put(id, resultStr.toString());
             });
             return resultMap;
@@ -137,5 +137,6 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     }
 
 }
+
 
 

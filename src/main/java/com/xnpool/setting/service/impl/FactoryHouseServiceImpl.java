@@ -43,8 +43,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(FactoryHouse record) {
         int rows = factoryHouseMapper.insertSelective(record);
-        record.setCreatetime(new Date());
-        redisToInsert(rows,"factory_house",record,record.getMineid());
+        record.setCreateTime(new Date());
+        redisToInsert(rows, "factory_house", record, record.getMineId());
     }
 
     @Override
@@ -56,8 +56,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(FactoryHouse record) {
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
-        record.setUpdatetime(new Date());
-        redisToUpdate(rows,"factory_house",record,record.getMineid());
+        record.setUpdateTime(new Date());
+        redisToUpdate(rows, "factory_house", record, record.getMineId());
     }
 
     @Override
@@ -70,13 +70,13 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void updateById(int id) {
         int rows = factoryHouseMapper.updateById(id);
         FactoryHouse record = new FactoryHouse();
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows,"factory_house",record,record.getMineid());
+        redisToDelete(rows, "factory_house", record, record.getMineId());
     }
 
     @Override
-    public PageInfo<FactoryHouseExample> selectByOther(String keyWord,int pageNum,int pageSize) {
+    public PageInfo<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -108,5 +108,6 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     }
 
 }
+
 
 

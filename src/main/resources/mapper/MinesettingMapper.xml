@@ -5,15 +5,15 @@
     <!--@mbg.generated-->
     <!--@Table mine_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="mineName" jdbcType="VARCHAR" property="minename" />
+    <result column="mine_name" jdbcType="VARCHAR" property="mineName" />
     <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, mineName, description, isDelete, updateTime, createTime
+    id, mine_name, description, is_delete, update_time, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,46 +29,46 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into mine_setting (mineName, description, isDelete,
-      updateTime, createTime)
-    values (#{minename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER},
-      #{updatetime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP})
+    insert into mine_setting (mine_name, description, is_delete, 
+      update_time, create_time)
+    values (#{mineName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id"  parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.MineSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into mine_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="minename != null">
-        mineName,
+      <if test="mineName != null">
+        mine_name,
       </if>
       <if test="description != null">
         description,
       </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="isDelete != null">
+        is_delete,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="updateTime != null">
+        update_time,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="createTime != null">
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="minename != null">
-        #{minename,jdbcType=VARCHAR},
+      <if test="mineName != null">
+        #{mineName,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -76,20 +76,20 @@
     <!--@mbg.generated-->
     update mine_setting
     <set>
-      <if test="minename != null">
-        mineName = #{minename,jdbcType=VARCHAR},
+      <if test="mineName != null">
+        mine_name = #{mineName,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -97,17 +97,17 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.MineSetting">
     <!--@mbg.generated-->
     update mine_setting
-    set mineName = #{minename,jdbcType=VARCHAR},
+    set mine_name = #{mineName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP},
-      createTime = #{createtime,jdbcType=TIMESTAMP}
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
 <!--  软删除-->
   <update id="updateById">
-    update mine_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+    update mine_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
 
 <!--  根据搜索条件查询列表-->
@@ -116,9 +116,9 @@
     <include refid="Base_Column_List" />
     from mine_setting
     <where>
-      isDelete = 0
+      is_delete = 0
       <if test="keyWord != null">
-        AND (mineName like #{keyWord} or `description` like #{keyWord})
+        AND (mmine_name like #{keyWord} or `description` like #{keyWord})
       </if>
     </where>
   </select>

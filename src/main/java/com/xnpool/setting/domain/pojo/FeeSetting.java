@@ -2,41 +2,45 @@ package com.xnpool.setting.domain.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * @author  zly
- * @date  2020/2/6 16:05
+ * @author zly
  * @version 1.0
+ * @date 2020/3/5 13:28
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FeeSetting implements Serializable {
-    private static final long serialVersionUID = 8780220522404594124L;
     private Integer id;
 
     /**
-    * 费用单价
-    */
-    private Double feeprice;
+     * 费用单价
+     */
+    private Double feePrice;
 
     /**
-    * 费用名称
-    */
-    private String feename;
+     * 费用名称
+     */
+    private String feeName;
 
     /**
-    * 是否删除,0:否,1:是
-    */
-    private Integer isdelete;
+     * 是否删除,0:否,1:是
+     */
+    private Integer isDelete;
 
     /**
-    * 创建时间
-    */
-    private Date createtime;
+     * 创建时间
+     */
+    private Date createTime;
 
     /**
-    * 修改时间
-    */
-    private Date updatetime;
+     * 修改时间
+     */
+    private Date updateTime;
 
+    private static final long serialVersionUID = 1L;
 }

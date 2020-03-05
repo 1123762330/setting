@@ -46,7 +46,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(MineSetting record) {
         int rows = minesettingMapper.insertSelective(record);
-        record.setCreatetime(new Date());
+        record.setCreateTime(new Date());
         redisToInsert(rows,"mine_setting",record,record.getId());
     }
 
@@ -59,7 +59,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(MineSetting record) {
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         redisToUpdate(rows,"mine_setting",record,record.getId());
     }
 
@@ -73,7 +73,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void updateById(int id) {
         int rows = minesettingMapper.updateById(id);
         MineSetting record = new MineSetting();
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         record.setId(id);
         String jsonString = JSON.toJSONString(record, true);
         redisToDelete(rows,"mine_setting",record,record.getId());
@@ -85,7 +85,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         HashMap<Integer, String> resultMap = new HashMap<>();
         mineSettingList.forEach(mineSetting -> {
             Integer id = mineSetting.getId();
-            String mineName = mineSetting.getMinename();
+            String mineName = mineSetting.getMineName();
             resultMap.put(id, mineName);
         });
         return resultMap;

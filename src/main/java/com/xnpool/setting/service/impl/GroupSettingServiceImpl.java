@@ -33,7 +33,7 @@ import java.util.Set;
  * @date 2020/2/5 15:36
  */
 @Service
-public class GroupSettingServiceImpl  extends BaseController implements GroupSettingService {
+public class GroupSettingServiceImpl extends BaseController implements GroupSettingService {
 
     @Resource
     private GroupSettingMapper groupSettingMapper;
@@ -59,8 +59,8 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(GroupSetting record) {
         int rows = groupSettingMapper.insertSelective(record);
-        record.setCreatetime(new Date());
-        redisToInsert(rows,"group_setting",record,record.getMineid());
+        record.setCreateTime(new Date());
+        redisToInsert(rows, "group_setting", record, record.getMineId());
     }
 
     @Override
@@ -72,8 +72,8 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(GroupSetting record) {
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdatetime(new Date());
-        redisToUpdate(rows,"group_setting",record,record.getMineid());
+        record.setUpdateTime(new Date());
+        redisToUpdate(rows, "group_setting", record, record.getMineId());
     }
 
     @Override
@@ -88,7 +88,7 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         HashMap<Integer, String> ipStart = ipSettingService.selectByIPStart();
         Set<Integer> keySet = ipStart.keySet();
         GroupSetting groupSetting = groupSettingMapper.selectByPrimaryKey(id);
-        String ipid = groupSetting.getIpid();
+        String ipid = groupSetting.getIpId();
         if (ipid.contains(",")) {
             //多个IP
             String[] split = ipid.split(",");
@@ -105,9 +105,9 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         }
         int rows = groupSettingMapper.updateById(id);
         GroupSetting record = new GroupSetting();
-        record.setUpdatetime(new Date());
-        record.setGroupid(id);
-        redisToDelete(rows,"group_setting",record,record.getMineid());
+        record.setUpdateTime(new Date());
+        record.setId(id);
+        redisToDelete(rows, "group_setting", record, record.getMineId());
     }
 
     @Override
@@ -125,7 +125,7 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         //解決包含多个属性集合
         groupSettings.forEach(groupSettingExample -> {
             //包含多个IP
-            String ipid = groupSettingExample.getIpid();
+            String ipid = groupSettingExample.getIpId();
             if (ipid.contains(",")) {
                 //如果包含多个IP
                 String[] split = ipid.split(",");
@@ -140,12 +140,12 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
                 }
             } else {
                 //只有一个IP字段
-                String ipStr = groupSettingExample.getStartip() + "-" + groupSettingExample.getEndip();
+                String ipStr = groupSettingExample.getStartIp() + "-" + groupSettingExample.getEndIp();
                 groupSettingExample.setIpStr(ipStr);
             }
 
             //包含多个矿机架
-            String frameid = groupSettingExample.getFrameid();
+            String frameid = groupSettingExample.getFrameId();
             if (frameid.contains(",")) {
                 //如果包含多个矿机架Id
                 groupSettingExample.setFramenameDetailed(null);
@@ -163,19 +163,19 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
             }
 
             //包含多个厂房Id
-            String factoryid = groupSettingExample.getFactoryid();
+            String factoryid = groupSettingExample.getFactoryId();
             if (factoryid.contains(",")) {
                 //如果包含多个厂房ID
-                groupSettingExample.setFactoryname(null);
+                groupSettingExample.setFactoryName(null);
                 String[] split = factoryid.split(",");
                 for (int i = 0; i < split.length; i++) {
                     FactoryHouse factoryHouse = factoryHouseMapper.selectByPrimaryKey(Integer.valueOf(split[i]));
-                    String factoryname = factoryHouse.getFactoryname();
-                    if (groupSettingExample.getFactoryname() != null) {
-                        String manyFrame = groupSettingExample.getFactoryname() + "," + factoryname;
-                        groupSettingExample.setFactoryname(manyFrame);
+                    String factoryname = factoryHouse.getFactoryName();
+                    if (groupSettingExample.getFactoryName() != null) {
+                        String manyFrame = groupSettingExample.getFactoryName() + "," + factoryname;
+                        groupSettingExample.setFactoryName(manyFrame);
                     } else {
-                        groupSettingExample.setFactoryname(factoryname);
+                        groupSettingExample.setFactoryName(factoryname);
                     }
                 }
             }
@@ -185,11 +185,11 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
     }
 
     /**
+     * @return
      * @Description 分组名集合
      * @Author zly
      * @Date 11:15 2020/3/3
      * @Param
-     * @return
      */
     @Override
     public HashMap<Integer, String> selectGroupMap() {
@@ -197,14 +197,15 @@ public class GroupSettingServiceImpl  extends BaseController implements GroupSet
         List<GroupSetting> groupSettings = groupSettingMapper.selectGroupMap();
         System.out.println(groupSettings);
         groupSettings.forEach(groupSettingExample -> {
-            Integer groupid = groupSettingExample.getGroupid();
-            String groupname = groupSettingExample.getGroupname();
-            groupNameMap.put(groupid,groupname);
+            Integer groupid = groupSettingExample.getId();
+            String groupname = groupSettingExample.getGroupName();
+            groupNameMap.put(groupid, groupname);
         });
         return groupNameMap;
     }
 
 }
+
 
 
 

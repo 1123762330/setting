@@ -21,7 +21,7 @@ public class FactoryHouseExample implements Serializable {
     /**
      * 厂房名称
      */
-    private String factoryname;
+    private String factoryName;
 
     /**
      * 备注
@@ -31,15 +31,15 @@ public class FactoryHouseExample implements Serializable {
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
-    private Date updatetime;
+    private Date updateTime;
 
     /**
      * 所属矿场
      */
-    private String minename;
+    private String mineName;
 }

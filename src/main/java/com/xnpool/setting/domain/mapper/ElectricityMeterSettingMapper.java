@@ -1,11 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/11 10:36
+ * @date 2020/3/5 20:52
  */
 public interface ElectricityMeterSettingMapper {
     int deleteByPrimaryKey(Integer id);
@@ -22,5 +22,5 @@ public interface ElectricityMeterSettingMapper {
 
     void updateById(int id);
 
-    List<ElectricityMeterSetting> selectByOther(@Param("keyWord") String keyWord);
+    List<ElectricityMeterSettingExample> selectByOther(@Param("keyWord") String keyWord);
 }

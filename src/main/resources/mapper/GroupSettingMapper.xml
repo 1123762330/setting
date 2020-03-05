@@ -4,94 +4,102 @@
   <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.GroupSetting">
     <!--@mbg.generated-->
     <!--@Table group_setting-->
-    <id column="groupId" jdbcType="INTEGER" property="groupid" />
-    <result column="groupName" jdbcType="VARCHAR" property="groupname" />
-    <result column="ipId" jdbcType="VARCHAR" property="ipid" />
-    <result column="factoryId" jdbcType="VARCHAR" property="factoryid" />
-    <result column="mineId" jdbcType="INTEGER" property="mineid" />
-    <result column="frameId" jdbcType="VARCHAR" property="frameid" />
-    <result column="isDelete" jdbcType="INTEGER" property="isdelete" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="ip_id" jdbcType="VARCHAR" property="ipId" />
+    <result column="factory_id" jdbcType="VARCHAR" property="factoryId" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
+    <result column="frame_id" jdbcType="VARCHAR" property="frameId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    groupId, groupName, ipId, factoryId, mineId, frameId, isDelete, createTime, updateTime
+    id, group_name, ip_id, factory_id, mine_id, frame_id, is_delete, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
     from group_setting
-    where groupId = #{groupid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from group_setting
-    where groupId = #{groupid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="groupId" keyProperty="groupid" parameterType="com.xnpool.setting.domain.pojo.GroupSetting" useGeneratedKeys="true">
+  <insert id="insert" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
     <!--@mbg.generated-->
-    insert into group_setting (groupName, ipId, factoryId, 
-      mineId, frameId, isDelete, 
-      createTime, updateTime)
-    values (#{groupname,jdbcType=VARCHAR}, #{ipid,jdbcType=VARCHAR}, #{factoryid,jdbcType=VARCHAR}, 
-      #{mineid,jdbcType=INTEGER}, #{frameid,jdbcType=VARCHAR}, #{isdelete,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+    insert into group_setting (id, group_name, ip_id, 
+      factory_id, mine_id, frame_id, 
+      is_delete, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{ipId,jdbcType=VARCHAR}, 
+      #{factoryId,jdbcType=VARCHAR}, #{mineId,jdbcType=INTEGER}, #{frameId,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" keyColumn="groupId" keyProperty="groupid" parameterType="com.xnpool.setting.domain.pojo.GroupSetting" useGeneratedKeys="true">
+  <insert id="insertSelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
     <!--@mbg.generated-->
     insert into group_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="groupname != null">
-        groupName,
+      <if test="id != null">
+        id,
       </if>
-      <if test="ipid != null">
-        ipId,
+      <if test="groupName != null">
+        group_name,
       </if>
-      <if test="factoryid != null">
-        factoryId,
+      <if test="ipId != null">
+        ip_id,
       </if>
-      <if test="mineid != null">
-        mineId,
+      <if test="factoryId != null">
+        factory_id,
       </if>
-      <if test="frameid != null">
-        frameId,
+      <if test="mineId != null">
+        mine_id,
       </if>
-      <if test="isdelete != null">
-        isDelete,
+      <if test="frameId != null">
+        frame_id,
       </if>
-      <if test="createtime != null">
-        createTime,
+      <if test="isDelete != null">
+        is_delete,
       </if>
-      <if test="updatetime != null">
-        updateTime,
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="groupname != null">
-        #{groupname,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
       </if>
-      <if test="ipid != null">
-        #{ipid,jdbcType=VARCHAR},
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
       </if>
-      <if test="factoryid != null">
-        #{factoryid,jdbcType=VARCHAR},
+      <if test="ipId != null">
+        #{ipId,jdbcType=VARCHAR},
       </if>
-      <if test="mineid != null">
-        #{mineid,jdbcType=INTEGER},
+      <if test="factoryId != null">
+        #{factoryId,jdbcType=VARCHAR},
       </if>
-      <if test="frameid != null">
-        #{frameid,jdbcType=VARCHAR},
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="isdelete != null">
-        #{isdelete,jdbcType=INTEGER},
+      <if test="frameId != null">
+        #{frameId,jdbcType=VARCHAR},
       </if>
-      <if test="createtime != null">
-        #{createtime,jdbcType=TIMESTAMP},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -99,45 +107,45 @@
     <!--@mbg.generated-->
     update group_setting
     <set>
-      <if test="groupname != null">
-        groupName = #{groupname,jdbcType=VARCHAR},
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
       </if>
-      <if test="ipid != null">
-        ipId = #{ipid,jdbcType=VARCHAR},
+      <if test="ipId != null">
+        ip_id = #{ipId,jdbcType=VARCHAR},
       </if>
-      <if test="factoryid != null">
-        factoryId = #{factoryid,jdbcType=VARCHAR},
+      <if test="factoryId != null">
+        factory_id = #{factoryId,jdbcType=VARCHAR},
       </if>
-      <if test="mineid != null">
-        mineId = #{mineid,jdbcType=INTEGER},
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
       </if>
-      <if test="frameid != null">
-        frameId = #{frameid,jdbcType=VARCHAR},
+      <if test="frameId != null">
+        frame_id = #{frameId,jdbcType=VARCHAR},
       </if>
-      <if test="isdelete != null">
-        isDelete = #{isdelete,jdbcType=INTEGER},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null">
-        createTime = #{createtime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where groupId = #{groupid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
     <!--@mbg.generated-->
     update group_setting
-    set groupName = #{groupname,jdbcType=VARCHAR},
-      ipId = #{ipid,jdbcType=VARCHAR},
-      factoryId = #{factoryid,jdbcType=VARCHAR},
-      mineId = #{mineid,jdbcType=INTEGER},
-      frameId = #{frameid,jdbcType=VARCHAR},
-      isDelete = #{isdelete,jdbcType=INTEGER},
-      createTime = #{createtime,jdbcType=TIMESTAMP},
-      updateTime = #{updatetime,jdbcType=TIMESTAMP}
-    where groupId = #{groupid,jdbcType=INTEGER}
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      ip_id = #{ipId,jdbcType=VARCHAR},
+      factory_id = #{factoryId,jdbcType=VARCHAR},
+      mine_id = #{mineId,jdbcType=INTEGER},
+      frame_id = #{frameId,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 
 <!--  软删除-->
@@ -148,19 +156,19 @@
 <!--  根据条件查询列表-->
   <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.GroupSettingExample">
     SELECT
-    group_setting.groupId,
-    group_setting.groupName,
-    group_setting.ipId,
-    group_setting.frameId,
-    group_setting.factoryId,
-    group_setting.mineId,
-    group_setting.createTime,
-    group_setting.updateTime,
-    mine_setting.mineName,
-    factory_house.factoryName,
+    group_setting.id,
+    group_setting.group_name,
+    group_setting.ip_id,
+    group_setting.frame_id,
+    group_setting.factory_id,
+    group_setting.mine_id,
+    group_setting.create_time,
+    group_setting.update_time,
+    mine_setting.mine_name,
+    factory_house.factory_name,
     frame_setting.detailed AS framenameDetailed,
-    ip_setting.startIP,
-    ip_setting.endIP
+    ip_setting.start_ip,
+    ip_setting.end_ip
     FROM
     group_setting,
     mine_setting,
@@ -168,14 +176,14 @@
     frame_setting,
     ip_setting
     <where>
-      group_setting.isDelete = 0
+      group_setting.is_delete = 0
       <if test="keyWord != null">
-        AND (groupName like #{keyWord})
+        AND (group_name like #{keyWord})
       </if>
-      AND group_setting.mineId = mine_setting.id
-      AND group_setting.factoryId = factory_house.id
-      AND group_setting.frameId = frame_setting.id
-      AND group_setting.ipId = ip_setting.id
+      AND group_setting.mine_id = mine_setting.id
+      AND group_setting.factory_id = factory_house.id
+      AND group_setting.frame_id = frame_setting.id
+      AND group_setting.ip_id = ip_setting.id
     </where>
   </select>
 

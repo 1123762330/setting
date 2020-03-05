@@ -1,16 +1,12 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.baomidou.mybatisplus.annotation.SqlParser;
-import com.xnpool.setting.domain.pojo.IpSetting;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.IpSetting;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/2/6 13:21
+ * @date 2020/3/5 13:30
  */
-@Mapper
 public interface IpSettingMapper {
     int deleteByPrimaryKey(Integer id);
 

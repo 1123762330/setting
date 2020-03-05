@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/2/6 13:22
+ * @author zly
  * @version 1.0
+ * @date 2020/2/6 13:22
  */
 @Service
-public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService{
+public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService {
 
     @Resource
     private WorkerbrandSettingMapper workerbrandSettingMapper;
@@ -59,11 +59,11 @@ public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService{
     }
 
     @Override
-    public PageInfo<WorkerbrandSetting> selectByOther(String keyWord,int pageNum,int pageSize) {
+    public PageInfo<WorkerbrandSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(keyWord);
         PageInfo<WorkerbrandSetting> pageInfo = new PageInfo<>(workerbrandSettingList);
         return pageInfo;
@@ -74,13 +74,14 @@ public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService{
         HashMap<Integer, String> workerbrandMap = new HashMap<>();
         List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(null);
         workerbrandSettingList.forEach(workerbrandSetting -> {
-            String workername = workerbrandSetting.getWorkername();
+            String workername = workerbrandSetting.getWorkerName();
             String difficulty = workerbrandSetting.getDifficulty();
-            String workerbrand=workername+" "+difficulty;
+            String workerbrand = workername + " " + difficulty;
             Integer id = workerbrandSetting.getId();
-            workerbrandMap.put(id,workerbrand);
+            workerbrandMap.put(id, workerbrand);
         });
         return workerbrandMap;
     }
 
 }
+

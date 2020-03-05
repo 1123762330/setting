@@ -29,11 +29,12 @@ public interface FactoryHouseService {
 
     void updateById(int id);
 
-    PageInfo<FactoryHouseExample> selectByOther(String keyWord,int pageNum,int pageSize);
+    PageInfo<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
     List<FactoryHouse> selectByMineId(Integer mineId);
 
     HashMap<Integer, String> selectFactoryNameByMineId(Integer mineId);
 }
+
 
 

@@ -58,7 +58,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(CustomerSetting record) {
         int rows = customerSettingMapper.insertSelective(record);
-        record.setCreatetime(new Date());
+        record.setCreateTime(new Date());
         //redisToInsert(rows,"customer_setting",record,null);
     }
 
@@ -71,7 +71,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(CustomerSetting record) {
         int rows = customerSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         //redisToUpdate(rows,"customer_setting",record,null);
     }
 
@@ -85,7 +85,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void updateById(int id) {
         int rows = customerSettingMapper.updateById(id);
         CustomerSetting record = new CustomerSetting();
-        record.setUpdatetime(new Date());
+        record.setUpdateTime(new Date());
         record.setId(id);
         //redisToDelete(rows,"customer_setting",record,null);
     }
@@ -103,7 +103,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
-            String agreementid = customerSettingExample.getAgreementid();
+            String agreementid = customerSettingExample.getAgreementId();
             if (agreementid.contains(",")) {
                 HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
                 //多个协议ID,从协议IDMap集合里面取出相应的值,重新set进属性里面
@@ -147,6 +147,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
 }
+
+
+
 
 
 

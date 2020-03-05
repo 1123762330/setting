@@ -2,6 +2,7 @@ package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;
 
 /**
  * @author zly
@@ -25,8 +26,10 @@ public interface ElectricityMeterSettingService {
 
     void updateById(int id);
 
-    PageInfo<ElectricityMeterSetting> selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<ElectricityMeterSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 }
+
+
 
 
 
