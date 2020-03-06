@@ -71,5 +71,5 @@ public class OperatorWorkerHistoryExample implements Serializable {
     /**
     * 出库员
     */
-    private Integer operatorId;
+    private String operator;
 }

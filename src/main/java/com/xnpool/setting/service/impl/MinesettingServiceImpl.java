@@ -75,7 +75,6 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         MineSetting record = new MineSetting();
         record.setUpdateTime(new Date());
         record.setId(id);
-        String jsonString = JSON.toJSONString(record, true);
         redisToDelete(rows,"mine_setting",record,record.getId());
     }
 
@@ -104,22 +103,24 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     }
 
     @Override
-    public HashMap<String, HashMap<Integer, String>> selectMineFactoryAndFrame() {
+    public HashMap<String, HashMap> selectMineFactoryAndFrame() {
         List<HashMap> mineFactoryAndFrameList = minesettingMapper.selectMineFactoryAndFrame();
         HashMap<Integer, String> mineMap = new HashMap<>();
         HashMap<Integer, String> factroyMap = new HashMap<>();
-        HashMap<Integer, String> frameMap = new HashMap<>();
-        HashMap<String, HashMap<Integer, String>> resultMap = new HashMap<>();
+        HashMap<String, String> frameMap = new HashMap<>();
+        HashMap<String, HashMap> resultMap = new HashMap<>();
         for (HashMap hashMap : mineFactoryAndFrameList) {
             Integer frameId = (Integer) hashMap.get("frameId");
-            String frameName = String.valueOf(hashMap.get("frameName"));
+            String frameName = String.valueOf(hashMap.get("frame_name"));
             Integer factoryId = (Integer) hashMap.get("factoryId");
-            String factoryName = String.valueOf(hashMap.get("factoryName"));
+            String factoryName = String.valueOf(hashMap.get("factory_name"));
             Integer mineId = (Integer) hashMap.get("mineId");
-            String mineName = String.valueOf(hashMap.get("mineName"));
+            String mineName = String.valueOf(hashMap.get("mine_name"));
             mineMap.put(mineId,mineName);
             factroyMap.put(factoryId,factoryName+"-"+mineName);
-            frameMap.put(frameId,frameName+"-"+factoryName+"-"+mineName);
+            StringBuffer idBuffer = new StringBuffer(String.valueOf(frameId)).append("-").append(factoryId).append("-").append(mineId);
+            StringBuffer nameBuffer = new StringBuffer(frameName).append("-").append(factoryName).append("-").append(mineName);
+            frameMap.put(idBuffer.toString(),nameBuffer.toString());
         }
         resultMap.put("mine",mineMap);
         resultMap.put("factory",factroyMap);

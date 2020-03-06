@@ -139,20 +139,24 @@
       DATE_FORMAT( operator_worker_history.move_out_time, '%Y-%m-%d %H:%i:%s' )AS moveOutTime,
       DATE_FORMAT( operator_worker_history.come_in_time, '%Y-%m-%d %H:%i:%s' )AS comeInTime,
       operator_worker_history.reason,
-      operator_worker_history.operator_id
+      sys_role.`name` AS operator
       FROM
       operator_worker_history,
       worker_detailed,
       worker_info,
       factory_house,
       frame_setting,
-      group_setting
+      group_setting,
+      sys_role_user,
+      sys_role
       <where>
-        operator_worker_history.worker_id = worker_detailed.worker_id
-        AND worker_detailed.worker_id = worker_info.id
-        AND worker_detailed.factory_id = factory_house.id
-        AND worker_detailed.frame_id = frame_setting.id
-        AND worker_detailed.group_id = group_setting.id
+      operator_worker_history.worker_id = worker_detailed.worker_id
+      AND worker_detailed.worker_id = worker_info.id
+      AND worker_detailed.factory_id = factory_house.id
+      AND worker_detailed.frame_id = frame_setting.id
+      AND worker_detailed.group_id = group_setting.id
+      AND operator_worker_history.operator_id=sys_role_user.user_id
+      AND sys_role_user.role_id=sys_role.id
         <if test="startTime != null">
           AND operator_worker_history.move_out_time &gt; #{startTime}
         </if>

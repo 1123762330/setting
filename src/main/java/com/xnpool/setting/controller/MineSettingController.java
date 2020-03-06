@@ -112,7 +112,7 @@ public class MineSettingController extends BaseController{
      */
     @GetMapping("/selectMineFactoryAndFrame")
     public ResponseResult selectMineFactoryAndFrame() {
-        HashMap<String, HashMap<Integer, String>> resultMap = mineSettingService.selectMineFactoryAndFrame();
+        HashMap<String, HashMap> resultMap = mineSettingService.selectMineFactoryAndFrame();
         return new ResponseResult(SUCCESS,resultMap);
     }
 }

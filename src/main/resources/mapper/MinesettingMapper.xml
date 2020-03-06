@@ -126,19 +126,19 @@
   <select id="selectMineFactoryAndFrame" resultType="hashmap">
     SELECT
         frame_setting.id AS frameId,
-        frame_setting.frameName,
+        frame_setting.frame_name,
         factory_house.id AS factoryId,
-        factory_house.factoryName,
+        factory_house.factory_name,
         mine_setting.id AS mineId,
-        mine_setting.mineName
+        mine_setting.mine_name
     FROM
         frame_setting,
         factory_house,
         mine_setting
     WHERE
-        frame_setting.factoryId = factory_house.id
-        AND frame_setting.mineId = mine_setting.id
-        AND frame_setting.isDelete=0
+        frame_setting.factory_id = factory_house.id
+        AND frame_setting.mine_id = mine_setting.id
+        AND frame_setting.is_delete=0
   </select>
 
 </mapper>
