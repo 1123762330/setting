@@ -120,7 +120,7 @@
 
     <!--  批量记录矿机出库历史-->
     <insert id="insertTobatch" parameterType="java.util.List">
-        insert into operator_worker_history (workerId, moveOutTime, reason, `operatorId`,mineId)
+        insert into operator_worker_history (worker_id, move_out_time, reason, operator_id,mine_id)
         values
       <foreach collection="list" index="index" item="item" separator=",">
         (#{item,jdbcType=BIGINT},now(),#{reason,jdbcType=VARCHAR},#{operatorId,jdbcType=INTEGER},#{mineId,jdbcType=INTEGER})
@@ -134,8 +134,7 @@
       factory_house.factory_name,
       frame_setting.detailed,
       worker_detailed.worker_id,
-      worker.miner,
-      worker.workerName,
+      worker_info.worker1 AS workerName,
       group_setting.group_name,
       DATE_FORMAT( operator_worker_history.move_out_time, '%Y-%m-%d %H:%i:%s' )AS moveOutTime,
       DATE_FORMAT( operator_worker_history.come_in_time, '%Y-%m-%d %H:%i:%s' )AS comeInTime,
@@ -144,13 +143,13 @@
       FROM
       operator_worker_history,
       worker_detailed,
-      worker,
+      worker_info,
       factory_house,
       frame_setting,
       group_setting
       <where>
         operator_worker_history.worker_id = worker_detailed.worker_id
-        AND worker_detailed.worker_id = worker.id
+        AND worker_detailed.worker_id = worker_info.id
         AND worker_detailed.factory_id = factory_house.id
         AND worker_detailed.frame_id = frame_setting.id
         AND worker_detailed.group_id = group_setting.id

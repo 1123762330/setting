@@ -35,7 +35,7 @@ public class WorkerDetailedExample implements Serializable {
     /**
      * 矿机名
      */
-    private String workername;
+    private String workerName;
 
     /**
      * 矿机品牌
@@ -45,27 +45,27 @@ public class WorkerDetailedExample implements Serializable {
     /**
      * 矿机ip
      */
-    private String workerIp;
+    private String ip;
 
     /**
      * 厂房名称
      */
-    private String factoryname;
+    private String factoryName;
 
     /**
      * 机架名称
      */
-    private String framename;
+    private String frameName;
 
     /**
     * 矿机架层数
     */
-    private Integer framenumber;
+    private Integer frameNumber;
 
     /**
      * 组名
      */
-    private String groupname;
+    private String groupName;
 
     /**
     * 是否入库,0:未入库,1:已入库
@@ -75,7 +75,7 @@ public class WorkerDetailedExample implements Serializable {
     /**
      * 在线离线
      */
-    private Integer isOnLine;
+    private Integer state;
 
     /**
     * 备注

@@ -81,6 +81,18 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord);
+        WorkerDetailedExampleList.forEach(workerDetailedExample -> {
+            String workerName = workerDetailedExample.getWorkerName();
+            int lastIndexOf = workerName.lastIndexOf(".");
+            String minerName = workerName.substring(0, lastIndexOf);
+            String workerNameStr = workerName.substring(lastIndexOf+1);
+            String frameName = workerDetailedExample.getFrameName();
+            Integer frameNumber = workerDetailedExample.getFrameNumber();
+            workerDetailedExample.setMiner(minerName);
+            workerDetailedExample.setWorkerName(workerNameStr);
+            StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
+            workerDetailedExample.setFrameName(frameNameBuffer.toString());
+        });
         PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(WorkerDetailedExampleList);
         return pageInfo;
     }
@@ -168,7 +180,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerInfo> workers = workerInfoMapper.selectByOther(keyWord);
-
         //已经入库的矿机Id
         List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
 
@@ -255,7 +266,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //根据批量更新的id去库里面查询矿场id
         List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
         Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
-        System.out.println(groupByMineId);
         for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
             //同时需要记录到历史表中
             List<Integer> workerIdList = new ArrayList<>();
@@ -306,7 +316,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerIdList.add(workerId);
             }
             //批量入库数据同步到缓存里
-            redisToBatchDelete(rows, "worker", workerIdList, entry.getKey());
+            redisToBatchDelete(rows, "worker_info", workerIdList, entry.getKey());
             redisToBatchDelete(rows, "worker_detailed", workerIdList, entry.getKey());
         }
 

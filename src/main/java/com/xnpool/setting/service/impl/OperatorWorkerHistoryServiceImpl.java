@@ -105,6 +105,12 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
                 } else {
                     operatorWorkerHistoryExample.setTotalTime("--");
                 }
+                String workerName = operatorWorkerHistoryExample.getWorkerName();
+                int lastIndexOf = workerName.lastIndexOf(".");
+                String minerName = workerName.substring(0, lastIndexOf);
+                String workerNameStr = workerName.substring(lastIndexOf+1);
+                operatorWorkerHistoryExample.setMiner(minerName);
+                operatorWorkerHistoryExample.setWorkerName(workerNameStr);
             } catch (ParseException e) {
                 log.error("时间转换异常!" + e.getMessage());
             }

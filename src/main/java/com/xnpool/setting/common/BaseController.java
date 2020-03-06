@@ -120,7 +120,6 @@ public abstract class BaseController {
 		hashMap.put("use", user);
 		hashMap.put("data", data);
 		String jsonString = JSON.toJSONString(hashMap);
-		System.out.println(jsonString);
 		try {
 			String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
 			Long global_id = primaryKeyUtils.orderId(orderIdPrefix);

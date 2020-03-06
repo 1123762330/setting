@@ -74,14 +74,15 @@ public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService 
         HashMap<Integer, String> workerbrandMap = new HashMap<>();
         List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(null);
         workerbrandSettingList.forEach(workerbrandSetting -> {
-            String workername = workerbrandSetting.getWorkerName();
+            String brandName = workerbrandSetting.getBrandName();
             String difficulty = workerbrandSetting.getDifficulty();
-            String workerbrand = workername + " " + difficulty;
+            String workerBrand = brandName + " " + difficulty;
             Integer id = workerbrandSetting.getId();
-            workerbrandMap.put(id, workerbrand);
+            workerbrandMap.put(id, workerBrand);
         });
         return workerbrandMap;
     }
 
 }
+
 

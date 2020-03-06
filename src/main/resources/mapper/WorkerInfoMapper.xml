@@ -346,17 +346,17 @@
   <select id="selectByOther" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from work_info
+    from worker_info
     <where>
       <if test="keyWord != null">
-        AND (ip like #{keyWord} or `worker1` like #{keyWord})
+         (ip like #{keyWord} or `worker1` like #{keyWord})
       </if>
     </where>
   </select>
 
   <!--  矿机软删除-->
   <update id="updateById">
-    update work_info set isDelete = 1 where id in
+    update worker_info set isDelete = 1 where id in
     <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>

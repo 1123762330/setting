@@ -5,7 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table workerbrand_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="worker_name" jdbcType="VARCHAR" property="workerName" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
     <result column="worker_type" jdbcType="VARCHAR" property="workerType" />
     <result column="business" jdbcType="VARCHAR" property="business" />
     <result column="worker_size" jdbcType="VARCHAR" property="workerSize" />
@@ -17,7 +17,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, worker_name, worker_type, business, worker_size, power_waste, difficulty, is_delete, 
+    id, brand_name, worker_type, business, worker_size, power_waste, difficulty, is_delete, 
     create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -34,11 +34,11 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerbrandSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into workerbrand_setting (worker_name, worker_type, business, 
+    insert into workerbrand_setting (brand_name, worker_type, business, 
       worker_size, power_waste, difficulty, 
       is_delete, create_time, update_time
       )
-    values (#{workerName,jdbcType=VARCHAR}, #{workerType,jdbcType=VARCHAR}, #{business,jdbcType=VARCHAR}, 
+    values (#{brandName,jdbcType=VARCHAR}, #{workerType,jdbcType=VARCHAR}, #{business,jdbcType=VARCHAR}, 
       #{workerSize,jdbcType=VARCHAR}, #{powerWaste,jdbcType=VARCHAR}, #{difficulty,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -47,8 +47,8 @@
     <!--@mbg.generated-->
     insert into workerbrand_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="workerName != null">
-        worker_name,
+      <if test="brandName != null">
+        brand_name,
       </if>
       <if test="workerType != null">
         worker_type,
@@ -76,8 +76,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="workerName != null">
-        #{workerName,jdbcType=VARCHAR},
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
       </if>
       <if test="workerType != null">
         #{workerType,jdbcType=VARCHAR},
@@ -109,8 +109,8 @@
     <!--@mbg.generated-->
     update workerbrand_setting
     <set>
-      <if test="workerName != null">
-        worker_name = #{workerName,jdbcType=VARCHAR},
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
       </if>
       <if test="workerType != null">
         worker_type = #{workerType,jdbcType=VARCHAR},
@@ -142,7 +142,7 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.WorkerbrandSetting">
     <!--@mbg.generated-->
     update workerbrand_setting
-    set worker_name = #{workerName,jdbcType=VARCHAR},
+    set brand_name = #{brandName,jdbcType=VARCHAR},
       worker_type = #{workerType,jdbcType=VARCHAR},
       business = #{business,jdbcType=VARCHAR},
       worker_size = #{workerSize,jdbcType=VARCHAR},
@@ -166,7 +166,7 @@
     <where>
       is_delete = 0
       <if test="keyWord != null">
-        AND (worker_name like #{keyWord} or `worker_type` like #{keyWord} or `business` like #{keyWord}
+        AND (brand_name like #{keyWord} or `worker_type` like #{keyWord} or `business` like #{keyWord}
             or `worker_size` like #{keyWord} or `power_waste` like #{keyWord} or difficulty like #{keyWord})
       </if>
     </where>
