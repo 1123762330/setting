@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FrameSetting implements Serializable {
+    private static final long serialVersionUID = -8883990864667195110L;
     /**
      * 机架Id
      */
@@ -60,5 +61,4 @@ public class FrameSetting implements Serializable {
      */
     private String detailed;
 
-    private static final long serialVersionUID = 1L;
 }

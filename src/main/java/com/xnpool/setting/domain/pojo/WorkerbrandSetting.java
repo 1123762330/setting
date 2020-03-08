@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkerbrandSetting implements Serializable {
+    private static final long serialVersionUID = 8677738246508455820L;
     /**
      * 编号
      */
@@ -65,5 +66,4 @@ public class WorkerbrandSetting implements Serializable {
      */
     private Date updateTime;
 
-    private static final long serialVersionUID = 1L;
 }

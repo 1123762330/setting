@@ -85,7 +85,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             String workerName = workerDetailedExample.getWorkerName();
             int lastIndexOf = workerName.lastIndexOf(".");
             String minerName = workerName.substring(0, lastIndexOf);
-            String workerNameStr = workerName.substring(lastIndexOf+1);
+            String workerNameStr = workerName.substring(lastIndexOf + 1);
             String frameName = workerDetailedExample.getFrameName();
             Integer frameNumber = workerDetailedExample.getFrameNumber();
             workerDetailedExample.setMiner(minerName);
@@ -107,6 +107,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Override
     public void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam) {
         String workerid = workerDetailedParam.getWorkerid();
+        Integer userId = workerDetailedParam.getUserId();
         Integer factoryid = workerDetailedParam.getFactoryid();
         Integer frameid = workerDetailedParam.getFrameid();
         Integer framenumber = workerDetailedParam.getFramenumber();
@@ -128,6 +129,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     WorkerDetailed workerDetailed = new WorkerDetailed();
                     workerDetailed.setWorkerId(Integer.valueOf(workerId));
                     workerDetailed.setWorkerIp(split_ip[i]);
+                    workerDetailed.setUserId(userId);
                     workerDetailed.setFactoryId(factoryid);
                     workerDetailed.setFrameId(frameid);
                     workerDetailed.setFrameNumber(framenumber);
@@ -144,6 +146,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 WorkerDetailed workerDetailed = new WorkerDetailed();
                 workerDetailed.setWorkerId(Integer.valueOf(workerid));
                 workerDetailed.setWorkerIp(workerIp);
+                workerDetailed.setUserId(userId);
                 workerDetailed.setFactoryId(factoryid);
                 workerDetailed.setFrameId(frameid);
                 workerDetailed.setFrameNumber(framenumber);
@@ -323,6 +326,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
 }
+
 
 
 

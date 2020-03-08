@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PowerSetting implements Serializable {
+    private static final long serialVersionUID = 932256797041792313L;
     private Integer id;
 
     /**
@@ -42,5 +43,4 @@ public class PowerSetting implements Serializable {
      */
     private Date updateTime;
 
-    private static final long serialVersionUID = 1L;
 }

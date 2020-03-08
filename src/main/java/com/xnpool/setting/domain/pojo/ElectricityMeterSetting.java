@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ElectricityMeterSetting implements Serializable {
+    private static final long serialVersionUID = -5275399669116759361L;
     private Integer id;
 
     /**
@@ -62,5 +63,4 @@ public class ElectricityMeterSetting implements Serializable {
      */
     private Date updateTime;
 
-    private static final long serialVersionUID = 1L;
 }

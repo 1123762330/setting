@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.d
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 13:34
+ * @date 2020/3/8 8:59
  */
 public interface WorkerDetailedMapper {
     int deleteByPrimaryKey(Integer id);

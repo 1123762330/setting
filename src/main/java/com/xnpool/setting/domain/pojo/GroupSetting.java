@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupSetting implements Serializable {
+    private static final long serialVersionUID = -4867013184861718917L;
     /**
      * 分组ID
      */
@@ -60,5 +61,4 @@ public class GroupSetting implements Serializable {
      */
     private Date updateTime;
 
-    private static final long serialVersionUID = 1L;
 }

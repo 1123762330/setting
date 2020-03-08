@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FactoryHouse implements Serializable {
+    private static final long serialVersionUID = -6876932242393257931L;
     /**
      * 厂房编号
      */
@@ -50,5 +51,4 @@ public class FactoryHouse implements Serializable {
      */
     private Integer isDelete;
 
-    private static final long serialVersionUID = 1L;
 }

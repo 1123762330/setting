@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IpSetting implements Serializable {
+    private static final long serialVersionUID = -3760031732088770526L;
     /**
      * 编号
      */
@@ -50,5 +51,4 @@ public class IpSetting implements Serializable {
      */
     private Integer isDelete;
 
-    private static final long serialVersionUID = 1L;
 }

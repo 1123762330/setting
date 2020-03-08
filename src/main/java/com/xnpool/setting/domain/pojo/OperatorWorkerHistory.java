@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OperatorWorkerHistory implements Serializable {
+    private static final long serialVersionUID = 8177802319467257734L;
     /**
      * 编号
      */
@@ -50,5 +51,4 @@ public class OperatorWorkerHistory implements Serializable {
      */
     private Integer operatorId;
 
-    private static final long serialVersionUID = 1L;
 }

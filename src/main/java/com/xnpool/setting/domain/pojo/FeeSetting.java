@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeeSetting implements Serializable {
+    private static final long serialVersionUID = -234259685803496422L;
     private Integer id;
 
     /**
@@ -42,5 +43,4 @@ public class FeeSetting implements Serializable {
      */
     private Date updateTime;
 
-    private static final long serialVersionUID = 1L;
 }
