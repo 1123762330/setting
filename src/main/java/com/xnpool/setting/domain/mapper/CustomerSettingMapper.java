@@ -1,6 +1,9 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.CustomerSetting;import com.xnpool.setting.domain.pojo.CustomerSettingExample;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.CustomerSetting;import com.xnpool.setting.domain.pojo.CustomerSettingExample;import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author zly
@@ -25,4 +28,6 @@ public interface CustomerSettingMapper {
     List<CustomerSettingExample> selectByOther(@Param("keyWord") String keyWord, @Param("managerUserId") int managerUserId);
 
     void updateAttestationById(@Param("userId") int userId, @Param("isPass") int isPass);
+
+    List<HashMap> selectUserList();
 }

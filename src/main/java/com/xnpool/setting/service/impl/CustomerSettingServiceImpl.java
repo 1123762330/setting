@@ -146,6 +146,18 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         customerSettingMapper.updateAttestationById(userid, isPass);
     }
 
+    @Override
+    public HashMap<Integer, String> selectUserList() {
+        HashMap<Integer, String> resultMap = new HashMap<>();
+        List<HashMap> hashMapList = customerSettingMapper.selectUserList();
+        hashMapList.forEach(hashMap -> {
+            Integer id = Integer.valueOf(hashMap.get("id").toString());
+            String username = hashMap.get("username").toString();
+            resultMap.put(id,username);
+        });
+        return resultMap;
+    }
+
 }
 
 

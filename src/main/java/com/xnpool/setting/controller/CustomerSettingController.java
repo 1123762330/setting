@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 /**
  * 客户设置
  * @author zly
@@ -95,6 +97,19 @@ public class CustomerSettingController extends BaseController {
         int isPass=1;
         customerSettingService.updateAttestationById(userid,isPass);
         return new ResponseResult(SUCCESS);
+    }
+
+    /**
+     * @Description 查询客户名称,在矿机入库时绑定userid
+     * @Author zly
+     * @Date 13:50 2020/3/8
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectUserList")
+    public ResponseResult selectUserList (){
+        HashMap<Integer, String> userNameList = customerSettingService.selectUserList();
+        return new ResponseResult(SUCCESS,userNameList);
     }
 
 

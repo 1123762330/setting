@@ -273,4 +273,17 @@
     <update id="updateAttestationById">
     update customer_setting set authentication = #{isPass} where user_id = #{userId,jdbcType=INTEGER}
   </update>
+
+  <!--查询客户姓名集合-->
+    <select id="selectUserList" resultType="java.util.HashMap">
+      SELECT
+          sys_user.id,
+          sys_user.username
+      FROM
+          customer_setting,
+          sys_user
+      WHERE
+          customer_setting.is_delete = 0
+          AND customer_setting.user_id = sys_user.id
+    </select>
 </mapper>

@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.domain.pojo.CustomerSettingExample;
 
+import java.util.HashMap;
+
 /**
  * @author zly
  * @version 1.0
@@ -29,6 +31,8 @@ public interface CustomerSettingService {
     PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
     void updateAttestationById(int userid, int isPass);
+
+    HashMap<Integer,String> selectUserList();
 }
 
 
