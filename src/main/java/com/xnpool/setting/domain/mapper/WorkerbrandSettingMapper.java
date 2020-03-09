@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.WorkerbrandSetting;import org.apache.ibati
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/6 11:36
+ * @date 2020/3/9 11:57
  */
 public interface WorkerbrandSettingMapper {
     int deleteByPrimaryKey(Integer id);

@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/6 11:36
+ * @date 2020/3/9 11:57
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkerbrandSetting implements Serializable {
-    private static final long serialVersionUID = 8677738246508455820L;
     /**
      * 编号
      */
@@ -66,4 +65,10 @@ public class WorkerbrandSetting implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 算法id
+     */
+    private Integer algorithmId;
+
+    private static final long serialVersionUID = 1L;
 }
