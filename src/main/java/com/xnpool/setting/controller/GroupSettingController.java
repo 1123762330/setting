@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 
 /**
  * 分组设置
@@ -88,7 +90,7 @@ public class GroupSettingController extends BaseController {
      */
     @GetMapping("/selectGroupMap")
     public ResponseResult selectGroupMap() {
-         groupSettingService.selectGroupMap();
-        return new ResponseResult(SUCCESS);
+        HashMap<Integer, String> groupMap = groupSettingService.selectGroupMap();
+        return new ResponseResult(SUCCESS,groupMap);
     }
 }

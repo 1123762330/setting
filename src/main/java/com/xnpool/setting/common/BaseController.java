@@ -277,4 +277,31 @@ public abstract class BaseController {
 		}
 	}
 
+	/**
+	 * @Description	计算时间(传入的是秒值)
+	 * @Author zly
+	 * @Date 10:46 2020/3/11
+	 * @Param
+	 * @return
+	 */
+	public String calculTime(Long totalTime){
+		String DateTimes = null;
+		if (totalTime !=0L) {
+			long days = totalTime / (60 * 60 * 24);
+			long hours = (totalTime % (60 * 60 * 24)) / (60 * 60);
+			long minutes = (totalTime % (60 * 60)) / 60;
+			long seconds = totalTime % 60;
+			if (days > 0) {
+				DateTimes = days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+			} else if (hours > 0) {
+				DateTimes = hours + "小时" + minutes + "分钟" + seconds + "秒";
+			} else if (minutes > 0) {
+				DateTimes = minutes + "分钟" + seconds + "秒";
+			} else {
+				DateTimes = seconds + "秒";
+			}
+		}
+		return DateTimes;
+	}
+
 }

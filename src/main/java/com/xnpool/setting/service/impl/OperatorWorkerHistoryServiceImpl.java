@@ -87,20 +87,7 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
                 Date comeintime = simpleDate.parse(operatorWorkerHistoryExample.getComeInTime());
                 if (comeintime != null) {
                     long totalTime = (comeintime.getTime() - moveouttime.getTime()) / 1000;
-                    String DateTimes = null;
-                    long days = totalTime / (60 * 60 * 24);
-                    long hours = (totalTime % (60 * 60 * 24)) / (60 * 60);
-                    long minutes = (totalTime % (60 * 60)) / 60;
-                    long seconds = totalTime % 60;
-                    if (days > 0) {
-                        DateTimes = days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
-                    } else if (hours > 0) {
-                        DateTimes = hours + "小时" + minutes + "分钟" + seconds + "秒";
-                    } else if (minutes > 0) {
-                        DateTimes = minutes + "分钟" + seconds + "秒";
-                    } else {
-                        DateTimes = seconds + "秒";
-                    }
+                    String DateTimes = calculTime(totalTime);
                     operatorWorkerHistoryExample.setTotalTime(DateTimes);
                 } else {
                     operatorWorkerHistoryExample.setTotalTime("--");

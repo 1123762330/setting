@@ -85,7 +85,6 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        apiContext.setTenantId(112233L);
         List<IpSetting> ipSettings = ipSettingMapper.selectByOther(keyWord);
         PageInfo<IpSetting> pageInfo = new PageInfo<>(ipSettings);
         return pageInfo;

@@ -325,6 +325,40 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
     }
 
+    /**
+     * @Description 用户网站的矿机详情列表
+     * @Author zly
+     * @Date 18:00 2020/3/10
+     * @Param
+     * @return
+     */
+    public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName,String startIp,
+                                                                 String endIp, Integer pageNum,
+                                                                 Integer pageSize, String token){
+        int userId=0;
+        PageHelper.startPage(pageNum, pageSize);
+        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName,startIp,userId);
+        for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
+            String frameName = workerDetailedModel.getFrameName();
+            String frameNumber = workerDetailedModel.getFrameNumber();
+            StringBuffer frameDetailsBuffer = new StringBuffer(frameName).append(" ").append(frameNumber);
+            workerDetailedModel.setFrameDetails(frameDetailsBuffer.toString());
+            String workerNameStr = workerDetailedModel.getWorkerName();
+            int lastIndexOf = workerNameStr.lastIndexOf(".");
+            workerDetailedModel.setWorkerName(workerNameStr.substring(lastIndexOf + 1));
+            if (workerDetailedModel.getOnTime()!=null){
+                String onTimeStr = calculTime(Long.valueOf(workerDetailedModel.getOnTime()));
+                workerDetailedModel.setOnTime(onTimeStr);
+            }
+            if (workerDetailedModel.getRunTime()!=null){
+                String runTimeStr = calculTime(Long.valueOf(workerDetailedModel.getRunTime()));
+                workerDetailedModel.setRunTime(runTimeStr);
+            }
+        }
+        PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(workerDetailedModels);
+        return pageInfo;
+    }
+
 }
 
 

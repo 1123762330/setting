@@ -34,6 +34,8 @@ public interface WorkerDetailedService {
     void updateComeInByid(String ids);
 
     void updateById(String ids);
+
+    PageInfo<WorkerDetailedModel>  selectAllWorkerDetailed(String workerName,String startIp,String endIp,Integer pageNum,Integer pageSize,String token);
 }
 
 
