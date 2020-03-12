@@ -230,7 +230,7 @@
   </update>
 
     <!--  根据条件查询客户列表-->
-    <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.CustomerSettingExample">
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.model.CustomerSettingExample">
         SELECT
             sys_user.username AS userName,
             customer_setting.id,

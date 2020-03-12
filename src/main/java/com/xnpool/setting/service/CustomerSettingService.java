@@ -2,7 +2,7 @@ package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
-import com.xnpool.setting.domain.pojo.CustomerSettingExample;
+import com.xnpool.setting.domain.model.CustomerSettingExample;
 
 import java.util.HashMap;
 

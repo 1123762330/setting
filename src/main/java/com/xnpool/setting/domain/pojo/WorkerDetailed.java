@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkerDetailed implements Serializable {
+    private static final long serialVersionUID = -417791547265980197L;
     /**
      * 编号
      */
@@ -90,5 +91,4 @@ public class WorkerDetailed implements Serializable {
      */
     private String workerIp;
 
-    private static final long serialVersionUID = 1L;
 }

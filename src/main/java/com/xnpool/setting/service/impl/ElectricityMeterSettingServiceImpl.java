@@ -2,8 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.AgreementSetting;
-import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;
+import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.ElectricityMeterSettingMapper;

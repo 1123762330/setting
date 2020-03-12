@@ -2,12 +2,8 @@ package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;
-import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;
-import org.apache.ibatis.annotations.Param;
+import com.xnpool.setting.domain.model.OperatorWorkerHistoryExample;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

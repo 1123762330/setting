@@ -128,7 +128,7 @@
     </insert>
 
 <!--    出库记录-->
-    <select id="selectWorkerHistoryList" resultType="com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample">
+    <select id="selectWorkerHistoryList" resultType="com.xnpool.setting.domain.model.OperatorWorkerHistoryExample">
       SELECT
       operator_worker_history.id,
       factory_house.factory_name,

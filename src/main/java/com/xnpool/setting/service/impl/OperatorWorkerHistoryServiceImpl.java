@@ -3,9 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.common.exception.IOException;
-import com.xnpool.setting.common.exception.ParseDateException;
-import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;
+import com.xnpool.setting.domain.model.OperatorWorkerHistoryExample;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

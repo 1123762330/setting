@@ -1,12 +1,9 @@
 package com.xnpool.setting.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.CustomerSettingExample;
-import com.xnpool.setting.domain.pojo.FactoryHouseExample;
-import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.service.AgreementSettingService;
 import com.xnpool.setting.service.GroupSettingService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +18,6 @@ import com.xnpool.setting.service.CustomerSettingService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

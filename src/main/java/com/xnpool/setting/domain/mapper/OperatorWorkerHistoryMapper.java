@@ -1,6 +1,6 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.OperatorWorkerHistory;import com.xnpool.setting.domain.model.OperatorWorkerHistoryExample;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @author zly

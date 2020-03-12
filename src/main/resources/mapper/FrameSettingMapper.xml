@@ -147,7 +147,7 @@
   </update>
 
 <!--  按照条件查询矿机架列表-->
-  <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.FrameSettingExample">
+  <select id="selectByOther" resultType="com.xnpool.setting.domain.model.FrameSettingExample">
     SELECT
       frame_setting.id,
       frame_setting.frame_name,

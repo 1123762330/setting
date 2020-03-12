@@ -212,7 +212,7 @@
   </update>
 
     <!--    出库列表-->
-    <select id="selectMoveOutList" resultType="com.xnpool.setting.domain.pojo.WorkerDetailedExample">
+    <select id="selectMoveOutList" resultType="com.xnpool.setting.domain.model.WorkerDetailedExample">
         SELECT
         worker_detailed.id,
         worker_detailed.worker_id,
@@ -301,7 +301,7 @@
     </update>
 
     <!--用户网站的矿机详情-->
-    <select id="selectAllWorkerDetailed" resultType="com.xnpool.setting.domain.pojo.WorkerDetailedModel">
+    <select id="selectAllWorkerDetailed" resultType="com.xnpool.setting.domain.model.WorkerDetailedModel">
         SELECT
             group_setting.group_name,
             worker_info.ip,

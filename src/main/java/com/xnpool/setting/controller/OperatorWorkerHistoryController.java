@@ -2,8 +2,7 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.OperatorWorkerHistoryExample;
-import com.xnpool.setting.domain.pojo.PowerSetting;
+import com.xnpool.setting.domain.model.OperatorWorkerHistoryExample;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;

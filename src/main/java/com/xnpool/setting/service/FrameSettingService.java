@@ -1,12 +1,10 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.pojo.FrameSetting;
-import com.xnpool.setting.domain.pojo.FrameSettingExample;
+import com.xnpool.setting.domain.model.FrameSettingExample;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @author zly

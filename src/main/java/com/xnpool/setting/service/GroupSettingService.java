@@ -2,7 +2,7 @@ package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.GroupSetting;
-import com.xnpool.setting.domain.pojo.GroupSettingExample;
+import com.xnpool.setting.domain.model.GroupSettingExample;
 
 import java.util.HashMap;
 

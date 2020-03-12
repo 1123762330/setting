@@ -2,7 +2,7 @@ package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
-import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;
+import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
 
 /**
  * @author zly

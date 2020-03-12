@@ -2,17 +2,13 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.AgreementSetting;
 import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
-import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;
-import com.xnpool.setting.domain.pojo.FactoryHouse;
+import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
 import com.xnpool.setting.service.ElectricityMeterSettingService;
 import com.xnpool.setting.utils.ResponseResult;
-import com.xnpool.setting.utils.UploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 电表设置

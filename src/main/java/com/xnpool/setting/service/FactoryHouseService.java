@@ -2,7 +2,7 @@ package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
-import com.xnpool.setting.domain.pojo.FactoryHouseExample;
+import com.xnpool.setting.domain.model.FactoryHouseExample;
 
 import java.util.HashMap;
 import java.util.List;

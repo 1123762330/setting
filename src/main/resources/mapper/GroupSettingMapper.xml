@@ -154,7 +154,7 @@
   </update>
 
     <!--  根据条件查询列表-->
-    <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.GroupSettingExample">
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.model.GroupSettingExample">
         SELECT
         group_setting.id,
         group_setting.group_name,

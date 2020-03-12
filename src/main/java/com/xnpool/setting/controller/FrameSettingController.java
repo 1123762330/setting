@@ -3,7 +3,7 @@ package com.xnpool.setting.controller;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FrameSetting;
-import com.xnpool.setting.domain.pojo.FrameSettingExample;
+import com.xnpool.setting.domain.model.FrameSettingExample;
 import com.xnpool.setting.service.FrameSettingService;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;

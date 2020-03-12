@@ -124,7 +124,7 @@
   </update>
 
 <!--  根据条件进行查询-->
-  <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.FactoryHouseExample">
+  <select id="selectByOther" resultType="com.xnpool.setting.domain.model.FactoryHouseExample">
     SELECT
     factory_house.id,
     factory_house.factory_name,

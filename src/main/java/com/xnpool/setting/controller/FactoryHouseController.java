@@ -1,10 +1,9 @@
 package com.xnpool.setting.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
-import com.xnpool.setting.domain.pojo.FactoryHouseExample;
+import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
 import com.xnpool.setting.utils.ResponseResult;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 厂房设置

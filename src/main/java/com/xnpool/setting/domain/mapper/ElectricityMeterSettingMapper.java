@@ -1,6 +1,6 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;import com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @author zly

@@ -1,13 +1,9 @@
 package com.xnpool.setting.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.common.exception.UpdateException;
-import com.xnpool.setting.domain.pojo.FactoryHouse;
-import com.xnpool.setting.domain.pojo.FrameSettingExample;
-import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.setting.domain.model.FrameSettingExample;
 import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;

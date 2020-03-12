@@ -158,7 +158,7 @@
     update electricity_meter_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
 <!--  根据条件查询电表列表-->
-    <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.ElectricityMeterSettingExample">
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.model.ElectricityMeterSettingExample">
       SELECT
       electricity_meter_setting.id,
       electricity_meter_setting.electricity_meter_Name,

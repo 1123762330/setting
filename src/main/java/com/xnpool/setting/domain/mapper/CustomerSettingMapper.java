@@ -1,6 +1,6 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.CustomerSetting;import com.xnpool.setting.domain.pojo.CustomerSettingExample;import org.apache.ibatis.annotations.Param;
+import com.xnpool.setting.domain.pojo.CustomerSetting;import com.xnpool.setting.domain.model.CustomerSettingExample;import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;

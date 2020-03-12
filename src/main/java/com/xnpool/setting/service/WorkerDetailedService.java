@@ -1,6 +1,9 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.domain.model.WorkerDetailedExample;
+import com.xnpool.setting.domain.model.WorkerDetailedModel;
+import com.xnpool.setting.domain.model.WorkerExample;
 import com.xnpool.setting.domain.pojo.*;
 
 /**

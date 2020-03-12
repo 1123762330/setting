@@ -1,4 +1,4 @@
-package com.xnpool.setting.domain.pojo;
+package com.xnpool.setting.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
