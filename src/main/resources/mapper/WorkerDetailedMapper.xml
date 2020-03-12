@@ -325,10 +325,10 @@
         <where>
             worker_detailed.user_id=#{userId}
             <if test="startIp != null">
-            AND worker_info.long_ip &gt;= #{startIp}
+            AND worker_info.ip_long &gt;= #{startIp}
             </if>
             <if test="endIp != null">
-                AND worker_info.long_ip &lt; #{endIp}
+                AND worker_info.ip_long &lt; #{endIp}
             </if>
             <if test="workerName != null">
             AND worker_info.worker1=#{workerName}

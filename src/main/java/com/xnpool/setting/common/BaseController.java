@@ -320,12 +320,26 @@ public abstract class BaseController {
 	 * @return
 	 */
 	public static long getStringIpToLong(String ip) {
-		String[] ips = ip.split("\\.");
-		long num =  16777216L*Long.parseLong(ips[0]) + 65536L*Long.parseLong(ips[1]) + 256*Long.parseLong(ips[2]) + Long.parseLong(ips[3]);
-		return num;
+		long result = 0;
+		java.util.StringTokenizer token = new java.util.StringTokenizer(ip,".");
+		result += Long.parseLong(token.nextToken())<<24;
+		result += Long.parseLong(token.nextToken())<<16;
+		result += Long.parseLong(token.nextToken())<<8;
+		result += Long.parseLong(token.nextToken());
+		return result;
 	}
 
-//*******************************redis缓存json实体类*************************
+	//长整型转ip字符串
+	public static String longToIp(long ipLong){
+		StringBuilder sb = new StringBuilder();
+		sb.append(ipLong>>>24);sb.append(".");
+		sb.append(String.valueOf((ipLong&0x00FFFFFF)>>>16));sb.append(".");
+		sb.append(String.valueOf((ipLong&0x0000FFFF)>>>8));sb.append(".");
+		sb.append(String.valueOf(ipLong&0x000000FF));
+		return sb.toString();
+	}
+
+	//*******************************redis缓存json实体类*************************
 	public MineSettingRedisModel getMineSettingRedisModel(MineSetting record) {
 		MineSettingRedisModel mineSettingRedisModel = new MineSettingRedisModel();
 		mineSettingRedisModel.setId(record.getId());

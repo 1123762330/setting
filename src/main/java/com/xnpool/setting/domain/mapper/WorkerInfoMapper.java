@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.WorkerInfo;import org.apache.ibatis.annota
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/12 10:46
+ * @date 2020/3/12 20:36
  */
 public interface WorkerInfoMapper {
     int deleteByPrimaryKey(Long id);
