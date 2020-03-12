@@ -40,5 +40,5 @@ public interface WorkerDetailedMapper {
                                                       @Param("endIp") Long endIp,
                                                       @Param("userId") Integer userId);
 
-    List<GroupModel> selectGroupModel();
+    List<GroupModel> selectGroupModel(Integer userId);
 }

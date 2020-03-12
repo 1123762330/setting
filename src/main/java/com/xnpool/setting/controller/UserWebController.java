@@ -55,8 +55,10 @@ public class UserWebController extends BaseController {
      */
     @GetMapping("/selectGroupModel")
     public ResponseResult selectGroupModel(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        List<GroupModel> groupModelList = workerDetailedService.selectGroupModel();
+                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                           HttpServletRequest request) {
+        String token = request.getHeader("token");
+        List<GroupModel> groupModelList = workerDetailedService.selectGroupModel(token);
         return new ResponseResult(SUCCESS,groupModelList);
     }
 }

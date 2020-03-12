@@ -43,7 +43,7 @@ public interface WorkerDetailedService {
 
     PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp, String endIp, Integer pageNum, Integer pageSize, String token);
 
-    List<GroupModel> selectGroupModel();
+    List<GroupModel> selectGroupModel(String token);
 }
 
 

@@ -417,8 +417,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Date 18:54 2020/3/12
      * @Param
      */
-    public List<GroupModel> selectGroupModel() {
-        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel();
+    public List<GroupModel> selectGroupModel(String token) {
+        //后面从token中获取
+        int userId=0;
+        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
         //按分组名进行分组
