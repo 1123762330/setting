@@ -1,10 +1,13 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.model.WorkerDetailedExample;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.model.WorkerExample;
 import com.xnpool.setting.domain.pojo.*;
+
+import java.util.List;
 
 /**
  * @author zly
@@ -39,6 +42,8 @@ public interface WorkerDetailedService {
     void updateById(String ids);
 
     PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp, String endIp, Integer pageNum, Integer pageSize, String token);
+
+    List<GroupModel> selectGroupModel();
 }
 
 

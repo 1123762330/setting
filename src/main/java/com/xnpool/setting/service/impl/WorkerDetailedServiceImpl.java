@@ -10,6 +10,7 @@ import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.common.exception.DeleteException;
 import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
+import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.model.WorkerDetailedExample;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.model.WorkerExample;
@@ -407,6 +408,59 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(workerDetailedModels);
         return pageInfo;
+    }
+
+    /**
+     * @return
+     * @Description 用户网站的分组列表
+     * @Author zly
+     * @Date 18:54 2020/3/12
+     * @Param
+     */
+    public List<GroupModel> selectGroupModel() {
+        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel();
+        HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
+        ArrayList<GroupModel> resultList = new ArrayList<>();
+        //按分组名进行分组
+        Map<String, List<GroupModel>> groupMap = groupModels.stream().collect(Collectors.groupingBy(GroupModel::getGroupName));
+        //遍历每个分组下面的list集合
+        for (Map.Entry<String, List<GroupModel>> entry : groupMap.entrySet()) {
+            List<GroupModel> groupModelList = entry.getValue();
+            GroupModel groupModel_tmp = new GroupModel();
+            ArrayList<String> brandList = new ArrayList<>();
+            int offLinesize = 0;
+            //遍历这个分组下的所有的数据
+            for (GroupModel groupModel : groupModelList) {
+                String brandName = groupModel.getBrandName();
+                //如果分组下面矿机品牌不为null,并且这个矿机品牌是新的,那就进行追加,否则就直接添加到该分组下
+                if (groupModel_tmp.getBrandName() != null && !brandList.contains(brandName)) {
+                    StringBuffer brandStringBuffer = new StringBuffer(groupModel_tmp.getBrandName()).append(",").append(brandName);
+                    groupModel_tmp.setBrandName(brandStringBuffer.toString());
+                } else {
+                    groupModel_tmp.setBrandName(brandName);
+                }
+                //记录离线的数量
+                if (groupModel.getState() == 0) {
+                    offLinesize++;
+                }
+                //对这个分组下的所有的矿机ip进行区间分组,取前三组进行字符串匹配
+                String workerIp = groupModel.getWorkerIp();
+                String startIpStr = workerIp.substring(0, workerIp.lastIndexOf("."));
+                String ipQuJianStr = ipQuJianMap.get(startIpStr);
+                if (!StringUtils.isEmpty(groupModel_tmp.getIpQuJian())) {
+                    StringBuffer ipQujianBuffer = new StringBuffer(groupModel_tmp.getIpQuJian()).append(",").append(ipQuJianStr);
+                    groupModel_tmp.setIpQuJian(ipQujianBuffer.toString());
+                } else {
+                    groupModel_tmp.setIpQuJian(ipQuJianStr);
+                }
+                brandList.add(brandName);
+            }
+            groupModel_tmp.setGroupName(entry.getKey());
+            groupModel_tmp.setTotal(groupModelList.size());
+            groupModel_tmp.setOffLineSize(offLinesize);
+            resultList.add(groupModel_tmp);
+        }
+        return resultList;
     }
 
 }

@@ -31,6 +31,8 @@ public interface IpSettingService {
     PageInfo<IpSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 
     HashMap<Integer, String> selectByIPStart();
+
+    HashMap<String, String> selectIpQuJian();
 }
 
 

@@ -338,4 +338,22 @@
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
         </where>
     </select>
+    
+    <select id="selectGroupModel" resultType="com.xnpool.setting.domain.model.GroupModel">
+        SELECT
+            group_setting.group_name,
+            worker_detailed.worker_ip,
+            workerbrand_setting.brand_name,
+            worker_info.state
+        FROM
+            worker_detailed,
+            group_setting,
+            workerbrand_setting,
+            worker_info
+        WHERE
+            user_id = 0
+            AND worker_detailed.group_id = group_setting.id
+            AND worker_detailed.workerbrand_id=workerbrand_setting.id
+            ANd worker_detailed.worker_id=worker_info.id
+    </select>
 </mapper>

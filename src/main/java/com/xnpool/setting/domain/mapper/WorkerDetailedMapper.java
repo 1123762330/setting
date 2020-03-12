@@ -1,5 +1,6 @@
 package com.xnpool.setting.domain.mapper;
 
+import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.model.WorkerDetailedExample;import com.xnpool.setting.domain.model.WorkerDetailedModel;import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;import java.util.List;
 
 /**
@@ -38,4 +39,6 @@ public interface WorkerDetailedMapper {
                                                       @Param("startIp") Long startIp,
                                                       @Param("endIp") Long endIp,
                                                       @Param("userId") Integer userId);
+
+    List<GroupModel> selectGroupModel();
 }

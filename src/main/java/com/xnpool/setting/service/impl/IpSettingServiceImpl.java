@@ -112,6 +112,24 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
         }
     }
 
+    public HashMap<String, String> selectIpQuJian() {
+        List<IpSetting> ipSettings = ipSettingMapper.selectByOther(null);
+        if (ipSettings != null) {
+            HashMap<String, String> resultMap = new HashMap<>();
+            ipSettings.forEach(ipSetting -> {
+                String startIp = ipSetting.getStartIp();
+                String endIp = ipSetting.getEndIp();
+                String ipName = startIp + "-" + endIp;
+                int lastIndexOf = startIp.lastIndexOf(".");
+                String startIp_tmp = startIp.substring(0, lastIndexOf);
+                resultMap.put(startIp_tmp, ipName);
+            });
+            return resultMap;
+        } else {
+            return null;
+        }
+    }
+
 }
 
 
