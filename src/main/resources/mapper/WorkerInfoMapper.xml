@@ -6,6 +6,7 @@
     <!--@Table worker_info-->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="long_ip" jdbcType="BIGINT" property="longIp" />
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="mine_type" jdbcType="VARCHAR" property="mineType" />
     <result column="working_mode" jdbcType="VARCHAR" property="workingMode" />
@@ -33,7 +34,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, ip, `state`, mine_type, working_mode, cur_hashrate, avg_hashrate, temperature, 
+    id, ip, long_ip, `state`, mine_type, working_mode, cur_hashrate, avg_hashrate, temperature, 
     fan_speed, startup_time, pool1, worker1, pool2, worker2, pool3, worker3, firmware_version, 
     software_version, hardware_version, network_type, mac, tenant_id, mine_id, ts, create_time, 
     update_time
@@ -52,24 +53,24 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into worker_info (ip, `state`, mine_type, 
-      working_mode, cur_hashrate, avg_hashrate, 
-      temperature, fan_speed, startup_time, 
-      pool1, worker1, pool2, 
-      worker2, pool3, worker3, 
-      firmware_version, software_version, hardware_version, 
-      network_type, mac, tenant_id, 
-      mine_id, ts, create_time, 
-      update_time)
-    values (#{ip,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{mineType,jdbcType=VARCHAR}, 
-      #{workingMode,jdbcType=VARCHAR}, #{curHashrate,jdbcType=VARCHAR}, #{avgHashrate,jdbcType=VARCHAR}, 
-      #{temperature,jdbcType=VARCHAR}, #{fanSpeed,jdbcType=VARCHAR}, #{startupTime,jdbcType=VARCHAR}, 
-      #{pool1,jdbcType=VARCHAR}, #{worker1,jdbcType=VARCHAR}, #{pool2,jdbcType=VARCHAR}, 
-      #{worker2,jdbcType=VARCHAR}, #{pool3,jdbcType=VARCHAR}, #{worker3,jdbcType=VARCHAR}, 
-      #{firmwareVersion,jdbcType=VARCHAR}, #{softwareVersion,jdbcType=VARCHAR}, #{hardwareVersion,jdbcType=VARCHAR}, 
-      #{networkType,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, 
-      #{mineId,jdbcType=BIGINT}, #{ts,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into worker_info (ip, long_ip, `state`, 
+      mine_type, working_mode, cur_hashrate, 
+      avg_hashrate, temperature, fan_speed, 
+      startup_time, pool1, worker1, 
+      pool2, worker2, pool3, 
+      worker3, firmware_version, software_version, 
+      hardware_version, network_type, mac, 
+      tenant_id, mine_id, ts, 
+      create_time, update_time)
+    values (#{ip,jdbcType=VARCHAR}, #{longIp,jdbcType=BIGINT}, #{state,jdbcType=VARCHAR}, 
+      #{mineType,jdbcType=VARCHAR}, #{workingMode,jdbcType=VARCHAR}, #{curHashrate,jdbcType=VARCHAR}, 
+      #{avgHashrate,jdbcType=VARCHAR}, #{temperature,jdbcType=VARCHAR}, #{fanSpeed,jdbcType=VARCHAR}, 
+      #{startupTime,jdbcType=VARCHAR}, #{pool1,jdbcType=VARCHAR}, #{worker1,jdbcType=VARCHAR}, 
+      #{pool2,jdbcType=VARCHAR}, #{worker2,jdbcType=VARCHAR}, #{pool3,jdbcType=VARCHAR}, 
+      #{worker3,jdbcType=VARCHAR}, #{firmwareVersion,jdbcType=VARCHAR}, #{softwareVersion,jdbcType=VARCHAR}, 
+      #{hardwareVersion,jdbcType=VARCHAR}, #{networkType,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, 
+      #{tenantId,jdbcType=INTEGER}, #{mineId,jdbcType=BIGINT}, #{ts,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -77,6 +78,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="ip != null">
         ip,
+      </if>
+      <if test="longIp != null">
+        long_ip,
       </if>
       <if test="state != null">
         `state`,
@@ -154,6 +158,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="ip != null">
         #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="longIp != null">
+        #{longIp,jdbcType=BIGINT},
       </if>
       <if test="state != null">
         #{state,jdbcType=VARCHAR},
@@ -236,6 +243,9 @@
       <if test="ip != null">
         ip = #{ip,jdbcType=VARCHAR},
       </if>
+      <if test="longIp != null">
+        long_ip = #{longIp,jdbcType=BIGINT},
+      </if>
       <if test="state != null">
         `state` = #{state,jdbcType=VARCHAR},
       </if>
@@ -315,6 +325,7 @@
     <!--@mbg.generated-->
     update worker_info
     set ip = #{ip,jdbcType=VARCHAR},
+      long_ip = #{longIp,jdbcType=BIGINT},
       `state` = #{state,jdbcType=VARCHAR},
       mine_type = #{mineType,jdbcType=VARCHAR},
       working_mode = #{workingMode,jdbcType=VARCHAR},

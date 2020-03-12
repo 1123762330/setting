@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FactoryHouseExample;
 import com.xnpool.setting.domain.pojo.FrameSetting;
+import com.xnpool.setting.domain.redismodel.FactoryHouseRedisModel;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
@@ -44,7 +45,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void insertSelective(FactoryHouse record) {
         int rows = factoryHouseMapper.insertSelective(record);
         record.setCreateTime(new Date());
-        redisToInsert(rows, "factory_house", record, record.getMineId());
+        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
     }
 
     @Override
@@ -57,7 +59,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void updateByPrimaryKeySelective(FactoryHouse record) {
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
-        redisToUpdate(rows, "factory_house", record, record.getMineId());
+        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToUpdate(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
     }
 
     @Override
@@ -72,7 +75,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
         FactoryHouse record = new FactoryHouse();
         record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows, "factory_house", record, record.getMineId());
+        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToDelete(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
     }
 
     @Override

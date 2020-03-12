@@ -1,14 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.WorkerInfo;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.xnpool.setting.domain.pojo.WorkerInfo;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/3/5 14:28
+ * @author zly
  * @version 1.0
+ * @date 2020/3/12 10:46
  */
 public interface WorkerInfoMapper {
     int deleteByPrimaryKey(Long id);

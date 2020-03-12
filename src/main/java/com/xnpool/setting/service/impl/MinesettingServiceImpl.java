@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.redismodel.MineSettingRedisModel;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void insertSelective(MineSetting record) {
         int rows = minesettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
-        redisToInsert(rows,"mine_setting",record,record.getId());
+        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
+        redisToInsert(rows,"mine_setting",mineSettingRedisModel,record.getId());
     }
 
     @Override
@@ -60,7 +62,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void updateByPrimaryKeySelective(MineSetting record) {
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
-        redisToUpdate(rows,"mine_setting",record,record.getId());
+        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
+        redisToUpdate(rows,"mine_setting",mineSettingRedisModel,record.getId());
     }
 
     @Override
@@ -75,7 +78,8 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         MineSetting record = new MineSetting();
         record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows,"mine_setting",record,record.getId());
+        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
+        redisToDelete(rows,"mine_setting",mineSettingRedisModel,record.getId());
     }
 
     @Override

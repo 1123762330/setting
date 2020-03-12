@@ -1,196 +1,210 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xnpool.setting.domain.mapper.GroupSettingMapper">
-  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.GroupSetting">
-    <!--@mbg.generated-->
-    <!--@Table group_setting-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
-    <result column="ip_id" jdbcType="VARCHAR" property="ipId" />
-    <result column="factory_id" jdbcType="VARCHAR" property="factoryId" />
-    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
-    <result column="frame_id" jdbcType="VARCHAR" property="frameId" />
-    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, group_name, ip_id, factory_id, mine_id, frame_id, is_delete, create_time, update_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from group_setting
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from group_setting
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
-    <!--@mbg.generated-->
-    insert into group_setting (id, group_name, ip_id, 
-      factory_id, mine_id, frame_id, 
-      is_delete, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{ipId,jdbcType=VARCHAR}, 
-      #{factoryId,jdbcType=VARCHAR}, #{mineId,jdbcType=INTEGER}, #{frameId,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
-    <!--@mbg.generated-->
-    insert into group_setting
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="groupName != null">
-        group_name,
-      </if>
-      <if test="ipId != null">
-        ip_id,
-      </if>
-      <if test="factoryId != null">
-        factory_id,
-      </if>
-      <if test="mineId != null">
-        mine_id,
-      </if>
-      <if test="frameId != null">
-        frame_id,
-      </if>
-      <if test="isDelete != null">
-        is_delete,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="groupName != null">
-        #{groupName,jdbcType=VARCHAR},
-      </if>
-      <if test="ipId != null">
-        #{ipId,jdbcType=VARCHAR},
-      </if>
-      <if test="factoryId != null">
-        #{factoryId,jdbcType=VARCHAR},
-      </if>
-      <if test="mineId != null">
-        #{mineId,jdbcType=INTEGER},
-      </if>
-      <if test="frameId != null">
-        #{frameId,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
-    <!--@mbg.generated-->
-    update group_setting
-    <set>
-      <if test="groupName != null">
-        group_name = #{groupName,jdbcType=VARCHAR},
-      </if>
-      <if test="ipId != null">
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.GroupSetting">
+        <!--@mbg.generated-->
+        <!--@Table group_setting-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="ip_id" jdbcType="VARCHAR" property="ipId"/>
+        <result column="factory_id" jdbcType="VARCHAR" property="factoryId"/>
+        <result column="mine_id" jdbcType="INTEGER" property="mineId"/>
+        <result column="frame_id" jdbcType="VARCHAR" property="frameId"/>
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, group_name, ip_id, factory_id, mine_id, frame_id, is_delete, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from group_setting
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from group_setting
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
+        <!--@mbg.generated-->
+        insert into group_setting (id, group_name, ip_id,
+        factory_id, mine_id, frame_id,
+        is_delete, create_time, update_time
+        )
+        values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{ipId,jdbcType=VARCHAR},
+        #{factoryId,jdbcType=VARCHAR}, #{mineId,jdbcType=INTEGER}, #{frameId,jdbcType=VARCHAR},
+        #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
+        <!--@mbg.generated-->
+        insert into group_setting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="ipId != null">
+                ip_id,
+            </if>
+            <if test="factoryId != null">
+                factory_id,
+            </if>
+            <if test="mineId != null">
+                mine_id,
+            </if>
+            <if test="frameId != null">
+                frame_id,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="ipId != null">
+                #{ipId,jdbcType=VARCHAR},
+            </if>
+            <if test="factoryId != null">
+                #{factoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="mineId != null">
+                #{mineId,jdbcType=INTEGER},
+            </if>
+            <if test="frameId != null">
+                #{frameId,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
+        <!--@mbg.generated-->
+        update group_setting
+        <set>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="ipId != null">
+                ip_id = #{ipId,jdbcType=VARCHAR},
+            </if>
+            <if test="factoryId != null">
+                factory_id = #{factoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="mineId != null">
+                mine_id = #{mineId,jdbcType=INTEGER},
+            </if>
+            <if test="frameId != null">
+                frame_id = #{frameId,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
+        <!--@mbg.generated-->
+        update group_setting
+        set group_name = #{groupName,jdbcType=VARCHAR},
         ip_id = #{ipId,jdbcType=VARCHAR},
-      </if>
-      <if test="factoryId != null">
         factory_id = #{factoryId,jdbcType=VARCHAR},
-      </if>
-      <if test="mineId != null">
         mine_id = #{mineId,jdbcType=INTEGER},
-      </if>
-      <if test="frameId != null">
         frame_id = #{frameId,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
-    <!--@mbg.generated-->
-    update group_setting
-    set group_name = #{groupName,jdbcType=VARCHAR},
-      ip_id = #{ipId,jdbcType=VARCHAR},
-      factory_id = #{factoryId,jdbcType=VARCHAR},
-      mine_id = #{mineId,jdbcType=INTEGER},
-      frame_id = #{frameId,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
-<!--  软删除-->
-  <update id="updateById">
+    <!--  软删除-->
+    <update id="updateById">
     update group_setting set isDelete = 1 where groupId = #{id,jdbcType=INTEGER}
   </update>
 
-<!--  根据条件查询列表-->
-  <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.GroupSettingExample">
-    SELECT
-    group_setting.id,
-    group_setting.group_name,
-    group_setting.ip_id,
-    group_setting.frame_id,
-    group_setting.factory_id,
-    group_setting.mine_id,
-    group_setting.create_time,
-    group_setting.update_time,
-    mine_setting.mine_name,
-    factory_house.factory_name,
-    frame_setting.detailed AS framenameDetailed,
-    ip_setting.start_ip,
-    ip_setting.end_ip
-    FROM
-    group_setting,
-    mine_setting,
-    factory_house,
-    frame_setting,
-    ip_setting
-    <where>
-      group_setting.is_delete = 0
-      <if test="keyWord != null">
-        AND (group_name like #{keyWord})
-      </if>
-      AND group_setting.mine_id = mine_setting.id
-      AND group_setting.factory_id = factory_house.id
-      AND group_setting.frame_id = frame_setting.id
-      AND group_setting.ip_id = ip_setting.id
-    </where>
-  </select>
+    <!--  根据条件查询列表-->
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.pojo.GroupSettingExample">
+        SELECT
+        group_setting.id,
+        group_setting.group_name,
+        group_setting.ip_id,
+        group_setting.frame_id,
+        group_setting.factory_id,
+        group_setting.mine_id,
+        group_setting.create_time,
+        group_setting.update_time,
+        mine_setting.mine_name,
+        factory_house.factory_name,
+        frame_setting.detailed AS framenameDetailed,
+        ip_setting.start_ip,
+        ip_setting.end_ip
+        FROM
+        group_setting,
+        mine_setting,
+        factory_house,
+        frame_setting,
+        ip_setting
+        <where>
+            group_setting.is_delete = 0
+            <if test="keyWord != null">
+                AND (group_name like #{keyWord})
+            </if>
+            AND group_setting.mine_id = mine_setting.id
+            AND group_setting.factory_id = factory_house.id
+            AND group_setting.frame_id = frame_setting.id
+            AND group_setting.ip_id = ip_setting.id
+        </where>
+    </select>
 
-  <select id="selectGroupMap" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from group_setting
-    where isDelete=0
+    <!--查询分组名和分组id集合-->
+    <select id="selectGroupMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from group_setting
+        where isDelete=0
+    </select>
+
+    <select id="selectGroupAndIp" resultType="HashMap">
+    SELECT
+      group_setting.group_name,
+      group_setting.ip_id,
+      ip_setting.start_ip,
+      ip_setting.end_ip
+    FROM
+        group_setting,
+        ip_setting
+    WHERE
+        group_setting.ip_id = ip_setting.id
   </select>
 </mapper>

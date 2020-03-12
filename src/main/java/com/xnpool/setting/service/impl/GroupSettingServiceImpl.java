@@ -10,6 +10,7 @@ import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
 import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.domain.redismodel.GroupSettingRedisModel;
 import com.xnpool.setting.service.FrameSettingService;
 import com.xnpool.setting.service.IpSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,8 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     public void insertSelective(GroupSetting record) {
         int rows = groupSettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
-        redisToInsert(rows, "group_setting", record, record.getMineId());
+        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
+        redisToInsert(rows, "group_setting", groupSettingRedisModel, record.getMineId());
     }
 
     @Override
@@ -73,7 +75,8 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     public void updateByPrimaryKeySelective(GroupSetting record) {
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
-        redisToUpdate(rows, "group_setting", record, record.getMineId());
+        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
+        redisToUpdate(rows, "group_setting", groupSettingRedisModel, record.getMineId());
     }
 
     @Override
@@ -107,7 +110,8 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
         GroupSetting record = new GroupSetting();
         record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows, "group_setting", record, record.getMineId());
+        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
+        redisToDelete(rows, "group_setting", groupSettingRedisModel, record.getMineId());
     }
 
     @Override

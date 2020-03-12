@@ -8,6 +8,7 @@ import com.xnpool.setting.common.exception.UpdateException;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.pojo.FrameSettingExample;
 import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
@@ -50,7 +51,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
-        redisToInsert(rows, "frame_setting", record, record.getMineId());
+        FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToInsert(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
     }
 
     @Override
@@ -67,7 +69,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
-        redisToUpdate(rows, "frame_setting", record, record.getMineId());
+        FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToUpdate(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
     }
 
     @Override
@@ -82,7 +85,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         FrameSetting record = new FrameSetting();
         record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows, "frame_setting", record, record.getMineId());
+        FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToDelete(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
     }
 
     @Override

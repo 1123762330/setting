@@ -18,11 +18,12 @@
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="worker_ip" jdbcType="VARCHAR" property="workerIp" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, worker_id, user_id, workerbrand_id, factory_id, frame_id, frame_number, group_id, 
-    mine_id, is_come_in, remarks, is_delete, create_time, update_time
+    mine_id, is_come_in, remarks, is_delete, create_time, update_time, worker_ip
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -42,12 +43,12 @@
       factory_id, frame_id, frame_number, 
       group_id, mine_id, is_come_in, 
       remarks, is_delete, create_time, 
-      update_time)
+      update_time, worker_ip)
     values (#{workerId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{workerbrandId,jdbcType=INTEGER}, 
       #{factoryId,jdbcType=INTEGER}, #{frameId,jdbcType=INTEGER}, #{frameNumber,jdbcType=INTEGER}, 
       #{groupId,jdbcType=INTEGER}, #{mineId,jdbcType=INTEGER}, #{isComeIn,jdbcType=INTEGER}, 
       #{remarks,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP}, #{workerIp,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.WorkerDetailed" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -92,6 +93,9 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="workerIp != null">
+        worker_ip,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="workerId != null">
@@ -132,6 +136,9 @@
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workerIp != null">
+        #{workerIp,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,9 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="workerIp != null">
+        worker_ip = #{workerIp,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -196,7 +206,8 @@
       remarks = #{remarks,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      worker_ip = #{workerIp,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -314,7 +325,10 @@
         <where>
             worker_detailed.user_id=#{userId}
             <if test="startIp != null">
-            AND worker_info.ip = #{startIp}
+            AND worker_info.long_ip &gt;= #{startIp}
+            </if>
+            <if test="endIp != null">
+                AND worker_info.long_ip &lt; #{endIp}
             </if>
             <if test="workerName != null">
             AND worker_info.worker1=#{workerName}

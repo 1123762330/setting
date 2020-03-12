@@ -3,6 +3,8 @@ package com.xnpool.setting.common;
 import com.alibaba.fastjson.JSON;
 import com.xnpool.setting.common.exception.*;
 import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.domain.redismodel.*;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.ResponseResult;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -193,8 +196,9 @@ public abstract class BaseController {
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			hashMap.put("list",recordList);
-			hashMap.put("updateTime",new Date());
+			hashMap.put("updateTime",sdf.format(new Date()));
 			insertRedisToBatch(table, BATCHCOMEIN, hashMap,mineId);
 		} else {
 			throw new UpdateException("批量入库失败");
@@ -212,8 +216,9 @@ public abstract class BaseController {
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			hashMap.put("list",recordList);
-			hashMap.put("updateTime",new Date());
+			hashMap.put("updateTime",sdf.format(new Date()));
 			insertRedisToBatch(table, BATCHMOVEOUT, hashMap,mineId);
 		} else {
 			throw new UpdateException("批量出库失败");
@@ -231,8 +236,9 @@ public abstract class BaseController {
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			hashMap.put("list",recordList);
-			hashMap.put("updateTime",new Date());
+			hashMap.put("updateTime",sdf.format(new Date()));
 			insertRedis(table, BATCHDELETE, hashMap.toString(),mineId);
 		} else {
 			throw new DeleteException("批量删除失败");
@@ -250,8 +256,9 @@ public abstract class BaseController {
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			hashMap.put("list",recordList);
-			hashMap.put("updateTime",new Date());
+			hashMap.put("updateTime",sdf.format(new Date()));
 			insertRedisToBatch(table, BATCHINSERT, hashMap,mineId);
 		} else {
 			throw new DeleteException("批量添加失败");
@@ -269,8 +276,9 @@ public abstract class BaseController {
 		if (rows !=0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			hashMap.put("list",recordList);
-			hashMap.put("updateTime",new Date());
+			hashMap.put("updateTime",sdf.format(new Date()));
 			insertRedisToBatch(table, BATCHUPDATE, hashMap,mineId);
 		} else {
 			throw new DeleteException("批量更新失败");
@@ -303,5 +311,123 @@ public abstract class BaseController {
 		}
 		return DateTimes;
 	}
+
+	/**
+	 * @Description	ip地址转长整型
+	 * @Author zly
+	 * @Date 10:38 2020/3/12
+	 * @Param
+	 * @return
+	 */
+	public static long getStringIpToLong(String ip) {
+		String[] ips = ip.split("\\.");
+		long num =  16777216L*Long.parseLong(ips[0]) + 65536L*Long.parseLong(ips[1]) + 256*Long.parseLong(ips[2]) + Long.parseLong(ips[3]);
+		return num;
+	}
+
+//*******************************redis缓存json实体类*************************
+	public MineSettingRedisModel getMineSettingRedisModel(MineSetting record) {
+		MineSettingRedisModel mineSettingRedisModel = new MineSettingRedisModel();
+		mineSettingRedisModel.setId(record.getId());
+		mineSettingRedisModel.setMine_name(record.getMineName());
+		mineSettingRedisModel.setDescription(record.getDescription());
+		mineSettingRedisModel.setIs_delete(record.getIsDelete());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (record.getUpdateTime()!=null){
+			String updateTime = sdf.format(record.getUpdateTime());
+			mineSettingRedisModel.setUpdate_time(updateTime);
+		}
+		if (record.getCreateTime()!=null){
+			String createTime= sdf.format(record.getCreateTime());
+			mineSettingRedisModel.setCreate_time(createTime);
+		}
+		return mineSettingRedisModel;
+	}
+
+	public FactoryHouseRedisModel getFactoryHouseRedisModel(FactoryHouse record) {
+		FactoryHouseRedisModel factoryHouseRedisModel = new FactoryHouseRedisModel();
+		factoryHouseRedisModel.setId(record.getId());
+		factoryHouseRedisModel.setFactory_name(record.getFactoryName());
+		factoryHouseRedisModel.setDescription(record.getDescription());
+		factoryHouseRedisModel.setMine_id(record.getMineId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (record.getUpdateTime()!=null){
+			String updateTime = sdf.format(record.getUpdateTime());
+			factoryHouseRedisModel.setUpdate_time(updateTime);
+		}
+		if (record.getCreateTime()!=null){
+			String createTime= sdf.format(record.getCreateTime());
+			factoryHouseRedisModel.setCreate_time(createTime);
+		}
+		factoryHouseRedisModel.setIs_delete(record.getIsDelete());
+		return factoryHouseRedisModel;
+	}
+
+
+	public FrameSettingRedisModel getFactoryHouseRedisModel(FrameSetting record) {
+		FrameSettingRedisModel redisModel = new FrameSettingRedisModel();
+		redisModel.setId(record.getId());
+		redisModel.setFrame_name(record.getFrameName());
+		redisModel.setNumber(record.getNumber());
+		redisModel.setFactory_id(record.getFactoryId());
+		redisModel.setMine_id(record.getMineId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (record.getUpdateTime()!=null){
+			String updateTime = sdf.format(record.getUpdateTime());
+			redisModel.setUpdate_time(updateTime);
+		}
+		if (record.getCreateTime()!=null){
+			String createTime= sdf.format(record.getCreateTime());
+			redisModel.setCreate_time(createTime);
+		}
+		redisModel.setIs_delete(record.getIsDelete());
+		redisModel.setDetailed(record.getDetailed());
+		return redisModel;
+	}
+
+
+	public GroupSettingRedisModel getGroupSettingRedisModel(GroupSetting record) {
+		GroupSettingRedisModel redisModel = new GroupSettingRedisModel();
+		redisModel.setId(record.getId());
+		redisModel.setGroup_name(record.getGroupName());
+		redisModel.setIp_id(record.getIpId());
+		redisModel.setFactory_id(record.getFactoryId());
+		redisModel.setMine_id(record.getMineId());
+		redisModel.setFrame_id(record.getFrameId());
+		redisModel.setIs_delete(record.getIsDelete());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (record.getUpdateTime()!=null){
+			String updateTime = sdf.format(record.getUpdateTime());
+			redisModel.setUpdate_time(updateTime);
+		}
+		if (record.getCreateTime()!=null){
+			String createTime= sdf.format(record.getCreateTime());
+			redisModel.setCreate_time(createTime);
+		}
+		return redisModel;
+	}
+
+
+
+	public IpSettingRedisModel getIpSettingRedisModel(IpSetting record) {
+		IpSettingRedisModel redisModel = new IpSettingRedisModel();
+		redisModel.setId(record.getId());
+		redisModel.setStart_ip(record.getStartIp());
+		redisModel.setEnd_ip(record.getEndIp());
+		redisModel.setMine_id(record.getMineId());
+		redisModel.setIs_delete(record.getIsDelete());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (record.getUpdateTime()!=null){
+			String updateTime = sdf.format(record.getUpdateTime());
+			redisModel.setUpdate_time(updateTime);
+		}
+		if (record.getCreateTime()!=null){
+			String createTime= sdf.format(record.getCreateTime());
+			redisModel.setCreate_time(createTime);
+		}
+		return redisModel;
+	}
+
+
 
 }

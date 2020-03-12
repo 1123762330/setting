@@ -1,13 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.pojo.WorkerDetailedExample;
-import com.xnpool.setting.domain.pojo.WorkerDetailedModel;
-import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;import java.util.List;
+import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.pojo.WorkerDetailedExample;import com.xnpool.setting.domain.pojo.WorkerDetailedModel;import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;import java.util.List;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/8 8:59
+ * @date 2020/3/12 12:02
  */
 public interface WorkerDetailedMapper {
     int deleteByPrimaryKey(Integer id);
@@ -36,7 +34,8 @@ public interface WorkerDetailedMapper {
 
     int updateById(ArrayList<Integer> list);
 
-    List<WorkerDetailedModel> selectAllWorkerDetailed(@Param("workerName")String workerName,
-                                                      @Param("startIp")String startIp,
-                                                      @Param("userId")Integer userId);
+    List<WorkerDetailedModel> selectAllWorkerDetailed(@Param("workerName") String workerName,
+                                                      @Param("startIp") Long startIp,
+                                                      @Param("endIp") Long endIp,
+                                                      @Param("userId") Integer userId);
 }

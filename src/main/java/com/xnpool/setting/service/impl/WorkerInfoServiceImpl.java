@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/3/5 14:28
+ * @author zly
  * @version 1.0
+ * @date 2020/3/5 14:28
  */
 @Service
-public class WorkerInfoServiceImpl implements WorkerInfoService{
+public class WorkerInfoServiceImpl implements WorkerInfoService {
 
     @Resource
     private WorkerInfoMapper workerInfoMapper;
@@ -71,3 +71,4 @@ public class WorkerInfoServiceImpl implements WorkerInfoService{
         return resultMap;
     }
 }
+

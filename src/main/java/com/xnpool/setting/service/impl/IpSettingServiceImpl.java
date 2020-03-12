@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
+import com.xnpool.setting.domain.redismodel.IpSettingRedisModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -48,7 +49,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void insertSelective(IpSetting record) {
         int rows = ipSettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
-        redisToInsert(rows, "ip_setting", record, null);
+        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(record);
+        redisToInsert(rows, "ip_setting", ipSettingRedisModel, record.getMineId());
     }
 
     @Override
@@ -61,7 +63,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void updateByPrimaryKeySelective(IpSetting record) {
         int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
-        redisToUpdate(rows, "ip_setting", record, null);
+        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(record);
+        redisToUpdate(rows, "ip_setting", ipSettingRedisModel, record.getMineId());
     }
 
     @Override
@@ -76,7 +79,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
         IpSetting record = new IpSetting();
         record.setUpdateTime(new Date());
         record.setId(id);
-        redisToDelete(rows, "ip_setting", record, null);
+        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(record);
+        redisToDelete(rows, "ip_setting", ipSettingRedisModel, record.getMineId());
     }
 
     @Override

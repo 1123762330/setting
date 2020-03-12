@@ -1,6 +1,9 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.GroupSetting;import com.xnpool.setting.domain.pojo.GroupSettingExample;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.xnpool.setting.domain.pojo.GroupSetting;import com.xnpool.setting.domain.pojo.GroupSettingExample;import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author zly
@@ -25,4 +28,6 @@ public interface GroupSettingMapper {
     List<GroupSettingExample> selectByOther(@Param("keyWord") String keyWord);
 
     List<GroupSetting> selectGroupMap();
+
+    List<HashMap> selectGroupAndIp();
 }

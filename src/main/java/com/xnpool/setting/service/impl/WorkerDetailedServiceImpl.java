@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import com.xnpool.setting.common.exception.DeleteException;
 import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
 import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import com.xnpool.setting.service.IpSettingService;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -109,14 +111,17 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         String workerid = workerDetailedParam.getWorkerid();
         Integer userId = workerDetailedParam.getUserId();
         Integer factoryid = workerDetailedParam.getFactoryid();
+        Integer workerbrandId = workerDetailedParam.getWorkerbrandId();
         Integer frameid = workerDetailedParam.getFrameid();
         Integer framenumber = workerDetailedParam.getFramenumber();
         Integer groupid = workerDetailedParam.getGroupid();
         Integer mineId = workerDetailedParam.getMineId();
         String workerIp = workerDetailedParam.getWorkerIp();
+        String remarks = workerDetailedParam.getRemarks();
         List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(null);
         WorkerDetailedServiceImpl.log.info("库中已经存在的矿机ID:" + workerIdList);
         ArrayList<WorkerDetailed> list = new ArrayList<>();
+        ArrayList<WorkerDetailedRedisModel> redisModelList = new ArrayList<>();
         if (workerid.contains(",")) {
             //批量添加
             String[] split = workerid.split(",");
@@ -130,13 +135,30 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     workerDetailed.setWorkerId(Integer.valueOf(workerId));
                     workerDetailed.setWorkerIp(split_ip[i]);
                     workerDetailed.setUserId(userId);
+                    workerDetailed.setWorkerbrandId(workerbrandId);
                     workerDetailed.setFactoryId(factoryid);
                     workerDetailed.setFrameId(frameid);
                     workerDetailed.setFrameNumber(framenumber);
                     workerDetailed.setGroupId(groupid);
                     workerDetailed.setMineId(mineId);
                     workerDetailed.setCreateTime(new Date());
+                    workerDetailed.setRemarks(remarks);
                     list.add(workerDetailed);
+
+                    WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
+                    workerDetailedRedisModel.setWorker_id(Integer.valueOf(workerId));
+                    workerDetailedRedisModel.setUser_id(userId);
+                    workerDetailedRedisModel.setWorkerbrand_id(workerbrandId);
+                    workerDetailedRedisModel.setFactory_id(factoryid);
+                    workerDetailedRedisModel.setFrame_id(frameid);
+                    workerDetailedRedisModel.setFrame_number(framenumber);
+                    workerDetailedRedisModel.setGroup_id(groupid);
+                    workerDetailedRedisModel.setMine_id(mineId);
+                    workerDetailedRedisModel.setRemarks(remarks);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    workerDetailedRedisModel.setCreate_time(sdf.format(new Date()));
+                    workerDetailedRedisModel.setWorker_ip(split_ip[i]);
+                    redisModelList.add(workerDetailedRedisModel);
                 }
             }
         } else {
@@ -153,14 +175,31 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerDetailed.setGroupId(groupid);
                 workerDetailed.setMineId(mineId);
                 workerDetailed.setCreateTime(new Date());
+                workerDetailed.setWorkerIp(workerIp);
                 list.add(workerDetailed);
+
+                WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
+                workerDetailedRedisModel.setWorker_id(Integer.valueOf(workerid));
+                workerDetailedRedisModel.setUser_id(userId);
+                workerDetailedRedisModel.setWorkerbrand_id(workerbrandId);
+                workerDetailedRedisModel.setFactory_id(factoryid);
+                workerDetailedRedisModel.setFrame_id(frameid);
+                workerDetailedRedisModel.setFrame_number(framenumber);
+                workerDetailedRedisModel.setGroup_id(groupid);
+                workerDetailedRedisModel.setMine_id(mineId);
+                workerDetailedRedisModel.setRemarks(remarks);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                workerDetailedRedisModel.setCreate_time(sdf.format(new Date()));
+                workerDetailedRedisModel.setWorker_ip(workerIp);
+
+                redisModelList.add(workerDetailedRedisModel);
             }
         }
 
         //批量入管理仓库
         int rows = workerDetailedMapper.batchInsert(list);
         //批量入缓存
-        redisToBatchInsert(rows, "worker_detailed", list, mineId);
+        redisToBatchInsert(rows, "worker_detailed", redisModelList, mineId);
     }
 
     //入库列表
@@ -326,18 +365,26 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
     /**
+     * @return
      * @Description 用户网站的矿机详情列表
      * @Author zly
      * @Date 18:00 2020/3/10
      * @Param
-     * @return
      */
-    public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName,String startIp,
+    public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp,
                                                                  String endIp, Integer pageNum,
-                                                                 Integer pageSize, String token){
-        int userId=0;
+                                                                 Integer pageSize, String token) {
+        int userId = 0;
+        Long startIpToLong = null;
+        Long endIpToLong = null;
+        if (!StringUtils.isEmpty(startIp)) {
+            startIpToLong = getStringIpToLong(startIp);
+        }
+        if (!StringUtils.isEmpty(endIp)) {
+            endIpToLong = getStringIpToLong(endIp);
+        }
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName,startIp,userId);
+        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId);
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
             String frameNumber = workerDetailedModel.getFrameNumber();
@@ -346,11 +393,11 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             String workerNameStr = workerDetailedModel.getWorkerName();
             int lastIndexOf = workerNameStr.lastIndexOf(".");
             workerDetailedModel.setWorkerName(workerNameStr.substring(lastIndexOf + 1));
-            if (workerDetailedModel.getOnTime()!=null){
+            if (workerDetailedModel.getOnTime() != null) {
                 String onTimeStr = calculTime(Long.valueOf(workerDetailedModel.getOnTime()));
                 workerDetailedModel.setOnTime(onTimeStr);
             }
-            if (workerDetailedModel.getRunTime()!=null){
+            if (workerDetailedModel.getRunTime() != null) {
                 String runTimeStr = calculTime(Long.valueOf(workerDetailedModel.getRunTime()));
                 workerDetailedModel.setRunTime(runTimeStr);
             }
@@ -360,6 +407,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
 }
+
 
 
 
