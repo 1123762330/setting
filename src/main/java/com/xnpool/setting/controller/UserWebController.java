@@ -2,11 +2,9 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
-import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.service.WorkerDetailedService;
-import com.xnpool.setting.service.impl.WorkerHashService;
+import com.xnpool.setting.service.impl.UserWebService;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,7 +30,7 @@ public class UserWebController extends BaseController {
     private WorkerDetailedService workerDetailedService;
 
     @Autowired
-    private WorkerHashService workerHashService;
+    private UserWebService userWebService;
 
     /**
      * @Description 用户网站查询矿机详情列表
@@ -78,7 +75,7 @@ public class UserWebController extends BaseController {
     @GetMapping("/getWorkerHashByDay")
     public ResponseResult getPoolWorkerHashByDay(HttpServletRequest request){
         String token = request.getHeader("token");
-        Map<Object, Object>  workerHashByDay = workerHashService.getWorkerHashByDay(token);
+        Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(token);
         return new ResponseResult(SUCCESS,workerHashByDay);
     }
 
@@ -92,7 +89,7 @@ public class UserWebController extends BaseController {
     @GetMapping("/getWorkerTotalByDay")
     public ResponseResult getWorkerTotalByDay(HttpServletRequest request){
         String token = request.getHeader("token");
-        Map<Object, Object>  workerTotalByDay = workerHashService.getWorkerTotalByDay(token);
+        Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token);
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
 }

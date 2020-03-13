@@ -16,7 +16,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
-public class WorkerHashService extends BaseController {
+public class UserWebService extends BaseController {
     @Autowired
     private JedisUtil jedisUtil;
 
