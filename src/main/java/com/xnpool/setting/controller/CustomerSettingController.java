@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
@@ -32,6 +34,7 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "添加客户",type = LogType.SYSTEM)
     @PostMapping("/addCustomer")
     public ResponseResult addCustomer(CustomerSetting customerSetting) {
         customerSettingService.insertSelective(customerSetting);
@@ -45,6 +48,7 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "修改客户设置",type = LogType.SYSTEM)
     @PutMapping("/updateCustomer")
     public ResponseResult updateCustomer(CustomerSetting customerSetting) {
         customerSettingService.updateByPrimaryKeySelective(customerSetting);
@@ -58,6 +62,7 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "删除客户",type = LogType.SYSTEM)
     @DeleteMapping("/deleteCustomer")
     public ResponseResult deleteCustomer(int id) {
         customerSettingService.updateById(id);
@@ -72,6 +77,7 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
     @GetMapping("/selectCustomerList")
     public ResponseResult selectCustomerList (String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
@@ -87,6 +93,7 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "客户认证",type = LogType.SYSTEM)
     @PutMapping("/attestationCustomer")
     public ResponseResult attestationCustomer() {
        //首先根据根据管理者的企业ID去查询向企业请求认证的用户列表,如果authentication=2就是用户申请认证

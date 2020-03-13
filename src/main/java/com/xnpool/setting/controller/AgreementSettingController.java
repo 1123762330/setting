@@ -2,6 +2,8 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.AgreementSetting;
 import com.xnpool.setting.service.AgreementSettingService;
@@ -38,6 +40,7 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:48 2020/2/7
      * @Param
      */
+    @SystemLog(value = "添加协议",type = LogType.SYSTEM)
     @PostMapping("/addAgreement")
     public ResponseResult addAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
@@ -56,6 +59,7 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:49 2020/2/7
      * @Param
      */
+    @SystemLog(value = "修改协议",type = LogType.SYSTEM)
     @PutMapping("/updateAgreement")
     public ResponseResult updateAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
@@ -76,6 +80,7 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:52 2020/2/7
      * @Param
      */
+    @SystemLog(value = "删除协议",type = LogType.SYSTEM)
     @DeleteMapping("/deleteAgreement")
     public ResponseResult deleteAgreement(int id) {
         agreementSettingService.updateById(id);
@@ -89,6 +94,7 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:55 2020/2/7
      * @Param
      */
+    @SystemLog(value = "查询协议",type = LogType.SYSTEM)
     @GetMapping("/selectAgreement")
     public ResponseResult selectAgreement(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

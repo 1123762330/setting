@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.service.IpSettingService;
@@ -31,6 +33,7 @@ public class IpSettingController extends BaseController {
      * @Date 12:59 2020/2/3
      * @Param
      */
+    @SystemLog(value = "添加ip区间",type = LogType.SYSTEM)
     @PostMapping("/addIp")
     public ResponseResult addIP(IpSetting ipSetting) {
         ipSettingService.insertSelective(ipSetting);
@@ -44,6 +47,7 @@ public class IpSettingController extends BaseController {
      * @Date 11:26 2020/2/4
      * @Param
      */
+    @SystemLog(value = "修改IP区间",type = LogType.SYSTEM)
     @PutMapping("/updateIp")
     public ResponseResult updateIP(IpSetting ipSetting) {
         ipSettingService.updateByPrimaryKeySelective(ipSetting);
@@ -57,6 +61,7 @@ public class IpSettingController extends BaseController {
      * @Date 11:45 2020/2/4
      * @Param
      */
+    @SystemLog(value = "删除ip区间段",type = LogType.SYSTEM)
     @DeleteMapping("/deleteIpById")
     public ResponseResult deleteIPById(int id) {
         ipSettingService.updateById(id);
@@ -70,6 +75,7 @@ public class IpSettingController extends BaseController {
      * @Date 14:58 2020/2/4
      * @Param
      */
+    @SystemLog(value = "查询IP区间列表",type = LogType.SYSTEM)
     @GetMapping("/selectIpList")
     public ResponseResult selectIPList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

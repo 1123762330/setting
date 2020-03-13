@@ -143,6 +143,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--spring切面aop依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!--日志切面类-->
+        <dependency>
+            <groupId>cn.xnpool</groupId>
+            <artifactId>log-aop</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

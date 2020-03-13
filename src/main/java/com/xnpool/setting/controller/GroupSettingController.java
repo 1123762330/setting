@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.GroupSetting;
 import com.xnpool.setting.domain.model.GroupSettingExample;
@@ -34,6 +36,7 @@ public class GroupSettingController extends BaseController {
      * @Date 12:59 2020/2/3
      * @Param
      */
+    @SystemLog(value = "添加分组设置",type = LogType.SYSTEM)
     @PostMapping("/addGroup")
     public ResponseResult addGroup(GroupSetting groupSetting) {
         groupSettingService.insertSelective(groupSetting);
@@ -47,6 +50,7 @@ public class GroupSettingController extends BaseController {
      * @Date 11:26 2020/2/4
      * @Param
      */
+    @SystemLog(value = "修改分组设置",type = LogType.SYSTEM)
     @PutMapping("/updateGroup")
     public ResponseResult updateGroup(GroupSetting groupSetting) {
         groupSettingService.updateByPrimaryKeySelective(groupSetting);
@@ -60,6 +64,7 @@ public class GroupSettingController extends BaseController {
      * @Date 11:45 2020/2/4
      * @Param
      */
+    @SystemLog(value = "删除分组设置",type = LogType.SYSTEM)
     @DeleteMapping("/deleteGroup")
     public ResponseResult deleteGroup(int id) {
         //需要去查询当前分组内是否有矿机IP
@@ -74,6 +79,7 @@ public class GroupSettingController extends BaseController {
      * @Date 14:58 2020/2/4
      * @Param
      */
+    @SystemLog(value = "查询分组设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectGroupList")
     public ResponseResult selectGroupList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

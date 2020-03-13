@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
@@ -31,11 +33,12 @@ public class FactoryHouseController extends BaseController {
 
     /**
      * @return
-     * @Description 添加矿场设置
+     * @Description 添加厂房设置
      * @Author zly
      * @Date 12:59 2020/2/3
      * @Param
      */
+    @SystemLog(value = "添加厂房设置",type = LogType.SYSTEM)
     @PostMapping("/addFactoryHouse")
     public ResponseResult addFactoryHouse(FactoryHouse factoryHouse) {
         factoryHouseService.insertSelective(factoryHouse);
@@ -49,6 +52,7 @@ public class FactoryHouseController extends BaseController {
      * @Date 11:26 2020/2/4
      * @Param
      */
+    @SystemLog(value = "修改厂房设置",type = LogType.SYSTEM)
     @PutMapping("/updateFactoryHouse")
     public ResponseResult updateFactoryHouse(FactoryHouse factoryHouse) {
         factoryHouseService.updateByPrimaryKeySelective(factoryHouse);
@@ -62,6 +66,7 @@ public class FactoryHouseController extends BaseController {
      * @Date 11:45 2020/2/4
      * @Param
      */
+    @SystemLog(value = "删除厂房",type = LogType.SYSTEM)
     @DeleteMapping("/deleteFactoryHouse")
     public ResponseResult deleteFactoryHouse(int id) {
 
@@ -82,6 +87,7 @@ public class FactoryHouseController extends BaseController {
          * @Date 14:58 2020/2/4
          * @Param
          */
+        @SystemLog(value = "查询厂房列表",type = LogType.SYSTEM)
         @GetMapping("/selectFactoryHouse")
         public ResponseResult selectFactoryHouse (String keyWord,
         @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,

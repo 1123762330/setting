@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FrameSetting;
 import com.xnpool.setting.domain.model.FrameSettingExample;
@@ -33,6 +35,7 @@ public class FrameSettingController extends BaseController {
      * @Date 12:59 2020/2/3
      * @Param
      */
+    @SystemLog(value = "添加矿机架",type = LogType.SYSTEM)
     @PostMapping("/addFrame")
     public ResponseResult addFrame(FrameSetting frameSetting) {
         frameSettingService.insertSelective(frameSetting);
@@ -46,6 +49,7 @@ public class FrameSettingController extends BaseController {
      * @Date 11:26 2020/2/4
      * @Param
      */
+    @SystemLog(value = "修改矿机架",type = LogType.SYSTEM)
     @PutMapping("/updateFrame")
     public ResponseResult updateFrame(FrameSetting frameSetting) {
         frameSettingService.updateByPrimaryKeySelective(frameSetting);
@@ -59,6 +63,7 @@ public class FrameSettingController extends BaseController {
      * @Date 11:45 2020/2/4
      * @Param
      */
+    @SystemLog(value = "删除矿机架",type = LogType.SYSTEM)
     @DeleteMapping("/deleteFrameById")
     public ResponseResult deleteFrameById(int id) {
         frameSettingService.updateById(id);
@@ -67,11 +72,12 @@ public class FrameSettingController extends BaseController {
 
     /**
      * @return
-     * @Description 查询厂房列表
+     * @Description 查询矿机架列表
      * @Author zly
      * @Date 14:58 2020/2/4
      * @Param
      */
+    @SystemLog(value = "查询矿机架列表",type = LogType.SYSTEM)
     @GetMapping("/selectFrameList")
     public ResponseResult selectFrameList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

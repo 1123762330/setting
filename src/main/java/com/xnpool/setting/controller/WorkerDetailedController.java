@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.WorkerDetailedExample;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
@@ -34,6 +36,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询矿机出库列表",type = LogType.MINE)
     @GetMapping("/selectMoveOutList")
     public ResponseResult selectMoveOutList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
@@ -48,6 +51,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询矿机入库列表",type = LogType.MINE)
     @GetMapping("/selectComeInWorkerList")
     public ResponseResult selectComeInWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
@@ -62,6 +66,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "矿机上架",type = LogType.MINE)
     @PostMapping("/addWorkerToLibrary")
     public ResponseResult addWorkerToLibrary(WorkerDetailedParam workerDetailedParam) {
         workerDetailedService.addWorkerToLibrary(workerDetailedParam);
@@ -75,6 +80,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "矿机下架",type = LogType.MINE)
     @PutMapping("/moveOut")
     public ResponseResult moveOut(String ids, @RequestParam(value = "reason",required = false) String reason, HttpServletRequest request) {
         String token = request.getHeader("token");
@@ -89,6 +95,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "矿机入库",type = LogType.MINE)
     @PutMapping("/comeIn")
     public ResponseResult comeIn(String ids) {
         workerDetailedService.updateComeInByid(ids);

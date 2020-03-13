@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.OperatorWorkerHistoryExample;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
@@ -32,6 +34,7 @@ public class OperatorWorkerHistoryController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询矿机出库历史记录",type = LogType.SYSTEM)
     @GetMapping("/selectWorkerHistoryList")
     public ResponseResult selectWorkerHistoryList(@RequestParam(value = "startTime", required=false)String startTime,
                                                   @RequestParam(value = "endTime", required=false)String endTime,

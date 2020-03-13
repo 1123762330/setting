@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.pojo.MineSetting;
@@ -38,6 +40,7 @@ public class MineSettingController extends BaseController{
      * @Date 12:59 2020/2/3
      * @Param
      */
+    @SystemLog(value = "添加矿场",type = LogType.SYSTEM)
     @PostMapping("/addMineSetting")
     public ResponseResult addMineSetting(MineSetting MineSetting) {
         mineSettingService.insertSelective(MineSetting);
@@ -51,6 +54,7 @@ public class MineSettingController extends BaseController{
      * @Date 11:26 2020/2/4
      * @Param
      */
+    @SystemLog(value = "修改矿场",type = LogType.SYSTEM)
     @PutMapping("/updateMineSetting")
     public ResponseResult updateMineSetting(MineSetting MineSetting) {
         mineSettingService.updateByPrimaryKeySelective(MineSetting);
@@ -64,6 +68,7 @@ public class MineSettingController extends BaseController{
      * @Date 11:45 2020/2/4
      * @Param
      */
+    @SystemLog(value = "删除矿场",type = LogType.SYSTEM)
     @DeleteMapping("/deleteMineSetting")
     public ResponseResult deleteMineSetting(int id) {
         List<FactoryHouse> factoryHouses = factoryHouseService.selectByMineId(id);
@@ -82,6 +87,7 @@ public class MineSettingController extends BaseController{
      * @Date 14:58 2020/2/4
      * @Param
      */
+    @SystemLog(value = "查询矿场列表",type = LogType.SYSTEM)
     @GetMapping("/selectMineSetting")
     public ResponseResult selectMineSetting(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

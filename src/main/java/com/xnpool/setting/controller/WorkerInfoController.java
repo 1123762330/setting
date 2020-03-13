@@ -1,5 +1,7 @@
 package com.xnpool.setting.controller;
 
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.service.WorkerInfoService;
 import com.xnpool.setting.utils.ResponseResult;
@@ -22,6 +24,7 @@ public class WorkerInfoController extends BaseController {
     @Autowired
     private WorkerInfoService workerInfoService;
 
+    @SystemLog(value = "查询矿机列表",type = LogType.MINE)
     @GetMapping("/selectWorkerList")
     public ResponseResult selectWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

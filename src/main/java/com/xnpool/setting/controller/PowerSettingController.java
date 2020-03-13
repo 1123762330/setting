@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.service.PowerSettingService;
@@ -31,6 +33,7 @@ public class PowerSettingController extends BaseController {
      * @Date 15:28 2020/2/6
      * @Param
      */
+    @SystemLog(value = "添加电费设置",type = LogType.SYSTEM)
     @PostMapping("/addPowerRate")
     public ResponseResult addPowerRate(PowerSetting powerSetting) {
         powerSettingService.insertSelective(powerSetting);
@@ -44,6 +47,7 @@ public class PowerSettingController extends BaseController {
      * @Date 15:33 2020/2/6
      * @Param
      */
+    @SystemLog(value = "修改电费设置",type = LogType.SYSTEM)
     @PutMapping("/updatePowerRate")
     public ResponseResult updatePowerRate(PowerSetting powerSetting) {
         powerSettingService.updateByPrimaryKeySelective(powerSetting);
@@ -57,6 +61,7 @@ public class PowerSettingController extends BaseController {
      * @Date 15:34 2020/2/6
      * @Param
      */
+    @SystemLog(value = "删除电费设置",type = LogType.SYSTEM)
     @DeleteMapping("/deletePowerRateById")
     public ResponseResult deletePowerRateById(int id) {
         //删除电费之前应该先查查有没有应用到这个电费的地方
@@ -71,6 +76,7 @@ public class PowerSettingController extends BaseController {
      * @Date 15:52 2020/2/6
      * @Param
      */
+    @SystemLog(value = "查询电费设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectPowerRateList")
     public ResponseResult selectFrameList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

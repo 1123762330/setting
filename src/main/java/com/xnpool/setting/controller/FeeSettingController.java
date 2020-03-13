@@ -2,6 +2,8 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FeeSetting;
 import com.xnpool.setting.service.FeeSettingService;
@@ -31,6 +33,7 @@ public class FeeSettingController extends BaseController {
      * @Date 16:08 2020/2/6
      * @Param
      */
+    @SystemLog(value = "添加费用设置",type = LogType.SYSTEM)
     @PostMapping("/addFee")
     public ResponseResult addFee(FeeSetting feeSetting) {
         feeSettingService.insertSelective(feeSetting);
@@ -44,6 +47,7 @@ public class FeeSettingController extends BaseController {
      * @Date 16:13 2020/2/6
      * @Param
      */
+    @SystemLog(value = "修改费用设置",type = LogType.SYSTEM)
     @PutMapping("/updateFee")
     public ResponseResult updateFee(FeeSetting feeSetting) {
         feeSettingService.updateByPrimaryKeySelective(feeSetting);
@@ -57,6 +61,7 @@ public class FeeSettingController extends BaseController {
      * @Date 16:14 2020/2/6
      * @Param
      */
+    @SystemLog(value = "删除费用",type = LogType.SYSTEM)
     @DeleteMapping("/deleteFee")
     public ResponseResult deleteFee(int id) {
         //这里删除之前应该查询是否有相关的地方调用了此设置
@@ -71,6 +76,7 @@ public class FeeSettingController extends BaseController {
      * @Date 16:17 2020/2/6
      * @Param
      */
+    @SystemLog(value = "查询费用列表",type = LogType.SYSTEM)
     @GetMapping("/selectFeeList")
     public ResponseResult selectFeeList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                         @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {

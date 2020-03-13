@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.service.WorkerDetailedService;
@@ -39,6 +41,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询用户网站矿机详情列表",type = LogType.SURVER)
     @GetMapping("/selectAllWorkerDetailed")
     public ResponseResult selectAllWorkerDetailed(String workerName,String startIp,String endIp,
                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
@@ -56,6 +59,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询用户网站分组列表",type = LogType.SURVER)
     @GetMapping("/selectGroupModel")
     public ResponseResult selectGroupModel(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
@@ -72,6 +76,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询用户矿机曲线图",type = LogType.SURVER)
     @GetMapping("/getWorkerHashByDay")
     public ResponseResult getPoolWorkerHashByDay(HttpServletRequest request){
         String token = request.getHeader("token");
@@ -86,6 +91,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotalByDay")
     public ResponseResult getWorkerTotalByDay(HttpServletRequest request){
         String token = request.getHeader("token");

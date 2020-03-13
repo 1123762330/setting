@@ -1,6 +1,8 @@
 package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.util.LogType;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.service.WorkerbrandSettingService;
@@ -32,6 +34,7 @@ public class WorkerbrandSettingController extends BaseController {
      * @Date 13:28 2020/2/6
      * @Param
      */
+    @SystemLog(value = "添加矿机品牌",type = LogType.SYSTEM)
     @PostMapping("/addWorkerbrand")
     public ResponseResult addWorkerbrand(WorkerbrandSetting workerbrandSetting) {
         workerbrandSettingService.insertSelective(workerbrandSetting);
@@ -45,6 +48,7 @@ public class WorkerbrandSettingController extends BaseController {
      * @Date 13:33 2020/2/6
      * @Param
      */
+    @SystemLog(value = "修改矿机品牌",type = LogType.MINE)
     @PutMapping("/updateWorkerbrand")
     public ResponseResult updateWorkerbrand(WorkerbrandSetting workerbrandSetting) {
         workerbrandSettingService.updateByPrimaryKeySelective(workerbrandSetting);
@@ -58,6 +62,7 @@ public class WorkerbrandSettingController extends BaseController {
      * @Date 13:50 2020/2/6
      * @Param
      */
+    @SystemLog(value = "删除矿机品牌",type = LogType.MINE)
     @DeleteMapping("/deleteWorkerbrand")
     public ResponseResult deleteWorkerbrand(int id) {
         workerbrandSettingService.updateById(id);
@@ -71,6 +76,7 @@ public class WorkerbrandSettingController extends BaseController {
      * @Date 13:49 2020/2/6
      * @Param
      */
+    @SystemLog(value = "查询矿机品牌列表",type = LogType.MINE)
     @GetMapping("/selectWorkerbrand")
     public ResponseResult selectWorkerbrand(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
