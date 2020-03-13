@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * @Description 当前项目中所有控制器类基类
@@ -39,6 +38,11 @@ public abstract class BaseController {
 	public static final String BATCHMOVEOUT = "batchMoveOut";
 	public static final String BATCHDELETE = "batchDelete";
 	public static final String BATCHUPDATE = "batchupdate";
+	//在线折线图
+	public static final String ON_LINE_DATA = "xnpool:user:share:";
+	//矿机平均算力图
+	public static final String HASHRATE_DATA = "xnpool:user:hashrate:";
+
 
 	@Autowired
 	private PrimaryKeyUtils primaryKeyUtils;
@@ -431,17 +435,71 @@ public abstract class BaseController {
 		redisModel.setMine_id(record.getMineId());
 		redisModel.setIs_delete(record.getIsDelete());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (record.getUpdateTime()!=null){
+		if (record.getUpdateTime() != null) {
 			String updateTime = sdf.format(record.getUpdateTime());
 			redisModel.setUpdate_time(updateTime);
 		}
-		if (record.getCreateTime()!=null){
-			String createTime= sdf.format(record.getCreateTime());
+		if (record.getCreateTime() != null) {
+			String createTime = sdf.format(record.getCreateTime());
 			redisModel.setCreate_time(createTime);
 		}
 		return redisModel;
 	}
 
+	//当前时间按15分钟取整
+	public HashMap<String, Date> nowTimeAfter15min(){
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(new Date());
+		int min = calendar.get(Calendar.MINUTE);
+		if (min >= 45) {
+			calendar.set(Calendar.MINUTE, 45);
+		}else if (min >= 30) {
+			calendar.set(Calendar.MINUTE, 30);
+		} else if (min >= 15) {
+			calendar.set(Calendar.MINUTE, 15);
+		} else {
+			calendar.set(Calendar.MINUTE, 0);
+		}
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		Date endDate = calendar.getTime();
+		//前一天开始的时间
+		calendar.add(calendar.DATE, -1);//
+		Date startDate = calendar.getTime();
+		HashMap<String, Date> hashMap = new HashMap<>();
+		hashMap.put("startDate",startDate);
+		hashMap.put("endDate",endDate);
+		return hashMap;
+	}
 
+	//切割1天的时间戳,按传入的分钟数划分
+	public HashMap<Object, Object> qiegeMin(int min){
+		HashMap<String, Date> stringDateHashMap = nowTimeAfter15min();
+		Date startDate = stringDateHashMap.get("startDate");
+		Date endDate = stringDateHashMap.get("endDate");
 
+		//然后按照开始时间和终止时间进行时间切割
+		List<String> list = new ArrayList<>();
+		SimpleDateFormat simpleDateTime = new SimpleDateFormat("yyyyMMddHHmm");
+		while (startDate.getTime() <= endDate.getTime()) {
+			list.add(simpleDateTime.format(startDate));
+			Calendar calendar2 = Calendar.getInstance();
+			calendar2.setTime(startDate);
+			calendar2.add(Calendar.MINUTE, min);
+			if (calendar2.getTime().getTime() > endDate.getTime()) {
+				if (!startDate.equals(endDate)) {
+					list.add(simpleDateTime.format(startDate));
+				}
+				startDate = calendar2.getTime();
+			} else {
+				startDate = calendar2.getTime();
+			}
+		}
+		HashMap shiJianMap=new HashMap<>();
+		//遍历24小时的键
+		for (String timeStr : list) {
+			shiJianMap.put(timeStr,"0");
+		}
+		return shiJianMap;
+	}
 }

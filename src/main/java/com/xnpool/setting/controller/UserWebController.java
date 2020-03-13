@@ -6,6 +6,7 @@ import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.service.WorkerDetailedService;
+import com.xnpool.setting.service.impl.WorkerHashService;
 import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zly
@@ -28,6 +31,9 @@ import java.util.List;
 public class UserWebController extends BaseController {
     @Autowired
     private WorkerDetailedService workerDetailedService;
+
+    @Autowired
+    private WorkerHashService workerHashService;
 
     /**
      * @Description 用户网站查询矿机详情列表
@@ -58,7 +64,35 @@ public class UserWebController extends BaseController {
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                            HttpServletRequest request) {
         String token = request.getHeader("token");
-        List<GroupModel> groupModelList = workerDetailedService.selectGroupModel(token);
-        return new ResponseResult(SUCCESS,groupModelList);
+        HashMap<String, Object> groupModel = workerDetailedService.selectGroupModel(token, pageNum, pageSize);
+        return new ResponseResult(SUCCESS,groupModel);
+    }
+
+    /**
+     * @Description 用户矿机算力图
+     * @Author zly
+     * @Date 15:00 2020/3/13
+     * @Param
+     * @return
+     */
+    @GetMapping("/getWorkerHashByDay")
+    public ResponseResult getPoolWorkerHashByDay(HttpServletRequest request){
+        String token = request.getHeader("token");
+        Map<Object, Object>  workerHashByDay = workerHashService.getWorkerHashByDay(token);
+        return new ResponseResult(SUCCESS,workerHashByDay);
+    }
+
+    /**
+     * @Description 用户矿机在线数量图
+     * @Author zly
+     * @Date 15:00 2020/3/13
+     * @Param
+     * @return
+     */
+    @GetMapping("/getWorkerTotalByDay")
+    public ResponseResult getWorkerTotalByDay(HttpServletRequest request){
+        String token = request.getHeader("token");
+        Map<Object, Object>  workerTotalByDay = workerHashService.getWorkerTotalByDay(token);
+        return new ResponseResult(SUCCESS,workerTotalByDay);
     }
 }

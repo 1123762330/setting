@@ -7,6 +7,7 @@ import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.model.WorkerExample;
 import com.xnpool.setting.domain.pojo.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public interface WorkerDetailedService {
 
     PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp, String endIp, Integer pageNum, Integer pageSize, String token);
 
-    List<GroupModel> selectGroupModel(String token);
+    HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize);
 }
 
 

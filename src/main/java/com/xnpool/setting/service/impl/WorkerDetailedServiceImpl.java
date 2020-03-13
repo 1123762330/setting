@@ -18,6 +18,7 @@ import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import com.xnpool.setting.service.IpSettingService;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
+import com.xnpool.setting.utils.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -417,7 +418,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Date 18:54 2020/3/12
      * @Param
      */
-    public List<GroupModel> selectGroupModel(String token) {
+    public HashMap<String, Object> selectGroupModel(String token,Integer pageNum,Integer pageSize) {
         //后面从token中获取
         int userId=0;
         List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId);
@@ -462,7 +463,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             groupModel_tmp.setOffLineSize(offLinesize);
             resultList.add(groupModel_tmp);
         }
-        return resultList;
+        //进行分页
+        HashMap<String, Object> startPage = PageUtil.startPage(resultList, pageNum, pageSize);
+        return startPage;
     }
 
 }
