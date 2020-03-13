@@ -20,6 +20,7 @@ import java.util.Set;
 
 /**
  * jedis工具类
+ *
  * @author zly
  * @version 1.0
  * @date 2020/1/9 10:42
@@ -29,10 +30,11 @@ import java.util.Set;
 public class JedisUtil {
     @Value("${spring.redis.database}")
     private int indexdb;
-    
+
     @Autowired
     private JedisPool jedisPool;
 //**************************String**********************************************
+
     /**
      * <p>
      * 通过key获取储存在redis中的value
@@ -53,10 +55,9 @@ public class JedisUtil {
             value = jedis.get(key);
             log.info(value);
         } catch (Exception e) {
-
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return value;
     }
@@ -72,7 +73,7 @@ public class JedisUtil {
      * @param key
      * @return 成功返回value 失败返回null
      */
-    public byte[] get(byte[] key ) {
+    public byte[] get(byte[] key) {
         Jedis jedis = null;
         byte[] value = null;
         try {
@@ -81,12 +82,13 @@ public class JedisUtil {
             value = jedis.get(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return value;
     }
+
     /**
      * <p>
      * 向redis存入key和value,并释放连接资源
@@ -106,13 +108,13 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.set(key, value);
         } catch (Exception e) {
-
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return "0";
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
+
     /**
      * <p>
      * 向redis存入key和value,并释放连接资源
@@ -125,20 +127,20 @@ public class JedisUtil {
      * @param value
      * @return 成功 返回OK 失败返回 0
      */
-    public String set(byte[] key, byte[] value ) {
+    public String set(byte[] key, byte[] value) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             jedis.select(indexdb);
             return jedis.set(key, value);
         } catch (Exception e) {
-
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return "0";
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
+
     /**
      * <p>
      * 删除指定的key,也可以传入一个包含key的数组
@@ -153,17 +155,18 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             return jedis.del(keys);
         } catch (Exception e) {
-
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
+
     /**
      * <p>
      * 删除指定的key,也可以传入一个包含key的数组
      * </p>
+     *
      * @param keys 一个key 也可以使 string 数组
      * @return 返回删除成功的个数
      */
@@ -174,17 +177,18 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.del(keys);
         } catch (Exception e) {
-
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
+
     /**
      * <p>
      * 删除指定的key,也可以传入一个包含key的数组
      * </p>
+     *
      * @param keys 一个key 也可以使 string 数组
      * @return 返回删除成功的个数
      */
@@ -196,12 +200,13 @@ public class JedisUtil {
             return jedis.del(keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
+
     /**
      * <p>
      * 通过key向指定的value值追加值
@@ -219,10 +224,10 @@ public class JedisUtil {
             res = jedis.append(key, str);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -242,10 +247,10 @@ public class JedisUtil {
             return jedis.exists(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return false;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
 
@@ -262,9 +267,9 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             return jedis.flushDB();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
@@ -275,8 +280,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param value
-     *            过期时间，单位：秒
+     * @param value 过期时间，单位：秒
      * @return 成功返回1 如果存在 和 发生异常 返回 0
      */
     public Long expire(String key, int value) {
@@ -286,10 +290,10 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.expire(key, value);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
 
@@ -300,9 +304,9 @@ public class JedisUtil {
      *
      * @param key
      * @return 当 key 不存在时，返回 -2 。当 key 存在但没有设置剩余生存时间时，返回 -1 。否则，以秒为单位，返回 key
-     *         的剩余生存时间。 发生异常 返回 0
+     * 的剩余生存时间。 发生异常 返回 0
      */
-    public Long ttl(String key ) {
+    public Long ttl(String key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -310,10 +314,10 @@ public class JedisUtil {
             return jedis.ttl(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
 
@@ -332,10 +336,10 @@ public class JedisUtil {
             return jedis.persist(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return -1L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
 
@@ -345,8 +349,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param seconds
-     *            生存时间 单位：秒
+     * @param seconds 生存时间 单位：秒
      * @param value
      * @return 设置成功时返回 OK 。当 seconds 参数不合法时，返回一个错误。
      */
@@ -357,9 +360,9 @@ public class JedisUtil {
             return jedis.setex(key, seconds, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
@@ -380,10 +383,10 @@ public class JedisUtil {
             return jedis.setnx(key, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
 
@@ -406,9 +409,9 @@ public class JedisUtil {
             return jedis.getSet(key, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
@@ -420,8 +423,7 @@ public class JedisUtil {
      *
      * @param key
      * @param value
-     * @param seconds
-     *            单位:秒
+     * @param seconds 单位:秒
      * @return 成功返回OK 失败和异常返回null
      */
     public String setex(String key, String value, int seconds) {
@@ -432,9 +434,9 @@ public class JedisUtil {
             res = jedis.setex(key, seconds, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -467,8 +469,7 @@ public class JedisUtil {
      *
      * @param key
      * @param str
-     * @param offset
-     *            下标位置
+     * @param offset 下标位置
      * @return 返回替换后 value 的长度
      */
     public Long setrange(String key, String str, int offset) {
@@ -478,10 +479,10 @@ public class JedisUtil {
             return jedis.setrange(key, offset, str);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
     }
 
@@ -490,8 +491,7 @@ public class JedisUtil {
      * 通过批量的key获取批量的value
      * </p>
      *
-     * @param keys
-     *            string数组 也可以是一个key
+     * @param keys string数组 也可以是一个key
      * @return 成功返回value的集合, 失败返回null的集合 ,异常返回空
      */
     public List<String> mget(String... keys) {
@@ -502,9 +502,9 @@ public class JedisUtil {
             values = jedis.mget(keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return values;
     }
@@ -522,7 +522,6 @@ public class JedisUtil {
      *
      * @param keysvalues
      * @return 成功返回OK 失败 异常 返回 null
-     *
      */
     public String mset(String... keysvalues) {
         Jedis jedis = null;
@@ -532,9 +531,9 @@ public class JedisUtil {
             res = jedis.mset(keysvalues);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -561,9 +560,9 @@ public class JedisUtil {
             res = jedis.msetnx(keysvalues);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -585,9 +584,9 @@ public class JedisUtil {
             res = jedis.getSet(key, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -598,8 +597,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param startOffset
-     *            开始位置 从0 开始 负数表示从右边开始截取
+     * @param startOffset 开始位置 从0 开始 负数表示从右边开始截取
      * @param endOffset
      * @return 如果没有返回null
      */
@@ -611,9 +609,9 @@ public class JedisUtil {
             res = jedis.getrange(key, startOffset, endOffset);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -634,9 +632,9 @@ public class JedisUtil {
             res = jedis.incr(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -657,9 +655,9 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.incrBy(key, integer);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -680,9 +678,9 @@ public class JedisUtil {
             res = jedis.decr(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -704,9 +702,9 @@ public class JedisUtil {
             res = jedis.decrBy(key, integer);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -727,22 +725,22 @@ public class JedisUtil {
             res = jedis.strlen(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
 
     //**************************Hash**********************************************
+
     /**
      * <p>
      * 通过key给field设置指定的值,如果key不存在,则先创建
      * </p>
      *
      * @param key
-     * @param field
-     *            字段
+     * @param field 字段
      * @param value
      * @return 如果存在返回0 异常返回null
      */
@@ -754,9 +752,9 @@ public class JedisUtil {
             res = jedis.hset(key, field, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -779,9 +777,9 @@ public class JedisUtil {
             res = jedis.hsetnx(key, field, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -804,9 +802,9 @@ public class JedisUtil {
             res = jedis.hmset(key, hash);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -828,9 +826,9 @@ public class JedisUtil {
             res = jedis.hget(key, field);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -841,8 +839,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param fields
-     *            可以使 一个String 也可以是 String数组
+     * @param fields 可以使 一个String 也可以是 String数组
      * @return
      */
     public List<String> hmget(String key, String... fields) {
@@ -854,9 +851,9 @@ public class JedisUtil {
             res = jedis.hmget(key, fields);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -878,9 +875,9 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.hincrBy(key, field, value);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -902,9 +899,9 @@ public class JedisUtil {
             res = jedis.hexists(key, field);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -925,9 +922,9 @@ public class JedisUtil {
             res = jedis.hlen(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
 
@@ -939,8 +936,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param fields
-     *            可以是 一个 field 也可以是 一个数组
+     * @param fields 可以是 一个 field 也可以是 一个数组
      * @return
      */
     public Long hdel(String key, String... fields) {
@@ -950,9 +946,9 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.hdel(key, fields);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -973,9 +969,9 @@ public class JedisUtil {
             res = jedis.hkeys(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -996,9 +992,9 @@ public class JedisUtil {
             res = jedis.hvals(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1019,22 +1015,22 @@ public class JedisUtil {
             jedis.select(indexdb);
             res = jedis.hgetAll(key);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
 
     //**************************List**********************************************
+
     /**
      * <p>
      * 通过key向list头部添加字符串
      * </p>
      *
      * @param key
-     * @param strs
-     *            可以使一个string 也可以使string数组
+     * @param strs 可以使一个string 也可以使string数组
      * @return 返回list的value个数
      */
     public Long lpush(String key, String... strs) {
@@ -1046,9 +1042,9 @@ public class JedisUtil {
             res = jedis.lpush(key, strs);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1059,8 +1055,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param strs
-     *            可以使一个string 也可以使string数组
+     * @param strs 可以使一个string 也可以使string数组
      * @return 返回list的value个数
      */
     public Long rpush(String key, String... strs) {
@@ -1071,9 +1066,9 @@ public class JedisUtil {
             res = jedis.rpush(key, strs);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1084,12 +1079,9 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param where
-     *            LIST_POSITION枚举类型
-     * @param pivot
-     *            list里面的value
-     * @param value
-     *            添加的value
+     * @param where LIST_POSITION枚举类型
+     * @param pivot list里面的value
+     * @param value 添加的value
      * @return
      */
     public Long linsert(String key, LIST_POSITION where, String pivot,
@@ -1101,9 +1093,9 @@ public class JedisUtil {
             res = jedis.linsert(key, where, pivot, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1117,8 +1109,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param index
-     *            从0开始
+     * @param index 从0开始
      * @param value
      * @return 成功返回OK
      */
@@ -1130,9 +1121,9 @@ public class JedisUtil {
             res = jedis.lset(key, index, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1143,8 +1134,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param count
-     *            当count为0时删除全部
+     * @param count 当count为0时删除全部
      * @param value
      * @return 返回被删除的个数
      */
@@ -1156,9 +1146,9 @@ public class JedisUtil {
             res = jedis.lrem(key, count, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1181,9 +1171,9 @@ public class JedisUtil {
             res = jedis.ltrim(key, start, end);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1204,9 +1194,9 @@ public class JedisUtil {
             res = jedis.lpop(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1228,9 +1218,9 @@ public class JedisUtil {
             res = jedis.rpop(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1256,9 +1246,9 @@ public class JedisUtil {
             res = jedis.rpoplpush(srckey, dstkey);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1280,9 +1270,9 @@ public class JedisUtil {
             res = jedis.lindex(key, index);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1303,9 +1293,9 @@ public class JedisUtil {
             res = jedis.llen(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1332,9 +1322,9 @@ public class JedisUtil {
             res = jedis.lrange(key, start, end);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1356,9 +1346,9 @@ public class JedisUtil {
             return jedis.lset(key, index, value);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
@@ -1379,9 +1369,9 @@ public class JedisUtil {
             return jedis.sort(key, sortingParameters);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
@@ -1401,22 +1391,22 @@ public class JedisUtil {
             return jedis.sort(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
 
 //**************************Set**********************************************
+
     /**
      * <p>
      * 通过key向指定的set中添加value
      * </p>
      *
      * @param key
-     * @param members
-     *            可以是一个String 也可以是一个String数组
+     * @param members 可以是一个String 也可以是一个String数组
      * @return 添加成功的个数
      */
     public Long sadd(String key, String... members) {
@@ -1427,9 +1417,9 @@ public class JedisUtil {
             res = jedis.sadd(key, members);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1440,8 +1430,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param members
-     *            可以是一个String 也可以是一个String数组
+     * @param members 可以是一个String 也可以是一个String数组
      * @return 删除的个数
      */
     public Long srem(String key, String... members) {
@@ -1452,9 +1441,9 @@ public class JedisUtil {
             res = jedis.srem(key, members);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1475,9 +1464,9 @@ public class JedisUtil {
             res = jedis.spop(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1490,8 +1479,7 @@ public class JedisUtil {
      * 以第一个set为标准
      * </p>
      *
-     * @param keys
-     *            可以使一个string 则返回set中所有的value 也可以是string数组
+     * @param keys 可以使一个string 则返回set中所有的value 也可以是string数组
      * @return
      */
     public Set<String> sdiff(String... keys) {
@@ -1502,9 +1490,9 @@ public class JedisUtil {
             res = jedis.sdiff(keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1517,10 +1505,8 @@ public class JedisUtil {
      * 以第一个set为标准
      * </p>
      *
-     * @param dstkey
-     *            差集存入的key
-     * @param keys
-     *            可以使一个string 则返回set中所有的value 也可以是string数组
+     * @param dstkey 差集存入的key
+     * @param keys   可以使一个string 则返回set中所有的value 也可以是string数组
      * @return
      */
     public Long sdiffstore(String dstkey, String... keys) {
@@ -1531,9 +1517,9 @@ public class JedisUtil {
             res = jedis.sdiffstore(dstkey, keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1543,8 +1529,7 @@ public class JedisUtil {
      * 通过key获取指定set中的交集
      * </p>
      *
-     * @param keys
-     *            可以使一个string 也可以是一个string数组
+     * @param keys 可以使一个string 也可以是一个string数组
      * @return
      */
     public Set<String> sinter(String... keys) {
@@ -1555,9 +1540,9 @@ public class JedisUtil {
             res = jedis.sinter(keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1568,8 +1553,7 @@ public class JedisUtil {
      * </p>
      *
      * @param dstkey
-     * @param keys
-     *            可以使一个string 也可以是一个string数组
+     * @param keys   可以使一个string 也可以是一个string数组
      * @return
      */
     public Long sinterstore(String dstkey, String... keys) {
@@ -1580,9 +1564,9 @@ public class JedisUtil {
             res = jedis.sinterstore(dstkey, keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1592,8 +1576,7 @@ public class JedisUtil {
      * 通过key返回所有set的并集
      * </p>
      *
-     * @param keys
-     *            可以使一个string 也可以是一个string数组
+     * @param keys 可以使一个string 也可以是一个string数组
      * @return
      */
     public Set<String> sunion(String... keys) {
@@ -1604,9 +1587,9 @@ public class JedisUtil {
             res = jedis.sunion(keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1617,8 +1600,7 @@ public class JedisUtil {
      * </p>
      *
      * @param dstkey
-     * @param keys
-     *            可以使一个string 也可以是一个string数组
+     * @param keys   可以使一个string 也可以是一个string数组
      * @return
      */
     public Long sunionstore(String dstkey, String... keys) {
@@ -1629,9 +1611,9 @@ public class JedisUtil {
             res = jedis.sunionstore(dstkey, keys);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1641,12 +1623,9 @@ public class JedisUtil {
      * 通过key将set中的value移除并添加到第二个set中
      * </p>
      *
-     * @param srckey
-     *            需要移除的
-     * @param dstkey
-     *            添加的
-     * @param member
-     *            set中的value
+     * @param srckey 需要移除的
+     * @param dstkey 添加的
+     * @param member set中的value
      * @return
      */
     public Long smove(String srckey, String dstkey, String member) {
@@ -1657,9 +1636,9 @@ public class JedisUtil {
             res = jedis.smove(srckey, dstkey, member);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1680,9 +1659,9 @@ public class JedisUtil {
             res = jedis.scard(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1704,9 +1683,9 @@ public class JedisUtil {
             res = jedis.sismember(key, member);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1727,9 +1706,9 @@ public class JedisUtil {
             res = jedis.srandmember(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1750,15 +1729,16 @@ public class JedisUtil {
             res = jedis.smembers(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
 
 
 //**************************Zset**********************************************
+
     /**
      * <p>
      * 通过key向zset中添加value,score,其中score就是用来排序的
@@ -1772,7 +1752,7 @@ public class JedisUtil {
      * @param member
      * @return
      */
-    public Long zadd(String key, double score, String member){
+    public Long zadd(String key, double score, String member) {
         Jedis jedis = null;
         Long res = null;
         try {
@@ -1781,7 +1761,7 @@ public class JedisUtil {
         } catch (Exception e) {
             throw new InsertException(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1803,9 +1783,9 @@ public class JedisUtil {
             return jedis.zrange(key, min, max);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return null;
     }
@@ -1827,10 +1807,10 @@ public class JedisUtil {
             return jedis.zcount(key, min, max);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
 
     }
@@ -1856,10 +1836,10 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             return jedis.hincrBy(key, value, increment);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
             return 0L;
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
 
     }
@@ -1870,8 +1850,7 @@ public class JedisUtil {
      * </p>
      *
      * @param key
-     * @param members
-     *            可以使一个string 也可以是一个string数组
+     * @param members 可以使一个string 也可以是一个string数组
      * @return
      */
     public Long zrem(String key, String... members) {
@@ -1882,9 +1861,9 @@ public class JedisUtil {
             res = jedis.zrem(key, members);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1907,9 +1886,9 @@ public class JedisUtil {
             res = jedis.zincrby(key, score, member);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1934,9 +1913,9 @@ public class JedisUtil {
             res = jedis.zrank(key, member);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1961,9 +1940,9 @@ public class JedisUtil {
             res = jedis.zrevrank(key, member);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -1992,9 +1971,9 @@ public class JedisUtil {
             res = jedis.zrevrange(key, start, end);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2017,9 +1996,9 @@ public class JedisUtil {
             res = jedis.zrevrangeByScore(key, max, min);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2042,9 +2021,9 @@ public class JedisUtil {
             res = jedis.zrevrangeByScore(key, max, min);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2067,9 +2046,9 @@ public class JedisUtil {
             res = jedis.zcount(key, min, max);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2090,9 +2069,9 @@ public class JedisUtil {
             res = jedis.zcard(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2114,9 +2093,9 @@ public class JedisUtil {
             res = jedis.zscore(key, member);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2139,9 +2118,9 @@ public class JedisUtil {
             res = jedis.zremrangeByRank(key, start, end);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2164,9 +2143,9 @@ public class JedisUtil {
             res = jedis.zremrangeByScore(key, start, end);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2193,9 +2172,9 @@ public class JedisUtil {
             res = jedis.keys(pattern);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2209,9 +2188,9 @@ public class JedisUtil {
             res = jedis.keys(pattern);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
@@ -2233,18 +2212,18 @@ public class JedisUtil {
             res = jedis.type(key);
         } catch (Exception e) {
 
-            log.error(e.getMessage());
+            System.out.print(e.getMessage());
         } finally {
-           closeJedis(jedis);
+            closeJedis(jedis);
         }
         return res;
     }
 
     /**
      * 序列化对象
+     *
      * @param obj
-     * @return
-     * 对象需实现Serializable接口
+     * @return 对象需实现Serializable接口
      */
     public static byte[] ObjTOSerialize(Object obj) {
         ObjectOutputStream oos = null;
@@ -2262,9 +2241,9 @@ public class JedisUtil {
 
     /**
      * 反序列化对象
+     *
      * @param bytes
-     * @return
-     * 对象需实现Serializable接口
+     * @return 对象需实现Serializable接口
      */
     public static Object unserialize(byte[] bytes) {
         ByteArrayInputStream bais = null;
@@ -2280,6 +2259,7 @@ public class JedisUtil {
 
     /**
      * 关闭jides连接
+     *
      * @param jedis
      * @return
      * @Author zly

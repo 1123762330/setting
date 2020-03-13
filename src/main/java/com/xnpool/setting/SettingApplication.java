@@ -1,5 +1,6 @@
 package com.xnpool.setting;
 
+
 import com.xnpool.logaop.util.WriteLogUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

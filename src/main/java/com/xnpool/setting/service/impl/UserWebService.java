@@ -28,7 +28,7 @@ public class UserWebService extends BaseController {
      * @return
      */
     public Map<Object, Object>  getWorkerHashByDay(String token) {
-        int userId=0;
+        int userId=1;
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);
@@ -64,7 +64,7 @@ public class UserWebService extends BaseController {
      */
     public Map<Object, Object> getWorkerTotalByDay(String token) {
         //后期从token中获取用户Id
-        int userId=0;
+        int userId=1;
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);

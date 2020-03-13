@@ -26,7 +26,6 @@ import java.util.*;
  * @return
  */
 @ControllerAdvice
-@Slf4j
 public abstract class BaseController {
 	public static final Integer SUCCESS = 200;
 	public static final Integer FAIL = 500;
@@ -109,7 +108,6 @@ public abstract class BaseController {
 				jedisUtil.zadd("syncing:"+apiContext.getTenantId()+":"+mineId, Double.valueOf(global_id), jsonString);
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
 			throw new InsertException("添加缓存失败");
 		}
 	}
@@ -136,7 +134,6 @@ public abstract class BaseController {
 				jedisUtil.zadd("syncing:"+apiContext.getTenantId()+":"+mineId, Double.valueOf(global_id), jsonString);
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
 			throw new InsertException("添加缓存失败");
 		}
 	}
@@ -452,13 +449,14 @@ public abstract class BaseController {
 		calendar.setTime(new Date());
 		int min = calendar.get(Calendar.MINUTE);
 		if (min >= 45) {
-			calendar.set(Calendar.MINUTE, 45);
-		}else if (min >= 30) {
-			calendar.set(Calendar.MINUTE, 30);
-		} else if (min >= 15) {
-			calendar.set(Calendar.MINUTE, 15);
-		} else {
+			calendar.set(Calendar.HOUR_OF_DAY,calendar.get(Calendar.HOUR_OF_DAY) + 1);
 			calendar.set(Calendar.MINUTE, 0);
+		}else if (min >= 30) {
+			calendar.set(Calendar.MINUTE, 45);
+		} else if (min >= 15) {
+			calendar.set(Calendar.MINUTE, 30);
+		} else {
+			calendar.set(Calendar.MINUTE, 15);
 		}
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
