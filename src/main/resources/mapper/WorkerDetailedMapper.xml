@@ -354,6 +354,6 @@
             user_id = #{userId}
             AND worker_detailed.group_id = group_setting.id
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
-            ANd worker_detailed.worker_id=worker_info.id
+            AND worker_detailed.worker_id=worker_info.id
     </select>
 </mapper>
