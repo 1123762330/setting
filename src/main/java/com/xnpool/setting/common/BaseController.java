@@ -464,7 +464,7 @@ public abstract class BaseController {
 		calendar.set(Calendar.MILLISECOND, 0);
 		Date endDate = calendar.getTime();
 		//前一天开始的时间
-		calendar.add(calendar.DATE, -1);//
+		calendar.add(calendar.DATE, -1);
 		Date startDate = calendar.getTime();
 		HashMap<String, Date> hashMap = new HashMap<>();
 		hashMap.put("startDate",startDate);
