@@ -1,5 +1,5 @@
 server:
-  port: 8766
+  port: 8765
   servlet:
     context-path: /setting
 ---
@@ -16,7 +16,7 @@ eureka:
     registryFetchIntervalSeconds: 5
     service-url:
       #defaultZone: http://127.0.0.1:9601/eureka/
-      defaultZone: http://127.0.0.1:9602/eureka/
+      defaultZone: http://127.0.0.1:9601/eureka/
 ---
 feign:
   hystrix:
