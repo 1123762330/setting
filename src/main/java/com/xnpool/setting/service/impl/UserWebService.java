@@ -1,5 +1,7 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.utils.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +89,24 @@ public class UserWebService extends BaseController {
         Map<Object, Object> sortedMap = new TreeMap<>(resultMap);
         return sortedMap;
 
+    }
+
+    /**
+     * @Description 查询用户的总矿机数
+     * @Author zly
+     * @Date 19:06 2020/3/16
+     * @Param
+     * @return
+     */
+    public Integer getWorkerTotal(String token) {
+        //后期从token中获取用户Id
+        int userId = 1;
+        String hashSet = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
+        log.info(userId+"用户的redis中取出的矿机数集合是"+hashSet);
+        JSONObject jsonObject = JSON.parseObject(hashSet);
+        Set<String> keySet = jsonObject.keySet();
+        int total=keySet.size();
+        return total;
     }
 }
 

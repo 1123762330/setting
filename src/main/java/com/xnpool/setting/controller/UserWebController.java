@@ -100,4 +100,12 @@ public class UserWebController extends BaseController {
         Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token);
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
+
+    @SystemLog(value = "查询用户矿机总数",type = LogType.SURVER)
+    @GetMapping("/getWorkerTotal")
+    public ResponseResult getWorkerTotal(HttpServletRequest request){
+        String token = request.getHeader("token");
+        Integer workerTotal = userWebService.getWorkerTotal(token);
+        return new ResponseResult(SUCCESS,workerTotal);
+    }
 }
