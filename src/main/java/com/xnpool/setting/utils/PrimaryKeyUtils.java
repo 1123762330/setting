@@ -55,7 +55,7 @@ public class PrimaryKeyUtils {
             //往前补6位
             orderId=prefix+String.format("%1$06d",increment);
         } catch (Exception e) {
-            System.out.println("生成全局唯一id失败"+e.getMessage());
+            log.error("生成全局唯一id失败"+e.getMessage());
         }
         return Long.valueOf(orderId);
     }
