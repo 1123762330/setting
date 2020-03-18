@@ -1,9 +1,11 @@
 package com.xnpool.setting.config;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xnpool.setting.common.PassToken;
 import com.xnpool.setting.common.UserLoginToken;
 import com.xnpool.setting.utils.ResponseResult;
+import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,6 +41,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 		String token = request.getHeader("token");// 从 http 请求头中取出 token
+		log.info("从请求头里面拿到的token:"+token);
+		JSONObject jsonObject = TokenUtil.checkToken(token);
+		log.info("解析的token:"+jsonObject);
 		//从登录用户的token中获取企业ID,
 		apiContext.setTenantId(112233L);
 		// 如果不是映射到方法直接通过
