@@ -102,7 +102,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
             HashMap<Integer, String> resultMap = new HashMap<>();
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                String factoryName = hashMap.get("factoryName").toString();
+                String factoryName = hashMap.get("factory_name").toString();
                 resultMap.put(id, factoryName);
             });
             return resultMap;

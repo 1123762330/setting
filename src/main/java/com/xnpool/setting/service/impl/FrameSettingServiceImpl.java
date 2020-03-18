@@ -105,7 +105,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             HashMap<Integer, String> resultMap = new HashMap<>();
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                String factoryName = hashMap.get("frameName").toString();
+                String factoryName = hashMap.get("frame_name").toString();
                 resultMap.put(id, factoryName);
             });
             return resultMap;
