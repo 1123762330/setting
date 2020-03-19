@@ -72,6 +72,10 @@ public class MybatisPlusConfig {
                                 //过滤的表
                                 return true;
                             }
+                            if ("algorithm".equals(tableName)){
+                                //过滤的表
+                                return true;
+                            }
                             //return false;
                             return tenantProperties.getIgnoreSqls().stream().anyMatch((e) -> e.equalsIgnoreCase(tableName));
                         }

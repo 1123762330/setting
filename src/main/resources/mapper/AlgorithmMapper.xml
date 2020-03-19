@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.AlgorithmMapper">
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.Algorithm">
+    <!--@mbg.generated-->
+    <!--@Table algorithm-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="algorithm_name" jdbcType="VARCHAR" property="algorithmName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, algorithm_name, create_time, update_time, is_delete
+  </sql>
+  <select id="selectAlgorithm"  resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from algorithm
+    <where>
+      is_delete = 0
+      <if test="keyWord != null">
+        AND algorithm_name like #{keyWord}
+      </if>
+    </where>
+  </select>
+
+  <!--查询算法集合-->
+  <select id="selectAlgorithmMap"  resultType="hashmap">
+    <!--@mbg.generated-->
+    select
+    id,algorithm_name
+    from algorithm
+    where is_delete=0
+  </select>
+
+  <!--  软删除-->
+  <update id="deleteByAlgorithmId">
+    update algorithm set is_delete = 1 where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

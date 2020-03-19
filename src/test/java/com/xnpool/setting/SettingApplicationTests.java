@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.controller.MineSettingController;
+import com.xnpool.setting.domain.mapper.AlgorithmMapper;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
+import com.xnpool.setting.domain.pojo.Algorithm;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.utils.JedisUtil;
@@ -22,12 +24,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SettingApplicationTests {
 
     @Autowired
-    private ApiContext apiContext;
+    private AlgorithmMapper algorithmMapper;
 
     @Before
     public void before() {
         // 在上下文中设置当前服务商的ID
-        apiContext.setTenantId(112233L);
+        //apiContext.setTenantId(112233L);
     }
 
     @Test

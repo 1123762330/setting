@@ -27,6 +27,7 @@ public class TenantProperties {
      */
     private List<String> ignoreTables = new ArrayList<>();
 
+
     /**
      * 配置不进行多租户隔离的sql
      * 需要配置mapper的全路径如：com.central.user.mapper.SysUserMapper.findList
