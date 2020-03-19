@@ -2,6 +2,11 @@ package com.xnpool.setting.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TokenUtil {
@@ -76,7 +82,42 @@ public class TokenUtil {
         return JSONObject.parseObject(JSON.toJSONString(reusltMap));
     }
 
-
+    //解析token第二种方式
+    public static JSONObject verify(String token) {
+        HashMap<String, Object> reslut = new HashMap();
+        HashMap<String, Object> reslutMap = new HashMap();
+        int success = 500;
+        String msg = "解析失败";
+        if (token == null) {
+            reslut.put("username", "匿名");
+            reslut.put("roles", "游客");
+            reslut.put("enterpriseId", -1);
+        } else {
+            try {
+                Algorithm algorithm = Algorithm.HMAC256("test_key");
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT jwt = verifier.verify(token);
+                jwt.getClaims();
+                //用户ID
+                String username = jwt.getClaim("user_name").asString();
+                //角色列表
+                List<String> roles = jwt.getClaim("authorities").asList(String.class);
+                //企业id
+                Integer enterpriseId = jwt.getClaim("enterpriseId").asInt();
+                reslut.put("username", username);
+                reslut.put("roles", roles);
+                reslut.put("enterpriseId", enterpriseId);
+                success=200;
+                msg="解析成功";
+            } catch (Exception var8) {
+                msg="token已失效,请重新登录!";
+            }
+        }
+        reslutMap.put("success", success);
+        reslutMap.put("msg", msg);
+        reslutMap.put("data", reslut);
+        return JSONObject.parseObject(JSON.toJSONString(reslutMap));
+    }
 
 
 }

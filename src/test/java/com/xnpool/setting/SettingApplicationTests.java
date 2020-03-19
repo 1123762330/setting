@@ -2,7 +2,13 @@ package com.xnpool.setting;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.controller.MineSettingController;
 import com.xnpool.setting.domain.mapper.AlgorithmMapper;
@@ -12,6 +18,7 @@ import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
+import com.xnpool.setting.utils.TokenUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +41,9 @@ public class SettingApplicationTests {
 
     @Test
     public void addMineSetting() {
+        //Map<String, Object> verify = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2MTc1MDIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6ImE1ZDU2M2Y3LThiM2ItNGE5Mi05ZDZkLWRjMmE0NDJhNWNlMiIsImNsaWVudF9pZCI6InpsdCJ9.OFJ9k4yCPpZDHnuaX-hn-r86uPfJf8x6NbbLJ6HndwY");
+        //System.out.println("verify==="+verify);
+
     }
 
 }
