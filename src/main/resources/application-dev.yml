@@ -90,7 +90,7 @@ mybatis-plus:
 ---
 #mysql语句需要打印就true,不需要打印就false-->注入对应的Bean(打印sql)
 sql:
-performanceInterceptor: true
+performanceInterceptor: false
 ---
 spring:
   redis: #数据源1
@@ -135,5 +135,9 @@ config:
 
 #多租户配置是否启用
 zlt:
+  #多租户配置
   tenant:
     enable: true
+    ignoreTables:
+      - sys_user
+      - algorithm

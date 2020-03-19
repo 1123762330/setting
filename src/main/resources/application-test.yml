@@ -135,5 +135,9 @@ config:
 
 #多租户配置是否启用
 zlt:
+  #多租户配置
   tenant:
-    enable: false
+    enable: true
+    ignoreTables:
+      - sys_user
+      - algorithm

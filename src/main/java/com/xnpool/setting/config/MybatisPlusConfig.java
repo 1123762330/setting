@@ -68,14 +68,10 @@ public class MybatisPlusConfig {
                         @Override
                         public boolean doTableFilter(String tableName) {
                             // 过滤掉一些表：如租户表（provider）本身不需要执行这样的处理。
-                            if ("sys_user".equals(tableName)){
-                                //过滤的表
-                                return true;
-                            }
-                            if ("algorithm".equals(tableName)){
-                                //过滤的表
-                                return true;
-                            }
+                            //if ("sys_user".equals(tableName)){
+                            //    //过滤的表
+                            //    return true;
+                            //}
                             //return false;
                             return tenantProperties.getIgnoreSqls().stream().anyMatch((e) -> e.equalsIgnoreCase(tableName));
                         }
