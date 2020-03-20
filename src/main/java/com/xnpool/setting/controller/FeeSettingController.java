@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 /**
  * 费用设置
  *
@@ -84,5 +86,18 @@ public class FeeSettingController extends BaseController {
                                         @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<FeeSetting> feeSettingPageInfo = feeSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, feeSettingPageInfo);
+    }
+
+    /**
+     * @Description 用户网站的费用列表
+     * @Author zly
+     * @Date 17:41 2020/3/20
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectFeeMap")
+    public ResponseResult selectFeeMap() {
+        HashMap<Integer, String> feeMap = feeSettingService.selectFeeMap();
+        return new ResponseResult(SUCCESS,feeMap);
     }
 }

@@ -9,6 +9,7 @@ import com.xnpool.setting.domain.pojo.FeeSetting;
 import com.xnpool.setting.service.FeeSettingService;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,6 +67,18 @@ public class FeeSettingServiceImpl implements FeeSettingService {
         List<FeeSetting> feeSettingList = feeSettingMapper.selectByOther(keyWord);
         PageInfo<FeeSetting> pageInfo = new PageInfo<>(feeSettingList);
         return pageInfo;
+    }
+
+    @Override
+    public HashMap<Integer, String> selectFeeMap() {
+        HashMap<Integer, String> feeMap = new HashMap<>();
+        List<FeeSetting> feeSettingList = feeSettingMapper.selectByOther(null);
+        for (FeeSetting feeSetting : feeSettingList) {
+            String feeName = feeSetting.getFeeName();
+            Integer id = feeSetting.getId();
+            feeMap.put(id,feeName);
+        }
+        return feeMap;
     }
 
 }
