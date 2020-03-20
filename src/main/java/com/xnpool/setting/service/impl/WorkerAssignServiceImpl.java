@@ -3,6 +3,8 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.CheckException;
+import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.pojo.MineFactoryAndFraneId;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
@@ -77,7 +79,13 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         HashMap<Integer, List<MineFactoryAndFraneId>> resultMap = new HashMap<>();
         ArrayList<MineFactoryAndFraneId> list = new ArrayList<>();
         //从token中取出userid
+        HashMap<String, Object> tokenData = getTokenData(token);
         int userId=12;
+        //if (tokenData!=null){
+        //     userId = Integer.valueOf(tokenData.get("userId").toString());
+        //}else {
+        //    throw new CheckException("校验token失败!");
+        //}
         if (ids.contains(",")){
             //多个矿机架
             String[] split = ids.split(",");

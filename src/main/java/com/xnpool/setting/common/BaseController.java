@@ -1,6 +1,7 @@
 package com.xnpool.setting.common;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xnpool.setting.common.exception.*;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.*;
@@ -8,6 +9,7 @@ import com.xnpool.setting.domain.redismodel.*;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.ResponseResult;
+import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -43,6 +45,8 @@ public abstract class BaseController {
 	public static final String HASHRATE_DATA = "xnpool:user:hashrate:";
 	//用户矿机总数量
 	public static final String USERWORKER_TOTAL = "xnpool:user:mine:ship";
+	//用户矿机在线总数量
+	public static final String USERWORKER_ONLINE_TOTAL = "xnpool:user:mine:onLine:count";
 
 
 	@Autowired
@@ -501,5 +505,26 @@ public abstract class BaseController {
 			shiJianMap.put(timeStr,"0");
 		}
 		return shiJianMap;
+	}
+
+	/**
+	 * @Description	获取token的数据
+	 * @Author zly
+	 * @Date 8:57 2020/3/20
+	 * @Param
+	 * @return
+	 */
+	public HashMap<String, Object> getTokenData(String token){
+		JSONObject jsonObject = TokenUtil.verify(token);
+		Integer success = jsonObject.getInteger("success");
+		HashMap<String, Object> result = new HashMap<>();
+		if (success==200){
+			JSONObject data = jsonObject.getJSONObject("data");
+			Integer userId = data.getInteger("id");
+			Integer enterpriseId = data.getInteger("enterpriseId");
+			result.put("userId",userId);
+			result.put("tenantId",enterpriseId);
+		}
+		return result;
 	}
 }

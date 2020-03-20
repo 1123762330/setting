@@ -41,11 +41,20 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 		String token = request.getHeader("token");// 从 http 请求头中取出 token
-		log.info("从请求头里面拿到的token:"+token);
 		JSONObject jsonObject = TokenUtil.verify(token);
 		log.info("解析的token:"+jsonObject);
-		//从登录用户的token中获取企业ID,
-		apiContext.setTenantId(112233L);
+		Integer success = jsonObject.getInteger("success");
+		if (success==200){
+			JSONObject data = jsonObject.getJSONObject("data");
+			Integer userId = data.getInteger("id");
+			Integer enterpriseId = data.getInteger("enterpriseId");
+			//从登录用户的token中获取企业ID,
+			//apiContext.setTenantId(Long.valueOf(enterpriseId));
+			apiContext.setTenantId(112233L);
+		}else {
+			printJson(response, 403, "请登录!");
+			return false;
+		}
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){
 			return true;

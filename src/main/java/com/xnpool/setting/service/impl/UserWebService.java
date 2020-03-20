@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.CheckException;
 import com.xnpool.setting.utils.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,13 @@ public class UserWebService extends BaseController {
      * @Param
      */
     public Map<Object, Object> getWorkerHashByDay(String token) {
-        int userId = 1;
+        HashMap<String, Object> tokenData = getTokenData(token);
+        int userId=0;
+        if (tokenData!=null){
+            userId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
+        }
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);
@@ -64,7 +71,13 @@ public class UserWebService extends BaseController {
      */
     public Map<Object, Object> getWorkerTotalByDay(String token) {
         //后期从token中获取用户Id
-        int userId = 1;
+        HashMap<String, Object> tokenData = getTokenData(token);
+        int userId=0;
+        if (tokenData!=null){
+            userId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
+        }
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);
@@ -98,15 +111,35 @@ public class UserWebService extends BaseController {
      * @Param
      * @return
      */
-    public Integer getWorkerTotal(String token) {
+    public HashMap<String, Integer> getWorkerTotal(String token) {
         //后期从token中获取用户Id
-        int userId = 1;
-        String hashSet = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
-        log.info(userId+"用户的redis中取出的矿机数集合是"+hashSet);
-        JSONObject jsonObject = JSON.parseObject(hashSet);
-        Set<String> keySet = jsonObject.keySet();
-        int total=keySet.size();
-        return total;
+        HashMap<String, Object> tokenData = getTokenData(token);
+        int userId=0;
+        if (tokenData!=null){
+             userId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
+        }
+        Boolean totalHexists = jedisUtil.hexists(USERWORKER_TOTAL, String.valueOf(userId));
+        int total=0;
+        if (totalHexists){
+            String hashSet = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
+            log.info(userId+"用户的redis中取出的矿机数集合是"+hashSet);
+            JSONObject jsonObject = JSON.parseObject(hashSet);
+            Set<String> keySet = jsonObject.keySet();
+            total=keySet.size();
+        }
+
+        Boolean hexists = jedisUtil.hexists(USERWORKER_ONLINE_TOTAL, String.valueOf(userId));
+        String onLineSize="0";
+        if (hexists){
+            onLineSize = jedisUtil.hget(USERWORKER_ONLINE_TOTAL,String.valueOf(userId) );
+            log.info(userId+"用户的redis中取出的在线矿机总数是"+onLineSize);
+        }
+        HashMap<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("total",total);
+        resultMap.put("onLine",Integer.valueOf(onLineSize));
+        return resultMap;
     }
 }
 

@@ -7,6 +7,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.xnpool.setting.common.exception.CheckException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -98,19 +99,22 @@ public class TokenUtil {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT jwt = verifier.verify(token);
                 jwt.getClaims();
-                //用户ID
+                //用户名
                 String username = jwt.getClaim("user_name").asString();
                 //角色列表
                 List<String> roles = jwt.getClaim("authorities").asList(String.class);
                 //企业id
                 Integer enterpriseId = jwt.getClaim("enterpriseId").asInt();
+                //用户id
+                Integer userId = jwt.getClaim("id").asInt();
                 reslut.put("username", username);
                 reslut.put("roles", roles);
                 reslut.put("enterpriseId", enterpriseId);
+                reslut.put("id", userId);
                 success=200;
                 msg="解析成功";
             } catch (Exception var8) {
-                msg="token已失效,请重新登录!";
+                throw new CheckException("token已失效,请重新登录!");
             }
         }
         reslutMap.put("success", success);
