@@ -119,10 +119,10 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
 
         PageHelper.startPage(pageNum, pageSize);
         List<GroupSettingExample> groupSettings = groupSettingMapper.selectByOther(keyWord);
-        System.out.println(groupSettings);
+        //System.out.println(groupSettings);
         //查询IP字段Map
         HashMap<Integer, String> ipStartMap = ipSettingService.selectByIPStart();
-        System.out.println(ipStartMap);
+        //System.out.println(ipStartMap);
         //解決包含多个属性集合
         groupSettings.forEach(groupSettingExample -> {
             //包含多个IP

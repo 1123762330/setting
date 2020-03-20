@@ -100,7 +100,6 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         }
         PageHelper.startPage(pageNum, pageSize);
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(keyWord);
-        System.out.println(mineSettingList);
         PageInfo<MineSetting> pageInfo = new PageInfo<>(mineSettingList);
         return pageInfo;
     }

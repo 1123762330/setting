@@ -44,16 +44,16 @@ public class SettingApplicationTests {
     public void addMineSetting() {
         //Map<String, Object> verify = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2MTc1MDIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6ImE1ZDU2M2Y3LThiM2ItNGE5Mi05ZDZkLWRjMmE0NDJhNWNlMiIsImNsaWVudF9pZCI6InpsdCJ9.OFJ9k4yCPpZDHnuaX-hn-r86uPfJf8x6NbbLJ6HndwY");
         //System.out.println("verify==="+verify);
-        JSONObject jsonObject = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2Njc5NDksImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6IjFjMmY2NWVlLTNiNzEtNDU0Yy05Y2I1LWRjYmRlYzk4ZjZhZSIsImNsaWVudF9pZCI6InpsdCJ9.9cEqM7zE_s1ZDb7lmzSSCdMMHwtJp8Ihps5BprO5cto");
-        System.out.println("jsonObject=="+jsonObject);
-        Integer success = jsonObject.getInteger("success");
-        if (success==200){
-            JSONObject data = jsonObject.getJSONObject("data");
-            Integer userId = data.getInteger("id");
-            Integer enterpriseId = data.getInteger("enterpriseId");
-            System.out.println("userId"+userId);
-            System.out.println("enterpriseId"+enterpriseId);
-        }
+        //JSONObject jsonObject = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2Njc5NDksImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6IjFjMmY2NWVlLTNiNzEtNDU0Yy05Y2I1LWRjYmRlYzk4ZjZhZSIsImNsaWVudF9pZCI6InpsdCJ9.9cEqM7zE_s1ZDb7lmzSSCdMMHwtJp8Ihps5BprO5cto");
+        //System.out.println("jsonObject=="+jsonObject);
+        //Integer success = jsonObject.getInteger("success");
+        //if (success==200){
+        //    JSONObject data = jsonObject.getJSONObject("data");
+        //    Integer userId = data.getInteger("id");
+        //    Integer enterpriseId = data.getInteger("enterpriseId");
+        //    System.out.println("userId"+userId);
+        //    System.out.println("enterpriseId"+enterpriseId);
+        //}
     }
 
 }

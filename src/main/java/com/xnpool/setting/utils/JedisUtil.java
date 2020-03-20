@@ -55,7 +55,7 @@ public class JedisUtil {
             value = jedis.get(key);
             log.info(value);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -82,7 +82,7 @@ public class JedisUtil {
             value = jedis.get(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -108,7 +108,7 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.set(key, value);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return "0";
         } finally {
             closeJedis(jedis);
@@ -134,7 +134,7 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.set(key, value);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return "0";
         } finally {
             closeJedis(jedis);
@@ -155,7 +155,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             return jedis.del(keys);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -177,7 +177,7 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.del(keys);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -200,7 +200,7 @@ public class JedisUtil {
             return jedis.del(keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -224,7 +224,7 @@ public class JedisUtil {
             res = jedis.append(key, str);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -247,7 +247,7 @@ public class JedisUtil {
             return jedis.exists(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return false;
         } finally {
             closeJedis(jedis);
@@ -267,7 +267,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             return jedis.flushDB();
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -290,7 +290,7 @@ public class JedisUtil {
             jedis.select(indexdb);
             return jedis.expire(key, value);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -314,7 +314,7 @@ public class JedisUtil {
             return jedis.ttl(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -336,7 +336,7 @@ public class JedisUtil {
             return jedis.persist(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return -1L;
         } finally {
             closeJedis(jedis);
@@ -360,7 +360,7 @@ public class JedisUtil {
             return jedis.setex(key, seconds, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -383,7 +383,7 @@ public class JedisUtil {
             return jedis.setnx(key, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -409,7 +409,7 @@ public class JedisUtil {
             return jedis.getSet(key, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -434,7 +434,7 @@ public class JedisUtil {
             res = jedis.setex(key, seconds, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -479,7 +479,7 @@ public class JedisUtil {
             return jedis.setrange(key, offset, str);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -502,7 +502,7 @@ public class JedisUtil {
             values = jedis.mget(keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -531,7 +531,7 @@ public class JedisUtil {
             res = jedis.mset(keysvalues);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -560,7 +560,7 @@ public class JedisUtil {
             res = jedis.msetnx(keysvalues);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -584,7 +584,7 @@ public class JedisUtil {
             res = jedis.getSet(key, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -609,7 +609,7 @@ public class JedisUtil {
             res = jedis.getrange(key, startOffset, endOffset);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -632,7 +632,7 @@ public class JedisUtil {
             res = jedis.incr(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -655,7 +655,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.incrBy(key, integer);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -678,7 +678,7 @@ public class JedisUtil {
             res = jedis.decr(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -702,7 +702,7 @@ public class JedisUtil {
             res = jedis.decrBy(key, integer);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -725,7 +725,7 @@ public class JedisUtil {
             res = jedis.strlen(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -752,7 +752,7 @@ public class JedisUtil {
             res = jedis.hset(key, field, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -777,7 +777,7 @@ public class JedisUtil {
             res = jedis.hsetnx(key, field, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -802,7 +802,7 @@ public class JedisUtil {
             res = jedis.hmset(key, hash);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -826,7 +826,7 @@ public class JedisUtil {
             res = jedis.hget(key, field);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -851,7 +851,7 @@ public class JedisUtil {
             res = jedis.hmget(key, fields);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -875,7 +875,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.hincrBy(key, field, value);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -899,7 +899,7 @@ public class JedisUtil {
             res = jedis.hexists(key, field);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -922,7 +922,7 @@ public class JedisUtil {
             res = jedis.hlen(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -946,7 +946,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.hdel(key, fields);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -969,7 +969,7 @@ public class JedisUtil {
             res = jedis.hkeys(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -992,7 +992,7 @@ public class JedisUtil {
             res = jedis.hvals(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1015,7 +1015,7 @@ public class JedisUtil {
             jedis.select(indexdb);
             res = jedis.hgetAll(key);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1042,7 +1042,7 @@ public class JedisUtil {
             res = jedis.lpush(key, strs);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1066,7 +1066,7 @@ public class JedisUtil {
             res = jedis.rpush(key, strs);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1093,7 +1093,7 @@ public class JedisUtil {
             res = jedis.linsert(key, where, pivot, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1121,7 +1121,7 @@ public class JedisUtil {
             res = jedis.lset(key, index, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1146,7 +1146,7 @@ public class JedisUtil {
             res = jedis.lrem(key, count, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1171,7 +1171,7 @@ public class JedisUtil {
             res = jedis.ltrim(key, start, end);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1194,7 +1194,7 @@ public class JedisUtil {
             res = jedis.lpop(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1218,7 +1218,7 @@ public class JedisUtil {
             res = jedis.rpop(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1246,7 +1246,7 @@ public class JedisUtil {
             res = jedis.rpoplpush(srckey, dstkey);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1270,7 +1270,7 @@ public class JedisUtil {
             res = jedis.lindex(key, index);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1293,7 +1293,7 @@ public class JedisUtil {
             res = jedis.llen(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1322,7 +1322,7 @@ public class JedisUtil {
             res = jedis.lrange(key, start, end);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1346,7 +1346,7 @@ public class JedisUtil {
             return jedis.lset(key, index, value);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1369,7 +1369,7 @@ public class JedisUtil {
             return jedis.sort(key, sortingParameters);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1391,7 +1391,7 @@ public class JedisUtil {
             return jedis.sort(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1417,7 +1417,7 @@ public class JedisUtil {
             res = jedis.sadd(key, members);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1441,7 +1441,7 @@ public class JedisUtil {
             res = jedis.srem(key, members);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1464,7 +1464,7 @@ public class JedisUtil {
             res = jedis.spop(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1490,7 +1490,7 @@ public class JedisUtil {
             res = jedis.sdiff(keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1517,7 +1517,7 @@ public class JedisUtil {
             res = jedis.sdiffstore(dstkey, keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1540,7 +1540,7 @@ public class JedisUtil {
             res = jedis.sinter(keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1564,7 +1564,7 @@ public class JedisUtil {
             res = jedis.sinterstore(dstkey, keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1587,7 +1587,7 @@ public class JedisUtil {
             res = jedis.sunion(keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1611,7 +1611,7 @@ public class JedisUtil {
             res = jedis.sunionstore(dstkey, keys);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1636,7 +1636,7 @@ public class JedisUtil {
             res = jedis.smove(srckey, dstkey, member);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1659,7 +1659,7 @@ public class JedisUtil {
             res = jedis.scard(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1683,7 +1683,7 @@ public class JedisUtil {
             res = jedis.sismember(key, member);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1706,7 +1706,7 @@ public class JedisUtil {
             res = jedis.srandmember(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1729,7 +1729,7 @@ public class JedisUtil {
             res = jedis.smembers(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1783,7 +1783,7 @@ public class JedisUtil {
             return jedis.zrange(key, min, max);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1807,7 +1807,7 @@ public class JedisUtil {
             return jedis.zcount(key, min, max);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -1836,7 +1836,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             return jedis.hincrBy(key, value, increment);
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
             return 0L;
         } finally {
             closeJedis(jedis);
@@ -1861,7 +1861,7 @@ public class JedisUtil {
             res = jedis.zrem(key, members);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1886,7 +1886,7 @@ public class JedisUtil {
             res = jedis.zincrby(key, score, member);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1913,7 +1913,7 @@ public class JedisUtil {
             res = jedis.zrank(key, member);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1940,7 +1940,7 @@ public class JedisUtil {
             res = jedis.zrevrank(key, member);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1971,7 +1971,7 @@ public class JedisUtil {
             res = jedis.zrevrange(key, start, end);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -1996,7 +1996,7 @@ public class JedisUtil {
             res = jedis.zrevrangeByScore(key, max, min);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2021,7 +2021,7 @@ public class JedisUtil {
             res = jedis.zrevrangeByScore(key, max, min);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2046,7 +2046,7 @@ public class JedisUtil {
             res = jedis.zcount(key, min, max);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2069,7 +2069,7 @@ public class JedisUtil {
             res = jedis.zcard(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2093,7 +2093,7 @@ public class JedisUtil {
             res = jedis.zscore(key, member);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2118,7 +2118,7 @@ public class JedisUtil {
             res = jedis.zremrangeByRank(key, start, end);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2143,7 +2143,7 @@ public class JedisUtil {
             res = jedis.zremrangeByScore(key, start, end);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2171,8 +2171,7 @@ public class JedisUtil {
             jedis = jedisPool.getResource();
             res = jedis.keys(pattern);
         } catch (Exception e) {
-
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2187,8 +2186,7 @@ public class JedisUtil {
             jedis.select(database);
             res = jedis.keys(pattern);
         } catch (Exception e) {
-
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
@@ -2212,7 +2210,7 @@ public class JedisUtil {
             res = jedis.type(key);
         } catch (Exception e) {
 
-            System.out.print(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             closeJedis(jedis);
         }
