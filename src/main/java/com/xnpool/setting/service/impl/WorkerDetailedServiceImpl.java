@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.common.exception.CheckException;
 import com.xnpool.setting.common.exception.DeleteException;
 import com.xnpool.setting.common.exception.InsertException;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
@@ -254,7 +255,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     public void updateMoveOutByid(String ids, String reason, String token) {
         ArrayList<Integer> list = new ArrayList<>();
         //从token中取出userid
-        int userId = 12;
+        HashMap<String, Object> tokenData = getTokenData(token);
+        int userId=0;
+        if (tokenData!=null){
+            userId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
+        }
         if (ids.contains(",")) {
             //全部出库
             String[] split = ids.split(",");
