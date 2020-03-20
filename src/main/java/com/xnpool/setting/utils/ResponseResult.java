@@ -11,10 +11,6 @@ import java.util.Map;
 
 @Data
 public class ResponseResult<T> implements Serializable {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -1626793180717240861L;
     private Integer status;
     private String message;
     private T data;

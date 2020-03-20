@@ -32,6 +32,10 @@ public class AgreementSettingController extends BaseController {
     @Value("${config.prifix}")
     private String prifix;
 
+    //文件存储路径
+    @Value("${config.filePath}")
+    private  String filePath;
+
     /**
      * @return
      * @Description 添加协议
@@ -43,8 +47,8 @@ public class AgreementSettingController extends BaseController {
     @PostMapping("/addAgreement")
     public ResponseResult addAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
-        ResponseResult result = UploadUtils.getFileToUpload(file);
-        if (result != null) return result;
+        ResponseResult result = UploadUtils.getFileToUpload(file,filePath);
+        if (200!=result.getStatus()) return result;
         //添加记录到数据库
         agreementSetting.setPath(prifix + file.getOriginalFilename());
         agreementSettingService.insertSelective(agreementSetting);
@@ -62,7 +66,7 @@ public class AgreementSettingController extends BaseController {
     @PutMapping("/updateAgreement")
     public ResponseResult updateAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
-        ResponseResult result = UploadUtils.getFileToUpload(file);
+        ResponseResult result = UploadUtils.getFileToUpload(file,filePath);
         if (result != null) return result;
         //添加记录到数据库
         agreementSetting.setPath(prifix + file.getOriginalFilename());

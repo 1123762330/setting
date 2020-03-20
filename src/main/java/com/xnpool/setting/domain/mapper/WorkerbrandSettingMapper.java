@@ -1,26 +1,16 @@
 package com.xnpool.setting.domain.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/9 11:57
+ * @date 2020/3/20 15:06
  */
-public interface WorkerbrandSettingMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface WorkerbrandSettingMapper extends BaseMapper<WorkerbrandSetting> {
 
-    int insert(WorkerbrandSetting record);
-
-    int insertSelective(WorkerbrandSetting record);
-
-    WorkerbrandSetting selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(WorkerbrandSetting record);
-
-    int updateByPrimaryKey(WorkerbrandSetting record);
-
-    int updateById(int id);
+    int deleteByIdKey(int id);
 
     List<WorkerbrandSetting> selectByOther(@Param("keyWord") String keyWord);
 }

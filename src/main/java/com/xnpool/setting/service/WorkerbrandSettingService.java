@@ -13,12 +13,9 @@ import java.util.List;
  */
 public interface WorkerbrandSettingService {
 
-
     int deleteByPrimaryKey(Integer id);
 
     int insert(WorkerbrandSetting record);
-
-    int insertSelective(WorkerbrandSetting record);
 
     WorkerbrandSetting selectByPrimaryKey(Integer id);
 
@@ -32,6 +29,7 @@ public interface WorkerbrandSettingService {
 
     HashMap<Integer, String> selectWorkerbrandMap();
 }
+
 
 
 

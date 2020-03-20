@@ -39,7 +39,7 @@ public class WorkerbrandSettingController extends BaseController {
     @SystemLog(value = "添加矿机品牌",type = LogType.SYSTEM)
     @PostMapping("/addWorkerbrand")
     public ResponseResult addWorkerbrand(WorkerbrandSetting workerbrandSetting) {
-        workerbrandSettingService.insertSelective(workerbrandSetting);
+        workerbrandSettingService.insert(workerbrandSetting);
         return new ResponseResult(SUCCESS);
     }
 

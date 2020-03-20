@@ -1,14 +1,18 @@
 package com.xnpool.setting.service.impl;
+import java.util.Date;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
 import com.xnpool.setting.service.WorkerbrandSettingService;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,14 +22,14 @@ import java.util.List;
  * @date 2020/2/6 13:22
  */
 @Service
-public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService {
+public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService {
 
     @Resource
     private WorkerbrandSettingMapper workerbrandSettingMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
-        return workerbrandSettingMapper.deleteByPrimaryKey(id);
+        return workerbrandSettingMapper.deleteById(id);
     }
 
     @Override
@@ -34,28 +38,23 @@ public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService 
     }
 
     @Override
-    public int insertSelective(WorkerbrandSetting record) {
-        return workerbrandSettingMapper.insertSelective(record);
-    }
-
-    @Override
     public WorkerbrandSetting selectByPrimaryKey(Integer id) {
-        return workerbrandSettingMapper.selectByPrimaryKey(id);
+        return workerbrandSettingMapper.selectById(id);
     }
 
     @Override
     public int updateByPrimaryKeySelective(WorkerbrandSetting record) {
-        return workerbrandSettingMapper.updateByPrimaryKeySelective(record);
+        return workerbrandSettingMapper.update(record,new UpdateWrapper<>());
     }
 
     @Override
     public int updateByPrimaryKey(WorkerbrandSetting record) {
-        return workerbrandSettingMapper.updateByPrimaryKey(record);
+        return workerbrandSettingMapper.updateById(record);
     }
 
     @Override
     public int updateById(int id) {
-        return workerbrandSettingMapper.updateById(id);
+        return workerbrandSettingMapper.deleteById(id);
     }
 
     @Override
@@ -84,6 +83,7 @@ public class WorkerbrandSettingServiceImpl implements WorkerbrandSettingService 
     }
 
 }
+
 
 
 

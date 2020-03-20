@@ -21,9 +21,8 @@ import static com.xnpool.setting.common.BaseController.SUCCESS;
 @Component
 @Slf4j
 public class UploadUtils {
-    //文件存储路径
-    @Value("${config.filePath}")
-    private static String filePath;
+
+
 
     /**
      * @return
@@ -59,13 +58,15 @@ public class UploadUtils {
      * @Param
      * @return
      */
-    public static ResponseResult getFileToUpload(@RequestParam("file") MultipartFile file) {
+    public static ResponseResult getFileToUpload(@RequestParam("file") MultipartFile file,String filePath) {
         ResponseResult resp = checkFile(file);
-        if ("200".equals(resp.getStatus())) {
+        if (200==resp.getStatus()) {
             try {
                 //上传文件到服务器上
                 String path = System.getProperty("user.dir") + filePath;
                 uploadFile(file, file.getOriginalFilename(), path);
+                log.info("文件上传的位置:"+path);
+                return new ResponseResult(SUCCESS, "上传文件成功");
             } catch (FileNotFoundException e) {
                 log.info("文件上传异常:" + e.getMessage());
                 return new ResponseResult(FAIL, "文件上传出错,请重试!"+e.getMessage());
@@ -73,8 +74,9 @@ public class UploadUtils {
                 log.info("文件上传异常:" + e.getMessage());
                 return new ResponseResult(FAIL, "文件上传出错,请重试!"+e.getMessage());
             }
+        }else {
+            return new ResponseResult(resp.getStatus(), resp.getMessage());
         }
-        return null;
     }
 
     /**

@@ -14,9 +14,11 @@ import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.controller.MineSettingController;
 import com.xnpool.setting.domain.mapper.AlgorithmMapper;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
+import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
 import com.xnpool.setting.domain.pojo.Algorithm;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.TokenUtil;
@@ -32,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SettingApplicationTests {
 
     @Autowired
-    private AlgorithmMapper algorithmMapper;
+    private WorkerbrandSettingMapper workerbrandSettingMapper;
 
     @Before
     public void before() {
@@ -42,6 +44,20 @@ public class SettingApplicationTests {
 
     @Test
     public void addMineSetting() {
+        //WorkerbrandSetting workerbrandSetting = new WorkerbrandSetting();
+        //workerbrandSetting.setBrandName("");
+        //workerbrandSetting.setWorkerType("");
+        //workerbrandSetting.setBusiness("");
+        //workerbrandSetting.setWorkerSize("");
+        //workerbrandSetting.setPowerWaste("");
+        //workerbrandSetting.setDifficulty("");
+        //workerbrandSetting.setIsDelete(0);
+        //workerbrandSetting.setCreateTime(new Date());
+        //workerbrandSetting.setUpdateTime(new Date());
+        //workerbrandSetting.setAlgorithmId(0);
+        //
+        //int rows = workerbrandSettingMapper.insert(workerbrandSetting);
+        //System.out.println(rows);
         //Map<String, Object> verify = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2MTc1MDIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6ImE1ZDU2M2Y3LThiM2ItNGE5Mi05ZDZkLWRjMmE0NDJhNWNlMiIsImNsaWVudF9pZCI6InpsdCJ9.OFJ9k4yCPpZDHnuaX-hn-r86uPfJf8x6NbbLJ6HndwY");
         //System.out.println("verify==="+verify);
         //JSONObject jsonObject = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2Njc5NDksImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6IjFjMmY2NWVlLTNiNzEtNDU0Yy05Y2I1LWRjYmRlYzk4ZjZhZSIsImNsaWVudF9pZCI6InpsdCJ9.9cEqM7zE_s1ZDb7lmzSSCdMMHwtJp8Ihps5BprO5cto");
