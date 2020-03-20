@@ -192,7 +192,7 @@
         select
         <include refid="Base_Column_List"/>
         from group_setting
-        where isDelete=0
+        where is_delete=0
     </select>
 
     <select id="selectGroupAndIp" resultType="HashMap">

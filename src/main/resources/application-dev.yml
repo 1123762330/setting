@@ -141,3 +141,5 @@ zlt:
     ignoreTables:
       - sys_user
       - algorithm
+      - sys_role_user
+      - sys_role
