@@ -70,7 +70,7 @@ spring:
 #mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
-  typeAliasesPackage:  com.xnpool.setting.domain
+  typeAliasesPackage:  com.xnpool.setting.domain.mapper
   global-config:
     db-config:
       id-type: AUTO

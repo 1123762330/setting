@@ -25,4 +25,6 @@ public interface FrameSettingMapper {
     List<FrameSettingExample> selectByOther(@Param("keyWord") String keyWord);
 
     List<HashMap> selectFrameNameByFactoryId(Integer factoryId);
+
+    List<HashMap> selectMineFactoryAndFrame();
 }

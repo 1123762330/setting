@@ -40,7 +40,7 @@ public class WorkerAssignController extends BaseController {
      */
     @SystemLog(value = "查询矿机权限列表",type = LogType.MINE)
     @GetMapping("/selectUserAndRole")
-    public ResponseResult selectFrameList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectUserAndRole(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<UserRoleVO> pageInfo = workerAssignService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);

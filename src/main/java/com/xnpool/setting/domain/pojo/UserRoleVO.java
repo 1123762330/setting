@@ -15,8 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRoleVO implements Serializable {
-    private static final long serialVersionUID = -8083564486547497851L;
-
+    private static final long serialVersionUID = -4872978249967353439L;
     private String userName;
     private Integer userId;
     private String roleName;

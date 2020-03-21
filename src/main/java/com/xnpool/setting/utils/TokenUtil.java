@@ -104,7 +104,7 @@ public class TokenUtil {
                 //角色列表
                 List<String> roles = jwt.getClaim("authorities").asList(String.class);
                 //企业id
-                Integer enterpriseId = jwt.getClaim("enterpriseId").asInt();
+                String enterpriseId = jwt.getClaim("enterpriseId").asString();
                 //用户id
                 Integer userId = jwt.getClaim("id").asInt();
                 reslut.put("username", username);

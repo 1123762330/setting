@@ -113,5 +113,18 @@ public class FrameSettingController extends BaseController {
         return new ResponseResult(SUCCESS, resultMap);
     }
 
+    /**
+     * @Description 矿场厂房和机架集合
+     * @Author zly
+     * @Date 17:01 2020/3/3
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectMineFactoryAndFrame")
+    public ResponseResult selectMineFactoryAndFrame() {
+        HashMap<String, HashMap> resultMap = frameSettingService.selectMineFactoryAndFrame();
+        return new ResponseResult(SUCCESS,resultMap);
+    }
+
 
 }

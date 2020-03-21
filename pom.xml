@@ -66,11 +66,6 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.0.5</version>
         </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus</artifactId>
-            <version>3.0.5</version>
-        </dependency>
 
         <!--lombok-->
         <dependency>
@@ -165,6 +160,17 @@
             <version>1.1.2</version>
         </dependency>
 
+        <!--<dependency>-->
+        <!--    <groupId>org.apache.velocity</groupId>-->
+        <!--    <artifactId>velocity-engine-core</artifactId>-->
+        <!--    <version>2.2</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--    <groupId>org.freemarker</groupId>-->
+        <!--    <artifactId>freemarker</artifactId>-->
+        <!--    <version>2.3.30</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <dependencyManagement>

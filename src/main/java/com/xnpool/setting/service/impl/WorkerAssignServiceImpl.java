@@ -68,7 +68,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<UserRoleVO> userRoleVOS = workerAssignMapper.selectByOther(keyWord);
+        List<UserRoleVO> userRoleVOS = workerAssignMapper.selectByOther();
         PageInfo<UserRoleVO> pageInfo = new PageInfo<>(userRoleVOS);
         return pageInfo;
     }

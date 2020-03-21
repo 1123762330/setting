@@ -32,7 +32,7 @@ public interface MineSettingService {
 
     PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    HashMap<String, HashMap> selectMineFactoryAndFrame();
+
 }
 
 

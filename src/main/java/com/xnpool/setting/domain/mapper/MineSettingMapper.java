@@ -23,6 +23,4 @@ public interface MineSettingMapper {
     int updateById(int id);
 
     List<MineSetting> selectByOther(@Param("keyWord") String keyWord);
-
-    List<HashMap> selectMineFactoryAndFrame();
 }
