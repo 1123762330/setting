@@ -81,8 +81,18 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
         for (OperatorWorkerHistoryExample operatorWorkerHistoryExample : operatorWorkerHistoryExamples) {
             SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//转换年月日
             try {
-                Date moveouttime = simpleDate.parse(operatorWorkerHistoryExample.getMoveOutTime());
-                Date comeintime = simpleDate.parse(operatorWorkerHistoryExample.getComeInTime());
+                String moveOutTime = operatorWorkerHistoryExample.getMoveOutTime();
+                String comeInTime = operatorWorkerHistoryExample.getComeInTime();
+                Date moveouttime=null;
+                Date comeintime=null;
+                if (!StringUtils.isEmpty(moveOutTime)){
+                     moveouttime = simpleDate.parse(moveOutTime);
+
+                }
+                if (!StringUtils.isEmpty(comeInTime)){
+                    comeintime = simpleDate.parse(moveOutTime);
+
+                }
                 if (comeintime != null) {
                     long totalTime = (comeintime.getTime() - moveouttime.getTime()) / 1000;
                     String DateTimes = calculTime(totalTime);
