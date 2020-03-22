@@ -3,18 +3,16 @@ package com.xnpool.setting.controller;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.AgreementSetting;
 import com.xnpool.setting.service.AgreementSettingService;
-import com.xnpool.setting.utils.ResponseResult;
 import com.xnpool.setting.utils.UploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.*;
 
 /**
  * 协议设置

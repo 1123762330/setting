@@ -2,8 +2,8 @@ package com.xnpool.setting.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.common.exception.CheckException;
 import com.xnpool.setting.utils.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

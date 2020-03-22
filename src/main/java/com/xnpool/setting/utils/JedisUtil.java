@@ -1,6 +1,6 @@
 package com.xnpool.setting.utils;
 
-import com.xnpool.setting.common.exception.InsertException;
+import com.xnpool.logaop.service.exception.InsertException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

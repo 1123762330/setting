@@ -1,5 +1,6 @@
 package com.xnpool.setting.utils;
 
+import com.xnpool.logaop.util.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -58,7 +59,7 @@ public class UploadUtils {
      * @Param
      * @return
      */
-    public static ResponseResult getFileToUpload(@RequestParam("file") MultipartFile file,String filePath) {
+    public static ResponseResult getFileToUpload(@RequestParam("file") MultipartFile file, String filePath) {
         ResponseResult resp = checkFile(file);
         if (200==resp.getStatus()) {
             try {

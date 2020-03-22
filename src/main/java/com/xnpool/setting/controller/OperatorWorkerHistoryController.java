@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.OperatorWorkerHistoryExample;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
-import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +42,7 @@ public class OperatorWorkerHistoryController extends BaseController {
                                                   @RequestParam(value = "endTime", required=false)String endTime,
                                                   @RequestParam(value = "keyWord", required=false)String keyWord,
                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<OperatorWorkerHistoryExample> pageInfo = operatorWorkerHistoryService.selectWorkerHistoryList(startTime,endTime,keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);
     }

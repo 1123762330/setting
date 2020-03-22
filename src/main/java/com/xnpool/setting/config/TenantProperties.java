@@ -14,13 +14,13 @@ import java.util.List;
 @Data
 @Component
 @ConfigurationProperties(prefix = "zlt.tenant")
-@RefreshScope
+@RefreshScope //配置文件自动刷新
 public class TenantProperties {
 
     /**
      * 是否开启多租户
      */
-    private Boolean enable = false;
+    private Boolean enable = true;
 
     /**
      * 配置不进行多租户隔离的表名

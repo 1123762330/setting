@@ -2,9 +2,11 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.logaop.service.exception.DataNotFoundException;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import com.xnpool.setting.domain.pojo.Algorithm;
 import com.xnpool.setting.domain.mapper.AlgorithmMapper;
 import com.xnpool.setting.service.AlgorithmService;
@@ -15,12 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/3/19 16:21
+ * @author zly
  * @version 1.0
+ * @date 2020/3/19 16:21
  */
 @Service
-public class AlgorithmServiceImpl implements AlgorithmService{
+public class AlgorithmServiceImpl implements AlgorithmService {
 
     @Resource
     private AlgorithmMapper algorithmMapper;
@@ -55,7 +57,7 @@ public class AlgorithmServiceImpl implements AlgorithmService{
         for (HashMap hashMap : hashMapList) {
             String algorithm_name = hashMap.get("algorithm_name").toString();
             Integer id = Integer.valueOf(hashMap.get("id").toString());
-            resultMap.put(id,algorithm_name);
+            resultMap.put(id, algorithm_name);
         }
         return resultMap;
     }

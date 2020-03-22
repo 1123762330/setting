@@ -5,11 +5,11 @@ import com.github.pagehelper.PageInfo;
 
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
 import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
 import com.xnpool.setting.service.ElectricityMeterSettingService;
-import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -79,7 +79,7 @@ public class ElectricityMeterController extends BaseController {
     @SystemLog(value = "查询电表设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectElectricityMeter")
     public ResponseResult selectElectricityMeter(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<ElectricityMeterSettingExample> pageInfo = electricityMeterSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS,pageInfo);
     }

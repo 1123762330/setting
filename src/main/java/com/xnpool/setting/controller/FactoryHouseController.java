@@ -5,12 +5,12 @@ import com.github.pagehelper.PageInfo;
 
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
-import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

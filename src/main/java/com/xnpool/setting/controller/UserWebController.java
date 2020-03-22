@@ -5,11 +5,11 @@ import com.github.pagehelper.PageInfo;
 
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.service.WorkerDetailedService;
 import com.xnpool.setting.service.impl.UserWebService;
-import com.xnpool.setting.utils.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +45,7 @@ public class UserWebController extends BaseController {
      */
     @SystemLog(value = "查询用户网站矿机详情列表",type = LogType.SURVER)
     @GetMapping("/selectAllWorkerDetailed")
-    public ResponseResult selectAllWorkerDetailed(String workerName,String startIp,String endIp,
+    public ResponseResult selectAllWorkerDetailed(String workerName, String startIp, String endIp,
                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                   HttpServletRequest request) {

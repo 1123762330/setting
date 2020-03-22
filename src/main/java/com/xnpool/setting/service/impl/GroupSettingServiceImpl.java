@@ -2,8 +2,8 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.common.exception.DeleteException;
 import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
 import com.xnpool.setting.domain.model.GroupSettingExample;

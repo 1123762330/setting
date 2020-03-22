@@ -73,7 +73,7 @@ public class MybatisPlusConfig {
                             //    return true;
                             //}
                             //return false;
-                            return tenantProperties.getIgnoreSqls().stream().anyMatch((e) -> e.equalsIgnoreCase(tableName));
+                            return tenantProperties.getIgnoreTables().stream().anyMatch((e) -> e.equalsIgnoreCase(tableName));
                         }
                     });
             paginationInterceptor.setSqlParserList(CollUtil.toList(tenantSqlParser));

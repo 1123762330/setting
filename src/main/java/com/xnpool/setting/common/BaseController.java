@@ -2,21 +2,18 @@ package com.xnpool.setting.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xnpool.setting.common.exception.*;
+import com.xnpool.logaop.service.exception.DeleteException;
+import com.xnpool.logaop.service.exception.InsertException;
+import com.xnpool.logaop.service.exception.UpdateException;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.domain.redismodel.*;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
-import com.xnpool.setting.utils.ResponseResult;
 import com.xnpool.setting.utils.TokenUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -59,43 +56,43 @@ public abstract class BaseController {
 	private ApiContext apiContext;
 
 
-	@ExceptionHandler({ServiceException.class})
-	@ResponseBody
-	public ResponseResult<Void> handleException(Exception e) {
-		Integer status = null;
-		//400-验证异常
-		if(e instanceof CheckException) {
-			status = 400;
-		//401-数据不存在
-		}else if(e instanceof DataNotFoundException){
-			status = 401;
-		//402-数据不存在
-		}else if(e instanceof DataExistException){
-			status = 402;
-		//长度不正确
-		}else if(e instanceof OutLengthException){
-			status = 403;
-		//解密异常
-		}else if(e instanceof VerifyException){
-			status = 405;
-		//数据添加失败
-		}else if (e instanceof InsertException){
-			status = 501;
-		}else if(e instanceof UpdateException){
-			status = 502;
-		}else if (e instanceof TokenException){
-			//todo
-			status =700;
-		}else if(e instanceof NoMessageException){
-			//无需返回消息给前端异常
-			status= 201;
-		}else if(e instanceof ParseException){
-			//时间转换异常
-			status= 701;
-		}
-
-		return new ResponseResult<>(status,e);
-	}
+	//@ExceptionHandler({ServiceException.class})
+	//@ResponseBody
+	//public ResponseResult<Void> handleException(Exception e) {
+	//	Integer status = null;
+	//	//400-验证异常
+	//	if(e instanceof CheckException) {
+	//		status = 400;
+	//	//401-数据不存在
+	//	}else if(e instanceof DataNotFoundException){
+	//		status = 401;
+	//	//402-数据不存在
+	//	}else if(e instanceof DataExistException){
+	//		status = 402;
+	//	//长度不正确
+	//	}else if(e instanceof OutLengthException){
+	//		status = 403;
+	//	//解密异常
+	//	}else if(e instanceof VerifyException){
+	//		status = 405;
+	//	//数据添加失败
+	//	}else if (e instanceof InsertException){
+	//		status = 501;
+	//	}else if(e instanceof UpdateException){
+	//		status = 502;
+	//	}else if (e instanceof TokenException){
+	//		//todo
+	//		status =700;
+	//	}else if(e instanceof NoMessageException){
+	//		//无需返回消息给前端异常
+	//		status= 201;
+	//	}else if(e instanceof ParseException){
+	//		//时间转换异常
+	//		status= 701;
+	//	}
+	//
+	//	return new ResponseResult<>(status,e);
+	//}
 
 	//执行添加数据到缓存里面
 	public void insertRedis(String table, String user, Object record,Integer mineId) {

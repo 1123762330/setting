@@ -2,9 +2,9 @@ package com.xnpool.setting.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.PassToken;
 import com.xnpool.setting.common.UserLoginToken;
-import com.xnpool.setting.utils.ResponseResult;
 import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +49,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 			Integer userId = data.getInteger("id");
 			String enterpriseId = data.getString("enterpriseId");
 			//从登录用户的token中获取企业ID,
-			apiContext.setTenantId(Long.valueOf(enterpriseId));
-			//apiContext.setTenantId(1L);
+			//apiContext.setTenantId(Long.valueOf(enterpriseId));
+			apiContext.setTenantId(1L);
 		}else {
-			printJson(response, 403, "请登录!");
-			return true;
+			apiContext.setTenantId(1L);
+			//printJson(response, 403, "请登录!");
+			//return true;
 		}
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){
