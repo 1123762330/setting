@@ -48,13 +48,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 			JSONObject data = jsonObject.getJSONObject("data");
 			Integer userId = data.getInteger("id");
 			String enterpriseId = data.getString("enterpriseId");
-			//从登录用户的token中获取企业ID,
-			//apiContext.setTenantId(Long.valueOf(enterpriseId));
-			apiContext.setTenantId(1L);
+			//这里会有多企业id
+			if (enterpriseId.contains(",")){
+				String[] split = enterpriseId.split(",");
+				//从登录用户的token中获取企业ID,
+				apiContext.setTenantId(Long.valueOf(split[0]));
+			}else {
+				apiContext.setTenantId(Long.valueOf(enterpriseId));
+			}
+			//apiContext.setTenantId(1L);
 		}else {
-			apiContext.setTenantId(1L);
-			//printJson(response, 403, "请登录!");
-			//return true;
+			//apiContext.setTenantId(1L);
+			printJson(response, 403, "请登录!");
+			return true;
 		}
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){
