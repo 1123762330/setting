@@ -62,7 +62,7 @@ public class CustomerSetting implements Serializable {
     private String roleId;
 
     /**
-     * 认证,0:默认,1:通过,-1是不通过,2是申请
+     * 认证,0:待审核,1:通过,2:不通过
      */
     private Integer authentication;
 

@@ -71,15 +71,10 @@ public class CustomerSettingExample implements Serializable {
     /**
      * 角色ID,包含多个
      */
-    private String roleid;
-
-    /**
-     * 角色ID,包含多个
-     */
     private String roleName;
 
     /**
-     * 认证,0:不通过,1:通过
+     * 认证,0:待审核,1:通过,2:不通过
      */
     private Integer authentication;
 
@@ -87,4 +82,9 @@ public class CustomerSettingExample implements Serializable {
      * 观察者,0:无权限,1:有权限
      */
     private Integer iswatch;
+
+    /**
+     * 管理员id
+     */
+    private Integer managerUserId;
 }
