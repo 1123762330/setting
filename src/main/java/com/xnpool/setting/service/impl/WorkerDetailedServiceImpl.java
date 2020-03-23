@@ -114,13 +114,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      */
     @Override
     public void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam) {
-        String workerid = workerDetailedParam.getWorkerid();
+        String workerIds = workerDetailedParam.getWorkerId();
         Integer userId = workerDetailedParam.getUserId();
-        Integer factoryid = workerDetailedParam.getFactoryid();
+        Integer factoryId = workerDetailedParam.getFactoryId();
         Integer workerbrandId = workerDetailedParam.getWorkerbrandId();
-        Integer frameid = workerDetailedParam.getFrameid();
-        Integer framenumber = workerDetailedParam.getFramenumber();
-        Integer groupid = workerDetailedParam.getGroupid();
+        Integer frameId = workerDetailedParam.getFrameId();
+        Integer frameNumber = workerDetailedParam.getFrameNumber();
+        Integer groupId = workerDetailedParam.getGroupId();
         Integer mineId = workerDetailedParam.getMineId();
         String workerIp = workerDetailedParam.getWorkerIp();
         String remarks = workerDetailedParam.getRemarks();
@@ -128,9 +128,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         WorkerDetailedServiceImpl.log.info("库中已经存在的矿机ID:" + workerIdList);
         ArrayList<WorkerDetailed> list = new ArrayList<>();
         ArrayList<WorkerDetailedRedisModel> redisModelList = new ArrayList<>();
-        if (workerid.contains(",")) {
+        if (workerIds.contains(",")) {
             //批量添加
-            String[] split = workerid.split(",");
+            String[] split = workerIds.split(",");
             String[] split_ip = workerIp.split(",");
             for (int i = 0; i < split.length; i++) {
                 if (workerIdList.contains(Integer.valueOf(split[i]))) {
@@ -142,10 +142,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     workerDetailed.setWorkerIp(split_ip[i]);
                     workerDetailed.setUserId(userId);
                     workerDetailed.setWorkerbrandId(workerbrandId);
-                    workerDetailed.setFactoryId(factoryid);
-                    workerDetailed.setFrameId(frameid);
-                    workerDetailed.setFrameNumber(framenumber);
-                    workerDetailed.setGroupId(groupid);
+                    workerDetailed.setFactoryId(factoryId);
+                    workerDetailed.setFrameId(frameId);
+                    workerDetailed.setFrameNumber(frameNumber);
+                    workerDetailed.setGroupId(groupId);
                     workerDetailed.setMineId(mineId);
                     workerDetailed.setCreateTime(new Date());
                     workerDetailed.setRemarks(remarks);
@@ -155,10 +155,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     workerDetailedRedisModel.setWorker_id(Integer.valueOf(workerId));
                     workerDetailedRedisModel.setUser_id(userId);
                     workerDetailedRedisModel.setWorkerbrand_id(workerbrandId);
-                    workerDetailedRedisModel.setFactory_id(factoryid);
-                    workerDetailedRedisModel.setFrame_id(frameid);
-                    workerDetailedRedisModel.setFrame_number(framenumber);
-                    workerDetailedRedisModel.setGroup_id(groupid);
+                    workerDetailedRedisModel.setFactory_id(factoryId);
+                    workerDetailedRedisModel.setFrame_id(frameId);
+                    workerDetailedRedisModel.setFrame_number(frameNumber);
+                    workerDetailedRedisModel.setGroup_id(groupId);
                     workerDetailedRedisModel.setMine_id(mineId);
                     workerDetailedRedisModel.setRemarks(remarks);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -168,30 +168,30 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 }
             }
         } else {
-            if (workerIdList.contains(workerid)) {
+            if (workerIdList.contains(workerIds)) {
                 throw new InsertException("该矿机已经添加过!");
             } else {
                 WorkerDetailed workerDetailed = new WorkerDetailed();
-                workerDetailed.setWorkerId(Integer.valueOf(workerid));
+                workerDetailed.setWorkerId(Integer.valueOf(workerIds));
                 workerDetailed.setWorkerIp(workerIp);
                 workerDetailed.setUserId(userId);
-                workerDetailed.setFactoryId(factoryid);
-                workerDetailed.setFrameId(frameid);
-                workerDetailed.setFrameNumber(framenumber);
-                workerDetailed.setGroupId(groupid);
+                workerDetailed.setFactoryId(factoryId);
+                workerDetailed.setFrameId(frameId);
+                workerDetailed.setFrameNumber(frameNumber);
+                workerDetailed.setGroupId(groupId);
                 workerDetailed.setMineId(mineId);
                 workerDetailed.setCreateTime(new Date());
                 workerDetailed.setWorkerIp(workerIp);
                 list.add(workerDetailed);
 
                 WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
-                workerDetailedRedisModel.setWorker_id(Integer.valueOf(workerid));
+                workerDetailedRedisModel.setWorker_id(Integer.valueOf(workerIds));
                 workerDetailedRedisModel.setUser_id(userId);
                 workerDetailedRedisModel.setWorkerbrand_id(workerbrandId);
-                workerDetailedRedisModel.setFactory_id(factoryid);
-                workerDetailedRedisModel.setFrame_id(frameid);
-                workerDetailedRedisModel.setFrame_number(framenumber);
-                workerDetailedRedisModel.setGroup_id(groupid);
+                workerDetailedRedisModel.setFactory_id(factoryId);
+                workerDetailedRedisModel.setFrame_id(frameId);
+                workerDetailedRedisModel.setFrame_number(frameNumber);
+                workerDetailedRedisModel.setGroup_id(groupId);
                 workerDetailedRedisModel.setMine_id(mineId);
                 workerDetailedRedisModel.setRemarks(remarks);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -202,6 +202,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             }
         }
 
+        System.out.println("列表集合:"+list);
         //批量入管理仓库
         int rows = workerDetailedMapper.batchInsert(list);
         //批量入缓存

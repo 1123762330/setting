@@ -19,73 +19,73 @@ public class WorkerDetailedParam implements Serializable {
     private static final long serialVersionUID = -370117579611317755L;
 
     /**
-    * 矿机ID
-    */
-    private String workerid;
-
-    /**
-     * 矿机IP
+     * 矿机ID
      */
-    private String workerIp;
+    private String workerId;
 
     /**
-     * 矿机品牌
-     */
-    private Integer workerbrandId;
-
-    /**
-     * 用户Id
+     * 用户id
      */
     private Integer userId;
 
     /**
-    * 所属厂房
-    */
-    private Integer factoryid;
+     * 矿机品牌id
+     */
+    private Integer workerbrandId;
 
     /**
-    * 所属机架
-    */
-    private Integer frameid;
+     * 所属厂房
+     */
+    private Integer factoryId;
 
     /**
-    * 矿机架层数
-    */
-    private Integer framenumber;
+     * 所属机架
+     */
+    private Integer frameId;
 
     /**
-    * 所属分组
-    */
-    private Integer groupid;
+     * 矿机架层数
+     */
+    private Integer frameNumber;
 
     /**
-     * 所属矿场
+     * 所属分组
+     */
+    private Integer groupId;
+
+    /**
+     * 矿场id
      */
     private Integer mineId;
 
     /**
-    * 是否入库,0:未入库,1:已入库
-    */
+     * 是否入库,0:未入库,1:已入库
+     */
     private Integer isComeIn;
 
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remarks;
 
     /**
-    * 是否删除,0:否,1:是
-    */
-    private Integer isdelete;
+     * 是否删除,0:否,1:是
+     */
+    private Integer isDelete;
 
     /**
-    * 创建时间
-    */
-    private Date createtime;
+     * 创建时间
+     */
+    private Date createTime;
 
     /**
-    * 更新时间
-    */
-    private Date updatetime;
+     * 更新时间
+     */
+    private Date updateTime;
+
+    /**
+     * 矿机ip
+     */
+    private String workerIp;
 
 }

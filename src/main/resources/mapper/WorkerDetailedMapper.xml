@@ -248,11 +248,11 @@
 
     <!--    批量添加-->
     <insert id="batchInsert" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
-        insert into worker_detailed (worker_id,user_id, factory_id, frame_id,frame_number, group_id, mine_id,create_time)
+        insert into worker_detailed (worker_id,user_id, factory_id, frame_id,frame_number, group_id, mine_id,create_time,workerbrand_id,worker_ip)
         values
         <foreach collection="list" index="index" item="item" separator=",">
             (#{item.workerId},#{item.userId},#{item.factoryId},#{item.frameId},#{item.frameNumber},
-            #{item.groupId},#{item.mineId},#{item.createTime})
+            #{item.groupId},#{item.mineId},#{item.createTime},#{item.workerbrandId},#{item.workerIp})
         </foreach>
     </insert>
 
