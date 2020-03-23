@@ -196,7 +196,6 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     public HashMap<Integer, String> selectGroupMap() {
         HashMap<Integer, String> groupNameMap = new HashMap<>();
         List<GroupSetting> groupSettings = groupSettingMapper.selectGroupMap();
-        System.out.println(groupSettings);
         groupSettings.forEach(groupSettingExample -> {
             Integer groupid = groupSettingExample.getId();
             String groupname = groupSettingExample.getGroupName();
