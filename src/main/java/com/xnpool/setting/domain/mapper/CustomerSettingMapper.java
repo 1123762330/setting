@@ -30,4 +30,6 @@ public interface CustomerSettingMapper {
     void updateAttestationById(@Param("userId") int userId, @Param("isPass") int isPass);
 
     List<HashMap> selectUserList();
+
+    List<HashMap> selectUserMap();
 }

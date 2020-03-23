@@ -154,6 +154,31 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         return resultMap;
     }
 
+    @Override
+    public HashMap<Integer, String> selectCustomerMap() {
+        HashMap<Integer, String> resultMap = new HashMap<>();
+        List<HashMap> hashMapList = customerSettingMapper.selectUserList();
+        System.out.println();
+        hashMapList.forEach(hashMap -> {
+            Integer id = Integer.valueOf(hashMap.get("customerId").toString());
+            String username = hashMap.get("username").toString();
+            resultMap.put(id,username);
+        });
+        return resultMap;
+    }
+
+    @Override
+    public HashMap<Integer, String> selectAllUser() {
+        HashMap<Integer, String> resultMap = new HashMap<>();
+        List<HashMap> hashMapList = customerSettingMapper.selectUserMap();
+        hashMapList.forEach(hashMap -> {
+            Integer id = Integer.valueOf(hashMap.get("id").toString());
+            String username = hashMap.get("username").toString();
+            resultMap.put(id,username);
+        });
+        return resultMap;
+    }
+
 }
 
 

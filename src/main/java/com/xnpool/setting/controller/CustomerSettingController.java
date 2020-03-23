@@ -117,5 +117,30 @@ public class CustomerSettingController extends BaseController {
         return new ResponseResult(SUCCESS,userNameList);
     }
 
+    /**
+     * @Description 查询客户姓名集合,添加电表时需要
+     * @Author zly
+     * @Date 9:51 2020/3/23
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectCustomerMap")
+    public ResponseResult selectCustomerMap (){
+        HashMap<Integer, String> userNameList = customerSettingService.selectCustomerMap();
+        return new ResponseResult(SUCCESS,userNameList);
+    }
+
+    /**
+     * @Description 查询用户表所有的用户
+     * @Author zly
+     * @Date 10:21 2020/3/23
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectAllUser")
+    public ResponseResult selectAllUser (){
+        HashMap<Integer, String> userNameList = customerSettingService.selectAllUser();
+        return new ResponseResult(SUCCESS,userNameList);
+    }
 
 }

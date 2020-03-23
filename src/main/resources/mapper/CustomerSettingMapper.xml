@@ -280,6 +280,7 @@
     <!--查询客户姓名集合-->
     <select id="selectUserList" resultType="java.util.HashMap">
       SELECT
+          customer_setting.id AS customerId,
           sys_user.id,
           sys_user.username
       FROM
@@ -288,5 +289,15 @@
       WHERE
           customer_setting.is_delete = 0
           AND customer_setting.user_id = sys_user.id
+    </select>
+
+    <select id="selectUserMap" resultType="java.util.HashMap">
+        SELECT
+          sys_user.id,
+          sys_user.username
+      FROM
+          sys_user
+      WHERE
+          sys_user.is_del = 0
     </select>
 </mapper>

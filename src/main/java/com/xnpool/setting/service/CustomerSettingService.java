@@ -33,6 +33,10 @@ public interface CustomerSettingService {
     void updateAttestationById(int userid, int isPass);
 
     HashMap<Integer,String> selectUserList();
+
+    HashMap<Integer, String> selectCustomerMap();
+
+    HashMap<Integer, String> selectAllUser();
 }
 
 
