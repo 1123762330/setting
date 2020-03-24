@@ -18,7 +18,7 @@ public interface CustomerSettingService {
 
     int insert(CustomerSetting record);
 
-    void insertSelective(CustomerSetting record);
+    void insertSelective(CustomerSetting record,String token);
 
     CustomerSetting selectByPrimaryKey(Integer id);
 

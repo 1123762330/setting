@@ -8,14 +8,13 @@ import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
+import com.xnpool.setting.domain.pojo.CustomerSetting;
+import com.xnpool.setting.service.CustomerSettingService;
 import com.xnpool.setting.service.WorkerDetailedService;
 import com.xnpool.setting.service.impl.UserWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -35,6 +34,9 @@ public class UserWebController extends BaseController {
 
     @Autowired
     private UserWebService userWebService;
+
+    @Autowired
+    private CustomerSettingService customerSettingService;
 
     /**
      * @Description 用户网站查询矿机详情列表
@@ -107,5 +109,13 @@ public class UserWebController extends BaseController {
         String token = request.getHeader("token");
         HashMap<String, Integer> hashMap = userWebService.getWorkerTotal(token);
         return new ResponseResult(SUCCESS,hashMap);
+    }
+
+    @SystemLog(value = "用户申请企业授权",type = LogType.SYSTEM)
+    @PostMapping("/userApplyAuthority")
+    public ResponseResult userApplyAuthority(CustomerSetting customerSetting,HttpServletRequest request){
+        String token = request.getHeader("token");
+        customerSettingService.insertSelective(customerSetting,token);
+        return new ResponseResult(SUCCESS);
     }
 }

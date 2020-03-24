@@ -96,6 +96,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             for (int i = 0; i < split.length; i++) {
                 String id = split[i];
                 String[] splitId = id.split("-");
+                //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
                 if (!id.contains("-")){
                     //直接是矿场ID
                     Integer mineId = Integer.valueOf(id);

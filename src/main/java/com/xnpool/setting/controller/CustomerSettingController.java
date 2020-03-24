@@ -37,7 +37,7 @@ public class CustomerSettingController extends BaseController {
     @SystemLog(value = "添加客户",type = LogType.SYSTEM)
     @PostMapping("/addCustomer")
     public ResponseResult addCustomer(CustomerSetting customerSetting) {
-        customerSettingService.insertSelective(customerSetting);
+        customerSettingService.insertSelective(customerSetting,null);
         return new ResponseResult(SUCCESS);
     }
 

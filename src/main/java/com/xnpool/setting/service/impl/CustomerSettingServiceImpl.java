@@ -1,11 +1,14 @@
 package com.xnpool.setting.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.service.AgreementSettingService;
 import com.xnpool.setting.service.GroupSettingService;
+import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,9 +55,17 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSelective(CustomerSetting record) {
+    public void insertSelective(CustomerSetting record,String token) {
+        JSONObject jsonObject = TokenUtil.verify(token);
+        log.info("解析的token:"+jsonObject);
+        Integer success = jsonObject.getInteger("success");
+        if (success==200) {
+            JSONObject data = jsonObject.getJSONObject("data");
+            Integer userId = data.getInteger("id");
+            record.setUserId(userId);
+        }
         int rows = customerSettingMapper.insertSelective(record);
-        record.setCreateTime(new Date());
+        //record.setCreateTime(new Date());
         //redisToInsert(rows,"customer_setting",record,null);
     }
 
