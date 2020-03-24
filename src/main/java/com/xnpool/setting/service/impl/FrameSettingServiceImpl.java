@@ -137,29 +137,18 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     }
 
     @Override
-    public HashMap<String, HashMap> selectMineFactoryAndFrame() {
-        List<HashMap> mineFactoryAndFrameList = frameSettingMapper.selectMineFactoryAndFrame();
-        HashMap<Integer, String> mineMap = new HashMap<>();
-        HashMap<Integer, String> factroyMap = new HashMap<>();
-        HashMap<String, String> frameMap = new HashMap<>();
-        HashMap<String, HashMap> resultMap = new HashMap<>();
+    public HashMap<Integer, String> selectMineFactoryAndFrame(Integer factoryId) {
+        List<HashMap> mineFactoryAndFrameList = frameSettingMapper.selectMineFactoryAndFrame(factoryId);
+        HashMap<Integer, String> frameMap = new HashMap<>();
         for (HashMap hashMap : mineFactoryAndFrameList) {
             Integer frameId = (Integer) hashMap.get("frameId");
             String frameName = String.valueOf(hashMap.get("frame_name"));
-            Integer factoryId = (Integer) hashMap.get("factoryId");
             String factoryName = String.valueOf(hashMap.get("factory_name"));
-            Integer mineId = (Integer) hashMap.get("mineId");
             String mineName = String.valueOf(hashMap.get("mine_name"));
-            mineMap.put(mineId,mineName);
-            factroyMap.put(factoryId,factoryName+"-"+mineName);
-            StringBuffer idBuffer = new StringBuffer(String.valueOf(frameId)).append("-").append(factoryId).append("-").append(mineId);
             StringBuffer nameBuffer = new StringBuffer(frameName).append("-").append(factoryName).append("-").append(mineName);
-            frameMap.put(idBuffer.toString(),nameBuffer.toString());
+            frameMap.put(frameId,nameBuffer.toString());
         }
-        resultMap.put("mine",mineMap);
-        resultMap.put("factory",factroyMap);
-        resultMap.put("frame",frameMap);
-        return resultMap;
+        return frameMap;
     }
 
 }

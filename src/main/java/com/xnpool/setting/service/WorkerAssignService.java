@@ -5,6 +5,8 @@ import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
 import com.xnpool.setting.domain.pojo.WorkerAssign;
 
+import java.util.List;
+
 /**
  * @author zly
  * @version 1.0
@@ -28,4 +30,6 @@ public interface WorkerAssignService {
     PageInfo<UserRoleVO> selectByOther(String keyWord, int pageNum, int pageSize);
 
     void addAssignWorker(String ids,String token);
+
+    List<Integer> selectWorkerAssign();
 }

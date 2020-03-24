@@ -193,7 +193,7 @@
         factory_house,
         mine_setting
     WHERE
-        frame_setting.factory_id = factory_house.id
+        frame_setting.factory_id = #{factoryId}
         AND frame_setting.mine_id = mine_setting.id
         AND frame_setting.is_delete=0
   </select>

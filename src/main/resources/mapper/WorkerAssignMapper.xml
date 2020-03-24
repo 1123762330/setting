@@ -147,4 +147,11 @@
             (#{item.userId},#{item.mineId},#{item.factoryId},#{item.frameId})
         </foreach>
     </insert>
+
+    <select id="selectWorkerAssign" resultType="integer">
+        <!--@mbg.generated-->
+        select
+        frame_id
+        from worker_assign
+    </select>
 </mapper>

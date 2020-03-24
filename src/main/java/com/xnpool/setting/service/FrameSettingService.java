@@ -33,7 +33,7 @@ public interface FrameSettingService {
 
     HashMap<Integer, String> selectFrameNameToGruop(Integer factoryId);
 
-    HashMap<String, HashMap> selectMineFactoryAndFrame();
+    HashMap<Integer, String> selectMineFactoryAndFrame(Integer factoryId);
 }
 
 

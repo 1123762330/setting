@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 矿机分配
@@ -58,4 +59,11 @@ public class WorkerAssignController extends BaseController {
         return new ResponseResult(SUCCESS);
     }
 
+
+    //判断添加的矿机架是否已经分配
+    @PostMapping("/selectWorkerAssign")
+    public ResponseResult selectWorkerAssign() {
+        List<Integer> list = workerAssignService.selectWorkerAssign();
+        return new ResponseResult(SUCCESS,list);
+    }
 }

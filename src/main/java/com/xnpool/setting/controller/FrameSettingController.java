@@ -121,8 +121,8 @@ public class FrameSettingController extends BaseController {
      * @return
      */
     @GetMapping("/selectMineFactoryAndFrame")
-    public ResponseResult selectMineFactoryAndFrame() {
-        HashMap<String, HashMap> resultMap = frameSettingService.selectMineFactoryAndFrame();
+    public ResponseResult selectMineFactoryAndFrame(Integer factoryId) {
+        HashMap<Integer, String> resultMap = frameSettingService.selectMineFactoryAndFrame(factoryId);
         return new ResponseResult(SUCCESS,resultMap);
     }
 

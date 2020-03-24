@@ -29,4 +29,6 @@ public interface WorkerAssignMapper {
     List<UserRoleVO> selectByOther();
 
     int batchInsert(ArrayList<MineFactoryAndFraneId> list);
+
+    List<Integer> selectWorkerAssign();
 }
