@@ -303,25 +303,25 @@
     <!--用户网站的矿机详情-->
     <select id="selectAllWorkerDetailed" resultType="com.xnpool.setting.domain.model.WorkerDetailedModel">
         SELECT
-            group_setting.group_name,
-            worker_info.ip,
-            frame_setting.frame_name,
-            worker_detailed.frame_number,
-            worker_info.worker1 AS workerName,
-            worker_info.mine_type,
-            worker_info.mac,
-            workerbrand_setting.algorithm_id AS algorithm,
-            worker_info.state,
-            worker_info.startup_time AS onTime,
-            worker_info.ts AS runTime,
-            worker_info.avg_hashrate,
-            workerbrand_setting.power_waste
+        group_setting.group_name,
+        worker_info.ip,
+        frame_setting.frame_name,
+        worker_detailed.frame_number,
+        worker_info.worker1 AS workerName,
+        worker_info.mine_type,
+        worker_info.mac,
+        workerbrand_setting.algorithm_id AS algorithm,
+        worker_info.state,
+        worker_info.startup_time AS onTime,
+        worker_info.ts AS runTime,
+        worker_info.avg_hashrate,
+        workerbrand_setting.power_waste
         FROM
-            worker_detailed,
-            worker_info,
-            group_setting,
-            frame_setting,
-            workerbrand_setting
+        worker_detailed,
+        worker_info,
+        frame_setting,
+        group_setting,
+        workerbrand_setting
         <where>
             worker_detailed.user_id=#{userId}
             <if test="startIp != null">
@@ -336,6 +336,7 @@
             AND worker_detailed.worker_id = worker_info.id
             AND worker_detailed.group_id=group_setting.id
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
+            AND worker_detailed.frame_id=frame_setting.id
         </where>
     </select>
     

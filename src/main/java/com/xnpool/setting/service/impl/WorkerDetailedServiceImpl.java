@@ -89,6 +89,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord);
+        System.out.println("查询的矿机出库列表是:"+WorkerDetailedExampleList);
         WorkerDetailedExampleList.forEach(workerDetailedExample -> {
             String workerName = workerDetailedExample.getWorkerName();
             int lastIndexOf = workerName.lastIndexOf(".");
@@ -201,8 +202,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 redisModelList.add(workerDetailedRedisModel);
             }
         }
-
-        System.out.println("列表集合:"+list);
         //批量入管理仓库
         int rows = workerDetailedMapper.batchInsert(list);
         //批量入缓存
@@ -398,6 +397,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId);
+        System.out.println("用户网站的矿机详情列表:"+workerDetailedModels);
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
             String frameNumber = workerDetailedModel.getFrameNumber();

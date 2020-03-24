@@ -14,7 +14,9 @@ import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.controller.MineSettingController;
 import com.xnpool.setting.domain.mapper.AlgorithmMapper;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
+import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
 import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
+import com.xnpool.setting.domain.model.WorkerDetailedExample;
 import com.xnpool.setting.domain.pojo.Algorithm;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
@@ -34,7 +36,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SettingApplicationTests {
 
     @Autowired
-    private WorkerbrandSettingMapper workerbrandSettingMapper;
+    private WorkerDetailedMapper workerDetailedMapper;
 
     @Before
     public void before() {
@@ -44,6 +46,8 @@ public class SettingApplicationTests {
 
     @Test
     public void addMineSetting() {
+        //List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(null);
+        //System.out.println(WorkerDetailedExampleList);
         //WorkerbrandSetting workerbrandSetting = new WorkerbrandSetting();
         //workerbrandSetting.setBrandName("");
         //workerbrandSetting.setWorkerType("");
