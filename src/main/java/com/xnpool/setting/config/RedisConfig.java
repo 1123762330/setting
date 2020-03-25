@@ -79,7 +79,7 @@ public class RedisConfig {
         jedisPoolConfig.setTimeBetweenEvictionRunsMillis(30000);
         JedisPool jedisPool;
         if("".equals(password)){
-          password = null;
+            password = null;
         }
         jedisPool  = new JedisPool(jedisPoolConfig, host, port, Integer.valueOf(timeoutStr), password,database);
         return jedisPool;
