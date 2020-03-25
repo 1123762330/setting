@@ -30,7 +30,7 @@ public interface CustomerSettingService {
 
     PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    void updateAttestationById(int userid, int isPass);
+    void updateAttestationById(String cusId, int isPass);
 
     HashMap<Integer,String> selectUserList();
 

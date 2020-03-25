@@ -21,9 +21,7 @@ import com.xnpool.setting.service.CustomerSettingService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zly
@@ -149,8 +147,17 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public void updateAttestationById(int userid, int isPass) {
-        customerSettingMapper.updateAttestationById(userid, isPass);
+    public void updateAttestationById(String cusId, int isPass) {
+        if (cusId.contains(",")){
+            String[] split = cusId.split(",");
+            List<String> cusIdlist = Arrays.asList(split);
+            customerSettingMapper.updateAttestationById(cusIdlist, isPass);
+        }else {
+            List<String> cusIdlist = new ArrayList<>();
+            cusIdlist.add(cusId);
+            customerSettingMapper.updateAttestationById(cusIdlist, isPass);
+        }
+
     }
 
     @Override

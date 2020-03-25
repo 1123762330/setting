@@ -274,7 +274,13 @@
 
     <!--  修改企业认证-->
     <update id="updateAttestationById">
-    update customer_setting set authentication = #{isPass} where user_id = #{userId,jdbcType=INTEGER}
+        update customer_setting
+        set authentication = #{isPass}
+        where
+        id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+        #{item}
+        </foreach>
   </update>
 
     <!--查询客户姓名集合-->

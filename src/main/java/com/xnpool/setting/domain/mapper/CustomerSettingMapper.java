@@ -27,7 +27,7 @@ public interface CustomerSettingMapper {
 
     List<CustomerSettingExample> selectByOther(@Param("keyWord") String keyWord, @Param("managerUserId") int managerUserId);
 
-    void updateAttestationById(@Param("userId") int userId, @Param("isPass") int isPass);
+    void updateAttestationById(@Param("list") List<String> list, @Param("isPass") int isPass);
 
     List<HashMap> selectUserList();
 
