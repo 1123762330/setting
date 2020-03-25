@@ -89,18 +89,35 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord);
-        System.out.println("查询的矿机出库列表是:"+WorkerDetailedExampleList);
+        System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
         WorkerDetailedExampleList.forEach(workerDetailedExample -> {
             String workerName = workerDetailedExample.getWorkerName();
-            int lastIndexOf = workerName.lastIndexOf(".");
-            String minerName = workerName.substring(0, lastIndexOf);
-            String workerNameStr = workerName.substring(lastIndexOf + 1);
-            String frameName = workerDetailedExample.getFrameName();
-            Integer frameNumber = workerDetailedExample.getFrameNumber();
-            workerDetailedExample.setMiner(minerName);
-            workerDetailedExample.setWorkerName(workerNameStr);
-            StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
-            workerDetailedExample.setFrameName(frameNameBuffer.toString());
+            if (StringUtils.isEmpty(workerName)) {
+                String frameName = workerDetailedExample.getFrameName();
+                Integer frameNumber = workerDetailedExample.getFrameNumber();
+                workerDetailedExample.setMiner("");
+                workerDetailedExample.setWorkerName("");
+                StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
+                workerDetailedExample.setFrameName(frameNameBuffer.toString());
+            } else {
+                String frameName = workerDetailedExample.getFrameName();
+                Integer frameNumber = workerDetailedExample.getFrameNumber();
+                String minerName = "";
+                String workerNameStr = "";
+                if (!workerName.contains("\\.")) {
+                    minerName = workerName;
+                    workerNameStr = "";
+                } else {
+                    int lastIndexOf = workerName.lastIndexOf(".");
+                    minerName = workerName.substring(0, lastIndexOf);
+                    workerNameStr = workerName.substring(lastIndexOf + 1);
+                }
+                workerDetailedExample.setMiner(minerName);
+                workerDetailedExample.setWorkerName(workerNameStr);
+                StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
+                workerDetailedExample.setFrameName(frameNameBuffer.toString());
+
+            }
         });
         PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(WorkerDetailedExampleList);
         return pageInfo;
@@ -256,10 +273,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         ArrayList<Integer> list = new ArrayList<>();
         //从token中取出userid
         HashMap<String, Object> tokenData = getTokenData(token);
-        int userId=0;
-        if (tokenData!=null){
+        int userId = 0;
+        if (tokenData != null) {
             userId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
+        } else {
             throw new CheckException("校验token失败!");
         }
         if (ids.contains(",")) {
@@ -397,7 +414,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId);
-        System.out.println("用户网站的矿机详情列表:"+workerDetailedModels);
+        System.out.println("用户网站的矿机详情列表:" + workerDetailedModels);
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
             String frameNumber = workerDetailedModel.getFrameNumber();
@@ -426,9 +443,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Date 18:54 2020/3/12
      * @Param
      */
-    public HashMap<String, Object> selectGroupModel(String token,Integer pageNum,Integer pageSize) {
+    public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize) {
         //后面从token中获取
-        int userId=0;
+        int userId = 0;
         List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
