@@ -72,7 +72,23 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
+        HashMap<Integer, Integer> conutMap = new HashMap<>();
+        List<HashMap> list = workerAssignMapper.selectCountGroupByUserId();
+        list.forEach(hashMap -> {
+            Integer user_id = Integer.valueOf(hashMap.get("user_id").toString());
+            Integer count = Integer.valueOf(hashMap.get("count").toString());
+            conutMap.put(user_id,count);
+        });
         List<UserRoleVO> userRoleVOS = workerAssignMapper.selectByOther();
+        for (UserRoleVO userRoleVO : userRoleVOS) {
+            Integer userId = userRoleVO.getUserId();
+            if (userId==null){
+                userRoleVO.setCount(0);
+            }else {
+                Integer count = conutMap.get(userId);
+                userRoleVO.setCount(count);
+            }
+        }
         PageInfo<UserRoleVO> pageInfo = new PageInfo<>(userRoleVOS);
         return pageInfo;
     }

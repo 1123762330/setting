@@ -20,4 +20,5 @@ public class UserRoleVO implements Serializable {
     private Integer userId;
     private String roleName;
     private Integer roleId;
+    private Integer count=0;
 }

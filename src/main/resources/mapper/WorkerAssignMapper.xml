@@ -154,4 +154,14 @@
         frame_id
         from worker_assign
     </select>
+
+    <select id="selectCountGroupByUserId" resultType="hashmap">
+        SELECT
+            user_id,
+            count( id ) AS count
+        FROM
+            worker_assign
+        GROUP BY
+            user_id
+    </select>
 </mapper>
