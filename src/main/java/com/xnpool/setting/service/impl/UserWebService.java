@@ -32,7 +32,7 @@ public class UserWebService extends BaseController {
      */
     public Map<Object, Object> getWorkerHashByDay(String token) {
         HashMap<String, Object> tokenData = getTokenData(token);
-        int userId=0;
+        Integer userId=null;
         if (tokenData!=null){
             userId = Integer.valueOf(tokenData.get("userId").toString());
         }else {
@@ -72,7 +72,7 @@ public class UserWebService extends BaseController {
     public Map<Object, Object> getWorkerTotalByDay(String token) {
         //后期从token中获取用户Id
         HashMap<String, Object> tokenData = getTokenData(token);
-        int userId=0;
+        Integer userId=null;
         if (tokenData!=null){
             userId = Integer.valueOf(tokenData.get("userId").toString());
         }else {
@@ -114,9 +114,9 @@ public class UserWebService extends BaseController {
     public HashMap<String, Integer> getWorkerTotal(String token) {
         //后期从token中获取用户Id
         HashMap<String, Object> tokenData = getTokenData(token);
-        int userId=0;
+        Integer userId=null;
         if (tokenData!=null){
-             userId = Integer.valueOf(tokenData.get("userId").toString());
+            userId = Integer.valueOf(tokenData.get("userId").toString());
         }else {
             throw new CheckException("校验token失败!");
         }

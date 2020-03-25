@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
@@ -20,6 +21,7 @@ import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import com.xnpool.setting.service.IpSettingService;
 import com.xnpool.setting.service.OperatorWorkerHistoryService;
 import com.xnpool.setting.utils.PageUtil;
+import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -403,7 +405,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp,
                                                                  String endIp, Integer pageNum,
                                                                  Integer pageSize, String token) {
-        int userId = 0;
         Long startIpToLong = null;
         Long endIpToLong = null;
         if (!StringUtils.isEmpty(startIp)) {
@@ -411,6 +412,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         if (!StringUtils.isEmpty(endIp)) {
             endIpToLong = getStringIpToLong(endIp);
+        }
+        Integer userId=null;
+        HashMap<String, Object> tokenData = getTokenData(token);
+        if (tokenData!=null){
+            userId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
         }
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId);
@@ -445,7 +453,15 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      */
     public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize) {
         //后面从token中获取
-        int userId = 0;
+        Integer userId = null;
+        JSONObject jsonObject = TokenUtil.verify(token);
+        Integer success = jsonObject.getInteger("success");
+        if (success==200) {
+            JSONObject data = jsonObject.getJSONObject("data");
+            userId = data.getInteger("id");
+        }else {
+            throw new CheckException("token解析错误");
+        }
         List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
