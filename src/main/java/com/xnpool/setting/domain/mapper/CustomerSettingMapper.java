@@ -32,4 +32,6 @@ public interface CustomerSettingMapper {
     List<HashMap> selectUserList();
 
     List<HashMap> selectUserMap();
+
+    List<HashMap> selectTenantList(Integer userId);
 }

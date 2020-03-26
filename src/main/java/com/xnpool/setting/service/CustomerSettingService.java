@@ -37,6 +37,8 @@ public interface CustomerSettingService {
     HashMap<Integer, String> selectCustomerMap();
 
     HashMap<Integer, String> selectAllUser();
+
+    HashMap<Long, String> selectTenantList(String token);
 }
 
 

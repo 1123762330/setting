@@ -196,6 +196,26 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         return resultMap;
     }
 
+    @Override
+    public HashMap<Long, String> selectTenantList(String token) {
+        HashMap<Long, String> resultMap = new HashMap<>();
+        //后期从token中获取用户Id
+        HashMap<String, Object> tokenData = getTokenData(token);
+        Integer userId=null;
+        if (tokenData!=null){
+            userId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
+        }
+        List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
+        hashMapList.forEach(hashMap -> {
+            String enterpriseName = String.valueOf(hashMap.get("enterprise_name"));
+            Long tenantId = Long.valueOf(hashMap.get("tenant_id").toString());
+            resultMap.put(tenantId,enterpriseName);
+        });
+        return resultMap;
+    }
+
 }
 
 

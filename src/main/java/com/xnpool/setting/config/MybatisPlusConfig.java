@@ -78,22 +78,26 @@ public class MybatisPlusConfig {
                     });
             paginationInterceptor.setSqlParserList(CollUtil.toList(tenantSqlParser));
 
-            //过滤某些不需要多租户的方法
+            /**
+             * 过滤不需要根据租户隔离的MappedStatement
+             */
             paginationInterceptor.setSqlParserFilter(new ISqlParserFilter() {
                 @Override
                 public boolean doFilter(MetaObject metaObject) {
                     //获取当前执行的方法,如果相等,那就不增加租户信息
-                    //MappedStatement mappedStatement = SqlParserHelper.getMappedStatement(metaObject);
-                    //if (mappedStatement.getId().contains("com.xnpool.setting.domain.mapper.WorkerMapper.selectByOther")) {
+                    MappedStatement mappedStatement = SqlParserHelper.getMappedStatement(metaObject);
+                    //if (mappedStatement.getI d().contains("com.xnpool.setting.domain.mapper.WorkerMapper.selectByOther")) {
                     //    return true;
                     //}
-                    return false;
+                    return tenantProperties.getIgnoreSqls().stream().anyMatch(
+                            (e) -> e.equalsIgnoreCase(mappedStatement.getId())
+                    );
                 }
             });
+
         }
         return paginationInterceptor;
     }
-
 
     //性能分析插件,显示sql语句
     @ConditionalOnProperty(name = "performanceInterceptor", havingValue = "true")

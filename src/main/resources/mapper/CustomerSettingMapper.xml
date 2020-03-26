@@ -306,4 +306,18 @@
       WHERE
           sys_user.is_del = 0
     </select>
+
+    <select id="selectTenantList" resultType="java.util.HashMap">
+        SELECT
+            sys_enterprise.enterprise_name,
+            customer_setting.tenant_id
+        FROM
+            customer_setting,
+            sys_enterprise
+        WHERE
+            user_id = #{userId}
+            AND customer_setting.tenant_id = sys_enterprise.id
+        GROUP BY
+            tenant_id
+    </select>
 </mapper>

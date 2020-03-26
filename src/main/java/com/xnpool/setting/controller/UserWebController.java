@@ -118,4 +118,18 @@ public class UserWebController extends BaseController {
         customerSettingService.insertSelective(customerSetting,token);
         return new ResponseResult(SUCCESS);
     }
+
+    /**
+     * @Description 查询已授权企业列表
+     * @Author zly
+     * @Date 12:47 2020/3/26
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectTenantList")
+    public ResponseResult selectTenantList (HttpServletRequest request){
+        String token = request.getHeader("token");
+        HashMap<Long, String> tenantList = customerSettingService.selectTenantList(token);
+        return new ResponseResult(SUCCESS,tenantList);
+    }
 }
