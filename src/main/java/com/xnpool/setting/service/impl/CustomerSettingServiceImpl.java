@@ -96,12 +96,18 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
-        int managerUserId = 1;
+        HashMap<String, Object> tokenData = getTokenData(token);
+        Integer managerUserId=null;
+        if (tokenData!=null){
+            managerUserId = Integer.valueOf(tokenData.get("userId").toString());
+        }else {
+            throw new CheckException("校验token失败!");
+        }
         PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
@@ -109,38 +115,43 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         //log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
             String agreementid = customerSettingExample.getAgreementId();
-            if (agreementid.contains(",")) {
-                HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
-                //多个协议ID,从协议IDMap集合里面取出相应的值,重新set进属性里面
-                String[] split = agreementid.split(",");
-                StringBuffer agreemmentNameStr = null;
-                for (int i = 0; i < split.length; i++) {
-                    String agreemmentName = agreementMap.get(Integer.valueOf(split[i]));
-                    if (agreemmentNameStr == null) {
-                        agreemmentNameStr = new StringBuffer().append(agreemmentName);
-                    } else {
-                        agreemmentNameStr = agreemmentNameStr.append(",").append(agreemmentName);
+            if (!StringUtils.isEmpty(agreementid)) {
+                if (agreementid.contains(",")) {
+                    HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
+                    //多个协议ID,从协议IDMap集合里面取出相应的值,重新set进属性里面
+                    String[] split = agreementid.split(",");
+                    StringBuffer agreemmentNameStr = null;
+                    for (int i = 0; i < split.length; i++) {
+                        String agreemmentName = agreementMap.get(Integer.valueOf(split[i]));
+                        if (agreemmentNameStr == null) {
+                            agreemmentNameStr = new StringBuffer().append(agreemmentName);
+                        } else {
+                            agreemmentNameStr = agreemmentNameStr.append(",").append(agreemmentName);
+                        }
                     }
-                }
-                customerSettingExample.setAgreementName(agreemmentNameStr.toString());
+                    customerSettingExample.setAgreementName(agreemmentNameStr.toString());
 
+                }
             }
             String groupId = customerSettingExample.getGroupId();
-            if (groupId.contains(",")) {
-                //多个分组ID,从分组IDMap集合里面取出相应的值,重新set进属性里面
-                HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
-                String[] split = agreementid.split(",");
-                StringBuffer groupNameNameStr = null;
-                for (int i = 0; i < split.length; i++) {
-                    String groupName = groupNameHashMap.get(Integer.valueOf(split[i]));
-                    if (groupNameNameStr == null) {
-                        groupNameNameStr = new StringBuffer().append(groupName);
-                    } else {
-                        groupNameNameStr = groupNameNameStr.append(",").append(groupName);
+            if (!StringUtils.isEmpty(groupId)){
+                if (groupId.contains(",")) {
+                    //多个分组ID,从分组IDMap集合里面取出相应的值,重新set进属性里面
+                    HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
+                    String[] split = agreementid.split(",");
+                    StringBuffer groupNameNameStr = null;
+                    for (int i = 0; i < split.length; i++) {
+                        String groupName = groupNameHashMap.get(Integer.valueOf(split[i]));
+                        if (groupNameNameStr == null) {
+                            groupNameNameStr = new StringBuffer().append(groupName);
+                        } else {
+                            groupNameNameStr = groupNameNameStr.append(",").append(groupName);
+                        }
                     }
+                    customerSettingExample.setGroupName(groupNameNameStr.toString());
                 }
-                customerSettingExample.setGroupName(groupNameNameStr.toString());
             }
+
         });
         PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
         return pageInfo;

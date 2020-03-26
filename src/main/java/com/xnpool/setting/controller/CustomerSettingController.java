@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,9 +88,12 @@ public class CustomerSettingController extends BaseController {
      */
     @SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
     @GetMapping("/selectCustomerList")
-    public ResponseResult selectCustomerList (String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
-        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize);
+    public ResponseResult selectCustomerList (String keyWord,
+                                              @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                              HttpServletRequest request){
+        String token = request.getHeader("token");
+        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS,pageInfo);
     }
 

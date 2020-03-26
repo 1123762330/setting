@@ -74,7 +74,7 @@ public class AgreementSettingServiceImpl implements AgreementSettingService {
         HashMap<Integer, String> resultMap = new HashMap<>();
         hashMaps.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
-            String agreementName = hashMap.get("agreementName").toString();
+            String agreementName = hashMap.get("agreement_name").toString();
             resultMap.put(id, agreementName);
         });
         return resultMap;

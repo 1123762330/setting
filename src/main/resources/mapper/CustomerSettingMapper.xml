@@ -243,7 +243,6 @@
         customer_setting.remarks,
         customer_setting.agreement_id,
         customer_setting.group_id,
-        group_setting.group_name,
         customer_setting.authentication,
         customer_setting.is_watch,
         sys_user.mobile,
@@ -252,22 +251,17 @@
         FROM
         customer_setting,
         sys_user,
-        group_setting,
         agreement_setting,
         sys_role_user,
         sys_role
         <where>
-            customer_setting.is_delete = 0
-            AND customer_setting.user_id = sys_user.id
-            AND customer_setting.group_id = group_setting.id
-            AND customer_setting.agreement_id = agreement_setting.id
-            AND customer_setting.manager_user_id = sys_role_user.user_id
-            AND sys_role_user.role_id = sys_role.id
+        customer_setting.is_delete = 0
+        AND customer_setting.user_id = sys_user.id
+        AND customer_setting.agreement_id = agreement_setting.id
+        AND customer_setting.user_id = sys_role_user.user_id
+        AND sys_role_user.role_id = sys_role.id
             <if test="keyWord != null">
                 AND customer_setting.remarks like #{keyWord}
-            </if>
-            <if test="managerUserId != null">
-                AND customer_setting.manager_user_id = #{managerUserId}
             </if>
         </where>
     </select>
