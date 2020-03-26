@@ -23,6 +23,7 @@ import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.service.CustomerSettingService;
+import com.xnpool.setting.service.impl.UserWebService;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.TokenUtil;
@@ -38,7 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class SettingApplicationTests {
 
     @Autowired
-    private CustomerSettingService customerSettingService;
+    private UserWebService userWebService;
 
     @Before
     public void before() {
@@ -48,6 +49,8 @@ public class SettingApplicationTests {
 
     @Test
     public void addMineSetting() {
+        //HashMap<String, Integer> workerTotal = userWebService.getWorkerTotal("");
+        //System.out.println(workerTotal);
         //HashMap<Long, String> longStringHashMap = customerSettingService.selectTenantList("");
         //System.out.println(longStringHashMap);
         //List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(null);

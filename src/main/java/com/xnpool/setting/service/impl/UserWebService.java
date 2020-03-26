@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.utils.JedisUtil;
@@ -123,11 +124,10 @@ public class UserWebService extends BaseController {
         Boolean totalHexists = jedisUtil.hexists(USERWORKER_TOTAL, String.valueOf(userId));
         int total=0;
         if (totalHexists){
-            String hashSet = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
-            log.info(userId+"用户的redis中取出的矿机数集合是"+hashSet);
-            JSONObject jsonObject = JSON.parseObject(hashSet);
-            Set<String> keySet = jsonObject.keySet();
-            total=keySet.size();
+            String hashSetStr = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
+            log.info(userId+"用户的redis中取出的矿机数集合是"+hashSetStr);
+            HashSet hashSet = new Gson().fromJson(hashSetStr, HashSet.class);
+            total=hashSet.size();
         }
 
         Boolean hexists = jedisUtil.hexists(USERWORKER_ONLINE_TOTAL, String.valueOf(userId));
