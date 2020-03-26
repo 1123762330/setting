@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 13:24
+ * @date 2020/3/26 23:01
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerSetting implements Serializable {
-    private static final long serialVersionUID = 5558152303511131448L;
+    private static final long serialVersionUID = 858913058394170912L;
     /**
      * 编号
      */
@@ -25,26 +25,6 @@ public class CustomerSetting implements Serializable {
      * 用户ID
      */
     private Integer userId;
-
-    /**
-     * 客户类型
-     */
-    private String cusType;
-
-    /**
-     * 联系人
-     */
-    private String contactPerson;
-
-    /**
-     * 联系人电话
-     */
-    private String contactPersonPhone;
-
-    /**
-     * 地址
-     */
-    private String address;
 
     /**
      * 协议ID,包含多个
@@ -57,12 +37,7 @@ public class CustomerSetting implements Serializable {
     private String groupId;
 
     /**
-     * 角色ID,包含多个
-     */
-    private String roleId;
-
-    /**
-     * 认证,0:待审核,1:通过,2:不通过
+     * 认证,0:待审核,1:通过,-1是不通过,2:已删除
      */
     private Integer authentication;
 
@@ -96,4 +71,8 @@ public class CustomerSetting implements Serializable {
      */
     private Integer managerUserId;
 
+    /**
+     * 企业id
+     */
+    private Long tenantId;
 }

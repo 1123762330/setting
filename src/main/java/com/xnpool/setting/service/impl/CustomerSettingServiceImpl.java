@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.mapper.WorkerAssignMapper;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
@@ -44,7 +45,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     private GroupSettingService groupSettingService;
 
     @Autowired
-    private WorkerAssignMapper workerAssignMapper;
+    private ApiContext apiContext;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -58,18 +59,15 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSelective(CustomerSetting record,String token) {
+    public void insertSelective(CustomerSetting record, String token) {
         JSONObject jsonObject = TokenUtil.verify(token);
-        log.info("解析的token:"+jsonObject);
         Integer success = jsonObject.getInteger("success");
-        if (success==200) {
+        if (success == 200) {
             JSONObject data = jsonObject.getJSONObject("data");
             Integer userId = data.getInteger("id");
             record.setUserId(userId);
         }
         int rows = customerSettingMapper.insertSelective(record);
-        //record.setCreateTime(new Date());
-        //redisToInsert(rows,"customer_setting",record,null);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(CustomerSetting record) {
         int rows = customerSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdateTime(new Date());
+        //record.setUpdateTime(new Date());
         //redisToUpdate(rows,"customer_setting",record,null);
     }
 
@@ -95,40 +93,40 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void updateById(int id) {
         int rows = customerSettingMapper.updateById(id);
         CustomerSetting record = new CustomerSetting();
-        record.setUpdateTime(new Date());
-        record.setId(id);
+        //record.setUpdateTime(new Date());
+        //record.setId(id);
         //redisToDelete(rows,"customer_setting",record,null);
     }
 
     @Override
-    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
+    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
         //HashMap<String, Object> tokenData = getTokenData(token);
-        Integer managerUserId=null;
+        Integer managerUserId = null;
         //if (tokenData!=null){
         //    managerUserId = Integer.valueOf(tokenData.get("userId").toString());
         //}else {
         //    throw new CheckException("校验token失败!");
         //}
         //管理员和用户角色
-        HashMap<Integer, String> roleMap = new HashMap<>();
-        List<HashMap> UserRoleList = customerSettingMapper.selectUserRole();
-        UserRoleList.forEach(hashMap -> {
-            Object user_id = hashMap.get("user_id");
-            if (!StringUtils.isEmpty(user_id)){
-                Integer userId = Integer.valueOf(String.valueOf(user_id));
-                String roleName = String.valueOf(hashMap.get("roleName"));
-                roleMap.put(userId,roleName);
-            }
-
-        });
+        //HashMap<Integer, String> roleMap = new HashMap<>();
+        //List<HashMap> UserRoleList = customerSettingMapper.selectUserRole();
+        //UserRoleList.forEach(hashMap -> {
+        //    Object user_id = hashMap.get("user_id");
+        //    if (!StringUtils.isEmpty(user_id)) {
+        //        Integer userId = Integer.valueOf(String.valueOf(user_id));
+        //        String roleName = String.valueOf(hashMap.get("roleName"));
+        //        roleMap.put(userId, roleName);
+        //    }
+        //
+        //});
         PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
-        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord,managerUserId);
-        System.out.println("数据库查询的客户列表:"+customerSettingExamples.size());
+        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
+        System.out.println("数据库查询的客户列表:" + customerSettingExamples.size());
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         //log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
@@ -152,7 +150,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
                 }
             }
             String groupId = customerSettingExample.getGroupId();
-            if (!StringUtils.isEmpty(groupId)){
+            if (!StringUtils.isEmpty(groupId)) {
                 HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
                 if (groupId.contains(",")) {
                     //多个分组ID,从分组IDMap集合里面取出相应的值,重新set进属性里面
@@ -167,14 +165,14 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
                         }
                     }
                     customerSettingExample.setGroupName(groupNameNameStr.toString());
-                }else {
+                } else {
                     String groupName = groupNameHashMap.get(Integer.valueOf(groupId));
                     customerSettingExample.setGroupName(groupName);
                 }
             }
-            Integer managerUserId_db = customerSettingExample.getManagerUserId();
-            String roleName = roleMap.get(managerUserId_db);
-            customerSettingExample.setRoleName(roleName);
+            //Integer managerUserId_db = customerSettingExample.getManagerUserId();
+            //String roleName = roleMap.get(managerUserId_db);
+            //customerSettingExample.setRoleName(roleName);
         });
         PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
         return pageInfo;
@@ -182,11 +180,11 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Override
     public void updateAttestationById(String cusId, int isPass) {
-        if (cusId.contains(",")){
+        if (cusId.contains(",")) {
             String[] split = cusId.split(",");
             List<String> cusIdlist = Arrays.asList(split);
             customerSettingMapper.updateAttestationById(cusIdlist, isPass);
-        }else {
+        } else {
             List<String> cusIdlist = new ArrayList<>();
             cusIdlist.add(cusId);
             customerSettingMapper.updateAttestationById(cusIdlist, isPass);
@@ -201,7 +199,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         hashMapList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
             String username = hashMap.get("username").toString();
-            resultMap.put(id,username);
+            resultMap.put(id, username);
         });
         return resultMap;
     }
@@ -213,7 +211,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         hashMapList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("customerId").toString());
             String username = hashMap.get("username").toString();
-            resultMap.put(id,username);
+            resultMap.put(id, username);
         });
         return resultMap;
     }
@@ -225,7 +223,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         hashMapList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
             String username = hashMap.get("username").toString();
-            resultMap.put(id,username);
+            resultMap.put(id, username);
         });
         return resultMap;
     }
@@ -235,22 +233,40 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         HashMap<Long, String> resultMap = new HashMap<>();
         //后期从token中获取用户Id
         HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId=null;
-        if (tokenData!=null){
+        Integer userId = null;
+        if (tokenData != null) {
             userId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
+        } else {
             throw new CheckException("校验token失败!");
         }
         List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
         hashMapList.forEach(hashMap -> {
             String enterpriseName = String.valueOf(hashMap.get("enterprise_name"));
             Long tenantId = Long.valueOf(hashMap.get("tenant_id").toString());
-            resultMap.put(tenantId,enterpriseName);
+            resultMap.put(tenantId, enterpriseName);
         });
         return resultMap;
     }
 
+    @Override
+    public void deleteAuthority(String tenantId, String token) {
+        apiContext.setTenantId(Long.valueOf(tenantId));
+        HashMap<String, Object> tokenData = getTokenData(token);
+        Integer userId = 1;
+        if (tokenData != null) {
+            userId = Integer.valueOf(tokenData.get("userId").toString());
+        } else {
+            throw new CheckException("校验token失败!");
+        }
+        customerSettingMapper.deleteAuthority(tenantId, userId);
+    }
+
+    @Override
+    public int insertSelective(CustomerSetting record) {
+        return customerSettingMapper.insertSelective(record);
+    }
 }
+
 
 
 

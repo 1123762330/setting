@@ -18,7 +18,7 @@ public interface CustomerSettingService {
 
     int insert(CustomerSetting record);
 
-    void insertSelective(CustomerSetting record,String token);
+    void insertSelective(CustomerSetting record, String token);
 
     CustomerSetting selectByPrimaryKey(Integer id);
 
@@ -28,18 +28,23 @@ public interface CustomerSettingService {
 
     void updateById(int id);
 
-    PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token);
+    PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token);
 
     void updateAttestationById(String cusId, int isPass);
 
-    HashMap<Integer,String> selectUserList();
+    HashMap<Integer, String> selectUserList();
 
     HashMap<Integer, String> selectCustomerMap();
 
     HashMap<Integer, String> selectAllUser();
 
     HashMap<Long, String> selectTenantList(String token);
+
+    void deleteAuthority(String tenantId, String token);
+
+    int insertSelective(CustomerSetting record);
 }
+
 
 
 

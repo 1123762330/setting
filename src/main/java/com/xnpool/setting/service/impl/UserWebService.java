@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
 import com.xnpool.setting.utils.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserWebService extends BaseController {
     @Autowired
     private JedisUtil jedisUtil;
 
+    @Autowired
+    private WorkerbrandSettingMapper workerbrandSettingMapper;
+
     /**
      * @return
      * @Description 矿机算力曲线图
@@ -31,9 +35,11 @@ public class UserWebService extends BaseController {
      * @Date 15:05 2020/3/13
      * @Param
      */
-    public Map<Object, Object> getWorkerHashByDay(String token) {
+    public Map<Object, Object> getWorkerHashByDay(Integer algorithmId,String token) {
         HashMap<String, Object> tokenData = getTokenData(token);
         Integer userId=null;
+        //通过算法id去查询矿机品牌
+        String brandName = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
         if (tokenData!=null){
             userId = Integer.valueOf(tokenData.get("userId").toString());
         }else {
@@ -42,7 +48,7 @@ public class UserWebService extends BaseController {
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);
-        String bigKey = (HASHRATE_DATA + userId);
+        String bigKey = (HASHRATE_DATA + userId+":"+brandName);
         Boolean result = jedisUtil.exists(bigKey);
         if (result) {
             //取出24小时数据
@@ -50,7 +56,8 @@ public class UserWebService extends BaseController {
             for (Map.Entry<Object, Object> entry : middleMap.entrySet()) {
                 String value = workerAvgHash.get(entry.getKey());
                 if (!StringUtils.isEmpty(value)) {
-                    resultMap.put(entry.getKey(), value);
+                    String valueStr = value.substring(1, value.length() - 1);
+                    resultMap.put(entry.getKey(), valueStr);
                 } else {
                     resultMap.put(entry.getKey(), "0");
                 }
@@ -70,7 +77,7 @@ public class UserWebService extends BaseController {
      * @Date 15:03 2020/3/13
      * @Param
      */
-    public Map<Object, Object> getWorkerTotalByDay(String token) {
+    public Map<Object, Object> getWorkerTotalByDay(String token,Integer algorithmId) {
         //后期从token中获取用户Id
         HashMap<String, Object> tokenData = getTokenData(token);
         Integer userId=null;
@@ -79,10 +86,11 @@ public class UserWebService extends BaseController {
         }else {
             throw new CheckException("校验token失败!");
         }
+        String brandName = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);
-        String bigKey = (ON_LINE_DATA + userId);
+        String bigKey = (ON_LINE_DATA + userId+":"+brandName);
         Boolean result = jedisUtil.exists(bigKey);
         if (result) {
             //取出24小时数据
@@ -90,7 +98,8 @@ public class UserWebService extends BaseController {
             for (Map.Entry<Object, Object> entry : middleMap.entrySet()) {
                 String value = workerAvgHash.get(entry.getKey());
                 if (!StringUtils.isEmpty(value)) {
-                    resultMap.put(entry.getKey(), value);
+                    String valueStr = value.substring(1, value.length() - 1);
+                    resultMap.put(entry.getKey(), valueStr);
                 } else {
                     resultMap.put(entry.getKey(), "0");
                 }

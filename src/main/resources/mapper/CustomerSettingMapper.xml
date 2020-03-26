@@ -1,231 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xnpool.setting.domain.mapper.CustomerSettingMapper">
-    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <!--@mbg.generated-->
-        <!--@Table customer_setting-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="cus_type" jdbcType="VARCHAR" property="cusType"/>
-        <result column="contact_person" jdbcType="VARCHAR" property="contactPerson"/>
-        <result column="contact_person_phone" jdbcType="VARCHAR" property="contactPersonPhone"/>
-        <result column="address" jdbcType="VARCHAR" property="address"/>
-        <result column="agreement_id" jdbcType="VARCHAR" property="agreementId"/>
-        <result column="group_id" jdbcType="VARCHAR" property="groupId"/>
-        <result column="role_id" jdbcType="VARCHAR" property="roleId"/>
-        <result column="authentication" jdbcType="INTEGER" property="authentication"/>
-        <result column="is_watch" jdbcType="INTEGER" property="isWatch"/>
-        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
-        <result column="is_delete" jdbcType="INTEGER" property="isDelete"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="manager_user_id" jdbcType="INTEGER" property="managerUserId"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        id, user_id, cus_type, contact_person, contact_person_phone, address, agreement_id,
-        group_id, role_id, authentication, is_watch, remarks, is_delete, create_time, update_time,
-        manager_user_id
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from customer_setting
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete from customer_setting
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting"
-            useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into customer_setting (user_id, cus_type, contact_person,
-        contact_person_phone, address, agreement_id,
-        group_id, role_id, authentication,
-        is_watch, remarks, is_delete,
-        create_time, update_time, manager_user_id
-        )
-        values (#{userId,jdbcType=INTEGER}, #{cusType,jdbcType=VARCHAR}, #{contactPerson,jdbcType=VARCHAR},
-        #{contactPersonPhone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{agreementId,jdbcType=VARCHAR},
-        #{groupId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{authentication,jdbcType=INTEGER},
-        #{isWatch,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
-        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{managerUserId,jdbcType=INTEGER}
-        )
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.xnpool.setting.domain.pojo.CustomerSetting" useGeneratedKeys="true">
-        <!--@mbg.generated-->
-        insert into customer_setting
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="cusType != null">
-                cus_type,
-            </if>
-            <if test="contactPerson != null">
-                contact_person,
-            </if>
-            <if test="contactPersonPhone != null">
-                contact_person_phone,
-            </if>
-            <if test="address != null">
-                address,
-            </if>
-            <if test="agreementId != null">
-                agreement_id,
-            </if>
-            <if test="groupId != null">
-                group_id,
-            </if>
-            <if test="roleId != null">
-                role_id,
-            </if>
-            <if test="authentication != null">
-                authentication,
-            </if>
-            <if test="isWatch != null">
-                is_watch,
-            </if>
-            <if test="remarks != null">
-                remarks,
-            </if>
-            <if test="isDelete != null">
-                is_delete,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="managerUserId != null">
-                manager_user_id,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="cusType != null">
-                #{cusType,jdbcType=VARCHAR},
-            </if>
-            <if test="contactPerson != null">
-                #{contactPerson,jdbcType=VARCHAR},
-            </if>
-            <if test="contactPersonPhone != null">
-                #{contactPersonPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="address != null">
-                #{address,jdbcType=VARCHAR},
-            </if>
-            <if test="agreementId != null">
-                #{agreementId,jdbcType=VARCHAR},
-            </if>
-            <if test="groupId != null">
-                #{groupId,jdbcType=VARCHAR},
-            </if>
-            <if test="roleId != null">
-                #{roleId,jdbcType=VARCHAR},
-            </if>
-            <if test="authentication != null">
-                #{authentication,jdbcType=INTEGER},
-            </if>
-            <if test="isWatch != null">
-                #{isWatch,jdbcType=INTEGER},
-            </if>
-            <if test="remarks != null">
-                #{remarks,jdbcType=VARCHAR},
-            </if>
-            <if test="isDelete != null">
-                #{isDelete,jdbcType=INTEGER},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="managerUserId != null">
-                #{managerUserId,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <!--@mbg.generated-->
-        update customer_setting
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="cusType != null">
-                cus_type = #{cusType,jdbcType=VARCHAR},
-            </if>
-            <if test="contactPerson != null">
-                contact_person = #{contactPerson,jdbcType=VARCHAR},
-            </if>
-            <if test="contactPersonPhone != null">
-                contact_person_phone = #{contactPersonPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="address != null">
-                address = #{address,jdbcType=VARCHAR},
-            </if>
-            <if test="agreementId != null">
-                agreement_id = #{agreementId,jdbcType=VARCHAR},
-            </if>
-            <if test="groupId != null">
-                group_id = #{groupId,jdbcType=VARCHAR},
-            </if>
-            <if test="roleId != null">
-                role_id = #{roleId,jdbcType=VARCHAR},
-            </if>
-            <if test="authentication != null">
-                authentication = #{authentication,jdbcType=INTEGER},
-            </if>
-            <if test="isWatch != null">
-                is_watch = #{isWatch,jdbcType=INTEGER},
-            </if>
-            <if test="remarks != null">
-                remarks = #{remarks,jdbcType=VARCHAR},
-            </if>
-            <if test="isDelete != null">
-                is_delete = #{isDelete,jdbcType=INTEGER},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="managerUserId != null">
-                manager_user_id = #{managerUserId,jdbcType=INTEGER},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <!--@mbg.generated-->
-        update customer_setting
-        set user_id = #{userId,jdbcType=INTEGER},
-        cus_type = #{cusType,jdbcType=VARCHAR},
-        contact_person = #{contactPerson,jdbcType=VARCHAR},
-        contact_person_phone = #{contactPersonPhone,jdbcType=VARCHAR},
-        address = #{address,jdbcType=VARCHAR},
+  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.CustomerSetting">
+    <!--@mbg.generated-->
+    <!--@Table customer_setting-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="agreement_id" jdbcType="VARCHAR" property="agreementId" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="authentication" jdbcType="INTEGER" property="authentication" />
+    <result column="is_watch" jdbcType="INTEGER" property="isWatch" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="manager_user_id" jdbcType="INTEGER" property="managerUserId" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, agreement_id, group_id, authentication, is_watch, remarks, is_delete, 
+    create_time, update_time, manager_user_id, tenant_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from customer_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from customer_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_setting (user_id, agreement_id, group_id, 
+      authentication, is_watch, remarks, 
+      is_delete, create_time, update_time, 
+      manager_user_id, tenant_id)
+    values (#{userId,jdbcType=INTEGER}, #{agreementId,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
+      #{authentication,jdbcType=INTEGER}, #{isWatch,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{managerUserId,jdbcType=INTEGER}, #{tenantId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="agreementId != null">
+        agreement_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="authentication != null">
+        authentication,
+      </if>
+      <if test="isWatch != null">
+        is_watch,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="managerUserId != null">
+        manager_user_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="agreementId != null">
+        #{agreementId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="authentication != null">
+        #{authentication,jdbcType=INTEGER},
+      </if>
+      <if test="isWatch != null">
+        #{isWatch,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="managerUserId != null">
+        #{managerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
+    <!--@mbg.generated-->
+    update customer_setting
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="agreementId != null">
         agreement_id = #{agreementId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
         group_id = #{groupId,jdbcType=VARCHAR},
-        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="authentication != null">
         authentication = #{authentication,jdbcType=INTEGER},
+      </if>
+      <if test="isWatch != null">
         is_watch = #{isWatch,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
         remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
-        manager_user_id = #{managerUserId,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+      </if>
+      <if test="managerUserId != null">
+        manager_user_id = #{managerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.CustomerSetting">
+    <!--@mbg.generated-->
+    update customer_setting
+    set user_id = #{userId,jdbcType=INTEGER},
+      agreement_id = #{agreementId,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      authentication = #{authentication,jdbcType=INTEGER},
+      is_watch = #{isWatch,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      manager_user_id = #{managerUserId,jdbcType=INTEGER},
+      tenant_id = #{tenantId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
     <!--  软删除-->
     <update id="updateById">
     update customer_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
@@ -234,33 +183,28 @@
     <!--  根据条件查询客户列表-->
     <select id="selectByOther" resultType="com.xnpool.setting.domain.model.CustomerSettingExample">
         SELECT
-        sys_user.username AS userName,
         customer_setting.id,
-        customer_setting.cus_type,
-        customer_setting.contact_person,
-        customer_setting.contact_person_phone,
-        customer_setting.address,
+        sys_user.username AS userName,
+        sys_enterprise.type AS cusType,
+        sys_user.contact_person,
+        sys_user.mobile,
+        sys_user.address,
         customer_setting.remarks,
         customer_setting.agreement_id,
         customer_setting.group_id,
         customer_setting.authentication,
         customer_setting.is_watch,
-        sys_user.mobile,
-        agreement_setting.agreement_name,
         customer_setting.manager_user_id
         FROM
         customer_setting,
         sys_user,
-        agreement_setting
+        sys_enterprise
         <where>
         customer_setting.is_delete = 0
         AND customer_setting.user_id = sys_user.id
-        AND customer_setting.agreement_id = agreement_setting.id
+        AND customer_setting.tenant_id = sys_enterprise.id
             <if test="keyWord != null">
                     AND customer_setting.remarks like #{keyWord}
-            </if>
-            <if test="managerUserId != null">
-                AND customer_setting.manager_user_id = #{managerUserId}
             </if>
         </where>
     </select>
@@ -310,6 +254,7 @@
         WHERE
             user_id = #{userId}
             AND customer_setting.tenant_id = sys_enterprise.id
+            AND authentication !=2
         GROUP BY
             tenant_id
     </select>
@@ -326,4 +271,8 @@
     sys_role_user.user_id = sys_user.id
     AND sys_role_user.role_id = sys_role.id
     </select>
+
+    <update id="deleteAuthority">
+        update customer_setting set authentication = 2 where user_id = #{userId}
+    </update>
 </mapper>

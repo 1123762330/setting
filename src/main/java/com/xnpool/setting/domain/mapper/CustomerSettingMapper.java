@@ -1,14 +1,11 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.CustomerSetting;import com.xnpool.setting.domain.model.CustomerSettingExample;import org.apache.ibatis.annotations.Param;
-
-import java.util.HashMap;
-import java.util.List;
+import com.xnpool.setting.domain.model.CustomerSettingExample;import com.xnpool.setting.domain.pojo.CustomerSetting;import org.apache.ibatis.annotations.Param;import java.util.HashMap;import java.util.List;
 
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 13:24
+ * @date 2020/3/26 23:01
  */
 public interface CustomerSettingMapper {
     int deleteByPrimaryKey(Integer id);
@@ -36,4 +33,6 @@ public interface CustomerSettingMapper {
     List<HashMap> selectTenantList(Integer userId);
 
     List<HashMap> selectUserRole();
+
+    void deleteAuthority(@Param("tenantId") String tenantId, @Param("userId") Integer userId);
 }

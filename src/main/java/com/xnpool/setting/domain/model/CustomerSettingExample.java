@@ -35,11 +35,6 @@ public class CustomerSettingExample implements Serializable {
     private String contactPerson;
 
     /**
-     * 联系人电话
-     */
-    private String contactPersonPhone;
-
-    /**
      * 地址
      */
     private String address;

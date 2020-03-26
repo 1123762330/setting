@@ -38,7 +38,7 @@ public abstract class BaseController {
 	public static final String BATCHUPDATE = "batchupdate";
 	//在线折线图
 	public static final String ON_LINE_DATA = "xnpool:user:share:";
-	//矿机平均算力图
+	//矿机平均算力图(有效)
 	public static final String HASHRATE_DATA = "xnpool:user:hashrate:";
 	//用户矿机总数量
 	public static final String USERWORKER_TOTAL = "xnpool:user:mine:ship";

@@ -7,6 +7,7 @@ import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.service.CustomerSettingService;
@@ -34,6 +35,9 @@ public class UserWebController extends BaseController {
 
     @Autowired
     private UserWebService userWebService;
+
+    @Autowired
+    private ApiContext apiContext;
 
     @Autowired
     private CustomerSettingService customerSettingService;
@@ -80,11 +84,11 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "查询用户矿机曲线图",type = LogType.SURVER)
+    @SystemLog(value = "查询用户矿机算力曲线图",type = LogType.SURVER)
     @GetMapping("/getWorkerHashByDay")
-    public ResponseResult getPoolWorkerHashByDay(String algorithId,HttpServletRequest request){
+    public ResponseResult getPoolWorkerHashByDay(Integer algorithmId,HttpServletRequest request){
         String token = request.getHeader("token");
-        Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(token);
+        Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(algorithmId,token);
         return new ResponseResult(SUCCESS,workerHashByDay);
     }
 
@@ -97,9 +101,9 @@ public class UserWebController extends BaseController {
      */
     @SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotalByDay")
-    public ResponseResult getWorkerTotalByDay(HttpServletRequest request){
+    public ResponseResult getWorkerTotalByDay(Integer algorithmId,HttpServletRequest request){
         String token = request.getHeader("token");
-        Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token);
+        Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token,algorithmId);
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
 
@@ -131,5 +135,20 @@ public class UserWebController extends BaseController {
         String token = request.getHeader("token");
         HashMap<Long, String> tenantList = customerSettingService.selectTenantList(token);
         return new ResponseResult(SUCCESS,tenantList);
+    }
+
+    /**
+     * @Description 删除权限
+     * @Author zly
+     * @Date 20:50 2020/3/26
+     * @Param
+     * @return
+     */
+    @SystemLog(value = "用户删除企业授权",type = LogType.SYSTEM)
+    @PutMapping("/deleteAuthority")
+    public ResponseResult deleteAuthority (String tenantId, HttpServletRequest request){
+        String token = request.getHeader("token");
+        customerSettingService.deleteAuthority(tenantId,token);
+        return new ResponseResult(SUCCESS);
     }
 }
