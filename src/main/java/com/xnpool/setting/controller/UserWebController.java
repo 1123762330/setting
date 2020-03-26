@@ -82,7 +82,7 @@ public class UserWebController extends BaseController {
      */
     @SystemLog(value = "查询用户矿机曲线图",type = LogType.SURVER)
     @GetMapping("/getWorkerHashByDay")
-    public ResponseResult getPoolWorkerHashByDay(HttpServletRequest request){
+    public ResponseResult getPoolWorkerHashByDay(String algorithId,HttpServletRequest request){
         String token = request.getHeader("token");
         Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(token);
         return new ResponseResult(SUCCESS,workerHashByDay);

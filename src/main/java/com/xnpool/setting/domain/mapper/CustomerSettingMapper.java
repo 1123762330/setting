@@ -25,7 +25,7 @@ public interface CustomerSettingMapper {
 
     int updateById(int id);
 
-    List<CustomerSettingExample> selectByOther(@Param("keyWord") String keyWord, @Param("managerUserId") int managerUserId);
+    List<CustomerSettingExample> selectByOther(@Param("keyWord") String keyWord, @Param("managerUserId") Integer managerUserId);
 
     void updateAttestationById(@Param("list") List<String> list, @Param("isPass") int isPass);
 
@@ -34,4 +34,6 @@ public interface CustomerSettingMapper {
     List<HashMap> selectUserMap();
 
     List<HashMap> selectTenantList(Integer userId);
+
+    List<HashMap> selectUserRole();
 }

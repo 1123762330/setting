@@ -86,7 +86,7 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
+    //@SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
     @GetMapping("/selectCustomerList")
     public ResponseResult selectCustomerList (String keyWord,
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,

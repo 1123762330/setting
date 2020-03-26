@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.WorkerAssignMapper;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
+import com.xnpool.setting.domain.pojo.UserRoleVO;
 import com.xnpool.setting.service.AgreementSettingService;
 import com.xnpool.setting.service.GroupSettingService;
 import com.xnpool.setting.utils.TokenUtil;
@@ -40,6 +42,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Autowired
     private GroupSettingService groupSettingService;
+
+    @Autowired
+    private WorkerAssignMapper workerAssignMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -101,16 +106,29 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
             keyWord = "%" + keyWord + "%";
         }
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
-        HashMap<String, Object> tokenData = getTokenData(token);
+        //HashMap<String, Object> tokenData = getTokenData(token);
         Integer managerUserId=null;
-        if (tokenData!=null){
-            managerUserId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
-            throw new CheckException("校验token失败!");
-        }
+        //if (tokenData!=null){
+        //    managerUserId = Integer.valueOf(tokenData.get("userId").toString());
+        //}else {
+        //    throw new CheckException("校验token失败!");
+        //}
+        //管理员和用户角色
+        HashMap<Integer, String> roleMap = new HashMap<>();
+        List<HashMap> UserRoleList = customerSettingMapper.selectUserRole();
+        UserRoleList.forEach(hashMap -> {
+            Object user_id = hashMap.get("user_id");
+            if (!StringUtils.isEmpty(user_id)){
+                Integer userId = Integer.valueOf(String.valueOf(user_id));
+                String roleName = String.valueOf(hashMap.get("roleName"));
+                roleMap.put(userId,roleName);
+            }
+
+        });
         PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
-        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
+        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord,managerUserId);
+        System.out.println("数据库查询的客户列表:"+customerSettingExamples.size());
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         //log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
@@ -151,7 +169,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
                     customerSettingExample.setGroupName(groupNameNameStr.toString());
                 }
             }
-
+            Integer managerUserId_db = customerSettingExample.getManagerUserId();
+            String roleName = roleMap.get(managerUserId_db);
+            customerSettingExample.setRoleName(roleName);
         });
         PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
         return pageInfo;

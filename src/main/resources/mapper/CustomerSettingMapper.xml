@@ -261,7 +261,10 @@
         AND customer_setting.user_id = sys_role_user.user_id
         AND sys_role_user.role_id = sys_role.id
             <if test="keyWord != null">
-                AND customer_setting.remarks like #{keyWord}
+                    AND customer_setting.remarks like #{keyWord}
+            </if>
+            <if test="managerUserId != null">
+                AND customer_setting.manager_user_id = #{managerUserId}
             </if>
         </where>
     </select>
@@ -313,5 +316,18 @@
             AND customer_setting.tenant_id = sys_enterprise.id
         GROUP BY
             tenant_id
+    </select>
+
+    <select id="selectUserRole" resultType="hashmap">
+    SELECT
+    sys_role.`name` AS roleName,
+    sys_role_user.user_id
+    FROM
+    sys_user,
+    sys_role_user,
+    sys_role
+    WHERE
+    sys_role_user.user_id = sys_user.id
+    AND sys_role_user.role_id = sys_role.id
     </select>
 </mapper>
