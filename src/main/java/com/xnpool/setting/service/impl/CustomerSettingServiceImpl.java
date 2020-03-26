@@ -153,10 +153,10 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
             }
             String groupId = customerSettingExample.getGroupId();
             if (!StringUtils.isEmpty(groupId)){
+                HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
                 if (groupId.contains(",")) {
                     //多个分组ID,从分组IDMap集合里面取出相应的值,重新set进属性里面
-                    HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
-                    String[] split = agreementid.split(",");
+                    String[] split = groupId.split(",");
                     StringBuffer groupNameNameStr = null;
                     for (int i = 0; i < split.length; i++) {
                         String groupName = groupNameHashMap.get(Integer.valueOf(split[i]));
@@ -167,6 +167,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
                         }
                     }
                     customerSettingExample.setGroupName(groupNameNameStr.toString());
+                }else {
+                    String groupName = groupNameHashMap.get(Integer.valueOf(groupId));
+                    customerSettingExample.setGroupName(groupName);
                 }
             }
             Integer managerUserId_db = customerSettingExample.getManagerUserId();
