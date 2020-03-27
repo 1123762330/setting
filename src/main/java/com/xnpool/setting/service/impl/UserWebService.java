@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author zly
@@ -39,31 +40,55 @@ public class UserWebService extends BaseController {
         HashMap<String, Object> tokenData = getTokenData(token);
         Integer userId=null;
         //通过算法id去查询矿机品牌
-        String brandName = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
+        List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
         if (tokenData!=null){
             userId = Integer.valueOf(tokenData.get("userId").toString());
         }else {
             throw new CheckException("校验token失败!");
         }
         Map<Object, Object> resultMap = new HashMap<>();
-        //先生成一个96个点的数据map
+        //先生成一个96个点的数据map,然后再去请求其他的数据集合,进行累加
+        String firstType = list.get(0);
         HashMap<Object, Object> middleMap = qiegeMin(15);
-        String bigKey = (HASHRATE_DATA + userId+":"+brandName);
+        String bigKey = (HASHRATE_DATA + userId+":"+firstType);
         Boolean result = jedisUtil.exists(bigKey);
+        String REGEX ="[^(0-9).]";
+        String unit="";
         if (result) {
             //取出24小时数据
             Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
             for (Map.Entry<Object, Object> entry : middleMap.entrySet()) {
                 String value = workerAvgHash.get(entry.getKey());
                 if (!StringUtils.isEmpty(value)) {
-                    String valueStr = value.substring(1, value.length() - 1);
-                    resultMap.put(entry.getKey(), valueStr);
+                    resultMap.put(entry.getKey(), value);
                 } else {
                     resultMap.put(entry.getKey(), "0");
                 }
             }
         }else {
             resultMap=middleMap;
+        }
+        //遍历其他的矿机类型键做合并
+        for (int i = 1; i < list.size(); i++) {
+            String workerType = list.get(i);
+            String bigKey2 = (HASHRATE_DATA + userId+":"+workerType);
+            Boolean result2 = jedisUtil.exists(bigKey2);
+            if (result2) {
+                //取出24小时数据
+                Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey2);
+                for (Map.Entry<String, String> entry : workerAvgHash.entrySet()) {
+                    String value = workerAvgHash.get(entry.getKey());
+                    String firstMap_Value = String.valueOf(resultMap.get(entry.getKey()));
+                    String valueStr = Pattern.compile(REGEX).matcher(value).replaceAll("");
+                    unit = value.substring(valueStr.length());
+                    //然后两个value相加
+                    String valueStr_trim = Pattern.compile(REGEX).matcher(value).replaceAll("").trim();
+                    String firstMap_ValueStr = Pattern.compile(REGEX).matcher(firstMap_Value).replaceAll("").trim();
+                    Double total = Double.valueOf(valueStr_trim) + Double.valueOf(firstMap_ValueStr);
+                    String format = String.format("%.2f",total);
+                    resultMap.put(entry.getKey(),format+unit);
+                }
+            }
         }
         //将map转成treeMap排序,然后键和values直接转
         Map<Object, Object> sortedMap = new TreeMap<>(resultMap);
@@ -86,28 +111,28 @@ public class UserWebService extends BaseController {
         }else {
             throw new CheckException("校验token失败!");
         }
-        String brandName = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
+        List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
         Map<Object, Object> resultMap = new HashMap<>();
         //先生成一个96个点的数据map
         HashMap<Object, Object> middleMap = qiegeMin(15);
-        String bigKey = (ON_LINE_DATA + userId+":"+brandName);
-        Boolean result = jedisUtil.exists(bigKey);
-        if (result) {
-            //取出24小时数据
-            Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
-            for (Map.Entry<Object, Object> entry : middleMap.entrySet()) {
-                String value = workerAvgHash.get(entry.getKey());
-                if (!StringUtils.isEmpty(value)) {
-                    String valueStr = value.substring(1, value.length() - 1);
-                    resultMap.put(entry.getKey(), valueStr);
-                } else {
-                    resultMap.put(entry.getKey(), "0");
+        for (String workerType : list) {
+            String bigKey = (ON_LINE_DATA + userId+":"+workerType);
+            Boolean result = jedisUtil.exists(bigKey);
+            if (result) {
+                //取出24小时数据
+                Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
+                for (Map.Entry<Object, Object> entry : middleMap.entrySet()) {
+                    String value = workerAvgHash.get(entry.getKey());
+                    if (!StringUtils.isEmpty(value)) {
+                        resultMap.put(entry.getKey(), value);
+                    } else {
+                        resultMap.put(entry.getKey(), "0");
+                    }
                 }
+            }else {
+                resultMap=middleMap;
             }
-        }else {
-            resultMap=middleMap;
         }
-
         //将map转成treeMap排序,然后键和values直接转
         Map<Object, Object> sortedMap = new TreeMap<>(resultMap);
         return sortedMap;

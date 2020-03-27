@@ -96,7 +96,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
+    //@SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotalByDay")
     public ResponseResult getWorkerTotalByDay(Integer algorithmId,HttpServletRequest request){
         String token = request.getHeader("token");

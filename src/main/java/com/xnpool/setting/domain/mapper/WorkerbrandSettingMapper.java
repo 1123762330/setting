@@ -13,5 +13,5 @@ public interface WorkerbrandSettingMapper extends BaseMapper<WorkerbrandSetting>
     int deleteByIdKey(int id);
 
     List<WorkerbrandSetting> selectByOther(@Param("keyWord") String keyWord);
-    String selectBrandNameByAlgorithmId(@Param("algorithmId") Integer algorithmId);
+    List<String> selectBrandNameByAlgorithmId(@Param("algorithmId") Integer algorithmId);
 }
