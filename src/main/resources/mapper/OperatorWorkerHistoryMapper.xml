@@ -120,7 +120,7 @@
 
     <!--  批量记录矿机出库历史-->
     <insert id="insertTobatch" parameterType="java.util.List">
-        insert into operator_worker_history (worker_id, move_out_time, reason, operator_id,mine_id)
+        insert into operator_worker_history (worker_id, come_in_time, reason, operator_id,mine_id)
         values
       <foreach collection="list" index="index" item="item" separator=",">
         (#{item,jdbcType=BIGINT},now(),#{reason,jdbcType=VARCHAR},#{operatorId,jdbcType=INTEGER},#{mineId,jdbcType=INTEGER})
@@ -168,12 +168,12 @@
         </if>
       </where>
     </select>
-  <!--修改入库时间-->
-  <update id="updateComeInTimeById">
-    update operator_worker_history set  come_in_time = now() where  worker_id in
+  <!--修改出库时间-->
+  <update id="updateMoveOutTimeById">
+    update operator_worker_history set  move_out_time = now() where  worker_id in
     <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=BIGINT}
     </foreach>
-    AND come_in_time IS NULL
+    AND move_out_time IS NULL
   </update>
 </mapper>

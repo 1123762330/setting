@@ -32,19 +32,19 @@ public interface WorkerDetailedService {
 
     PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize);
 
-    void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam);
+    void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token);
 
-    PageInfo<WorkerExample> selectComeInWorkerList(String keyWord, int pageNum, int pageSize);
+    HashMap<String, Object>  selectComeInWorkerList(String workerType, Integer state, String ip, int pageNum, int pageSize);
 
     void updateMoveOutByid(String ids, String reason, String token);
-
-    void updateComeInByid(String ids);
 
     void updateById(String ids);
 
     PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp, String endIp, Integer pageNum, Integer pageSize, String token);
 
     HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize);
+
+    HashMap<Integer, String> selectNullFrame(Integer frameId);
 }
 
 

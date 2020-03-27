@@ -20,7 +20,7 @@ public interface OperatorWorkerHistoryMapper {
 
     int updateByPrimaryKey(OperatorWorkerHistory record);
 
-    int updateComeInTimeById(@Param("list") List<Integer> list);
+    int updateMoveOutTimeById(@Param("list") List<Integer> list);
 
     int insertTobatch(@Param("list") List<Integer> list, @Param("reason") String reason, @Param("mineId") Integer mineid, @Param("operatorId") Integer operatorId);
 

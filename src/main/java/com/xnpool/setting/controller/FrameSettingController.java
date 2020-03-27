@@ -37,7 +37,7 @@ public class FrameSettingController extends BaseController {
      * @Date 12:59 2020/2/3
      * @Param
      */
-    @SystemLog(value = "添加矿机架",type = LogType.SYSTEM)
+    //@SystemLog(value = "添加矿机架",type = LogType.SYSTEM)
     @PostMapping("/addFrame")
     public ResponseResult addFrame(FrameSetting frameSetting) {
         frameSettingService.insertSelective(frameSetting);

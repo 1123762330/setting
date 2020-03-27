@@ -259,20 +259,15 @@
 
     <!--  矿机出库操作-->
     <update id="updateMoveOutByid" parameterType="java.util.List">
-        update worker_detailed set is_come_in = 0 where id in
+        update worker_detailed
+        set
+        is_come_in = 0
+        where id in
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=BIGINT}
         </foreach>
     </update>
 
-    <!--  矿机入库操作-->
-    <update id="updateComeInByid" parameterType="java.util.List">
-        update worker_detailed set is_come_in = 1 where worker_id in
-        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
-            #{item,jdbcType=BIGINT}
-        </foreach>
-        AND is_delete=0
-    </update>
 
     <!--矿机管理表的出入库矿机ID列表-->
     <select id="selectWorkerIdlist" resultType="integer">
@@ -287,7 +282,7 @@
 
     <!--矿机矿场列表-->
     <select id="selectByWorkerId" resultType="com.xnpool.setting.domain.pojo.WorkerMineVO">
-        select worker_id,mine_id FROM worker_detailed where is_delete=0 AND worker_id in
+        select worker_id,mine_id FROM worker_detailed where is_delete=0 AND id in
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=BIGINT}
         </foreach>
@@ -311,7 +306,7 @@
         worker_info.worker1 AS workerName,
         worker_info.mine_type,
         worker_info.mac,
-        workerbrand_setting.algorithm_id AS algorithm,
+        algorithm.algorithm_name AS algorithm,
         worker_info.state,
         worker_info.startup_time AS onTime,
         worker_info.ts AS runTime,
@@ -322,7 +317,8 @@
         worker_info,
         frame_setting,
         group_setting,
-        workerbrand_setting
+        workerbrand_setting,
+        algorithm
         <where>
             worker_detailed.user_id=#{userId}
             <if test="startIp != null">
@@ -337,6 +333,7 @@
             AND worker_detailed.worker_id = worker_info.id
             AND worker_detailed.group_id=group_setting.id
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
+            AND workerbrand_setting.algorithm_id=algorithm.id
             AND worker_detailed.frame_id=frame_setting.id
         </where>
     </select>
@@ -357,5 +354,28 @@
             AND worker_detailed.group_id = group_setting.id
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
             AND worker_detailed.worker_id=worker_info.id
+    </select>
+
+    <!--矿机上架操作-->
+    <update id="update">
+        update worker_detailed
+            set worker_id = #{workerId},
+            user_id = #{userId},
+            workerbrand_id = #{workerbrandId},
+            worker_ip = #{workerIp},
+            is_come_in=1
+            where id=#{id}
+    </update>
+
+    <!--查询空闲的矿机架-->
+    <select id="selectNullFrame" resultType="hashmap">
+        SELECT
+            id,
+            frame_number
+        FROM
+            worker_detailed
+        WHERE
+            frame_id = #{frameId}
+            AND is_come_in=0
     </select>
 </mapper>

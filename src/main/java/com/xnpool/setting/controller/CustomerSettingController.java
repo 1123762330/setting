@@ -5,6 +5,7 @@ import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.service.CustomerSettingService;
@@ -36,6 +37,9 @@ public class CustomerSettingController extends BaseController {
     @Autowired
     private CustomerSettingService customerSettingService;
 
+    @Autowired
+    private ApiContext apiContext;
+
     /**
      * @Description 添加客户设置
      * @Author zly
@@ -45,8 +49,9 @@ public class CustomerSettingController extends BaseController {
      */
     @SystemLog(value = "添加客户",type = LogType.SYSTEM)
     @PostMapping("/addCustomer")
-    public ResponseResult addCustomer(CustomerSetting customerSetting) {
-        customerSettingService.insertSelective(customerSetting,null);
+    public ResponseResult addCustomer(CustomerSetting customerSetting,HttpServletRequest request) {
+        String token = request.getHeader("token");
+        customerSettingService.insertSelective(customerSetting,token);
         return new ResponseResult(SUCCESS);
     }
 

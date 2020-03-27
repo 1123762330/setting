@@ -56,12 +56,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 			}else {
 				apiContext.setTenantId(Long.valueOf(enterpriseId));
 			}
-			//apiContext.setTenantId(1L);
 		}else {
-			//apiContext.setTenantId(1L);
 			printJson(response, 403, "请登录!");
 			return true;
 		}
+		//apiContext.setTenantId(1L);
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){
 			return true;

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 /**
  * 矿机出入库管理
@@ -54,9 +55,12 @@ public class WorkerDetailedController extends BaseController {
      */
     @SystemLog(value = "查询矿机入库列表",type = LogType.MINE)
     @GetMapping("/selectComeInWorkerList")
-    public ResponseResult selectComeInWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectComeInWorkerList(@RequestParam(value = "workerType", required = false)String workerType,
+                                                 @RequestParam(value = "state", required = false)Integer state,
+                                                 @RequestParam(value = "ip", required = false)String ip,
+                                                 @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<WorkerExample> workerPageInfo = workerDetailedService.selectComeInWorkerList(keyWord, pageNum, pageSize);
+        HashMap<String, Object>  workerPageInfo = workerDetailedService.selectComeInWorkerList(workerType,state,ip, pageNum, pageSize);
         return new ResponseResult(SUCCESS, workerPageInfo);
     }
 
@@ -68,9 +72,10 @@ public class WorkerDetailedController extends BaseController {
      * @return
      */
     @SystemLog(value = "矿机上架",type = LogType.MINE)
-    @PostMapping("/addWorkerToLibrary")
-    public ResponseResult addWorkerToLibrary(WorkerDetailedParam workerDetailedParam) {
-        workerDetailedService.addWorkerToLibrary(workerDetailedParam);
+    @PutMapping("/addWorkerToLibrary")
+    public ResponseResult addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,HttpServletRequest request) {
+        String token = request.getHeader("token");
+        workerDetailedService.addWorkerToLibrary(workerDetailedParam,token);
         return new ResponseResult(SUCCESS);
     }
 
@@ -90,21 +95,6 @@ public class WorkerDetailedController extends BaseController {
     }
 
     /**
-     * @Description 入库操作
-     * @Author zly
-     * @Date 16:48 2020/2/18
-     * @Param
-     * @return
-     */
-    @SystemLog(value = "矿机入库",type = LogType.MINE)
-    @PutMapping("/comeIn")
-    public ResponseResult comeIn(String ids) {
-        workerDetailedService.updateComeInByid(ids);
-        return new ResponseResult(SUCCESS);
-    }
-
-
-    /**
      * @Description 删除矿机
      * @Author zly
      * @Date 16:36 2020/2/18
@@ -115,6 +105,19 @@ public class WorkerDetailedController extends BaseController {
     public ResponseResult deleteWorker(String ids) {
         workerDetailedService.updateById(ids);
         return new ResponseResult(SUCCESS);
+    }
+
+    /**
+     * @Description 查询空闲矿机架
+     * @Author zly
+     * @Date 14:38 2020/3/27
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectNullFrame")
+    public ResponseResult selectNullFrame(Integer frameId) {
+        HashMap<Integer,String> resultMap = workerDetailedService.selectNullFrame(frameId);
+        return new ResponseResult(SUCCESS, resultMap);
     }
 
 }

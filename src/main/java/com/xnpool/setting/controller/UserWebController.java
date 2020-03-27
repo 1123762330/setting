@@ -37,9 +37,6 @@ public class UserWebController extends BaseController {
     private UserWebService userWebService;
 
     @Autowired
-    private ApiContext apiContext;
-
-    @Autowired
     private CustomerSettingService customerSettingService;
 
     /**
@@ -133,7 +130,7 @@ public class UserWebController extends BaseController {
     @GetMapping("/selectTenantList")
     public ResponseResult selectTenantList (HttpServletRequest request){
         String token = request.getHeader("token");
-        HashMap<Long, String> tenantList = customerSettingService.selectTenantList(token);
+        HashMap<Long, HashMap> tenantList = customerSettingService.selectTenantList(token);
         return new ResponseResult(SUCCESS,tenantList);
     }
 

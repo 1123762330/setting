@@ -1,5 +1,7 @@
 package com.xnpool.setting.service.impl;
 
+import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
@@ -19,6 +21,9 @@ public class WorkerInfoServiceImpl implements WorkerInfoService {
 
     @Resource
     private WorkerInfoMapper workerInfoMapper;
+
+    @Autowired
+    private WorkerDetailedMapper workerDetailedMapper;
 
     @Override
     public int deleteByPrimaryKey(Long id) {
@@ -59,14 +64,19 @@ public class WorkerInfoServiceImpl implements WorkerInfoService {
      */
     @Override
     public HashMap<Integer, String> selectWorkerList(String keyWord) {
-        List<WorkerInfo> workers = workerInfoMapper.selectByOther(keyWord);
+        List<WorkerInfo> workers = workerInfoMapper.selectByOther(null,null,null);
+        //已经入库的矿机Id
+        List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
         HashMap<Integer, String> resultMap = new HashMap<>();
         for (WorkerInfo worker : workers) {
             Integer id = Integer.valueOf(String.valueOf(worker.getId()));
-            String workername = worker.getWorker1();
-            String workerip = worker.getIp();
-            String workernames = workername + " " + workerip;
-            resultMap.put(id, workernames);
+            if (!comeInlist.contains(id)){
+                String workername = worker.getWorker1();
+                String workerip = worker.getIp();
+                String workernames = workername + " " + workerip;
+                resultMap.put(id, workernames);
+            }
+
         }
         return resultMap;
     }

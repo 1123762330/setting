@@ -359,8 +359,14 @@
     <include refid="Base_Column_List" />
     from worker_info
     <where>
-      <if test="keyWord != null">
-         (ip like #{keyWord} or `worker1` like #{keyWord})
+      <if test="ip != null">
+         ip like #{ip}
+      </if>
+      <if test="workerType != null">
+        AND mine_type = #{workerType}
+      </if>
+      <if test="state != null">
+        AND state = #{state}
       </if>
     </where>
   </select>

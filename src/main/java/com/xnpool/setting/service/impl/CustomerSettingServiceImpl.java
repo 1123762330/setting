@@ -59,7 +59,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSelective(CustomerSetting record, String token) {
+    public int insertSelective(CustomerSetting record, String token) {
         JSONObject jsonObject = TokenUtil.verify(token);
         Integer success = jsonObject.getInteger("success");
         if (success == 200) {
@@ -67,7 +67,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
             Integer userId = data.getInteger("id");
             record.setUserId(userId);
         }
-        int rows = customerSettingMapper.insertSelective(record);
+        return customerSettingMapper.insertSelective(record);
     }
 
     @Override
@@ -229,8 +229,8 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public HashMap<Long, String> selectTenantList(String token) {
-        HashMap<Long, String> resultMap = new HashMap<>();
+    public HashMap<Long, HashMap> selectTenantList(String token) {
+        HashMap<Long, HashMap> resultMap = new HashMap<>();
         //后期从token中获取用户Id
         HashMap<String, Object> tokenData = getTokenData(token);
         Integer userId = null;
@@ -243,7 +243,10 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         hashMapList.forEach(hashMap -> {
             String enterpriseName = String.valueOf(hashMap.get("enterprise_name"));
             Long tenantId = Long.valueOf(hashMap.get("tenant_id").toString());
-            resultMap.put(tenantId, enterpriseName);
+            Integer authentication = Integer.valueOf(hashMap.get("authentication").toString());
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put(enterpriseName,authentication);
+            resultMap.put(tenantId, map);
         });
         return resultMap;
     }
@@ -252,7 +255,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void deleteAuthority(String tenantId, String token) {
         apiContext.setTenantId(Long.valueOf(tenantId));
         HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId = 1;
+        Integer userId = 0;
         if (tokenData != null) {
             userId = Integer.valueOf(tokenData.get("userId").toString());
         } else {

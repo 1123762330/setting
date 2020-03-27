@@ -18,7 +18,7 @@ public interface CustomerSettingService {
 
     int insert(CustomerSetting record);
 
-    void insertSelective(CustomerSetting record, String token);
+    int insertSelective(CustomerSetting record,String token);
 
     CustomerSetting selectByPrimaryKey(Integer id);
 
@@ -38,7 +38,7 @@ public interface CustomerSettingService {
 
     HashMap<Integer, String> selectAllUser();
 
-    HashMap<Long, String> selectTenantList(String token);
+    HashMap<Long, HashMap> selectTenantList(String token);
 
     void deleteAuthority(String tenantId, String token);
 

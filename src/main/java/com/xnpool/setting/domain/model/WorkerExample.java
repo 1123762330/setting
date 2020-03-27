@@ -37,7 +37,7 @@ public class WorkerExample implements Serializable {
     /**
     * 是否在线
     */
-    private Integer isOnline;
+    private Integer state;
 
     /**
     * 是否入库

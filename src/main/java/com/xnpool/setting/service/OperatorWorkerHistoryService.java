@@ -26,7 +26,7 @@ public interface OperatorWorkerHistoryService {
 
     int updateByPrimaryKey(OperatorWorkerHistory record);
 
-    int updateComeInTimeById(List<Integer> list);
+    int updateMoveOutTimeById(List<Integer> list);
 
     int insertTobatch(List<Integer> list, String reason, Integer mineid, Integer operatorId);
 

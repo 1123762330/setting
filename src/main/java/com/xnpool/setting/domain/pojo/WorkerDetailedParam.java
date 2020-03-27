@@ -18,6 +18,7 @@ import java.util.Date;
 public class WorkerDetailedParam implements Serializable {
     private static final long serialVersionUID = -370117579611317755L;
 
+    private Integer id;
     /**
      * 矿机ID
      */

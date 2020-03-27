@@ -62,8 +62,8 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
     }
 
     @Override
-    public int updateComeInTimeById(List<Integer> list) {
-        return operatorWorkerHistoryMapper.updateComeInTimeById(list);
+    public int updateMoveOutTimeById(List<Integer> list) {
+        return operatorWorkerHistoryMapper.updateMoveOutTimeById(list);
     }
 
     @Override

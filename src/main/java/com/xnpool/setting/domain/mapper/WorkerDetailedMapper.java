@@ -1,7 +1,9 @@
 package com.xnpool.setting.domain.mapper;
 
 import com.xnpool.setting.domain.model.GroupModel;
-import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.model.WorkerDetailedExample;import com.xnpool.setting.domain.model.WorkerDetailedModel;import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;import java.util.List;
+import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.model.WorkerDetailedExample;import com.xnpool.setting.domain.model.WorkerDetailedModel;import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author zly
@@ -25,9 +27,9 @@ public interface WorkerDetailedMapper {
 
     int batchInsert(List<WorkerDetailed> list);
 
-    int updateMoveOutByid(@Param("list") List<Integer> list);
+    int update(WorkerDetailed workerDetailed);
 
-    int updateComeInByid(ArrayList<Integer> list);
+    int updateMoveOutByid(@Param("list") List<Integer> list);
 
     List<Integer> selectWorkerIdlist(@Param("is_come_in") Integer is_come_in);
 
@@ -41,4 +43,6 @@ public interface WorkerDetailedMapper {
                                                       @Param("userId") Integer userId);
 
     List<GroupModel> selectGroupModel(Integer userId);
+
+    List<HashMap> selectNullFrame(@Param("frameId")Integer frameId);
 }

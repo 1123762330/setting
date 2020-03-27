@@ -3,8 +3,11 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
 import com.xnpool.setting.domain.model.FrameSettingExample;
+import com.xnpool.setting.domain.pojo.WorkerDetailed;
 import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
@@ -13,6 +16,7 @@ import com.xnpool.setting.service.FrameSettingService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +31,9 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
 
     @Resource
     private FrameSettingMapper frameSettingMapper;
+
+    @Autowired
+    private WorkerDetailedMapper workerDetailedMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -46,9 +53,23 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
         int rows = frameSettingMapper.insertSelective(record);
+        List<WorkerDetailed> list = new ArrayList<>();
+        for (int i = 1; i <= number; i++) {
+            WorkerDetailed workerDetailed = new WorkerDetailed();
+            workerDetailed.setFactoryId(record.getFactoryId());
+            workerDetailed.setFrameId(record.getId());
+            workerDetailed.setFrameNumber(i);
+            workerDetailed.setMineId(record.getMineId());
+            workerDetailed.setCreateTime(new Date());
+            workerDetailed.setUpdateTime(new Date());
+            list.add(workerDetailed);
+        }
+        int rows2 = workerDetailedMapper.batchInsert(list);
         record.setCreateTime(new Date());
         FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        //批量入缓存
         redisToInsert(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
+        redisToBatchInsert(rows2, "worker_detailed", list, record.getMineId());
     }
 
     @Override
