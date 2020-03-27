@@ -87,13 +87,12 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
                 Date comeintime=null;
                 if (!StringUtils.isEmpty(moveOutTimeStr)){
                      moveouttime = simpleDate.parse(moveOutTimeStr);
-
                 }
                 if (!StringUtils.isEmpty(comeInTimeStr)){
                     comeintime = simpleDate.parse(comeInTimeStr);
 
                 }
-                if (comeintime != null) {
+                if (moveouttime != null) {
                     long totalTime = (comeintime.getTime() - moveouttime.getTime()) / 1000;
                     String DateTimes = calculTime(totalTime);
                     operatorWorkerHistoryExample.setTotalTime(DateTimes);

@@ -53,7 +53,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "查询矿机入库列表",type = LogType.MINE)
+    //@SystemLog(value = "查询矿机入库列表",type = LogType.MINE)
     @GetMapping("/selectComeInWorkerList")
     public ResponseResult selectComeInWorkerList(@RequestParam(value = "workerType", required = false)String workerType,
                                                  @RequestParam(value = "state", required = false)Integer state,

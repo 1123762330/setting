@@ -258,14 +258,19 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         List<WorkerInfo> workers = workerInfoMapper.selectByOther(workerType,state,ip);
         //已经入库的矿机Id
         List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
-
+        //List<Integer>转List<Long>
+        ArrayList<Long> comeInlistToLong = new ArrayList<>();
+        for (Integer integer : comeInlist) {
+            Long workerIdToLong = Long.valueOf(integer.toString());
+            comeInlistToLong.add(workerIdToLong);
+        }
         //遍历list集合,setIP所属区间进去
         for (WorkerInfo worker : workers) {
             int lastIndexOf = worker.getIp().lastIndexOf(".");
             String substring = worker.getIp().substring(0, lastIndexOf);
             String ip_quJian = ipMap.get(substring);
             //这里需要做个判断,判断这个矿机有没有入库,如果入库列表里有那就是1,如果没有就是0
-            if (comeInlist.contains(worker.getId())) {
+            if (comeInlistToLong.contains(worker.getId())) {
                 WorkerExample workerExample = new WorkerExample(Integer.valueOf(worker.getId().toString()), worker.getIp(), ip_quJian, Integer.valueOf(worker.getState()), 1);
                 result.add(workerExample);
             } else {

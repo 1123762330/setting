@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkerInfo implements Serializable {
+
     private Long id;
 
     private String ip;
