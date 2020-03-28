@@ -378,4 +378,11 @@
             frame_id = #{frameId}
             AND is_come_in=0
     </select>
+
+    <select id="selectIdByWorkerId" resultType="integer">
+        select id FROM worker_detailed where
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            worker_id= #{item} AND is_come_in=1
+        </foreach>
+    </select>
 </mapper>

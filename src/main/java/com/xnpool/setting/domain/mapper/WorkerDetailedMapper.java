@@ -45,4 +45,6 @@ public interface WorkerDetailedMapper {
     List<GroupModel> selectGroupModel(Integer userId);
 
     List<HashMap> selectNullFrame(@Param("frameId")Integer frameId);
+
+    List<Integer> selectIdByWorkerId(@Param("list") List<Integer> list);
 }

@@ -307,8 +307,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             //单个出库
             list.add(Integer.valueOf(ids));
         }
+        List<Integer> idList = workerDetailedMapper.selectIdByWorkerId(list);
         List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
-        workerDetailedMapper.updateMoveOutByid(list);
+        workerDetailedMapper.updateMoveOutByid(idList);
 
         Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
         for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
