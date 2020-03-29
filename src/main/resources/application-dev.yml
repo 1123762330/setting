@@ -139,10 +139,19 @@ zlt:
   tenant:
     enable: true
     ignoreTables:
-      - sys_user
       - algorithm
       - sys_role_user
       - sys_role
     ignoreSqls:
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.selectTenantList
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.insertSelective
+
+---
+#上传和下载文件大小设置
+  spring:
+    servlet:
+      multipart:
+        #设置单个文件大小不超过10m
+        max-file-size: 10485760
+        #设置单次请求文件的总大小10m
+        max-request-size: 10485760

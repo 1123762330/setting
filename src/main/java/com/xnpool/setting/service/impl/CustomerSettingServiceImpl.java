@@ -241,11 +241,11 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         }
         List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
         hashMapList.forEach(hashMap -> {
-            String enterpriseName = String.valueOf(hashMap.get("enterprise_name"));
+            String tenantName = String.valueOf(hashMap.get("tenant_name"));
             Long tenantId = Long.valueOf(hashMap.get("tenant_id").toString());
             Integer authentication = Integer.valueOf(hashMap.get("authentication").toString());
             HashMap<Object, Object> map = new HashMap<>();
-            map.put(enterpriseName,authentication);
+            map.put(tenantName,authentication);
             resultMap.put(tenantId, map);
         });
         return resultMap;

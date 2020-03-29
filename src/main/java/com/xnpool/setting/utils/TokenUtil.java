@@ -103,12 +103,16 @@ public class TokenUtil {
                 //角色列表
                 List<String> roles = jwt.getClaim("authorities").asList(String.class);
                 //企业id
-                String enterpriseId = jwt.getClaim("enterpriseId").asString();
+                String tenant_id = jwt.getClaim("tenant_id").asString();
                 //用户id
                 Integer userId = jwt.getClaim("id").asInt();
                 reslut.put("username", username);
                 reslut.put("roles", roles);
-                reslut.put("enterpriseId", enterpriseId);
+                if (!"null".equals(tenant_id)){
+                    reslut.put("tenant_id", tenant_id);
+                }else {
+                    reslut.put("tenant_id", -1);
+                }
                 reslut.put("id", userId);
                 success=200;
                 msg="解析成功";

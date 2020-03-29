@@ -106,7 +106,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 Integer frameNumber = workerDetailedExample.getFrameNumber();
                 String minerName = "";
                 String workerNameStr = "";
-                if (!workerName.contains("\\.")) {
+                if (!workerName.contains(".")) {
                     minerName = workerName;
                     workerNameStr = "";
                 } else {
@@ -260,10 +260,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
         //List<Integer>转List<Long>
         ArrayList<Long> comeInlistToLong = new ArrayList<>();
-        for (Integer integer : comeInlist) {
-            Long workerIdToLong = Long.valueOf(integer.toString());
-            comeInlistToLong.add(workerIdToLong);
+        if (!comeInlist.isEmpty()){
+            for (Integer integer : comeInlist) {
+                Long workerIdToLong = Long.valueOf(integer.toString());
+                comeInlistToLong.add(workerIdToLong);
+            }
         }
+
         //遍历list集合,setIP所属区间进去
         for (WorkerInfo worker : workers) {
             int lastIndexOf = worker.getIp().lastIndexOf(".");
@@ -290,7 +293,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         ArrayList<Integer> list = new ArrayList<>();
         //从token中取出userid
         int userId = 1;
-        //HashMap<String, Object> tokenData = getTokenData(token);
+        HashMap<String, Object> tokenData = getTokenData(token);
         //int userId = 1;
         //if (tokenData != null) {
         //    userId = Integer.valueOf(tokenData.get("userId").toString());

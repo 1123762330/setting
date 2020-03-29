@@ -517,9 +517,9 @@ public abstract class BaseController {
 		if (success==200){
 			JSONObject data = jsonObject.getJSONObject("data");
 			Integer userId = data.getInteger("id");
-			Integer enterpriseId = data.getInteger("enterpriseId");
+			Integer tenant_id = data.getInteger("tenant_id");
 			result.put("userId",userId);
-			result.put("tenantId",enterpriseId);
+			result.put("tenantId",tenant_id);
 		}
 		return result;
 	}

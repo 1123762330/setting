@@ -235,7 +235,7 @@
         workerbrand_setting
         <where>
             worker_detailed.is_delete = 0
-            AND worker_detailed.is_come_in = 0
+            AND worker_detailed.is_come_in = 1
             <if test="keyWord != null">
                 AND (group_name like #{keyWord})
             </if>
@@ -277,6 +277,7 @@
             <if test="is_come_in != null">
                 AND is_come_in=#{is_come_in}
             </if>
+            AND worker_id IS NOT NULl
         </where>
     </select>
 

@@ -45,12 +45,18 @@ public class AgreementSettingController extends BaseController {
     @PostMapping("/addAgreement")
     public ResponseResult addAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
-        ResponseResult result = UploadUtils.getFileToUpload(file,filePath);
-        if (200!=result.getStatus()) return result;
-        //添加记录到数据库
-        agreementSetting.setPath(prifix + file.getOriginalFilename());
-        agreementSettingService.insertSelective(agreementSetting);
-        return new ResponseResult(SUCCESS);
+        long fileSize = file.getSize();
+        if (fileSize>10485760){
+            return new ResponseResult(FAIL,"上传文件不能超过10M");
+        }else {
+            ResponseResult result = UploadUtils.getFileToUpload(file,filePath);
+            if (200!=result.getStatus()) return result;
+            //添加记录到数据库
+            agreementSetting.setPath(prifix + file.getOriginalFilename());
+            agreementSettingService.insertSelective(agreementSetting);
+            return new ResponseResult(SUCCESS);
+        }
+
     }
 
     /**

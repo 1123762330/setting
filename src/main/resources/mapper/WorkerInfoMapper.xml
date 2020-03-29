@@ -359,13 +359,13 @@
     <include refid="Base_Column_List" />
     from worker_info
     <where>
-      <if test="ip != null">
+      <if test="ip != null and ip != '' " >
          ip like #{ip}
       </if>
-      <if test="workerType != null">
+      <if test="workerType != null and workerType != '' ">
         AND mine_type = #{workerType}
       </if>
-      <if test="state != null">
+      <if test="state != null and state != ''">
         AND state = #{state}
       </if>
     </where>

@@ -247,7 +247,7 @@
 
     <select id="selectTenantList" resultType="java.util.HashMap">
         SELECT
-            sys_enterprise.enterprise_name,
+            sys_tenant.tenant_name,
             customer_setting.tenant_id,
             customer_setting.authentication
         FROM
