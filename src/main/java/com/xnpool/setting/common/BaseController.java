@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.service.exception.UpdateException;
+import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.domain.redismodel.*;
@@ -522,5 +523,20 @@ public abstract class BaseController {
 			result.put("tenantId",tenant_id);
 		}
 		return result;
+	}
+
+	public Integer getUserId(String token){
+		Integer userId=0;
+		Map<String, String> verify = JwtUtil.verify(token);
+		if (verify != null) {
+			Object userIdObj = verify.get("id");
+			if (userIdObj != null) {
+				String data = userIdObj.toString();
+				if (!data.contains(",")) {
+					userId = Integer.valueOf(data);
+				}
+			}
+		}
+		return userId;
 	}
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
 import com.xnpool.setting.utils.JedisUtil;
@@ -38,16 +39,10 @@ public class UserWebService extends BaseController {
      * @Date 15:05 2020/3/13
      * @Param
      */
-    public Map<Object, Object> getWorkerHashByDay(Integer algorithmId,String token) {
-        HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId=null;
+    public Map<Object, Object> getWorkerHashByDay(Integer algorithmId, String token) {
         //通过算法id去查询矿机品牌
         List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
-        if (tokenData!=null){
-            userId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
         //先生成一个96个点的数据map,然后再去请求其他的数据集合,进行累加
         HashMap<Object, Object> middleMap = qiegeMin(15);
         HashMap<String, Date> stringDateHashMap = nowTimeAfter15min();
@@ -56,26 +51,31 @@ public class UserWebService extends BaseController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String startTime = sdf.format(startDate);
         String endTime = sdf.format(endDate);
-        log.info("开始时间=="+startTime+" 结束时间=="+endTime);
+        log.info("开始时间==" + startTime + " 结束时间==" + endTime);
         //遍历其他的矿机类型键做合并
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA + userId+":"+startTime+":"+workerType);
+            String bigKey = (HASHRATE_DATA + userId + ":" + startTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
-                log.info(startTime+"大键=="+bigKey);
+                log.info(startTime + "大键==" + bigKey);
                 //取出24小时数据
                 Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
                 for (Map.Entry<String, String> entry : workerAvgHash.entrySet()) {
                     String value = workerAvgHash.get(entry.getKey());
                     //然后两个value相加
-                    if (!StringUtils.isEmpty(value)){
+                    if (!StringUtils.isEmpty(value)) {
                         Object valueObj = middleMap.get(entry.getKey());
+                        if (!StringUtils.isEmpty(valueObj)) {
                             String firstMap_Value = String.valueOf(valueObj);
                             BigDecimal bignum1 = new BigDecimal(firstMap_Value);
                             BigDecimal bignum2 = new BigDecimal(value);
-                            BigDecimal total =  bignum1.add(bignum2);
-                            middleMap.put(entry.getKey(),total.toPlainString());
+                            BigDecimal total = bignum1.add(bignum2);
+                            middleMap.put(entry.getKey(), total.toPlainString());
+                        }else {
+                            BigDecimal total = new BigDecimal(value);
+                            middleMap.put(entry.getKey(), total.toPlainString());
+                        }
                     }
                 }
             }
@@ -83,22 +83,28 @@ public class UserWebService extends BaseController {
 
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA + userId+":"+endTime+":"+workerType);
+            String bigKey = (HASHRATE_DATA + userId + ":" + endTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
-                log.info(endTime+"大键=="+bigKey);
+                log.info(endTime + "大键==" + bigKey);
                 //取出24小时数据
                 Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
                 for (Map.Entry<String, String> entry : workerAvgHash.entrySet()) {
                     String value = workerAvgHash.get(entry.getKey());
                     //然后两个value相加
-                    if (!StringUtils.isEmpty(value)){
+                    if (!StringUtils.isEmpty(value)) {
                         Object valueObj = middleMap.get(entry.getKey());
+                        if (!StringUtils.isEmpty(valueObj)) {
                             String firstMap_Value = String.valueOf(valueObj);
                             BigDecimal bignum1 = new BigDecimal(firstMap_Value);
                             BigDecimal bignum2 = new BigDecimal(value);
-                            BigDecimal total =  bignum1.add(bignum2);
-                            middleMap.put(entry.getKey(),total.toPlainString());
+                            BigDecimal total = bignum1.add(bignum2);
+                            middleMap.put(entry.getKey(), total.toPlainString());
+                        }else {
+                            BigDecimal total = new BigDecimal(value);
+                            middleMap.put(entry.getKey(), total.toPlainString());
+                        }
+
                     }
                 }
             }
@@ -115,16 +121,10 @@ public class UserWebService extends BaseController {
      * @Date 15:03 2020/3/13
      * @Param
      */
-    public Map<Object, Object> getWorkerTotalByDay(String token,Integer algorithmId) {
-        HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId=null;
+    public Map<Object, Object> getWorkerTotalByDay(String token, Integer algorithmId) {
         //通过算法id去查询矿机品牌
         List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
-        if (tokenData!=null){
-            userId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
         //先生成一个96个点的数据map,然后再去请求其他的数据集合,进行累加
         HashMap<Object, Object> middleMap = qiegeMin(15);
         HashMap<String, Date> stringDateHashMap = nowTimeAfter15min();
@@ -133,25 +133,28 @@ public class UserWebService extends BaseController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String startTime = sdf.format(startDate);
         String endTime = sdf.format(endDate);
-        log.info("开始时间=="+startTime+" 结束时间=="+endTime);
+        log.info("开始时间==" + startTime + " 结束时间==" + endTime);
         //遍历其他的矿机类型键做合并
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA + userId+":"+startTime+":"+workerType);
+            String bigKey = (ON_LINE_DATA + userId + ":" + startTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
-                log.info(startTime+"大键=="+bigKey);
+                log.info(startTime + "大键==" + bigKey);
                 //取出24小时数据
                 Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
                 for (Map.Entry<String, String> entry : workerAvgHash.entrySet()) {
                     String value = workerAvgHash.get(entry.getKey());
                     //然后两个value相加
-                    if (!StringUtils.isEmpty(value)){
+                    if (!StringUtils.isEmpty(value)) {
                         Object valueObj = middleMap.get(entry.getKey());
+                        if (!StringUtils.isEmpty(valueObj)){
                             Integer firstMap_Value = Integer.valueOf(valueObj.toString());
-                            Integer total =  firstMap_Value+Integer.valueOf(value);
-                            middleMap.put(entry.getKey(),total);
-
+                            Integer total = firstMap_Value + Integer.valueOf(value);
+                            middleMap.put(entry.getKey(), total);
+                        }else {
+                            middleMap.put(entry.getKey(), Integer.valueOf(value));
+                        }
                     }
                 }
             }
@@ -159,20 +162,24 @@ public class UserWebService extends BaseController {
 
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA + userId+":"+endTime+":"+workerType);
+            String bigKey = (ON_LINE_DATA + userId + ":" + endTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
-                log.info(endTime+"大键=="+bigKey);
+                log.info(endTime + "大键==" + bigKey);
                 //取出24小时数据
                 Map<String, String> workerAvgHash = jedisUtil.hgetall(bigKey);
                 for (Map.Entry<String, String> entry : workerAvgHash.entrySet()) {
                     String value = workerAvgHash.get(entry.getKey());
                     //然后两个value相加
-                    if (!StringUtils.isEmpty(value)){
+                    if (!StringUtils.isEmpty(value)) {
                         Object valueObj = middleMap.get(entry.getKey());
-                        Integer firstMap_Value = Integer.valueOf(valueObj.toString());
-                        Integer total =  firstMap_Value+Integer.valueOf(value);
-                        middleMap.put(entry.getKey(),total);
+                        if (!StringUtils.isEmpty(valueObj)){
+                            Integer firstMap_Value = Integer.valueOf(valueObj.toString());
+                            Integer total = firstMap_Value + Integer.valueOf(value);
+                            middleMap.put(entry.getKey(), total);
+                        }else {
+                            middleMap.put(entry.getKey(), Integer.valueOf(value));
+                        }
                     }
                 }
             }
@@ -183,41 +190,35 @@ public class UserWebService extends BaseController {
     }
 
     /**
+     * @return
      * @Description 查询用户的总矿机数
      * @Author zly
      * @Date 19:06 2020/3/16
      * @Param
-     * @return
      */
     public HashMap<String, Integer> getWorkerTotal(String token) {
         //后期从token中获取用户Id
-        HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId=null;
-        if (tokenData!=null){
-            userId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
         Boolean totalHexists = jedisUtil.hexists(USERWORKER_TOTAL, String.valueOf(userId));
-        int total=0;
-        if (totalHexists){
+        int total = 0;
+        if (totalHexists) {
             String hashSetStr = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
-            if (!StringUtils.isEmpty(hashSetStr)){
+            if (!StringUtils.isEmpty(hashSetStr)) {
                 String[] split = hashSetStr.split(",");
                 total = split.length - 1;
             }
-            log.info(userId+"用户的redis中取出的矿机个数是"+total+",集合是"+hashSetStr);
+            log.info(userId + "用户的redis中取出的矿机个数是" + total + ",集合是" + hashSetStr);
         }
 
         Boolean hexists = jedisUtil.hexists(USERWORKER_ONLINE_TOTAL, String.valueOf(userId));
-        String onLineSize="0";
-        if (hexists){
-            onLineSize = jedisUtil.hget(USERWORKER_ONLINE_TOTAL,String.valueOf(userId) );
-            log.info(userId+"用户的redis中取出的在线矿机总数是"+onLineSize);
+        String onLineSize = "0";
+        if (hexists) {
+            onLineSize = jedisUtil.hget(USERWORKER_ONLINE_TOTAL, String.valueOf(userId));
+            log.info(userId + "用户的redis中取出的在线矿机总数是" + onLineSize);
         }
         HashMap<String, Integer> resultMap = new HashMap<>();
-        resultMap.put("total",total);
-        resultMap.put("onLine",Integer.valueOf(onLineSize));
+        resultMap.put("total", total);
+        resultMap.put("onLine", Integer.valueOf(onLineSize));
         return resultMap;
     }
 }

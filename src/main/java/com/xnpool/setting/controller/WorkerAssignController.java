@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
 import com.xnpool.setting.service.WorkerAssignService;
@@ -28,6 +29,8 @@ import java.util.List;
 public class WorkerAssignController extends BaseController {
     @Autowired
     private WorkerAssignService workerAssignService;
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     /**
      * @Description 用户角色列表
@@ -54,7 +57,7 @@ public class WorkerAssignController extends BaseController {
     @SystemLog(value = "矿机权限设置",type = LogType.MINE)
     @PostMapping("/addAssignWorker")
     public ResponseResult addAssignWorker(String ids, HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         workerAssignService.addAssignWorker(ids,token);
         return new ResponseResult(SUCCESS);
     }

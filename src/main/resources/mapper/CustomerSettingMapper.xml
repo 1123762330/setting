@@ -185,7 +185,7 @@
         SELECT
         customer_setting.id,
         sys_user.username AS userName,
-        sys_enterprise.type AS cusType,
+        sys_tenant.type AS cusType,
         sys_user.contact_person,
         sys_user.mobile,
         sys_user.address,
@@ -198,11 +198,11 @@
         FROM
         customer_setting,
         sys_user,
-        sys_enterprise
+        sys_tenant
         <where>
         customer_setting.is_delete = 0
         AND customer_setting.user_id = sys_user.id
-        AND customer_setting.tenant_id = sys_enterprise.id
+        AND customer_setting.tenant_id = sys_tenant.id
         AND authentication!=2
             <if test="keyWord != null">
                     AND customer_setting.remarks like #{keyWord}
@@ -252,10 +252,10 @@
             customer_setting.authentication
         FROM
             customer_setting,
-            sys_enterprise
+            sys_tenant
         WHERE
             user_id = #{userId}
-            AND customer_setting.tenant_id = sys_enterprise.id
+            AND customer_setting.tenant_id = sys_tenant.id
             AND authentication !=2
         GROUP BY
             tenant_id

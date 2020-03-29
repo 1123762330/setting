@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.mapper.WorkerAssignMapper;
@@ -60,13 +61,8 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int insertSelective(CustomerSetting record, String token) {
-        JSONObject jsonObject = TokenUtil.verify(token);
-        Integer success = jsonObject.getInteger("success");
-        if (success == 200) {
-            JSONObject data = jsonObject.getJSONObject("data");
-            Integer userId = data.getInteger("id");
-            record.setUserId(userId);
-        }
+        Integer userId = getUserId(token);
+        record.setUserId(userId);
         return customerSettingMapper.insertSelective(record);
     }
 
@@ -92,14 +88,14 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         int rows = customerSettingMapper.updateById(id);
-        CustomerSetting record = new CustomerSetting();
+        //CustomerSetting record = new CustomerSetting();
         //record.setUpdateTime(new Date());
         //record.setId(id);
         //redisToDelete(rows,"customer_setting",record,null);
     }
 
     @Override
-    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
+    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -231,14 +227,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     public HashMap<Long, HashMap> selectTenantList(String token) {
         HashMap<Long, HashMap> resultMap = new HashMap<>();
-        //后期从token中获取用户Id
-        HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId = null;
-        if (tokenData != null) {
-            userId = Integer.valueOf(tokenData.get("userId").toString());
-        } else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
         List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
         hashMapList.forEach(hashMap -> {
             String tenantName = String.valueOf(hashMap.get("tenant_name"));
@@ -254,13 +243,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     public void deleteAuthority(String tenantId, String token) {
         apiContext.setTenantId(Long.valueOf(tenantId));
-        HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId = 0;
-        if (tokenData != null) {
-            userId = Integer.valueOf(tokenData.get("userId").toString());
-        } else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
         customerSettingMapper.deleteAuthority(tenantId, userId);
     }
 

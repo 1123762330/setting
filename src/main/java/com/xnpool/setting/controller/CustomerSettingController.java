@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
@@ -38,7 +39,7 @@ public class CustomerSettingController extends BaseController {
     private CustomerSettingService customerSettingService;
 
     @Autowired
-    private ApiContext apiContext;
+    private WriteLogUtil writeLogUtil;
 
     /**
      * @Description 添加客户设置
@@ -50,7 +51,7 @@ public class CustomerSettingController extends BaseController {
     @SystemLog(value = "添加客户",type = LogType.SYSTEM)
     @PostMapping("/addCustomer")
     public ResponseResult addCustomer(CustomerSetting customerSetting,HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         customerSettingService.insertSelective(customerSetting,token);
         return new ResponseResult(SUCCESS);
     }
@@ -91,14 +92,12 @@ public class CustomerSettingController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
+    @SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
     @GetMapping("/selectCustomerList")
     public ResponseResult selectCustomerList (String keyWord,
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-                                              HttpServletRequest request){
-        String token = request.getHeader("token");
-        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize,token);
+                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
+        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS,pageInfo);
     }
 

@@ -49,23 +49,18 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 		//获取token
 		String token = writeLogUtil.getToken(request);
-		Map<String, String> verify = JwtUtil.verify(token);
-		log.info("解析的token:"+verify);
 		Long tenant_id=-1L;
+		Map<String, String> verify = JwtUtil.verify(token);
 		if(verify!=null){
 			Object enterpriseIdObj = verify.get("tenant_id");
-			if(!StringUtils.isEmpty(enterpriseIdObj)){
+			if(enterpriseIdObj!=null){
 				String data = enterpriseIdObj.toString();
 				if(!data.contains(",")){
 					tenant_id = Long.valueOf(data);
-				}else {
-					String[] split = data.split(",");
-					//从登录用户的token中获取企业ID,
-					tenant_id=Long.valueOf(split[0]);
 				}
 			}
 		}
-		apiContext.setTenantId(Long.valueOf(tenant_id));
+		apiContext.setTenantId(tenant_id);
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){
 			return true;

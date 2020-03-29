@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.WorkerDetailedExample;
 import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
@@ -30,6 +31,9 @@ import java.util.HashMap;
 public class WorkerDetailedController extends BaseController {
     @Autowired
     private WorkerDetailedService workerDetailedService;
+
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     /**
      * @Description 矿机出库列表
@@ -86,10 +90,10 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "矿机下架",type = LogType.MINE)
+    //@SystemLog(value = "矿机下架",type = LogType.MINE)
     @PutMapping("/moveOut")
     public ResponseResult moveOut(String ids, @RequestParam(value = "reason",required = false) String reason, HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         workerDetailedService.updateMoveOutByid(ids,reason,token);
         return new ResponseResult(SUCCESS);
     }

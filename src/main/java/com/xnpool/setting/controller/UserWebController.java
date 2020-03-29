@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
@@ -39,6 +40,9 @@ public class UserWebController extends BaseController {
     @Autowired
     private CustomerSettingService customerSettingService;
 
+    @Autowired
+    private WriteLogUtil writeLogUtil;
+
     /**
      * @Description 用户网站查询矿机详情列表
      * @Author zly
@@ -52,7 +56,7 @@ public class UserWebController extends BaseController {
                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                   HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         PageInfo<WorkerDetailedModel> workerPageInfo = workerDetailedService.selectAllWorkerDetailed(workerName,startIp,endIp, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, workerPageInfo);
     }
@@ -69,7 +73,7 @@ public class UserWebController extends BaseController {
     public ResponseResult selectGroupModel(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                            HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         HashMap<String, Object> groupModel = workerDetailedService.selectGroupModel(token, pageNum, pageSize);
         return new ResponseResult(SUCCESS,groupModel);
     }
@@ -84,7 +88,7 @@ public class UserWebController extends BaseController {
     @SystemLog(value = "查询用户矿机算力曲线图",type = LogType.SURVER)
     @GetMapping("/getWorkerHashByDay")
     public ResponseResult getPoolWorkerHashByDay(Integer algorithmId,HttpServletRequest request){
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(algorithmId,token);
         return new ResponseResult(SUCCESS,workerHashByDay);
     }
@@ -99,7 +103,7 @@ public class UserWebController extends BaseController {
     //@SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotalByDay")
     public ResponseResult getWorkerTotalByDay(Integer algorithmId,HttpServletRequest request){
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token,algorithmId);
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
@@ -107,7 +111,7 @@ public class UserWebController extends BaseController {
     @SystemLog(value = "用户饼状图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotal")
     public ResponseResult getWorkerTotal(HttpServletRequest request){
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         HashMap<String, Integer> hashMap = userWebService.getWorkerTotal(token);
         return new ResponseResult(SUCCESS,hashMap);
     }
@@ -115,7 +119,7 @@ public class UserWebController extends BaseController {
     @SystemLog(value = "用户申请企业授权",type = LogType.SYSTEM)
     @PostMapping("/userApplyAuthority")
     public ResponseResult userApplyAuthority(CustomerSetting customerSetting,HttpServletRequest request){
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         customerSettingService.insertSelective(customerSetting,token);
         return new ResponseResult(SUCCESS);
     }
@@ -129,7 +133,7 @@ public class UserWebController extends BaseController {
      */
     @GetMapping("/selectTenantList")
     public ResponseResult selectTenantList (HttpServletRequest request){
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         HashMap<Long, HashMap> tenantList = customerSettingService.selectTenantList(token);
         return new ResponseResult(SUCCESS,tenantList);
     }
@@ -144,7 +148,7 @@ public class UserWebController extends BaseController {
     @SystemLog(value = "用户删除企业授权",type = LogType.SYSTEM)
     @PutMapping("/deleteAuthority")
     public ResponseResult deleteAuthority (String tenantId, HttpServletRequest request){
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         customerSettingService.deleteAuthority(tenantId,token);
         return new ResponseResult(SUCCESS);
     }

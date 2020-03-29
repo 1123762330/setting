@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.MineFactoryAndFraneId;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
@@ -98,14 +99,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     public void addAssignWorker(String ids,String token) {
         HashMap<Integer, List<MineFactoryAndFraneId>> resultMap = new HashMap<>();
         ArrayList<MineFactoryAndFraneId> list = new ArrayList<>();
-        //从token中取出userid
-        HashMap<String, Object> tokenData = getTokenData(token);
-        Integer userId=null;
-        if (tokenData!=null){
-             userId = Integer.valueOf(tokenData.get("userId").toString());
-        }else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
         if (ids.contains(",")){
             //多个矿机架
             String[] split = ids.split(",");

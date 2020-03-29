@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
+import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
 import com.xnpool.setting.domain.model.GroupModel;
@@ -136,13 +137,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Transactional(rollbackFor = Exception.class)
     public void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token) {
         //后期从token中获取用户Id
-        Integer operatorId = 1;
-        HashMap<String, Object> tokenData = getTokenData(token);
-        if (tokenData != null) {
-            operatorId = Integer.valueOf(tokenData.get("userId").toString());
-        } else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer operatorId = getUserId(token);
         Integer id = workerDetailedParam.getId();
         Integer mineId = workerDetailedParam.getMineId();
         String workerIds = workerDetailedParam.getWorkerId();
@@ -291,15 +286,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Transactional(rollbackFor = Exception.class)
     public void updateMoveOutByid(String ids, String reason, String token) {
         ArrayList<Integer> list = new ArrayList<>();
-        //从token中取出userid
-        int userId = 1;
-        HashMap<String, Object> tokenData = getTokenData(token);
-        //int userId = 1;
-        //if (tokenData != null) {
-        //    userId = Integer.valueOf(tokenData.get("userId").toString());
-        //} else {
-        //    throw new CheckException("校验token失败!");
-        //}
+        Integer userId = getUserId(token);
         if (ids.contains(",")) {
             //全部出库
             String[] split = ids.split(",");
