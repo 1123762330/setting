@@ -460,15 +460,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      */
     public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize) {
         //后面从token中获取
-        Integer userId = null;
-        JSONObject jsonObject = TokenUtil.verify(token);
-        Integer success = jsonObject.getInteger("success");
-        if (success == 200) {
-            JSONObject data = jsonObject.getJSONObject("data");
-            userId = data.getInteger("id");
-        } else {
-            throw new CheckException("token解析错误");
-        }
+        Integer userId = getUserId(token);
         List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
