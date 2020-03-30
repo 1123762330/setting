@@ -145,6 +145,7 @@ zlt:
     ignoreSqls:
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.selectTenantList
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.insertSelective
+      - com.xnpool.setting.domain.mapper.CustomerSettingMapper.deleteAuthority
 
 ---
 #上传和下载文件大小设置

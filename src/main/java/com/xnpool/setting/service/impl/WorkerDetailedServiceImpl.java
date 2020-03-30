@@ -470,6 +470,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         for (Map.Entry<String, List<GroupModel>> entry : groupMap.entrySet()) {
             List<GroupModel> groupModelList = entry.getValue();
             GroupModel groupModel_tmp = new GroupModel();
+            HashSet<String> ipQuJianset = new HashSet<>();
             ArrayList<String> brandList = new ArrayList<>();
             int offLinesize = 0;
             //遍历这个分组下的所有的数据
@@ -490,14 +491,17 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 String workerIp = groupModel.getWorkerIp();
                 String startIpStr = workerIp.substring(0, workerIp.lastIndexOf("."));
                 String ipQuJianStr = ipQuJianMap.get(startIpStr);
-                if (!StringUtils.isEmpty(groupModel_tmp.getIpQuJian())) {
-                    StringBuffer ipQujianBuffer = new StringBuffer(groupModel_tmp.getIpQuJian()).append(",").append(ipQuJianStr);
-                    groupModel_tmp.setIpQuJian(ipQujianBuffer.toString());
-                } else {
-                    groupModel_tmp.setIpQuJian(ipQuJianStr);
+                if (!StringUtils.isEmpty(ipQuJianStr)){
+                    ipQuJianset.add(ipQuJianStr);
                 }
                 brandList.add(brandName);
             }
+            //将set集合转成字符串
+            String ipQuJiansetStr="";
+            if (!ipQuJianset.isEmpty()){
+                 ipQuJiansetStr = ipQuJianset.toString().substring(1, ipQuJianset.toString().length() - 1);
+            }
+            groupModel_tmp.setIpQuJian(ipQuJiansetStr);
             groupModel_tmp.setGroupName(entry.getKey());
             groupModel_tmp.setTotal(groupModelList.size());
             groupModel_tmp.setOffLineSize(offLinesize);

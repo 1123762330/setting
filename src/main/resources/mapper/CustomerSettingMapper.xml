@@ -275,6 +275,12 @@
     </select>
 
     <update id="deleteAuthority">
-        update customer_setting set authentication = 2 where user_id = #{userId}
+        update customer_setting set authentication = 2
+        where
+        user_id = #{userId}
+        AND tenant_id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
     </update>
 </mapper>

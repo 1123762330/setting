@@ -244,7 +244,19 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public void deleteAuthority(String tenantId, String token) {
         apiContext.setTenantId(Long.valueOf(tenantId));
         Integer userId = getUserId(token);
-        customerSettingMapper.deleteAuthority(tenantId, userId);
+        List<Long> list = new ArrayList<>();
+        if (tenantId.contains(",")){
+            //多个企业id
+            String[] split = tenantId.split(",");
+            for (int i = 0; i < split.length; i++) {
+                Long  tenantIdToLong= Long.valueOf(split[i]);
+                list.add(tenantIdToLong);
+            }
+        }else {
+            list.add(Long.valueOf(tenantId));
+        }
+
+        customerSettingMapper.deleteAuthority(list, userId);
     }
 
     @Override
