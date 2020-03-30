@@ -276,7 +276,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 result.add(workerExample);
             }
         }
-        HashMap<String, Object> startPage = PageUtil.startPage(result, pageNum, pageSize);
+        //过滤已经上架的机器
+        List<WorkerExample> filterList = result.stream().filter(a -> a.getIsComeIn().equals("0")).collect(Collectors.toList());
+        HashMap<String, Object> startPage = PageUtil.startPage(filterList, pageNum, pageSize);
 
         return startPage;
     }
