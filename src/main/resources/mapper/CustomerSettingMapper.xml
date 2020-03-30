@@ -283,4 +283,14 @@
             #{item}
         </foreach>
     </update>
+
+    <select id="selectAuthorizedToYes" resultType="integer">
+        SELECT
+        customer_setting.user_id
+        FROM
+        customer_setting
+        WHERE
+        user_id = #{userId}
+        AND authentication =1
+    </select>
 </mapper>

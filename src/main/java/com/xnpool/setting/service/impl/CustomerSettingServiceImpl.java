@@ -1,6 +1,6 @@
 package com.xnpool.setting.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
@@ -11,10 +11,12 @@ import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.mapper.WorkerAssignMapper;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
+import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.AgreementSettingService;
 import com.xnpool.setting.service.GroupSettingService;
 import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Autowired
     private ApiContext apiContext;
+
+    @Autowired
+    private UserCenterAPI userCenterAPI;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -272,6 +277,24 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     public int insertSelective(CustomerSetting record) {
         return customerSettingMapper.insertSelective(record);
+    }
+
+    @Override
+    public String authorizeToken(String userId) {
+        Integer userId_db = customerSettingMapper.selectAuthorizedToYes(Integer.valueOf(userId));
+        String access_token="";
+        if(userId.equals(String.valueOf(userId_db))){
+            //用户一致,可以发送授权token
+            JSONObject jsonObject = userCenterAPI.authorizeToken(Long.valueOf(userId));
+            log.info("fegin请求返回的数据:"+jsonObject);
+            if (!StringUtils.isEmpty(jsonObject)){
+                 access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
+
+            }
+        }else {
+            throw new CheckException("该用户和你不属于同一个企业");
+        }
+        return access_token;
     }
 }
 

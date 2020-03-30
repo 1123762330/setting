@@ -45,8 +45,9 @@ public class WorkerDetailedController extends BaseController {
     //@SystemLog(value = "查询矿机出库列表",type = LogType.MINE)
     @GetMapping("/selectMoveOutList")
     public ResponseResult selectMoveOutList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(keyWord, pageNum, pageSize);
+                                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(keyWord, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, workerExamplePageInfo);
     }
 

@@ -30,7 +30,7 @@ public interface WorkerDetailedService {
 
     int updateByPrimaryKey(WorkerDetailed record);
 
-    PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize);
+    PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize,String token);
 
     void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token);
 

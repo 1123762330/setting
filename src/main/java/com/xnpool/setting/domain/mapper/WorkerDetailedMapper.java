@@ -23,7 +23,7 @@ public interface WorkerDetailedMapper {
 
     int updateByPrimaryKey(WorkerDetailed record);
 
-    List<WorkerDetailedExample> selectMoveOutList(@Param("keyWord") String keyWord);
+    List<WorkerDetailedExample> selectMoveOutList(@Param("keyWord") String keyWord,@Param("tenandId")Long tenandId);
 
     int batchInsert(List<WorkerDetailed> list);
 
@@ -40,9 +40,10 @@ public interface WorkerDetailedMapper {
     List<WorkerDetailedModel> selectAllWorkerDetailed(@Param("workerName") String workerName,
                                                       @Param("startIp") Long startIp,
                                                       @Param("endIp") Long endIp,
-                                                      @Param("userId") Integer userId);
+                                                      @Param("userId") Integer userId,
+                                                      @Param("tenandId")Long tenandId);
 
-    List<GroupModel> selectGroupModel(Integer userId);
+    List<GroupModel> selectGroupModel(@Param("userId")Integer userId,@Param("tenandId")Long tenandId);
 
     List<HashMap> selectNullFrame(@Param("frameId")Integer frameId);
 

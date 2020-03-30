@@ -35,4 +35,6 @@ public interface CustomerSettingMapper {
     List<HashMap> selectUserRole();
 
     void deleteAuthority(@Param("list") List<Long> list, @Param("userId") Integer userId);
+
+    Integer selectAuthorizedToYes(@Param("userId") Integer userId);
 }

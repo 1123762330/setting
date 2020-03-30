@@ -525,6 +525,13 @@ public abstract class BaseController {
 		return result;
 	}
 
+	/**
+	 * @Description	从token中获取用户id
+	 * @Author zly
+	 * @Date 16:38 2020/3/30
+	 * @Param
+	 * @return
+	 */
 	public Integer getUserId(String token){
 		Integer userId=0;
 		Map<String, String> verify = JwtUtil.verify(token);
@@ -538,5 +545,26 @@ public abstract class BaseController {
 			}
 		}
 		return userId;
+	}
+	/**
+	 * @Description 从token中获取企业id
+	 * @Author zly
+	 * @Date 16:38 2020/3/30
+	 * @Param
+	 * @return
+	 */
+	public Long getTenandId(String token){
+		Long tenant_id=-1L;
+		Map<String, String> verify = JwtUtil.verify(token);
+		if(verify!=null){
+			Object enterpriseIdObj = verify.get("tenant_id");
+			if(enterpriseIdObj!=null){
+				String data = enterpriseIdObj.toString();
+				if(!data.contains(",")){
+					tenant_id = Long.valueOf(data);
+				}
+			}
+		}
+		return tenant_id;
 	}
 }

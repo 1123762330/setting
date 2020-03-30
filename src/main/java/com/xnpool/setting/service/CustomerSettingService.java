@@ -43,6 +43,8 @@ public interface CustomerSettingService {
     void deleteAuthority(String tenantId, String token);
 
     int insertSelective(CustomerSetting record);
+
+    String authorizeToken(String userId);
 }
 
 

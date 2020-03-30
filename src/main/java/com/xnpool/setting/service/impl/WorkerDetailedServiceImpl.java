@@ -87,12 +87,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
     @Override
-    public PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize,String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
+        Long tenandId = getTenandId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord);
+        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord,tenandId);
         System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
         WorkerDetailedExampleList.forEach(workerDetailedExample -> {
             String workerName = workerDetailedExample.getWorkerName();
@@ -426,15 +427,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         if (!StringUtils.isEmpty(endIp)) {
             endIpToLong = getStringIpToLong(endIp);
         }
-        Integer userId = null;
-        HashMap<String, Object> tokenData = getTokenData(token);
-        if (tokenData != null) {
-            userId = Integer.valueOf(tokenData.get("userId").toString());
-        } else {
-            throw new CheckException("校验token失败!");
-        }
+        Integer userId = getUserId(token);
+        Long tenandId = getTenandId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId);
+        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId,tenandId);
         System.out.println("用户网站的矿机详情列表:" + workerDetailedModels);
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
@@ -469,7 +465,8 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize) {
         //后面从token中获取
         Integer userId = getUserId(token);
-        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId);
+        Long tenandId = getTenandId(token);
+        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId,tenandId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
         //按分组名进行分组

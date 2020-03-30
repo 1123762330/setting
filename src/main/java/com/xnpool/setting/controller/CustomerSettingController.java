@@ -156,4 +156,18 @@ public class CustomerSettingController extends BaseController {
         HashMap<Integer, String> userNameList = customerSettingService.selectAllUser();
         return new ResponseResult(SUCCESS,userNameList);
     }
+
+    /**
+     * @Description 授权管理员用户token
+     * @Author zly
+     * @Date 21:05 2020/3/30
+     * @Param
+     * @return
+     */
+    @GetMapping("/authorizeToken")
+    public ResponseResult authorizeToken (String userId){
+        String authorizeToken = customerSettingService.authorizeToken(userId);
+        return new ResponseResult(SUCCESS,authorizeToken);
+    }
+
 }
