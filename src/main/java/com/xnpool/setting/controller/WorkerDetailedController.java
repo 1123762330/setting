@@ -90,7 +90,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "矿机下架",type = LogType.MINE)
+    @SystemLog(value = "矿机下架",type = LogType.MINE)
     @PutMapping("/moveOut")
     public ResponseResult moveOut(String ids, @RequestParam(value = "reason",required = false) String reason, HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);

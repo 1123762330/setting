@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
+import com.xnpool.logaop.service.exception.UpdateException;
 import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
@@ -297,9 +298,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             //单个出库
             list.add(Integer.valueOf(ids));
         }
-        List<Integer> idList = workerDetailedMapper.selectIdByWorkerId(list);
+        //List<Integer> idList = workerDetailedMapper.selectIdByWorkerId(list);
         List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
-        workerDetailedMapper.updateMoveOutByid(idList);
+        workerDetailedMapper.updateMoveOutByid(list);
 
         Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
         for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
@@ -312,13 +313,18 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerIdList.add(workerId);
             }
             int rows = operatorWorkerHistoryService.updateMoveOutTimeById(workerIdList);
-            //出库数据同步到缓存里
-            HashMap<String, Object> operatorWorkerData = new HashMap<>();
-            operatorWorkerData.put("workerIdList", workerIdList);
-            operatorWorkerData.put("reason", reason);
-            operatorWorkerData.put("operatorId", userId);
-            redisToBatchInsert(rows, "operator_worker_histkory", operatorWorkerData, entry.getKey());
-            batchMoveOut(rows, "worker_detailed", workerIdList, entry.getKey());
+            if (rows!=0){
+                //出库数据同步到缓存里
+                HashMap<String, Object> operatorWorkerData = new HashMap<>();
+                operatorWorkerData.put("workerIdList", workerIdList);
+                operatorWorkerData.put("reason", reason);
+                operatorWorkerData.put("operatorId", userId);
+                redisToBatchInsert(rows, "operator_worker_histkory", operatorWorkerData, entry.getKey());
+                batchMoveOut(rows, "worker_detailed", workerIdList, entry.getKey());
+            }else {
+                throw new UpdateException("该矿机还未上架,无法进行下架操作");
+            }
+
         }
     }
 

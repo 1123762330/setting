@@ -122,7 +122,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
-        System.out.println("数据库查询的客户列表:" + customerSettingExamples.size());
+        log.info("数据库查询的客户列表:" + customerSettingExamples.size());
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         //log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
