@@ -448,10 +448,12 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 String onTimeStr = calculTime(Long.valueOf(workerDetailedModel.getOnTime()));
                 workerDetailedModel.setOnTime(onTimeStr);
             }
-            if (workerDetailedModel.getRunTime() != null) {
-                String runTimeStr = calculTime(Long.valueOf(workerDetailedModel.getRunTime()));
-                workerDetailedModel.setRunTime(runTimeStr);
-            }
+            //if (workerDetailedModel.getRunTime() != null) {
+            //    Long runTime = Long.valueOf(workerDetailedModel.getRunTime());
+            //    long runTotal = new Date().getTime() / 1000 - runTime;
+            //    String onTimeStr = calculTime(runTotal);
+            //    workerDetailedModel.setRunTime(onTimeStr);
+            //}
         }
         PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(workerDetailedModels);
         return pageInfo;
