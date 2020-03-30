@@ -176,6 +176,7 @@
       electricity_meter_setting,
       mine_setting,
       factory_house,
+      customer_setting,
       sys_user
       <where>
         electricity_meter_setting.is_delete = 0
@@ -184,7 +185,8 @@
         </if>
         AND electricity_meter_setting.mine_id = mine_setting.id
         AND electricity_meter_setting.factory_id = factory_house.id
-        AND electricity_meter_setting.customer_id = sys_user.id
+        AND electricity_meter_setting.customer_id = customer_setting.id
+        AND customer_setting.user_id= sys_user.id
       </where>
     </select>
 </mapper>

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
@@ -63,6 +64,15 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public int insertSelective(CustomerSetting record, String token) {
         Integer userId = getUserId(token);
         record.setUserId(userId);
+        List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
+        List<Long> list = new ArrayList<>();
+        hashMapList.forEach(hashMap -> {
+            Long tenantId = Long.valueOf(hashMap.get("tenant_id").toString());
+            list.add(tenantId);
+        });
+        if (list.contains(record.getTenantId())){
+            throw new InsertException("该企业已经申请授权,请勿重复授权!");
+        }
         return customerSettingMapper.insertSelective(record);
     }
 
