@@ -268,17 +268,15 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             String substring = worker.getIp().substring(0, lastIndexOf);
             String ip_quJian = ipMap.get(substring);
             //这里需要做个判断,判断这个矿机有没有入库,如果入库列表里有那就是1,如果没有就是0
-            if (comeInlistToLong.contains(worker.getId())) {
-                WorkerExample workerExample = new WorkerExample(Integer.valueOf(worker.getId().toString()), worker.getIp(), ip_quJian, Integer.valueOf(worker.getState()), 1);
-                result.add(workerExample);
-            } else {
+            //过滤已经上架的机器
+            if (!comeInlistToLong.contains(worker.getId())) {
                 WorkerExample workerExample = new WorkerExample(Integer.valueOf(worker.getId().toString()), worker.getIp(), ip_quJian, Integer.valueOf(worker.getState()), 0);
                 result.add(workerExample);
             }
         }
         //过滤已经上架的机器
-        List<WorkerExample> filterList = result.stream().filter(a -> a.getIsComeIn().equals("0")).collect(Collectors.toList());
-        HashMap<String, Object> startPage = PageUtil.startPage(filterList, pageNum, pageSize);
+        //List<WorkerExample> filterList = result.stream().filter(a -> a.getIsComeIn().equals("0")).collect(Collectors.toList());
+        HashMap<String, Object> startPage = PageUtil.startPage(result, pageNum, pageSize);
 
         return startPage;
     }
