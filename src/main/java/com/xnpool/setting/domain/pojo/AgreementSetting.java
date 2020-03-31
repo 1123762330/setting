@@ -27,6 +27,11 @@ public class AgreementSetting implements Serializable {
     private String agreementName;
 
     /**
+     * 文件名
+     */
+    private String fileName;
+
+    /**
      * 文档路径地址
      */
     private String path;

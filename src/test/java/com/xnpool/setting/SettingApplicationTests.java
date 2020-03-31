@@ -1,9 +1,6 @@
 //package com.xnpool.setting;
 //
-//import java.util.Date;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
+//import java.util.*;
 //import java.util.regex.Pattern;
 //
 //import com.alibaba.fastjson.JSONObject;
@@ -28,6 +25,8 @@
 //import com.xnpool.setting.utils.JedisUtil;
 //import com.xnpool.setting.utils.PrimaryKeyUtils;
 //import com.xnpool.setting.utils.TokenUtil;
+//import net.sf.json.JSON;
+//import net.sf.json.JSONArray;
 //import org.junit.Before;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
@@ -39,8 +38,8 @@
 //@SpringBootTest
 //public class SettingApplicationTests {
 //
-//    //@Autowired
-//    //private JedisUtil jedisUtil;
+//    @Autowired
+//    private JedisUtil jedisUtil;
 //
 //    //@Before
 //    //public void before() {
@@ -48,41 +47,50 @@
 //    //    //apiContext.setTenantId(112233L);
 //    //}
 //
-//    //@Test
-//    //public void test() {
-//    //    //jedisUtil.scan("");
-//    //    //HashMap<String, Integer> workerTotal = userWebService.getWorkerTotal("");
-//    //    //System.out.println(workerTotal);
-//    //    //HashMap<Long, String> longStringHashMap = customerSettingService.selectTenantList("");
-//    //    //System.out.println(longStringHashMap);
-//    //    //List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(null);
-//    //    //System.out.println(WorkerDetailedExampleList);
-//    //    //WorkerbrandSetting workerbrandSetting = new WorkerbrandSetting();
-//    //    //workerbrandSetting.setBrandName("");
-//    //    //workerbrandSetting.setWorkerType("");
-//    //    //workerbrandSetting.setBusiness("");
-//    //    //workerbrandSetting.setWorkerSize("");
-//    //    //workerbrandSetting.setPowerWaste("");
-//    //    //workerbrandSetting.setDifficulty("");
-//    //    //workerbrandSetting.setIsDelete(0);
-//    //    //workerbrandSetting.setCreateTime(new Date());
-//    //    //workerbrandSetting.setUpdateTime(new Date());
-//    //    //workerbrandSetting.setAlgorithmId(0);
-//    //    //
-//    //    //int rows = workerbrandSettingMapper.insert(workerbrandSetting);
-//    //    //System.out.println(rows);
-//    //    //Map<String, Object> verify = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2MTc1MDIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6ImE1ZDU2M2Y3LThiM2ItNGE5Mi05ZDZkLWRjMmE0NDJhNWNlMiIsImNsaWVudF9pZCI6InpsdCJ9.OFJ9k4yCPpZDHnuaX-hn-r86uPfJf8x6NbbLJ6HndwY");
-//    //    //System.out.println("verify==="+verify);
-//    //    //JSONObject jsonObject = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2Njc5NDksImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6IjFjMmY2NWVlLTNiNzEtNDU0Yy05Y2I1LWRjYmRlYzk4ZjZhZSIsImNsaWVudF9pZCI6InpsdCJ9.9cEqM7zE_s1ZDb7lmzSSCdMMHwtJp8Ihps5BprO5cto");
-//    //    //System.out.println("jsonObject=="+jsonObject);
-//    //    //Integer success = jsonObject.getInteger("success");
-//    //    //if (success==200){
-//    //    //    JSONObject data = jsonObject.getJSONObject("data");
-//    //    //    Integer userId = data.getInteger("id");
-//    //    //    Integer enterpriseId = data.getInteger("enterpriseId");
-//    //    //    System.out.println("userId"+userId);
-//    //    //    System.out.println("enterpriseId"+enterpriseId);
-//    //    //}
-//    //}
+//    @Test
+//    public void test() {
+//        //HashSet<String> hashSet = new HashSet<>();
+//        //hashSet.add("127.0.0.1");
+//        //hashSet.add("127.0.0.2");
+//        //hashSet.add("127.0.0.3");
+//        //hashSet.add("127.0.0.4");
+//        //jedisUtil.hset("test1111","241",hashSet.toString());
+//        //String test1111 = jedisUtil.hget("test1111", "241");
+//        //JSONArray jsonArray = JSONArray.fromObject(test1111);
+//        //System.out.println("====="+jsonArray);
+//        //jedisUtil.scan("");
+//        //HashMap<String, Integer> workerTotal = userWebService.getWorkerTotal("");
+//        //System.out.println(workerTotal);
+//        //HashMap<Long, String> longStringHashMap = customerSettingService.selectTenantList("");
+//        //System.out.println(longStringHashMap);
+//        //List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(null);
+//        //System.out.println(WorkerDetailedExampleList);
+//        //WorkerbrandSetting workerbrandSetting = new WorkerbrandSetting();
+//        //workerbrandSetting.setBrandName("");
+//        //workerbrandSetting.setWorkerType("");
+//        //workerbrandSetting.setBusiness("");
+//        //workerbrandSetting.setWorkerSize("");
+//        //workerbrandSetting.setPowerWaste("");
+//        //workerbrandSetting.setDifficulty("");
+//        //workerbrandSetting.setIsDelete(0);
+//        //workerbrandSetting.setCreateTime(new Date());
+//        //workerbrandSetting.setUpdateTime(new Date());
+//        //workerbrandSetting.setAlgorithmId(0);
+//        //
+//        //int rows = workerbrandSettingMapper.insert(workerbrandSetting);
+//        //System.out.println(rows);
+//        //Map<String, Object> verify = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2MTc1MDIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6ImE1ZDU2M2Y3LThiM2ItNGE5Mi05ZDZkLWRjMmE0NDJhNWNlMiIsImNsaWVudF9pZCI6InpsdCJ9.OFJ9k4yCPpZDHnuaX-hn-r86uPfJf8x6NbbLJ6HndwY");
+//        //System.out.println("verify==="+verify);
+//        //JSONObject jsonObject = TokenUtil.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJpZCI6MSwiZW50ZXJwcmlzZUlkIjoxLCJleHAiOjE1ODQ2Njc5NDksImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImp0aSI6IjFjMmY2NWVlLTNiNzEtNDU0Yy05Y2I1LWRjYmRlYzk4ZjZhZSIsImNsaWVudF9pZCI6InpsdCJ9.9cEqM7zE_s1ZDb7lmzSSCdMMHwtJp8Ihps5BprO5cto");
+//        //System.out.println("jsonObject=="+jsonObject);
+//        //Integer success = jsonObject.getInteger("success");
+//        //if (success==200){
+//        //    JSONObject data = jsonObject.getJSONObject("data");
+//        //    Integer userId = data.getInteger("id");
+//        //    Integer enterpriseId = data.getInteger("enterpriseId");
+//        //    System.out.println("userId"+userId);
+//        //    System.out.println("enterpriseId"+enterpriseId);
+//        //}
+//    }
 //
 //}

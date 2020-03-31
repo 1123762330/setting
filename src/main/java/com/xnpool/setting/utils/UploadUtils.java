@@ -61,11 +61,12 @@ public class UploadUtils {
      */
     public static ResponseResult getFileToUpload(@RequestParam("file") MultipartFile file, String filePath) {
         ResponseResult resp = checkFile(file);
+        long time = System.currentTimeMillis() / 1000;
         if (200==resp.getStatus()) {
             try {
                 //上传文件到服务器上
                 String path = System.getProperty("user.dir") + filePath;
-                uploadFile(file, file.getOriginalFilename(), path);
+                uploadFile(file, time+"-"+file.getOriginalFilename(), path);
                 log.info("文件上传的位置:"+path);
                 return new ResponseResult(SUCCESS, "上传文件成功");
             } catch (FileNotFoundException e) {

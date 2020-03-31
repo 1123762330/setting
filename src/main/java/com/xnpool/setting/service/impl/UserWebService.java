@@ -1,10 +1,8 @@
 package com.xnpool.setting.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
-import com.xnpool.logaop.service.exception.CheckException;
-import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
 import com.xnpool.setting.utils.JedisUtil;
@@ -17,7 +15,6 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * @author zly

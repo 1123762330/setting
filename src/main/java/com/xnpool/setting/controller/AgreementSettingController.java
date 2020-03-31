@@ -53,6 +53,10 @@ public class AgreementSettingController extends BaseController {
             if (200!=result.getStatus()) return result;
             //添加记录到数据库
             agreementSetting.setPath(prifix + file.getOriginalFilename());
+            String originalFilename = file.getOriginalFilename();
+            int index = originalFilename.indexOf("-");
+            String fileName = originalFilename.substring(index);
+            agreementSetting.setFileName(fileName);
             agreementSettingService.insertSelective(agreementSetting);
             return new ResponseResult(SUCCESS);
         }
@@ -74,6 +78,10 @@ public class AgreementSettingController extends BaseController {
         if (result != null) return result;
         //添加记录到数据库
         agreementSetting.setPath(prifix + file.getOriginalFilename());
+        String originalFilename = file.getOriginalFilename();
+        int index = originalFilename.indexOf("-");
+        String fileName = originalFilename.substring(index);
+        agreementSetting.setFileName(fileName);
         agreementSettingService.updateByPrimaryKeySelective(agreementSetting);
         return new ResponseResult(SUCCESS);
 
