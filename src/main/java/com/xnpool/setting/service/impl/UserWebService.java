@@ -256,7 +256,7 @@ public class UserWebService extends BaseController {
             String hashSetStr = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
             if (!StringUtils.isEmpty(hashSetStr)) {
                 String[] split = hashSetStr.split(",");
-                total = (split.length - 1)/2;
+                total = (split.length)/2;
             }
             log.info(userId + "用户的redis中取出的矿机个数是" + total + ",集合是" + hashSetStr);
         }

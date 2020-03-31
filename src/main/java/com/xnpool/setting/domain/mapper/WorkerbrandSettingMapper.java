@@ -10,7 +10,6 @@ import com.xnpool.setting.domain.pojo.WorkerbrandSetting;import org.apache.ibati
  */
 public interface WorkerbrandSettingMapper extends BaseMapper<WorkerbrandSetting> {
     int deleteByIdKey(int id);
-
     List<WorkerbrandSetting> selectByOther(@Param("keyWord") String keyWord);
     List<String> selectBrandNameByAlgorithmId(@Param("algorithmId") Integer algorithmId);
 }

@@ -1,11 +1,6 @@
 package com.xnpool.setting.service.impl;
-import java.util.Date;
-
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.common.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
@@ -44,7 +39,7 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
 
     @Override
     public int updateByPrimaryKeySelective(WorkerbrandSetting record) {
-        return workerbrandSettingMapper.update(record,new UpdateWrapper<>());
+        return workerbrandSettingMapper.updateById(record);
     }
 
     @Override
@@ -54,7 +49,7 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
 
     @Override
     public int updateById(int id) {
-        return workerbrandSettingMapper.deleteById(id);
+        return workerbrandSettingMapper.deleteByIdKey(id);
     }
 
     @Override

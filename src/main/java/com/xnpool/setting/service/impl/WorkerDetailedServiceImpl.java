@@ -487,7 +487,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     groupModel_tmp.setBrandName(brandName);
                 }
                 //记录离线的数量
-                if (groupModel.getState() == 0) {
+                if (groupModel.getState() == 0||groupModel.getState() == 2) {
                     offLinesize++;
                 }
                 //对这个分组下的所有的矿机ip进行区间分组,取前三组进行字符串匹配
