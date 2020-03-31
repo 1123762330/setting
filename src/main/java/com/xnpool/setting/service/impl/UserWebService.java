@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -55,7 +56,7 @@ public class UserWebService extends BaseController {
         //遍历其他的矿机类型键做合并
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA + ":"+userId+":"+tenantId + ":" + startTime + ":" + workerType);
+            String bigKey = (HASHRATE_DATA +userId+":"+tenantId.toString()+ ":" + startTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(startTime + "大键==" + bigKey);
@@ -83,7 +84,7 @@ public class UserWebService extends BaseController {
 
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA + ":"+userId+":"+tenantId + ":" + endTime + ":" + workerType);
+            String bigKey = (HASHRATE_DATA +userId+":"+tenantId+ ":" + endTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(endTime + "大键==" + bigKey);
@@ -137,7 +138,7 @@ public class UserWebService extends BaseController {
         //遍历其他的矿机类型键做合并
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA + ":"+userId+":"+tenantId + ":" + startTime + ":" + workerType);
+            String bigKey = (ON_LINE_DATA +userId+":"+tenantId + ":" + startTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(startTime + "大键==" + bigKey);
@@ -162,7 +163,7 @@ public class UserWebService extends BaseController {
 
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA+ ":"+userId+":"+tenantId + ":" + endTime + ":" + workerType);
+            String bigKey = (ON_LINE_DATA+userId+":"+tenantId + ":" + endTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(endTime + "大键==" + bigKey);
