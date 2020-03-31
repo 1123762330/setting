@@ -536,6 +536,7 @@ public abstract class BaseController {
 	public Integer getUserId(String token){
 		Integer userId=0;
 		Map<String, String> verify = JwtUtil.verify(token);
+		System.out.println("解析的token:"+verify);
 		if (verify != null) {
 			Object userIdObj = verify.get("id");
 			if (userIdObj != null) {

@@ -140,8 +140,7 @@ zlt:
     enable: true
     ignoreTables:
       - algorithm
-      - sys_role_user
-      - sys_role
+      - workerbrand_setting
     ignoreSqls:
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.selectTenantList
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.insertSelective
