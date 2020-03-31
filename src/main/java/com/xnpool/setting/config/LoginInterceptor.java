@@ -53,7 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		Map<String, String> verify = JwtUtil.verify(token);
 		if(verify!=null){
 			Object enterpriseIdObj = verify.get("tenant_id");
-			if(enterpriseIdObj!=null){
+			if(!StringUtils.isEmpty(enterpriseIdObj)&&!"null".equals(enterpriseIdObj)){
 				String data = enterpriseIdObj.toString();
 				if(!data.contains(",")){
 					tenant_id = Long.valueOf(data);

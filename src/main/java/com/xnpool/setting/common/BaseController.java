@@ -13,6 +13,7 @@ import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.text.SimpleDateFormat;
@@ -557,9 +558,9 @@ public abstract class BaseController {
 		Long tenant_id=-1L;
 		Map<String, String> verify = JwtUtil.verify(token);
 		if(verify!=null){
-			Object enterpriseIdObj = verify.get("tenant_id");
-			if(enterpriseIdObj!=null){
-				String data = enterpriseIdObj.toString();
+			Object tenantIdObj = verify.get("tenant_id");
+			if(!StringUtils.isEmpty(tenantIdObj)&&!"null".equals(tenantIdObj)){
+				String data = tenantIdObj.toString();
 				if(!data.contains(",")){
 					tenant_id = Long.valueOf(data);
 				}
