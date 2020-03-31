@@ -1,22 +1,17 @@
 package com.xnpool.setting.utils;
 
 import com.xnpool.logaop.service.exception.InsertException;
+import javafx.scene.Cursor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.*;
 import redis.clients.jedis.BinaryClient.LIST_POSITION;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.SortingParams;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * jedis工具类
@@ -2268,6 +2263,46 @@ public class JedisUtil {
             jedis.close();
         }
     }
+
+    /**
+     * @Description jedis模糊查询
+     * @Author zly
+     * @Date 15:07 2020/3/31
+     * @Param
+     * @return
+     */
+    public Set<String> scan(String matchKey){
+        Set<String> keysTmp = new HashSet<>();
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            // 游标初始值为0
+            String cursor = ScanParams.SCAN_POINTER_START;
+            ScanParams scanParams = new ScanParams().match(matchKey).count(1000);
+            while (true){
+                //使用scan命令获取1000条数据，使用cursor游标记录位置，下次循环使用
+                ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
+                cursor = scanResult.getStringCursor();// 返回0 说明遍历完成
+                List<String> list = scanResult.getResult();
+                long start = System.currentTimeMillis();
+                for (String keyStr : list) {
+                    keysTmp.add(keyStr);
+                }
+                long end = System.currentTimeMillis();
+                log.info("模糊查询耗时" + (end-start) + "毫秒,cursor值:" + cursor);
+                if ("0".equals(cursor)){
+                    break;
+                }
+            }
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        } finally {
+            closeJedis(jedis);
+        }
+        return keysTmp;
+    }
+
 
 //    /**
 //     * 返还到连接池

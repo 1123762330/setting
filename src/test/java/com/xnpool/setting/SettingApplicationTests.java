@@ -31,6 +31,7 @@
 //import org.junit.Before;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.test.context.junit4.SpringRunner;
 //
@@ -39,7 +40,7 @@
 //public class SettingApplicationTests {
 //
 //    //@Autowired
-//    //private UserWebService userWebService;
+//    //private JedisUtil jedisUtil;
 //
 //    //@Before
 //    //public void before() {
@@ -48,7 +49,8 @@
 //    //}
 //
 //    //@Test
-//    //public void addMineSetting() {
+//    //public void test() {
+//    //    //jedisUtil.scan("");
 //    //    //HashMap<String, Integer> workerTotal = userWebService.getWorkerTotal("");
 //    //    //System.out.println(workerTotal);
 //    //    //HashMap<Long, String> longStringHashMap = customerSettingService.selectTenantList("");

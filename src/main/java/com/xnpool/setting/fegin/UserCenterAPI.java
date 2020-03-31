@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "user-center")
 public interface UserCenterAPI {
     @RequestMapping(value = "/mine/oauth/userId/token", method = RequestMethod.POST)
-    JSONObject authorizeToken(@RequestParam("userID") Long userID);
+    JSONObject authorizeToken(@RequestParam("userId") String userId);
 
 }

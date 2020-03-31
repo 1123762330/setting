@@ -43,6 +43,10 @@ public class UserWebService extends BaseController {
     public Map<Object, Object> getWorkerHashByDay(Integer algorithmId, String token,Long tenantId) {
         //通过算法id去查询矿机品牌
         List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
+        Set<String> totalTypeSet = new HashSet<>();
+        for (String type : list) {
+            totalTypeSet.add(URLEncoder.encode(type));
+        }
         Integer userId = getUserId(token);
         //先生成一个96个点的数据map,然后再去请求其他的数据集合,进行累加
         HashMap<Object, Object> middleMap = qiegeMin(15);
@@ -54,9 +58,20 @@ public class UserWebService extends BaseController {
         String endTime = sdf.format(endDate);
         log.info("开始时间==" + startTime + " 结束时间==" + endTime);
         //遍历其他的矿机类型键做合并
-        for (int i = 1; i < list.size(); i++) {
-            String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA +userId+":"+tenantId.toString()+ ":" + startTime + ":" + URLEncoder.encode(workerType));
+        //最终的矿机类型交集
+        Set<String> resultSetForStartTime = new HashSet<>();
+        String startTimekey = HASHRATE_DATA +userId+":"+tenantId.toString()+ ":" + startTime + ":";
+        Set<String> bigKeySet = jedisUtil.scan(startTimekey + "*");
+        HashSet<String> startTimetypeSet = new HashSet<>();
+        for (String bigKey : bigKeySet) {
+            String type = bigKey.substring(startTimekey.length());
+            startTimetypeSet.add(type);
+        }
+        resultSetForStartTime.addAll(totalTypeSet);
+        resultSetForStartTime.retainAll(startTimetypeSet);
+        //log.info(startTime+"缓存和数据库的共同type:"+resultSetForStartTime);
+        for (String type : resultSetForStartTime) {
+            String bigKey = ( startTimekey+ type);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(startTime + "大键==" + bigKey);
@@ -82,9 +97,20 @@ public class UserWebService extends BaseController {
             }
         }
 
-        for (int i = 1; i < list.size(); i++) {
-            String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA +userId+":"+tenantId+ ":" + endTime + ":" + URLEncoder.encode(workerType));
+        Set<String> resultSetForEndTime = new HashSet<>();
+        Set<String> EndTimeTypeSet = new HashSet<>();
+        String endTimekey = HASHRATE_DATA +userId+":"+tenantId+ ":" + endTime + ":";
+        Set<String> endTimekeySet = jedisUtil.scan(endTimekey + "*");
+        for (String bigKey : endTimekeySet) {
+            String type = bigKey.substring(endTimekey.length());
+            EndTimeTypeSet.add(type);
+        }
+        resultSetForEndTime.addAll(totalTypeSet);
+        resultSetForEndTime.retainAll(EndTimeTypeSet);
+        //log.info(endTime+"缓存和数据库的共同type:"+resultSetForEndTime);
+
+        for (String type : resultSetForEndTime) {
+            String bigKey = ( endTimekey+ type);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(endTime + "大键==" + bigKey);
@@ -110,6 +136,7 @@ public class UserWebService extends BaseController {
                 }
             }
         }
+
         //将map转成treeMap排序,然后键和values直接转
         Map<Object, Object> sortedMap = new TreeMap<>(middleMap);
         return sortedMap;
@@ -125,6 +152,10 @@ public class UserWebService extends BaseController {
     public Map<Object, Object> getWorkerTotalByDay(String token, Integer algorithmId,Long tenantId) {
         //通过算法id去查询矿机品牌
         List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
+        Set<String> totalTypeSet = new HashSet<>();
+        for (String type : list) {
+            totalTypeSet.add(URLEncoder.encode(type));
+        }
         Integer userId = getUserId(token);
         //先生成一个96个点的数据map,然后再去请求其他的数据集合,进行累加
         HashMap<Object, Object> middleMap = qiegeMin(15);
@@ -136,9 +167,21 @@ public class UserWebService extends BaseController {
         String endTime = sdf.format(endDate);
         log.info("开始时间==" + startTime + " 结束时间==" + endTime);
         //遍历其他的矿机类型键做合并
-        for (int i = 1; i < list.size(); i++) {
-            String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA +userId+":"+tenantId + ":" + startTime + ":" + URLEncoder.encode(workerType));
+        //最终的矿机类型交集
+        Set<String> resultSetForStartTime = new HashSet<>();
+        HashSet<String> startTimetypeSet = new HashSet<>();
+        String startTimekey = ON_LINE_DATA + userId + ":" + tenantId + ":" + startTime + ":";
+        Set<String> bigKeySet = jedisUtil.scan(startTimekey + "*");
+        for (String bigKey : bigKeySet) {
+            String type = bigKey.substring(startTimekey.length());
+            startTimetypeSet.add(type);
+        }
+        resultSetForStartTime.addAll(totalTypeSet);
+        resultSetForStartTime.retainAll(startTimetypeSet);
+        //log.info(startTime+"缓存和数据库的共同type:"+resultSetForStartTime);
+
+        for (String type : resultSetForStartTime) {
+            String bigKey = (startTimekey + type);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(startTime + "大键==" + bigKey);
@@ -161,9 +204,19 @@ public class UserWebService extends BaseController {
             }
         }
 
-        for (int i = 1; i < list.size(); i++) {
-            String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA+userId+":"+tenantId + ":" + endTime + ":" + URLEncoder.encode(workerType));
+        Set<String> resultSetForEndTime = new HashSet<>();
+        Set<String> EndTimeTypeSet = new HashSet<>();
+        String endTimekey = ON_LINE_DATA + userId + ":" + tenantId + ":" + endTime + ":";
+        Set<String> endTimekeySet = jedisUtil.scan(endTimekey + "*");
+        for (String bigKey : endTimekeySet) {
+            String type = bigKey.substring(endTimekey.length());
+            EndTimeTypeSet.add(type);
+        }
+        resultSetForEndTime.addAll(totalTypeSet);
+        resultSetForEndTime.retainAll(EndTimeTypeSet);
+        //log.info(endTime+"缓存和数据库的共同type:"+resultSetForEndTime);
+        for (String type : resultSetForEndTime) {
+            String bigKey = (endTimekey+ type);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(endTime + "大键==" + bigKey);
@@ -206,7 +259,7 @@ public class UserWebService extends BaseController {
             String hashSetStr = jedisUtil.hget(USERWORKER_TOTAL, String.valueOf(userId));
             if (!StringUtils.isEmpty(hashSetStr)) {
                 String[] split = hashSetStr.split(",");
-                total = split.length - 1;
+                total = (split.length - 1)/2;
             }
             log.info(userId + "用户的redis中取出的矿机个数是" + total + ",集合是" + hashSetStr);
         }

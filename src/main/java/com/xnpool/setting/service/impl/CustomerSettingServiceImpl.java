@@ -285,7 +285,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         String access_token="";
         if(userId.equals(String.valueOf(userId_db))){
             //用户一致,可以发送授权token
-            JSONObject jsonObject = userCenterAPI.authorizeToken(Long.valueOf(userId));
+            JSONObject jsonObject = userCenterAPI.authorizeToken(userId);
             log.info("fegin请求返回的数据:"+jsonObject);
             if (!StringUtils.isEmpty(jsonObject)){
                  access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
