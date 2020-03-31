@@ -43,6 +43,9 @@ public class UserWebController extends BaseController {
     @Autowired
     private WriteLogUtil writeLogUtil;
 
+    @Autowired
+    private ApiContext apiContext;
+
     /**
      * @Description 用户网站查询矿机详情列表
      * @Author zly
@@ -57,7 +60,9 @@ public class UserWebController extends BaseController {
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                   HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        PageInfo<WorkerDetailedModel> workerPageInfo = workerDetailedService.selectAllWorkerDetailed(workerName,startIp,endIp, pageNum, pageSize,token);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
+        PageInfo<WorkerDetailedModel> workerPageInfo = workerDetailedService.selectAllWorkerDetailed(workerName,startIp,endIp, pageNum, pageSize,token,tenantId);
         return new ResponseResult(SUCCESS, workerPageInfo);
     }
 
@@ -74,7 +79,9 @@ public class UserWebController extends BaseController {
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                            HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        HashMap<String, Object> groupModel = workerDetailedService.selectGroupModel(token, pageNum, pageSize);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
+        HashMap<String, Object> groupModel = workerDetailedService.selectGroupModel(token, pageNum, pageSize,tenantId);
         return new ResponseResult(SUCCESS,groupModel);
     }
 
@@ -89,7 +96,9 @@ public class UserWebController extends BaseController {
     @GetMapping("/getWorkerHashByDay")
     public ResponseResult getPoolWorkerHashByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
-        Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(algorithmId,token);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
+        Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(algorithmId,token,tenantId);
         return new ResponseResult(SUCCESS,workerHashByDay);
     }
 
@@ -104,7 +113,9 @@ public class UserWebController extends BaseController {
     @GetMapping("/getWorkerTotalByDay")
     public ResponseResult getWorkerTotalByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
-        Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token,algorithmId);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
+        Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token,algorithmId,tenantId);
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
 
@@ -112,7 +123,9 @@ public class UserWebController extends BaseController {
     @GetMapping("/getWorkerTotal")
     public ResponseResult getWorkerTotal(HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
-        HashMap<String, Integer> hashMap = userWebService.getWorkerTotal(token);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
+        HashMap<String, Integer> hashMap = userWebService.getWorkerTotal(token,tenantId);
         return new ResponseResult(SUCCESS,hashMap);
     }
 
@@ -120,6 +133,8 @@ public class UserWebController extends BaseController {
     @PostMapping("/userApplyAuthority")
     public ResponseResult userApplyAuthority(CustomerSetting customerSetting,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
         customerSettingService.insertSelective(customerSetting,token);
         return new ResponseResult(SUCCESS);
     }
@@ -134,6 +149,8 @@ public class UserWebController extends BaseController {
     @GetMapping("/selectTenantList")
     public ResponseResult selectTenantList (HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
         HashMap<Long, HashMap> tenantList = customerSettingService.selectTenantList(token);
         return new ResponseResult(SUCCESS,tenantList);
     }
@@ -149,6 +166,7 @@ public class UserWebController extends BaseController {
     @PutMapping("/deleteAuthority")
     public ResponseResult deleteAuthority (String tenantId, HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
+        apiContext.setTenantId(Long.valueOf(tenantId));
         customerSettingService.deleteAuthority(tenantId,token);
         return new ResponseResult(SUCCESS);
     }

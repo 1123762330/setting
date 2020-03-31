@@ -418,7 +418,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      */
     public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp,
                                                                  String endIp, Integer pageNum,
-                                                                 Integer pageSize, String token) {
+                                                                 Integer pageSize, String token,Long tenantId) {
         Long startIpToLong = null;
         Long endIpToLong = null;
         if (!StringUtils.isEmpty(startIp)) {
@@ -428,9 +428,8 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             endIpToLong = getStringIpToLong(endIp);
         }
         Integer userId = getUserId(token);
-        Long tenandId = getTenandId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId,tenandId);
+        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId, tenantId);
         System.out.println("用户网站的矿机详情列表:" + workerDetailedModels);
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
@@ -462,11 +461,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Date 18:54 2020/3/12
      * @Param
      */
-    public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize) {
+    public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize,Long tenantId) {
         //后面从token中获取
         Integer userId = getUserId(token);
-        Long tenandId = getTenandId(token);
-        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId,tenandId);
+        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId,tenantId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
         //按分组名进行分组

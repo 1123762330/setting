@@ -39,7 +39,7 @@ public class UserWebService extends BaseController {
      * @Date 15:05 2020/3/13
      * @Param
      */
-    public Map<Object, Object> getWorkerHashByDay(Integer algorithmId, String token) {
+    public Map<Object, Object> getWorkerHashByDay(Integer algorithmId, String token,Long tenantId) {
         //通过算法id去查询矿机品牌
         List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
         Integer userId = getUserId(token);
@@ -55,7 +55,7 @@ public class UserWebService extends BaseController {
         //遍历其他的矿机类型键做合并
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA + userId + ":" + startTime + ":" + workerType);
+            String bigKey = (HASHRATE_DATA + ":"+userId+":"+tenantId + ":" + startTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(startTime + "大键==" + bigKey);
@@ -83,7 +83,7 @@ public class UserWebService extends BaseController {
 
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (HASHRATE_DATA + userId + ":" + endTime + ":" + workerType);
+            String bigKey = (HASHRATE_DATA + ":"+userId+":"+tenantId + ":" + endTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(endTime + "大键==" + bigKey);
@@ -121,7 +121,7 @@ public class UserWebService extends BaseController {
      * @Date 15:03 2020/3/13
      * @Param
      */
-    public Map<Object, Object> getWorkerTotalByDay(String token, Integer algorithmId) {
+    public Map<Object, Object> getWorkerTotalByDay(String token, Integer algorithmId,Long tenantId) {
         //通过算法id去查询矿机品牌
         List<String> list = workerbrandSettingMapper.selectBrandNameByAlgorithmId(algorithmId);
         Integer userId = getUserId(token);
@@ -137,7 +137,7 @@ public class UserWebService extends BaseController {
         //遍历其他的矿机类型键做合并
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA + userId + ":" + startTime + ":" + workerType);
+            String bigKey = (ON_LINE_DATA + ":"+userId+":"+tenantId + ":" + startTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(startTime + "大键==" + bigKey);
@@ -162,7 +162,7 @@ public class UserWebService extends BaseController {
 
         for (int i = 1; i < list.size(); i++) {
             String workerType = list.get(i);
-            String bigKey = (ON_LINE_DATA + userId + ":" + endTime + ":" + workerType);
+            String bigKey = (ON_LINE_DATA+ ":"+userId+":"+tenantId + ":" + endTime + ":" + workerType);
             Boolean result = jedisUtil.exists(bigKey);
             if (result) {
                 log.info(endTime + "大键==" + bigKey);
@@ -196,7 +196,7 @@ public class UserWebService extends BaseController {
      * @Date 19:06 2020/3/16
      * @Param
      */
-    public HashMap<String, Integer> getWorkerTotal(String token) {
+    public HashMap<String, Integer> getWorkerTotal(String token,Long tenantId) {
         //后期从token中获取用户Id
         Integer userId = getUserId(token);
         Boolean totalHexists = jedisUtil.hexists(USERWORKER_TOTAL, String.valueOf(userId));

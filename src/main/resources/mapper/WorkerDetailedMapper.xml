@@ -333,7 +333,7 @@
             AND worker_info.worker1=#{workerName}
             </if>
             AND worker_detailed.worker_id = worker_info.id
-            AND worker_info.tenant_id=#{tenandId}
+            AND worker_info.tenant_id=#{tenantId}
             AND worker_detailed.group_id=group_setting.id
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
             AND workerbrand_setting.algorithm_id=algorithm.id
@@ -357,7 +357,7 @@
             AND worker_detailed.group_id = group_setting.id
             AND worker_detailed.workerbrand_id=workerbrand_setting.id
             AND worker_detailed.worker_id=worker_info.id
-            AND worker_info.tenant_id=#{tenandId}
+            AND worker_info.tenant_id=#{tenantId}
     </select>
 
     <!--矿机上架操作-->

@@ -41,9 +41,9 @@ public interface WorkerDetailedMapper {
                                                       @Param("startIp") Long startIp,
                                                       @Param("endIp") Long endIp,
                                                       @Param("userId") Integer userId,
-                                                      @Param("tenandId")Long tenandId);
+                                                      @Param("tenantId")Long  tenantId);
 
-    List<GroupModel> selectGroupModel(@Param("userId")Integer userId,@Param("tenandId")Long tenandId);
+    List<GroupModel> selectGroupModel(@Param("userId")Integer userId,@Param("tenantId")Long tenantId);
 
     List<HashMap> selectNullFrame(@Param("frameId")Integer frameId);
 
