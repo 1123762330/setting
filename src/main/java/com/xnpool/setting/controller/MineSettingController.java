@@ -44,8 +44,8 @@ public class MineSettingController extends BaseController{
      */
     @SystemLog(value = "添加矿场",type = LogType.SYSTEM)
     @PostMapping("/addMineSetting")
-    public ResponseResult addMineSetting(MineSetting MineSetting) {
-        mineSettingService.insertSelective(MineSetting);
+    public ResponseResult addMineSetting(MineSetting mineSetting) {
+        mineSettingService.insertSelective(mineSetting);
         return new ResponseResult(SUCCESS);
     }
 
@@ -58,8 +58,8 @@ public class MineSettingController extends BaseController{
      */
     @SystemLog(value = "修改矿场",type = LogType.SYSTEM)
     @PutMapping("/updateMineSetting")
-    public ResponseResult updateMineSetting(MineSetting MineSetting) {
-        mineSettingService.updateByPrimaryKeySelective(MineSetting);
+    public ResponseResult updateMineSetting(MineSetting mineSetting) {
+        mineSettingService.updateByPrimaryKeySelective(mineSetting);
         return new ResponseResult(SUCCESS);
     }
 

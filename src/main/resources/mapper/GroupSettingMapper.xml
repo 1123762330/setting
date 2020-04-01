@@ -207,4 +207,8 @@
     WHERE
         group_setting.ip_id = ip_setting.id
   </select>
+
+    <select id="selectMineId" resultType="integer">
+        select mine_id FROM group_setting where id=#{id}
+    </select>
 </mapper>

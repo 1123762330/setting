@@ -384,7 +384,7 @@ public abstract class BaseController {
 	}
 
 
-	public FrameSettingRedisModel getFactoryHouseRedisModel(FrameSetting record) {
+	public FrameSettingRedisModel getFrameSettingRedisModel(FrameSetting record) {
 		FrameSettingRedisModel redisModel = new FrameSettingRedisModel();
 		redisModel.setId(record.getId());
 		redisModel.setFrame_name(record.getFrameName());
@@ -435,6 +435,28 @@ public abstract class BaseController {
 		redisModel.setStart_ip(record.getStartIp());
 		redisModel.setEnd_ip(record.getEndIp());
 		redisModel.setMine_id(record.getMineId());
+		redisModel.setIs_delete(record.getIsDelete());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (record.getUpdateTime() != null) {
+			String updateTime = sdf.format(record.getUpdateTime());
+			redisModel.setUpdate_time(updateTime);
+		}
+		if (record.getCreateTime() != null) {
+			String createTime = sdf.format(record.getCreateTime());
+			redisModel.setCreate_time(createTime);
+		}
+		return redisModel;
+	}
+
+	public WorkerDetailedRedisModel getWorkerDetailedRedisModel(WorkerDetailed record) {
+		WorkerDetailedRedisModel redisModel = new WorkerDetailedRedisModel();
+		redisModel.setId(record.getId());
+		redisModel.setFactory_id(record.getFactoryId());
+		redisModel.setFrame_id(record.getFrameId());
+		redisModel.setFrame_number(record.getFrameNumber());
+		redisModel.setMine_id(record.getMineId());
+		redisModel.setIs_come_in(record.getIsComeIn());
+		redisModel.setRemarks(record.getRemarks());
 		redisModel.setIs_delete(record.getIsDelete());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		if (record.getUpdateTime() != null) {

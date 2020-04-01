@@ -74,7 +74,8 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
         record.setUpdateTime(new Date());
         record.setId(id);
         FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        redisToDelete(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
+        Integer mineId = factoryHouseMapper.selectMineId(id);
+        redisToDelete(rows, "factory_house", factoryHouseRedisModel, mineId);
     }
 
     @Override

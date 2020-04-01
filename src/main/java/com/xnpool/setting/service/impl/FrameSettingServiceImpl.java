@@ -7,6 +7,7 @@ import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
 import com.xnpool.setting.domain.model.FrameSettingExample;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;
 import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
+import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -16,6 +17,7 @@ import com.xnpool.setting.service.FrameSettingService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,8 +54,11 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         Integer number = record.getNumber();
         String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
+        record.setCreateTime(new Date());
         int rows = frameSettingMapper.insertSelective(record);
+        //同时在矿机详情表生成数据
         List<WorkerDetailed> list = new ArrayList<>();
+        List<WorkerDetailedRedisModel> redisList = new ArrayList<>();
         for (int i = 1; i <= number; i++) {
             WorkerDetailed workerDetailed = new WorkerDetailed();
             workerDetailed.setFactoryId(record.getFactoryId());
@@ -65,11 +70,31 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             list.add(workerDetailed);
         }
         int rows2 = workerDetailedMapper.batchInsert(list);
-        record.setCreateTime(new Date());
-        FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
         //批量入缓存
-        redisToInsert(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
-        redisToBatchInsert(rows2, "worker_detailed", list, record.getMineId());
+        for (WorkerDetailed workerDetailed : list) {
+            WorkerDetailedRedisModel redisModel = new WorkerDetailedRedisModel();
+            redisModel.setId(workerDetailed.getId());
+            redisModel.setFactory_id(workerDetailed.getFactoryId());
+            redisModel.setFrame_id(workerDetailed.getFrameId());
+            redisModel.setFrame_number(workerDetailed.getFrameNumber());
+            redisModel.setMine_id(workerDetailed.getMineId());
+            redisModel.setIs_come_in(0);
+            redisModel.setRemarks("");
+            redisModel.setIs_delete(0);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if (record.getUpdateTime() != null) {
+                String updateTime = sdf.format(record.getUpdateTime());
+                redisModel.setUpdate_time(updateTime);
+            }
+            if (record.getCreateTime() != null) {
+                String createTime = sdf.format(record.getCreateTime());
+                redisModel.setCreate_time(createTime);
+            }
+            redisList.add(redisModel);
+        }
+        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+        redisToBatchInsert(rows2, "worker_detailed", redisList, record.getMineId());
     }
 
     @Override
@@ -86,8 +111,8 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
-        FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        redisToUpdate(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
+        redisToUpdate(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
     }
 
     @Override
@@ -102,8 +127,9 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         FrameSetting record = new FrameSetting();
         record.setUpdateTime(new Date());
         record.setId(id);
-        FrameSettingRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        redisToDelete(rows, "frame_setting", factoryHouseRedisModel, record.getMineId());
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
+        Integer mineId = frameSettingMapper.selectMineId(id);
+        redisToDelete(rows, "frame_setting", frameSettingRedisModel, mineId);
     }
 
     @Override

@@ -135,4 +135,8 @@
       </if>
     </where>
   </select>
+
+  <select id="selectMineId" resultType="integer">
+    select mine_id FROM ip_setting where id=#{id}
+  </select>
 </mapper>

@@ -197,4 +197,8 @@
         AND frame_setting.mine_id = mine_setting.id
         AND frame_setting.is_delete=0
   </select>
+
+  <select id="selectMineId" resultType="integer">
+    select mine_id FROM frame_setting where id=#{id}
+  </select>
 </mapper>

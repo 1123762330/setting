@@ -389,4 +389,8 @@
             worker_id= #{item} AND is_come_in=1
         </foreach>
     </select>
+
+    <select id="selectMineId" resultType="integer">
+        select mine_id FROM worker_detailed where id=#{id}
+    </select>
 </mapper>

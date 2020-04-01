@@ -157,4 +157,8 @@
   <select id="selectFactoryNameByMineId" resultType="hashmap">
     select id,factory_name FROM factory_house where mine_id=#{mineId} AND is_delete=0
   </select>
+
+  <select id="selectMineId" resultType="integer">
+    select mine_id FROM factory_house where id=#{id}
+  </select>
 </mapper>

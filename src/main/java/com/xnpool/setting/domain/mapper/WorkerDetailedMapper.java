@@ -48,4 +48,6 @@ public interface WorkerDetailedMapper {
     List<HashMap> selectNullFrame(@Param("frameId")Integer frameId);
 
     List<Integer> selectIdByWorkerId(@Param("list") List<Integer> list);
+
+    Integer selectMineId(@Param("id") Integer id);
 }

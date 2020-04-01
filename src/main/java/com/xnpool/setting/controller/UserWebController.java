@@ -92,7 +92,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "查询用户矿机算力曲线图",type = LogType.SURVER)
+    //@SystemLog(value = "查询用户矿机算力曲线图",type = LogType.SURVER)
     @GetMapping("/getWorkerHashByDay")
     public ResponseResult getPoolWorkerHashByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);

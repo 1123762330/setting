@@ -72,12 +72,13 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
     }
 
     @Override
-    public PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime, String endTime, String keyWord, int pageNum, int pageSize) {
+    public PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime, String endTime, String keyWord, int pageNum, int pageSize,String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
+        Long tenandId = getTenandId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<OperatorWorkerHistoryExample> operatorWorkerHistoryExamples = operatorWorkerHistoryMapper.selectWorkerHistoryList(startTime, endTime, keyWord);
+        List<OperatorWorkerHistoryExample> operatorWorkerHistoryExamples = operatorWorkerHistoryMapper.selectWorkerHistoryList(startTime, endTime, keyWord,tenandId);
         for (OperatorWorkerHistoryExample operatorWorkerHistoryExample : operatorWorkerHistoryExamples) {
             SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//转换年月日
             try {
@@ -100,11 +101,13 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
                     operatorWorkerHistoryExample.setTotalTime("--");
                 }
                 String workerName = operatorWorkerHistoryExample.getWorkerName();
-                int lastIndexOf = workerName.lastIndexOf(".");
-                String minerName = workerName.substring(0, lastIndexOf);
-                String workerNameStr = workerName.substring(lastIndexOf+1);
-                operatorWorkerHistoryExample.setMiner(minerName);
-                operatorWorkerHistoryExample.setWorkerName(workerNameStr);
+                if(!StringUtils.isEmpty(workerName)){
+                    int lastIndexOf = workerName.lastIndexOf(".");
+                    String minerName = workerName.substring(0, lastIndexOf);
+                    String workerNameStr = workerName.substring(lastIndexOf+1);
+                    operatorWorkerHistoryExample.setMiner(minerName);
+                    operatorWorkerHistoryExample.setWorkerName(workerNameStr);
+                }
             } catch (ParseException e) {
                 log.error("时间转换异常!" + e.getMessage());
             }

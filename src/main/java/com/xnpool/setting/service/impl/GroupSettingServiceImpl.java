@@ -108,7 +108,8 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
         record.setUpdateTime(new Date());
         record.setId(id);
         GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
-        redisToDelete(rows, "group_setting", groupSettingRedisModel, record.getMineId());
+        Integer mineId = groupSettingMapper.selectMineId(id);
+        redisToDelete(rows, "group_setting", groupSettingRedisModel, mineId);
     }
 
     @Override

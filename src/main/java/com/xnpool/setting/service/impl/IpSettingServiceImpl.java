@@ -80,7 +80,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
         record.setUpdateTime(new Date());
         record.setId(id);
         IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(record);
-        redisToDelete(rows, "ip_setting", ipSettingRedisModel, record.getMineId());
+        Integer mineId = ipSettingMapper.selectMineId(id);
+        redisToDelete(rows, "ip_setting", ipSettingRedisModel, mineId);
     }
 
     @Override

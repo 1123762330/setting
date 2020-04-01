@@ -41,6 +41,6 @@
   </select>
   
   <select id="selectBrandNameByAlgorithmId" resultType="java.lang.String">
-    select worker_type FROM workerbrand_setting where is_delete=0 algorithm_id=#{algorithmId}
+    select worker_type FROM workerbrand_setting where is_delete=0 AND algorithm_id=#{algorithmId}
   </select>
 </mapper>

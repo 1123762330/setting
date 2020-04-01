@@ -24,5 +24,5 @@ public interface OperatorWorkerHistoryMapper {
 
     int insertTobatch(@Param("list") List<Integer> list, @Param("reason") String reason, @Param("mineId") Integer mineid, @Param("operatorId") Integer operatorId);
 
-    List<OperatorWorkerHistoryExample> selectWorkerHistoryList(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("keyword") String keyword);
+    List<OperatorWorkerHistoryExample> selectWorkerHistoryList(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("keyword") String keyword,Long tenantId);
 }

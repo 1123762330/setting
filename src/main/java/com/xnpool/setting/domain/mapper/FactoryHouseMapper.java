@@ -27,4 +27,6 @@ public interface FactoryHouseMapper {
     List<FactoryHouse> selectByMineId(@Param("mineId") Integer mineId);
 
     List<HashMap> selectFactoryNameByMineId(@Param("mineId") Integer mineId);
+
+    Integer selectMineId(@Param("id") Integer id);
 }
