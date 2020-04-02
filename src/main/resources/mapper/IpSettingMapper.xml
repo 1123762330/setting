@@ -136,7 +136,7 @@
     <where>
       ip_setting.is_delete = 0
       AND ip_setting.mine_id = mine_setting.id
-      <if test="keyWord != null">
+      <if test="keyWord != null and keyWord != ''">
         AND (ip_setting.start_ip like #{keyWord} or ip_setting.end_ip like #{keyWord})
       </if>
     </where>

@@ -177,7 +177,7 @@
         ip_setting
         <where>
             group_setting.is_delete = 0
-            <if test="keyWord != null">
+            <if test="keyWord != null and keyWord != ''">
                 AND (group_name like #{keyWord})
             </if>
             AND group_setting.mine_id = mine_setting.id

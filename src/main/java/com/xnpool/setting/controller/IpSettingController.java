@@ -80,7 +80,8 @@ public class IpSettingController extends BaseController {
      */
     @SystemLog(value = "查询IP区间列表",type = LogType.SYSTEM)
     @GetMapping("/selectIpList")
-    public ResponseResult selectIPList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectIPList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                       @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<IpSettingExample> ipSettingPageInfo = ipSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, ipSettingPageInfo);

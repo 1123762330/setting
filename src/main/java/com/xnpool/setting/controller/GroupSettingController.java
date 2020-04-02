@@ -83,7 +83,8 @@ public class GroupSettingController extends BaseController {
      */
     @SystemLog(value = "查询分组设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectGroupList")
-    public ResponseResult selectGroupList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectGroupList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                          @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<GroupSettingExample> groupSettingExamplePageInfo = groupSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, groupSettingExamplePageInfo);

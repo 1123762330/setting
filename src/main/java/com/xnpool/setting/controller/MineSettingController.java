@@ -91,7 +91,8 @@ public class MineSettingController extends BaseController{
      */
     @SystemLog(value = "查询矿场列表",type = LogType.SYSTEM)
     @GetMapping("/selectMineSetting")
-    public ResponseResult selectMineSetting(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectMineSetting(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<MineSetting> mineSettingPageInfo = mineSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, mineSettingPageInfo);

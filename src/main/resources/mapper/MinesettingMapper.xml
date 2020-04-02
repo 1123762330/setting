@@ -117,8 +117,8 @@
     from mine_setting
     <where>
       is_delete = 0
-      <if test="keyWord != null">
-        AND (mmine_name like #{keyWord} or `description` like #{keyWord})
+      <if test="keyWord != null and keyWord != ''">
+        AND (mine_name like #{keyWord} or `description` like #{keyWord})
       </if>
     </where>
   </select>

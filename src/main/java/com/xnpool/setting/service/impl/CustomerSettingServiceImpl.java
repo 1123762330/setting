@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONPath;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
@@ -76,7 +77,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
             list.add(tenantId);
         });
         if (list.contains(record.getTenantId())){
-            throw new InsertException("该企业已经申请授权,请勿重复授权!");
+            throw new DataExistException("该企业已经申请授权,请勿重复授权!");
         }
         return customerSettingMapper.insertSelective(record);
     }
@@ -137,7 +138,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
-        log.info("数据库查询的客户列表:" + customerSettingExamples.size());
+        //log.info("数据库查询的客户列表:" + customerSettingExamples.size());
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         //log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {

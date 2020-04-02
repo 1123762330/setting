@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
@@ -44,7 +45,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void insertSelective(FactoryHouse record) {
         List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
         if (list.contains(record.getFactoryName())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
 
         int rows = factoryHouseMapper.insertSelective(record);
@@ -63,7 +64,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     public void updateByPrimaryKeySelective(FactoryHouse record) {
         List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
         if (list.contains(record.getFactoryName())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());

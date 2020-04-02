@@ -158,14 +158,14 @@
       AND worker_detailed.group_id = group_setting.id
       AND operator_worker_history.operator_id=sys_role_user.user_id
       AND sys_role_user.role_id=sys_role.id
-        <if test="startTime != null">
+        <if test="startTime != null and startTime != ''">
           AND operator_worker_history.move_out_time &gt; #{startTime}
         </if>
-        <if test="endTime != null">
+        <if test="endTime != null and endTime != ''">
           AND operator_worker_history.move_out_time &lt; #{startTime}
         </if>
-        <if test="keyword != null">
-          AND operator_worker_history.reason like #{keyword}
+        <if test="keyWord != null and keyWord != ''">
+          AND operator_worker_history.reason like #{keyWord}
         </if>
       </where>
     </select>

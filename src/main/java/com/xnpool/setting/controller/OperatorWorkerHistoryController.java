@@ -43,9 +43,9 @@ public class OperatorWorkerHistoryController extends BaseController {
      */
     @SystemLog(value = "查询矿机出库历史记录",type = LogType.SYSTEM)
     @GetMapping("/selectWorkerHistoryList")
-    public ResponseResult selectWorkerHistoryList(@RequestParam(value = "startTime", required=false)String startTime,
-                                                  @RequestParam(value = "endTime", required=false)String endTime,
-                                                  @RequestParam(value = "keyWord", required=false)String keyWord,
+    public ResponseResult selectWorkerHistoryList(@RequestParam(value = "startTime", required=false,defaultValue = "")String startTime,
+                                                  @RequestParam(value = "endTime", required=false,defaultValue = "")String endTime,
+                                                  @RequestParam(value = "keyWord", required=false,defaultValue = "")String keyWord,
                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                   HttpServletRequest request) {

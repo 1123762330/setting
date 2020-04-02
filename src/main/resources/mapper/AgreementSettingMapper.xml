@@ -128,7 +128,7 @@
     from agreement_setting
     <where>
       is_delete = 0
-      <if test="keyWord != null">
+      <if test="keyWord != null and keyWord != ''">
         AND (aagreement_name like #{keyWord} or `path` like #{keyWord})
       </if>
     </where>

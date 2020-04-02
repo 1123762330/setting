@@ -180,7 +180,7 @@
       sys_user
       <where>
         electricity_meter_setting.is_delete = 0
-        <if test="keyWord != null">
+        <if test="keyWord != null and keyWord != ''">
           AND (electricity_meter_setting.electricity_meter_Name like #{keyWord} )
         </if>
         AND electricity_meter_setting.mine_id = mine_setting.id

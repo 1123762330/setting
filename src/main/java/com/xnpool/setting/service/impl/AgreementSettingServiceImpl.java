@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -38,7 +39,7 @@ public class AgreementSettingServiceImpl implements AgreementSettingService {
     public int insertSelective(AgreementSetting record) {
         List<String> list = agreementSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getAgreementName())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return agreementSettingMapper.insertSelective(record);
     }
@@ -52,7 +53,7 @@ public class AgreementSettingServiceImpl implements AgreementSettingService {
     public int updateByPrimaryKeySelective(AgreementSetting record) {
         List<String> list = agreementSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getAgreementName())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return agreementSettingMapper.updateByPrimaryKeySelective(record);
     }

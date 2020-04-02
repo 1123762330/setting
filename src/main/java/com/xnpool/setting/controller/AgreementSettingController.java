@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 协议设置
+ *
  * @author zly
  * @version 1.0
  * @date 2020/2/7 9:43
@@ -32,7 +33,7 @@ public class AgreementSettingController extends BaseController {
 
     //文件存储路径
     @Value("${config.filePath}")
-    private  String filePath;
+    private String filePath;
 
     /**
      * @return
@@ -47,12 +48,12 @@ public class AgreementSettingController extends BaseController {
         //上传文件到服务器上
         long fileSize = file.getSize();
         long time = System.currentTimeMillis() / 1000;
-        String originalFilename = time+"-"+file.getOriginalFilename();
-        if (fileSize>10485760){
-            return new ResponseResult(FAIL,"上传文件不能超过10M");
-        }else {
-            ResponseResult result = UploadUtils.getFileToUpload(file,filePath,originalFilename);
-            if (200!=result.getStatus()) return result;
+        String originalFilename = time + "-" + file.getOriginalFilename();
+        if (fileSize > 10485760) {
+            return new ResponseResult(FAIL, "上传文件不能超过10M");
+        } else {
+            ResponseResult result = UploadUtils.getFileToUpload(file, filePath, originalFilename);
+            if (200 != result.getStatus()) return result;
             //添加记录到数据库
             agreementSetting.setPath(prifix + originalFilename);
             agreementSetting.setFileName(file.getOriginalFilename());
@@ -69,13 +70,13 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:49 2020/2/7
      * @Param
      */
-    @SystemLog(value = "修改协议",type = LogType.SYSTEM)
+    @SystemLog(value = "修改协议", type = LogType.SYSTEM)
     @PutMapping("/updateAgreement")
     public ResponseResult updateAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
         long time = System.currentTimeMillis() / 1000;
-        String originalFilename = time+"-"+file.getOriginalFilename();
-        ResponseResult result = UploadUtils.getFileToUpload(file,filePath,originalFilename);
+        String originalFilename = time + "-" + file.getOriginalFilename();
+        ResponseResult result = UploadUtils.getFileToUpload(file, filePath, originalFilename);
         if (result != null) return result;
         //添加记录到数据库
         agreementSetting.setPath(prifix + file.getOriginalFilename());
@@ -93,7 +94,7 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:52 2020/2/7
      * @Param
      */
-    @SystemLog(value = "删除协议",type = LogType.SYSTEM)
+    @SystemLog(value = "删除协议", type = LogType.SYSTEM)
     @DeleteMapping("/deleteAgreement")
     public ResponseResult deleteAgreement(int id) {
         agreementSettingService.updateById(id);
@@ -107,19 +108,20 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:55 2020/2/7
      * @Param
      */
-    @SystemLog(value = "查询协议",type = LogType.SYSTEM)
+    @SystemLog(value = "查询协议", type = LogType.SYSTEM)
     @GetMapping("/selectAgreement")
-    public ResponseResult selectAgreement(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+    public ResponseResult selectAgreement(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                          @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<AgreementSetting> pageInfo = agreementSettingService.selectByOther(keyWord, pageNum, pageSize);
-        return new ResponseResult(SUCCESS,pageInfo);
+        return new ResponseResult(SUCCESS, pageInfo);
     }
 
     @GetMapping("/selectAgreementMap")
     public ResponseResult selectAgreementMap(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<AgreementSetting> pageInfo = agreementSettingService.selectByOther(keyWord, pageNum, pageSize);
-        return new ResponseResult(SUCCESS,pageInfo);
+        return new ResponseResult(SUCCESS, pageInfo);
     }
 
 

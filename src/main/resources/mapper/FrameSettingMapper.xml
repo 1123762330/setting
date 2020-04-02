@@ -166,7 +166,7 @@
       mine_setting
     <where>
       frame_setting.is_delete = 0
-      <if test="keyWord != null">
+      <if test="keyWord != null and keyWord != ''">
         AND ( frame_setting.frame_name like #{keyWord} or frame_setting.number like #{keyWord})
       </if>
       AND frame_setting.factory_id = factory_house.id

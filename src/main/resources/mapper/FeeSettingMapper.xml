@@ -117,7 +117,7 @@
     from fee_setting
     <where>
       is_delete = 0
-      <if test="keyWord != null">
+      <if test="keyWord != null and keyWord != ''">
         AND (fee_price like #{keyWord} or `fee_name` like #{keyWord})
       </if>
     </where>

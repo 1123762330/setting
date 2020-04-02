@@ -236,7 +236,7 @@
         <where>
             worker_detailed.is_delete = 0
             AND worker_detailed.is_come_in = 1
-            <if test="keyWord != null">
+            <if test="keyWord != null and keyWord != ''">
                 AND (group_name like #{keyWord})
             </if>
             AND worker_detailed.worker_id = worker_info.id
@@ -323,10 +323,10 @@
         algorithm
         <where>
             worker_detailed.user_id=#{userId}
-            <if test="startIp != null">
+            <if test="startIp != null and startIp !=''">
             AND worker_info.ip_long &gt;= #{startIp}
             </if>
-            <if test="endIp != null">
+            <if test="endIp != null and endIp != ''">
                 AND worker_info.ip_long &lt; #{endIp}
             </if>
             AND worker_detailed.worker_id = worker_info.id

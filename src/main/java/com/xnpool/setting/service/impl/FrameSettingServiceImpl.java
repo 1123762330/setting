@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
@@ -55,7 +56,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     public void insertSelective(FrameSetting record) {
         List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
         if (frameNameList.contains(record.getFrameName())) {
-            throw new InsertException("数据已存在,请重试!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         String framename = record.getFrameName();
         Integer number = record.getNumber();
@@ -114,7 +115,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     public void updateByPrimaryKeySelective(FrameSetting record) {
         List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
         if (frameNameList.contains(record.getFrameName())) {
-            throw new InsertException("数据已存在,请重试!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
 
         String framename = record.getFrameName();

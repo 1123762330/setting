@@ -80,7 +80,8 @@ public class PowerSettingController extends BaseController {
      */
     @SystemLog(value = "查询电费设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectPowerRateList")
-    public ResponseResult selectFrameList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectFrameList( @RequestParam(value = "keyWord", required=false,defaultValue = "")String keyWord,
+                                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<PowerSetting> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);

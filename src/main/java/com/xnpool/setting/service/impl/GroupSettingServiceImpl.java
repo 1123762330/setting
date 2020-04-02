@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
@@ -59,7 +60,7 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     public void insertSelective(GroupSetting record) {
         List<String> list = groupSettingMapper.selectGroupNameList(record.getId());
         if (list.contains(record.getGroupName())) {
-            throw new InsertException("矿场名重复,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = groupSettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
@@ -77,7 +78,7 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     public void updateByPrimaryKeySelective(GroupSetting record) {
         List<String> list = groupSettingMapper.selectGroupNameList(record.getId());
         if (list.contains(record.getGroupName())) {
-            throw new InsertException("矿场名重复,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());

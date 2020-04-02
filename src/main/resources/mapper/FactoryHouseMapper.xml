@@ -138,7 +138,7 @@
     mine_setting
     <where>
     factory_house.is_delete = 0
-    <if test="keyWord != null">
+    <if test="keyWord != null and keyWord != ''">
     AND ( factory_house.factory_name like #{keyWord} or factory_house.description like #{keyWord})
     </if>
     AND factory_house.mine_id = mine_setting.id

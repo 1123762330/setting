@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class PowerSettingServiceImpl implements PowerSettingService {
     public int insertSelective(PowerSetting record) {
         List<String> list = powerSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getDescription())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return powerSettingMapper.insertSelective(record);
     }
@@ -52,7 +53,7 @@ public class PowerSettingServiceImpl implements PowerSettingService {
     public int updateByPrimaryKeySelective(PowerSetting record) {
         List<String> list = powerSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getDescription())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return powerSettingMapper.updateByPrimaryKeySelective(record);
     }

@@ -77,7 +77,7 @@ public class AlgorithmController extends BaseController {
      */
     @SystemLog(value = "查询算法列表",type = LogType.SYSTEM)
     @GetMapping("/selectAlgorithm")
-    public ResponseResult selectFactoryHouse (String keyWord,
+    public ResponseResult selectFactoryHouse (@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
         PageInfo<Algorithm> pageInfo = algorithmService.selectAlgorithm(keyWord, pageNum, pageSize);

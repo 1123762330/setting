@@ -2289,7 +2289,7 @@ public class JedisUtil {
                     keysTmp.add(keyStr);
                 }
                 long end = System.currentTimeMillis();
-                log.info("模糊查询耗时" + (end-start) + "毫秒,cursor值:" + cursor);
+                //log.info("模糊查询耗时" + (end-start) + "毫秒,cursor值:" + cursor);
                 if ("0".equals(cursor)){
                     break;
                 }

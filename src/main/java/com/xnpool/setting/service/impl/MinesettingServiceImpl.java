@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.redismodel.MineSettingRedisModel;
@@ -49,7 +50,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void insertSelective(MineSetting record) {
         List<String> list = minesettingMapper.selectMineNameList(record.getId());
         if (list.contains(record.getMineName())) {
-            throw new InsertException("矿场名重复,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = minesettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
@@ -68,7 +69,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     public void updateByPrimaryKeySelective(MineSetting record) {
         List<String> list = minesettingMapper.selectMineNameList(record.getId());
         if (list.contains(record.getMineName())) {
-            throw new InsertException("矿场名重复,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
 
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);

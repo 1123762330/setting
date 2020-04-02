@@ -94,7 +94,7 @@ public class CustomerSettingController extends BaseController {
      */
     @SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
     @GetMapping("/selectCustomerList")
-    public ResponseResult selectCustomerList (String keyWord,
+    public ResponseResult selectCustomerList (@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
         PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize);

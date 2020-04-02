@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class ElectricityMeterSettingServiceImpl implements ElectricityMeterSetti
     public int insertSelective(ElectricityMeterSetting record) {
         List<String> list = electricityMeterSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getId())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return electricityMeterSettingMapper.insertSelective(record);
     }
@@ -52,7 +53,7 @@ public class ElectricityMeterSettingServiceImpl implements ElectricityMeterSetti
     public int updateByPrimaryKeySelective(ElectricityMeterSetting record) {
         List<String> list = electricityMeterSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getId())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return electricityMeterSettingMapper.updateByPrimaryKeySelective(record);
     }

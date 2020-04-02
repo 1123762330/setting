@@ -80,7 +80,8 @@ public class WorkerbrandSettingController extends BaseController {
      */
     @SystemLog(value = "查询矿机品牌列表",type = LogType.MINE)
     @GetMapping("/selectWorkerbrand")
-    public ResponseResult selectWorkerbrand(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectWorkerbrand( @RequestParam(value = "keyWord", required=false,defaultValue = "")String keyWord,
+                                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<WorkerbrandSetting> pageInfo = workerbrandSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);

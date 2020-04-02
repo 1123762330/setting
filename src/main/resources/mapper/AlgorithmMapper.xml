@@ -21,7 +21,7 @@
     from algorithm
     <where>
       is_delete = 0
-      <if test="keyWord != null">
+      <if test="keyWord != null and keyWord != ''">
         AND algorithm_name like #{keyWord}
       </if>
     </where>

@@ -40,7 +40,7 @@ public class FactoryHouseController extends BaseController {
      * @Date 12:59 2020/2/3
      * @Param
      */
-    @SystemLog(value = "添加厂房设置",type = LogType.SYSTEM)
+    @SystemLog(value = "添加厂房设置", type = LogType.SYSTEM)
     @PostMapping("/addFactoryHouse")
     public ResponseResult addFactoryHouse(FactoryHouse factoryHouse) {
         factoryHouseService.insertSelective(factoryHouse);
@@ -54,7 +54,7 @@ public class FactoryHouseController extends BaseController {
      * @Date 11:26 2020/2/4
      * @Param
      */
-    @SystemLog(value = "修改厂房设置",type = LogType.SYSTEM)
+    @SystemLog(value = "修改厂房设置", type = LogType.SYSTEM)
     @PutMapping("/updateFactoryHouse")
     public ResponseResult updateFactoryHouse(FactoryHouse factoryHouse) {
         factoryHouseService.updateByPrimaryKeySelective(factoryHouse);
@@ -68,7 +68,7 @@ public class FactoryHouseController extends BaseController {
      * @Date 11:45 2020/2/4
      * @Param
      */
-    @SystemLog(value = "删除厂房",type = LogType.SYSTEM)
+    @SystemLog(value = "删除厂房", type = LogType.SYSTEM)
     @DeleteMapping("/deleteFactoryHouse")
     public ResponseResult deleteFactoryHouse(int id) {
 
@@ -82,32 +82,32 @@ public class FactoryHouseController extends BaseController {
         }
     }
 
-        /**
-         * @return
-         * @Description 查询厂房列表
-         * @Author zly
-         * @Date 14:58 2020/2/4
-         * @Param
-         */
-        @SystemLog(value = "查询厂房列表",type = LogType.SYSTEM)
-        @GetMapping("/selectFactoryHouse")
-        public ResponseResult selectFactoryHouse (String keyWord,
-        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
-            PageInfo<FactoryHouseExample> pageInfo = factoryHouseService.selectByOther(keyWord, pageNum, pageSize);
-            return new ResponseResult(SUCCESS,pageInfo);
-        }
-
-        /**
-         * @return
-         * @Description 查询厂房列表
-         * @Author zly
-         * @Date 14:58 2020/2/4
-         * @Param
-         */
-        @GetMapping("/selectFactoryNameList")
-        public ResponseResult selectFactoryNameList (Integer mineId){
-            HashMap<Integer, String> resultMap = factoryHouseService.selectFactoryNameByMineId(mineId);
-            return new ResponseResult(SUCCESS,resultMap);
-        }
+    /**
+     * @return
+     * @Description 查询厂房列表
+     * @Author zly
+     * @Date 14:58 2020/2/4
+     * @Param
+     */
+    @SystemLog(value = "查询厂房列表", type = LogType.SYSTEM)
+    @GetMapping("/selectFactoryHouse")
+    public ResponseResult selectFactoryHouse(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
+        PageInfo<FactoryHouseExample> pageInfo = factoryHouseService.selectByOther(keyWord, pageNum, pageSize);
+        return new ResponseResult(SUCCESS, pageInfo);
     }
+
+    /**
+     * @return
+     * @Description 查询厂房列表
+     * @Author zly
+     * @Date 14:58 2020/2/4
+     * @Param
+     */
+    @GetMapping("/selectFactoryNameList")
+    public ResponseResult selectFactoryNameList(Integer mineId) {
+        HashMap<Integer, String> resultMap = factoryHouseService.selectFactoryNameByMineId(mineId);
+        return new ResponseResult(SUCCESS, resultMap);
+    }
+}

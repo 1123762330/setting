@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -38,7 +39,7 @@ public class FeeSettingServiceImpl implements FeeSettingService {
     public int insertSelective(FeeSetting record) {
         List<String> list = feeSettingMapper.selectFeeNameList(record.getId());
         if (list.contains(record.getFeeName())) {
-            throw new InsertException("矿场名重复,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return feeSettingMapper.insertSelective(record);
     }

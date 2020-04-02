@@ -42,9 +42,10 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "查询矿机出库列表",type = LogType.MINE)
+    @SystemLog(value = "查询矿机出库列表",type = LogType.MINE)
     @GetMapping("/selectMoveOutList")
-    public ResponseResult selectMoveOutList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectMoveOutList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
         PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(keyWord, pageNum, pageSize,token);
@@ -58,11 +59,11 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "查询矿机入库列表",type = LogType.MINE)
+    @SystemLog(value = "查询矿机入库列表",type = LogType.MINE)
     @GetMapping("/selectComeInWorkerList")
-    public ResponseResult selectComeInWorkerList(@RequestParam(value = "workerType", required = false)String workerType,
-                                                 @RequestParam(value = "state", required = false)Integer state,
-                                                 @RequestParam(value = "ip", required = false)String ip,
+    public ResponseResult selectComeInWorkerList(@RequestParam(value = "workerType", required = false,defaultValue = "")String workerType,
+                                                 @RequestParam(value = "state", required = false,defaultValue = "")Integer state,
+                                                 @RequestParam(value = "ip", required = false,defaultValue = "")String ip,
                                                  @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         HashMap<String, Object>  workerPageInfo = workerDetailedService.selectComeInWorkerList(workerType,state,ip, pageNum, pageSize);

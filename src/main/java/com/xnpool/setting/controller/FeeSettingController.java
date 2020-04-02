@@ -81,7 +81,8 @@ public class FeeSettingController extends BaseController {
      */
     @SystemLog(value = "查询费用列表",type = LogType.SYSTEM)
     @GetMapping("/selectFeeList")
-    public ResponseResult selectFeeList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectFeeList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                         @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<FeeSetting> feeSettingPageInfo = feeSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, feeSettingPageInfo);

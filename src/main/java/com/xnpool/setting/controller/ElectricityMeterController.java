@@ -78,7 +78,8 @@ public class ElectricityMeterController extends BaseController {
      */
     @SystemLog(value = "查询电表设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectElectricityMeter")
-    public ResponseResult selectElectricityMeter(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectElectricityMeter(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+                                                 @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         PageInfo<ElectricityMeterSettingExample> pageInfo = electricityMeterSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS,pageInfo);

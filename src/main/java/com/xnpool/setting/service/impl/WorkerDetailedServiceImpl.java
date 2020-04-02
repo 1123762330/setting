@@ -428,7 +428,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             filterList = getFilterList(workerName, startIp, endIp, filterList);
         } else {
             //在全部列表过滤三个条件
-            System.out.println("传进来的:"+filterList);
             filterList = getFilterList(workerName, startIp, endIp, filterList);
         }
         PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(filterList);

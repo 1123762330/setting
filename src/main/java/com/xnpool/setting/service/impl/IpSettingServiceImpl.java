@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
@@ -48,7 +49,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void insertSelective(IpSetting record) {
         List<String> list = ipSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getStartIp())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = ipSettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
@@ -66,7 +67,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     public void updateByPrimaryKeySelective(IpSetting record) {
         List<String> list = ipSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getStartIp())) {
-            throw new InsertException("数据已存在,请勿重复添加!");
+            throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
