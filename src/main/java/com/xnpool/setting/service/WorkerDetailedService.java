@@ -40,9 +40,9 @@ public interface WorkerDetailedService {
 
     void updateById(String ids);
 
-    PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp, String endIp, Integer pageNum, Integer pageSize, String token,Long tenantId);
+    PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String onLine,String offLine,String workerName, String startIp, String endIp, Integer pageNum, Integer pageSize, String token,Long tenantId);
 
-    HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize,Long tenantId);
+    HashMap<String, Object> selectGroupModel(String groupName,String startIp, String endIp,String token, Integer pageNum, Integer pageSize,Long tenantId);
 
     HashMap<Integer, String> selectNullFrame(Integer frameId);
 }

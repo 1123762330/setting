@@ -56,13 +56,15 @@ public class UserWebController extends BaseController {
     @SystemLog(value = "查询用户网站矿机详情列表",type = LogType.SURVER)
     @GetMapping("/selectAllWorkerDetailed")
     public ResponseResult selectAllWorkerDetailed(String workerName, String startIp, String endIp,
+                                                  @RequestParam(value = "onLine", required = false, defaultValue = "0") String onLine,
+                                                  @RequestParam(value = "offLine", required = false, defaultValue = "0") String offLine,
                                                   @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                   HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
         Long tenantId=Long.valueOf(request.getHeader("tenantId"));
         apiContext.setTenantId(Long.valueOf(tenantId));
-        PageInfo<WorkerDetailedModel> workerPageInfo = workerDetailedService.selectAllWorkerDetailed(workerName,startIp,endIp, pageNum, pageSize,token,tenantId);
+        PageInfo<WorkerDetailedModel> workerPageInfo = workerDetailedService.selectAllWorkerDetailed(onLine,offLine,workerName,startIp,endIp, pageNum, pageSize,token,tenantId);
         return new ResponseResult(SUCCESS, workerPageInfo);
     }
 
@@ -75,13 +77,13 @@ public class UserWebController extends BaseController {
      */
     @SystemLog(value = "查询用户网站分组列表",type = LogType.SURVER)
     @GetMapping("/selectGroupModel")
-    public ResponseResult selectGroupModel(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+    public ResponseResult selectGroupModel(String groupName,String startIp, String endIp, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                            HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
         Long tenantId=Long.valueOf(request.getHeader("tenantId"));
         apiContext.setTenantId(Long.valueOf(tenantId));
-        HashMap<String, Object> groupModel = workerDetailedService.selectGroupModel(token, pageNum, pageSize,tenantId);
+        HashMap<String, Object> groupModel = workerDetailedService.selectGroupModel(groupName,startIp,endIp,token, pageNum, pageSize,tenantId);
         return new ResponseResult(SUCCESS,groupModel);
     }
 

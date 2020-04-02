@@ -94,24 +94,24 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         //需要去查询当前分组内是否有矿机IP,首先查到IP字段Map集合
-        HashMap<Integer, String> ipStart = ipSettingService.selectByIPStart();
-        Set<Integer> keySet = ipStart.keySet();
-        GroupSetting groupSetting = groupSettingMapper.selectByPrimaryKey(id);
-        String ipid = groupSetting.getIpId();
-        if (ipid.contains(",")) {
-            //多个IP
-            String[] split = ipid.split(",");
-            for (int i = 0; i < split.length; i++) {
-                if (keySet.contains(split[i])) {
-                    throw new DeleteException("该分组下存在有效IP,不允许删除!");
-                }
-            }
-        } else {
-            //单个IP
-            if (keySet.contains(ipStart)) {
-                throw new DeleteException("该分组下存在有效IP,不允许删除!");
-            }
-        }
+        //HashMap<Integer, String> ipStart = ipSettingService.selectByIPStart();
+        //Set<Integer> keySet = ipStart.keySet();
+        //GroupSetting groupSetting = groupSettingMapper.selectByPrimaryKey(id);
+        //String ipid = groupSetting.getIpId();
+        //if (ipid.contains(",")) {
+        //    //多个IP
+        //    String[] split = ipid.split(",");
+        //    for (int i = 0; i < split.length; i++) {
+        //        if (keySet.contains(split[i])) {
+        //            throw new DeleteException("该分组下存在有效IP,不允许删除!");
+        //        }
+        //    }
+        //} else {
+        //    //单个IP
+        //    if (keySet.contains(ipStart)) {
+        //        throw new DeleteException("该分组下存在有效IP,不允许删除!");
+        //    }
+        //}
         int rows = groupSettingMapper.updateById(id);
         GroupSetting record = new GroupSetting();
         record.setUpdateTime(new Date());

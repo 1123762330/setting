@@ -41,22 +41,21 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:48 2020/2/7
      * @Param
      */
-    @SystemLog(value = "添加协议",type = LogType.SYSTEM)
+    //@SystemLog(value = "添加协议",type = LogType.SYSTEM)
     @PostMapping("/addAgreement")
     public ResponseResult addAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
         long fileSize = file.getSize();
+        long time = System.currentTimeMillis() / 1000;
+        String originalFilename = time+"-"+file.getOriginalFilename();
         if (fileSize>10485760){
             return new ResponseResult(FAIL,"上传文件不能超过10M");
         }else {
-            ResponseResult result = UploadUtils.getFileToUpload(file,filePath);
+            ResponseResult result = UploadUtils.getFileToUpload(file,filePath,originalFilename);
             if (200!=result.getStatus()) return result;
             //添加记录到数据库
-            agreementSetting.setPath(prifix + file.getOriginalFilename());
-            String originalFilename = file.getOriginalFilename();
-            int index = originalFilename.indexOf("-");
-            String fileName = originalFilename.substring(index);
-            agreementSetting.setFileName(fileName);
+            agreementSetting.setPath(prifix + originalFilename);
+            agreementSetting.setFileName(file.getOriginalFilename());
             agreementSettingService.insertSelective(agreementSetting);
             return new ResponseResult(SUCCESS);
         }
@@ -74,14 +73,13 @@ public class AgreementSettingController extends BaseController {
     @PutMapping("/updateAgreement")
     public ResponseResult updateAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
-        ResponseResult result = UploadUtils.getFileToUpload(file,filePath);
+        long time = System.currentTimeMillis() / 1000;
+        String originalFilename = time+"-"+file.getOriginalFilename();
+        ResponseResult result = UploadUtils.getFileToUpload(file,filePath,originalFilename);
         if (result != null) return result;
         //添加记录到数据库
         agreementSetting.setPath(prifix + file.getOriginalFilename());
-        String originalFilename = file.getOriginalFilename();
-        int index = originalFilename.indexOf("-");
-        String fileName = originalFilename.substring(index);
-        agreementSetting.setFileName(fileName);
+        agreementSetting.setFileName(originalFilename);
         agreementSettingService.updateByPrimaryKeySelective(agreementSetting);
         return new ResponseResult(SUCCESS);
 

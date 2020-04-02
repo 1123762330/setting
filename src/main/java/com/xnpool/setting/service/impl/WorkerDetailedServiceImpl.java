@@ -87,13 +87,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
     @Override
-    public PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize,String token) {
+    public PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize, String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         Long tenantId = getTenantId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord,tenantId);
+        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord, tenantId);
         System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
         WorkerDetailedExampleList.forEach(workerDetailedExample -> {
             String workerName = workerDetailedExample.getWorkerName();
@@ -137,7 +137,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token) {
+    public void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam, String token) {
         //后期从token中获取用户Id
         Integer operatorId = getUserId(token);
         Integer id = workerDetailedParam.getId();
@@ -185,7 +185,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //记录到操作历史表中
         List<Integer> arrayList = new ArrayList<>();
         arrayList.add(Integer.valueOf(workerIds));
-        String reason="";
+        String reason = "";
         int rows2 = operatorWorkerHistoryService.insertTobatch(arrayList, reason, mineId, operatorId);
         //出库数据同步到缓存里
         HashMap<String, Object> operatorWorkerData = new HashMap<>();
@@ -200,7 +200,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
     //入库列表
     @Override
-    public HashMap<String, Object>  selectComeInWorkerList(String workerType, Integer state, String ip, int pageNum, int pageSize) {
+    public HashMap<String, Object> selectComeInWorkerList(String workerType, Integer state, String ip, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(ip)) {
             ip = "%" + ip + "%";
         }
@@ -216,12 +216,12 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             String key = ipStart.substring(0, lastIndexOf);
             ipMap.put(key, value);
         }
-        List<WorkerInfo> workers = workerInfoMapper.selectByOther(workerType,state,ip);
+        List<WorkerInfo> workers = workerInfoMapper.selectByOther(workerType, state, ip);
         //已经入库的矿机Id
         List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
         //List<Integer>转List<Long>
         ArrayList<Long> comeInlistToLong = new ArrayList<>();
-        if (!comeInlist.isEmpty()){
+        if (!comeInlist.isEmpty()) {
             for (Integer integer : comeInlist) {
                 Long workerIdToLong = Long.valueOf(integer.toString());
                 comeInlistToLong.add(workerIdToLong);
@@ -278,7 +278,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerIdList.add(workerId);
             }
             int rows = operatorWorkerHistoryService.updateMoveOutTimeById(workerIdList);
-            if (rows!=0){
+            if (rows != 0) {
                 //出库数据同步到缓存里
                 HashMap<String, Object> operatorWorkerData = new HashMap<>();
                 operatorWorkerData.put("workerIdList", workerIdList);
@@ -286,7 +286,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 operatorWorkerData.put("operatorId", userId);
                 redisToBatchInsert(rows, "operator_worker_histkory", operatorWorkerData, entry.getKey());
                 batchMoveOut(rows, "worker_detailed", workerIdList, entry.getKey());
-            }else {
+            } else {
                 throw new UpdateException("该矿机还未上架,无法进行下架操作");
             }
 
@@ -380,9 +380,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Date 18:00 2020/3/10
      * @Param
      */
-    public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String workerName, String startIp,
+    public PageInfo<WorkerDetailedModel> selectAllWorkerDetailed(String onLine, String offLine, String workerName, String startIp,
                                                                  String endIp, Integer pageNum,
-                                                                 Integer pageSize, String token,Long tenantId) {
+                                                                 Integer pageSize, String token, Long tenantId) {
         Long startIpToLong = null;
         Long endIpToLong = null;
         if (!StringUtils.isEmpty(startIp)) {
@@ -414,8 +414,47 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 workerDetailedModel.setRunTime(onTimeStr);
             }
         }
-        PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(workerDetailedModels);
+        List<WorkerDetailedModel> filterList = workerDetailedModels;
+
+        //在在线列表里面过滤三个条件
+        if ("1".equals(onLine) && "0".equals(offLine)) {
+            filterList = filterList.stream().filter(a -> a.getState() == 1).collect(Collectors.toList());
+            //过滤矿机名
+            filterList = getFilterList(workerName, startIp, endIp, filterList);
+        } else if ("0".equals(onLine) && "1".equals(offLine)) {
+            //在离线列表里面过滤三个条件
+            filterList = workerDetailedModels.stream().filter(a -> a.getState() != 1).collect(Collectors.toList());
+            //过滤矿机名
+            filterList = getFilterList(workerName, startIp, endIp, filterList);
+        } else {
+            //在全部列表过滤三个条件
+            filterList = getFilterList(workerName, startIp, endIp, filterList);
+        }
+        PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(filterList);
         return pageInfo;
+    }
+
+    //用户网站矿机详情条件过滤
+    private List<WorkerDetailedModel> getFilterList(String workerName, String startIp, String endIp, List<WorkerDetailedModel> filterList) {
+        if (!StringUtils.isEmpty(workerName)) {
+            filterList = filterList.stream().filter(a -> a.getWorkerName().equals(workerName)).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(startIp)) {
+                filterList = filterList.stream().filter(a -> a.getIp().contains(startIp)).collect(Collectors.toList());
+            }
+            if (!StringUtils.isEmpty(endIp)) {
+                filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
+            }
+        }
+        if (!StringUtils.isEmpty(startIp)) {
+            filterList = filterList.stream().filter(a -> a.getIp().contains(startIp)).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(endIp)) {
+                filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
+            }
+        }
+        if (!StringUtils.isEmpty(endIp)) {
+            filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
+        }
+        return filterList;
     }
 
     /**
@@ -425,10 +464,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Date 18:54 2020/3/12
      * @Param
      */
-    public HashMap<String, Object> selectGroupModel(String token, Integer pageNum, Integer pageSize,Long tenantId) {
+    public HashMap<String, Object> selectGroupModel(String groupName, String startIp, String endIp, String token, Integer pageNum, Integer pageSize, Long tenantId) {
         //后面从token中获取
         Integer userId = getUserId(token);
-        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId,tenantId);
+        List<GroupModel> groupModels = workerDetailedMapper.selectGroupModel(userId, tenantId);
         HashMap<String, String> ipQuJianMap = ipSettingService.selectIpQuJian();
         ArrayList<GroupModel> resultList = new ArrayList<>();
         //按分组名进行分组
@@ -451,22 +490,22 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     groupModel_tmp.setBrandName(brandName);
                 }
                 //记录离线的数量
-                if (groupModel.getState() == 0||groupModel.getState() == 2) {
+                if (groupModel.getState() == 0 || groupModel.getState() == 2) {
                     offLinesize++;
                 }
                 //对这个分组下的所有的矿机ip进行区间分组,取前三组进行字符串匹配
                 String workerIp = groupModel.getWorkerIp();
                 String startIpStr = workerIp.substring(0, workerIp.lastIndexOf("."));
                 String ipQuJianStr = ipQuJianMap.get(startIpStr);
-                if (!StringUtils.isEmpty(ipQuJianStr)){
+                if (!StringUtils.isEmpty(ipQuJianStr)) {
                     ipQuJianset.add(ipQuJianStr);
                 }
                 brandList.add(brandName);
             }
             //将set集合转成字符串
-            String ipQuJiansetStr="";
-            if (!ipQuJianset.isEmpty()){
-                 ipQuJiansetStr = ipQuJianset.toString().substring(1, ipQuJianset.toString().length() - 1);
+            String ipQuJiansetStr = "";
+            if (!ipQuJianset.isEmpty()) {
+                ipQuJiansetStr = ipQuJianset.toString().substring(1, ipQuJianset.toString().length() - 1);
             }
             groupModel_tmp.setIpQuJian(ipQuJiansetStr);
             groupModel_tmp.setGroupName(entry.getKey());
@@ -474,8 +513,28 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             groupModel_tmp.setOffLineSize(offLinesize);
             resultList.add(groupModel_tmp);
         }
+        List<GroupModel> filterList = resultList;
+        //过滤矿机名
+        if (!StringUtils.isEmpty(groupName)) {
+            filterList = filterList.stream().filter(a -> a.getGroupName().equals(groupName)).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(startIp)) {
+                filterList = filterList.stream().filter(a -> a.getIpQuJian().contains(startIp)).collect(Collectors.toList());
+                if (!StringUtils.isEmpty(endIp)) {
+                    filterList = filterList.stream().filter(a -> a.getIpQuJian().contains(endIp)).collect(Collectors.toList());
+                }
+            }
+        }
+        if (!StringUtils.isEmpty(startIp)) {
+            filterList = filterList.stream().filter(a -> a.getIpQuJian().contains(startIp)).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(endIp)) {
+                filterList = filterList.stream().filter(a -> a.getIpQuJian().contains(endIp)).collect(Collectors.toList());
+            }
+        }
+        if (!StringUtils.isEmpty(endIp)) {
+            filterList = filterList.stream().filter(a -> a.getIpQuJian().contains(endIp)).collect(Collectors.toList());
+        }
         //进行分页
-        HashMap<String, Object> startPage = PageUtil.startPage(resultList, pageNum, pageSize);
+        HashMap<String, Object> startPage = PageUtil.startPage(filterList, pageNum, pageSize);
         return startPage;
     }
 
@@ -486,7 +545,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         mapList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
             Integer frameNumber = Integer.valueOf(hashMap.get("frame_number").toString());
-            resultMap.put(id,frameNumber+"层");
+            resultMap.put(id, frameNumber + "层");
         });
         return resultMap;
     }

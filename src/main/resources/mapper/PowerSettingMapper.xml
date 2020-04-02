@@ -106,7 +106,7 @@
   </update>
   <!--  软删除-->
   <update id="updateById">
-    update power_setting set isDelete = 1 where id = #{id,jdbcType=INTEGER}
+    update power_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
 <!--  按照搜索条件查询列表-->
   <select id="selectByOther" resultMap="BaseResultMap">
