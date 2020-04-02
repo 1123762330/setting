@@ -126,9 +126,8 @@ public class CustomerSettingController extends BaseController {
      * @return
      */
     @GetMapping("/selectUserList")
-    public ResponseResult selectUserList (HttpServletRequest request){
-        String token = writeLogUtil.getToken(request);
-        HashMap<Integer, String> userNameList = customerSettingService.selectUserList(token);
+    public ResponseResult selectUserList (){
+        HashMap<Integer, String> userNameList = customerSettingService.selectUserList();
         return new ResponseResult(SUCCESS,userNameList);
     }
 
@@ -140,9 +139,8 @@ public class CustomerSettingController extends BaseController {
      * @return
      */
     @GetMapping("/selectCustomerMap")
-    public ResponseResult selectCustomerMap (HttpServletRequest request){
-        String token = writeLogUtil.getToken(request);
-        HashMap<Integer, String> userNameList = customerSettingService.selectCustomerMap(token);
+    public ResponseResult selectCustomerMap (){
+        HashMap<Integer, String> userNameList = customerSettingService.selectCustomerMap();
         return new ResponseResult(SUCCESS,userNameList);
     }
 

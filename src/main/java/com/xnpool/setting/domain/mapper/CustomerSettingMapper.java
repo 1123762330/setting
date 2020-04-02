@@ -26,7 +26,7 @@ public interface CustomerSettingMapper {
 
     void updateAttestationById(@Param("list") List<String> list, @Param("isPass") int isPass);
 
-    List<HashMap> selectUserList(@Param("tenantId")Long tenantId);
+    List<HashMap> selectUserList();
 
     List<HashMap> selectUserMap();
 

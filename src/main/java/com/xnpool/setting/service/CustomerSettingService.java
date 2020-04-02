@@ -32,9 +32,9 @@ public interface CustomerSettingService {
 
     void updateAttestationById(String cusId, int isPass);
 
-    HashMap<Integer, String> selectUserList(String token);
+    HashMap<Integer, String> selectUserList();
 
-    HashMap<Integer, String> selectCustomerMap(String token);
+    HashMap<Integer, String> selectCustomerMap();
 
     HashMap<Integer, String> selectAllUser();
 
