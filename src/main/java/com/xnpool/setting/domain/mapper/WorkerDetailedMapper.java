@@ -37,8 +37,7 @@ public interface WorkerDetailedMapper {
 
     int updateById(ArrayList<Integer> list);
 
-    List<WorkerDetailedModel> selectAllWorkerDetailed(@Param("workerName") String workerName,
-                                                      @Param("startIp") Long startIp,
+    List<WorkerDetailedModel> selectAllWorkerDetailed(@Param("startIp") Long startIp,
                                                       @Param("endIp") Long endIp,
                                                       @Param("userId") Integer userId,
                                                       @Param("tenantId")Long  tenantId);

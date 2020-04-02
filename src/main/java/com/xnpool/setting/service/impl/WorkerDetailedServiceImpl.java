@@ -393,7 +393,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         Integer userId = getUserId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(workerName, startIpToLong, endIpToLong, userId, tenantId);
+        List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(startIpToLong, endIpToLong, userId, tenantId);
         System.out.println("用户网站的矿机详情列表:" + workerDetailedModels);
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
@@ -428,6 +428,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             filterList = getFilterList(workerName, startIp, endIp, filterList);
         } else {
             //在全部列表过滤三个条件
+            System.out.println("传进来的:"+filterList);
             filterList = getFilterList(workerName, startIp, endIp, filterList);
         }
         PageInfo<WorkerDetailedModel> pageInfo = new PageInfo<>(filterList);
@@ -437,23 +438,23 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     //用户网站矿机详情条件过滤
     private List<WorkerDetailedModel> getFilterList(String workerName, String startIp, String endIp, List<WorkerDetailedModel> filterList) {
         if (!StringUtils.isEmpty(workerName)) {
-            filterList = filterList.stream().filter(a -> a.getWorkerName().equals(workerName)).collect(Collectors.toList());
-            if (!StringUtils.isEmpty(startIp)) {
-                filterList = filterList.stream().filter(a -> a.getIp().contains(startIp)).collect(Collectors.toList());
-            }
-            if (!StringUtils.isEmpty(endIp)) {
-                filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
-            }
+            filterList = filterList.stream().filter(a -> a.getWorkerName().contains(workerName)).collect(Collectors.toList());
+            //if (!StringUtils.isEmpty(startIp)) {
+            //    filterList = filterList.stream().filter(a -> a.getIp().contains(startIp)).collect(Collectors.toList());
+            //}
+            //if (!StringUtils.isEmpty(endIp)) {
+            //    filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
+            //}
         }
-        if (!StringUtils.isEmpty(startIp)) {
-            filterList = filterList.stream().filter(a -> a.getIp().contains(startIp)).collect(Collectors.toList());
-            if (!StringUtils.isEmpty(endIp)) {
-                filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
-            }
-        }
-        if (!StringUtils.isEmpty(endIp)) {
-            filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
-        }
+        //if (!StringUtils.isEmpty(startIp)) {
+        //    filterList = filterList.stream().filter(a -> a.getIp().contains(startIp)).collect(Collectors.toList());
+        //    if (!StringUtils.isEmpty(endIp)) {
+        //        filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
+        //    }
+        //}
+        //if (!StringUtils.isEmpty(endIp)) {
+        //    filterList = filterList.stream().filter(a -> a.getIp().contains(endIp)).collect(Collectors.toList());
+        //}
         return filterList;
     }
 
@@ -516,7 +517,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         List<GroupModel> filterList = resultList;
         //过滤矿机名
         if (!StringUtils.isEmpty(groupName)) {
-            filterList = filterList.stream().filter(a -> a.getGroupName().equals(groupName)).collect(Collectors.toList());
+            filterList = filterList.stream().filter(a -> a.getGroupName().contains(groupName)).collect(Collectors.toList());
             if (!StringUtils.isEmpty(startIp)) {
                 filterList = filterList.stream().filter(a -> a.getIpQuJian().contains(startIp)).collect(Collectors.toList());
                 if (!StringUtils.isEmpty(endIp)) {

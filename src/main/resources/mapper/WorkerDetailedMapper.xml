@@ -329,9 +329,6 @@
             <if test="endIp != null">
                 AND worker_info.ip_long &lt; #{endIp}
             </if>
-            <if test="workerName != null">
-            AND worker_info.worker1=#{workerName}
-            </if>
             AND worker_detailed.worker_id = worker_info.id
             AND worker_info.tenant_id=#{tenantId}
             AND worker_detailed.group_id=group_setting.id
