@@ -1,5 +1,6 @@
 package com.xnpool.setting.domain.mapper;
 
+import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.IpSetting;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public interface IpSettingMapper {
 
     //开启这个注解,就相当于这个方法不增加多租户信息
     //@SqlParser(filter = true)
-    List<IpSetting> selectByOther(@Param("keyWord") String keyWord);
+    List<IpSettingExample> selectByOther(@Param("keyWord") String keyWord);
 
     Integer selectMineId(@Param("id")Integer id);
     List<String> selectNameList(@Param("id")Integer id);

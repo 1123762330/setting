@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.redismodel.IpSettingRedisModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,19 +92,19 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     }
 
     @Override
-    public PageInfo<IpSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<IpSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<IpSetting> ipSettings = ipSettingMapper.selectByOther(keyWord);
-        PageInfo<IpSetting> pageInfo = new PageInfo<>(ipSettings);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(keyWord);
+        PageInfo<IpSettingExample> pageInfo = new PageInfo<>(ipSettings);
         return pageInfo;
     }
 
     @Override
     public HashMap<Integer, String> selectByIPStart() {
-        List<IpSetting> ipSettings = ipSettingMapper.selectByOther(null);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null);
         if (ipSettings != null) {
             HashMap<Integer, String> resultMap = new HashMap<>();
             ipSettings.forEach(ipSetting -> {
@@ -120,7 +121,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     }
 
     public HashMap<String, String> selectIpQuJian() {
-        List<IpSetting> ipSettings = ipSettingMapper.selectByOther(null);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null);
         if (ipSettings != null) {
             HashMap<String, String> resultMap = new HashMap<>();
             ipSettings.forEach(ipSetting -> {

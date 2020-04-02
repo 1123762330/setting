@@ -7,6 +7,7 @@ import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.service.IpSettingService;
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +82,7 @@ public class IpSettingController extends BaseController {
     @GetMapping("/selectIpList")
     public ResponseResult selectIPList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<IpSetting> ipSettingPageInfo = ipSettingService.selectByOther(keyWord, pageNum, pageSize);
+        PageInfo<IpSettingExample> ipSettingPageInfo = ipSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, ipSettingPageInfo);
     }
 

@@ -1,6 +1,7 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.IpSetting;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public interface IpSettingService {
 
     void updateById(int id);
 
-    PageInfo<IpSetting> selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<IpSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
     HashMap<Integer, String> selectByIPStart();
 
