@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -35,6 +36,10 @@ public class PowerSettingServiceImpl implements PowerSettingService {
 
     @Override
     public int insertSelective(PowerSetting record) {
+        List<String> list = powerSettingMapper.selectNameList(record.getId());
+        if (list.contains(record.getDescription())) {
+            throw new InsertException("数据已存在,请勿重复添加!");
+        }
         return powerSettingMapper.insertSelective(record);
     }
 
@@ -45,6 +50,10 @@ public class PowerSettingServiceImpl implements PowerSettingService {
 
     @Override
     public int updateByPrimaryKeySelective(PowerSetting record) {
+        List<String> list = powerSettingMapper.selectNameList(record.getId());
+        if (list.contains(record.getDescription())) {
+            throw new InsertException("数据已存在,请勿重复添加!");
+        }
         return powerSettingMapper.updateByPrimaryKeySelective(record);
     }
 

@@ -138,4 +138,11 @@
   <select id="selectAgreementMap" resultType="java.util.HashMap">
     select id,agreement_name FROM agreement_setting where  is_delete=0
   </select>
+
+  <select id="selectNameList" resultType="string">
+    select agreement_name FROM agreement_setting where  is_delete=0
+    <if test="id != null">
+      AND id!=#{id}
+    </if>
+  </select>
 </mapper>

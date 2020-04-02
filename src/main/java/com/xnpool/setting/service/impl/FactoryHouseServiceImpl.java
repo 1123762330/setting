@@ -2,20 +2,21 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.domain.redismodel.FactoryHouseRedisModel;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
 import com.xnpool.setting.service.FactoryHouseService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zly
@@ -41,6 +42,11 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(FactoryHouse record) {
+        List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
+        if (list.contains(record.getFactoryName())) {
+            throw new InsertException("数据已存在,请勿重复添加!");
+        }
+
         int rows = factoryHouseMapper.insertSelective(record);
         record.setCreateTime(new Date());
         FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
@@ -55,6 +61,10 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(FactoryHouse record) {
+        List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
+        if (list.contains(record.getFactoryName())) {
+            throw new InsertException("数据已存在,请勿重复添加!");
+        }
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
         FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);

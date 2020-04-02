@@ -27,4 +27,5 @@ public interface IpSettingMapper {
     List<IpSetting> selectByOther(@Param("keyWord") String keyWord);
 
     Integer selectMineId(@Param("id")Integer id);
+    List<String> selectNameList(@Param("id")Integer id);
 }

@@ -106,7 +106,7 @@ public class MineSettingController extends BaseController{
      */
     @GetMapping("/selectMineName")
     public ResponseResult selectMineSetting() {
-        HashMap<Integer, String> resultMap = mineSettingService.selectPoolNameByOther();
+        HashMap<Integer, String> resultMap = mineSettingService.selectMineNameByOther();
         return new ResponseResult(SUCCESS, resultMap);
     }
 

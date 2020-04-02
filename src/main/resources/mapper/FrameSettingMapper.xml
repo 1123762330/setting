@@ -201,4 +201,11 @@
   <select id="selectMineId" resultType="integer">
     select mine_id FROM frame_setting where id=#{id}
   </select>
+
+  <select id="selectFrameNameList" resultType="string">
+    select frame_name FROM frame_setting where factory_id=#{factoryId} AND is_delete=0
+    <if test="id != null">
+      AND id!=#{id}
+    </if>
+  </select>
 </mapper>

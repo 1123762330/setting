@@ -211,4 +211,11 @@
     <select id="selectMineId" resultType="integer">
         select mine_id FROM group_setting where id=#{id}
     </select>
+
+    <select id="selectGroupNameList" resultType="string">
+        select group_name FROM group_setting  where is_delete=0
+        <if test="id != null">
+            AND id!=#{id}
+        </if>
+    </select>
 </mapper>

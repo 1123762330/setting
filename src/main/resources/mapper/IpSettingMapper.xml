@@ -124,19 +124,32 @@
   </update>
 
 <!--  根据条件查询列表-->
-  <select id="selectByOther" resultMap="BaseResultMap">
+  <select id="selectByOther" resultType="com.xnpool.setting.domain.model.IpSettingExample">
     select
-    <include refid="Base_Column_List" />
-    from ip_setting
+    ip_setting.id,
+    ip_setting.start_ip,
+    ip_setting.end_ip,
+    ip_setting.mine_id,
+    mine_setting.mine_name
+    from ip_setting,
+    mine_setting
     <where>
-      is_delete = 0
+      ip_setting.is_delete = 0
+      AND ip_setting.mine_id = mine_setting.id
       <if test="keyWord != null">
-        AND (start_ip like #{keyWord} or end_ip like #{keyWord})
+        AND (ip_setting.start_ip like #{keyWord} or ip_setting.end_ip like #{keyWord})
       </if>
     </where>
   </select>
 
   <select id="selectMineId" resultType="integer">
     select mine_id FROM ip_setting where id=#{id}
+  </select>
+
+  <select id="selectNameList" resultType="string">
+    select start_ip FROM ip_setting where  is_delete=0
+    <if test="id != null">
+      AND id!=#{id}
+    </if>
   </select>
 </mapper>

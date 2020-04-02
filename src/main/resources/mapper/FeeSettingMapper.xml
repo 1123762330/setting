@@ -122,4 +122,11 @@
       </if>
     </where>
   </select>
+
+  <select id="selectFeeNameList" resultType="string">
+    select fee_name FROM fee_setting  where is_delete=0
+    <if test="id != null">
+      AND id!=#{id}
+    </if>
+  </select>
 </mapper>

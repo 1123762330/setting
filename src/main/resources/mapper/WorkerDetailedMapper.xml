@@ -367,6 +367,7 @@
             user_id = #{userId},
             workerbrand_id = #{workerbrandId},
             worker_ip = #{workerIp},
+            group_id =#{groupId},
             is_come_in=1
             where id=#{id}
     </update>

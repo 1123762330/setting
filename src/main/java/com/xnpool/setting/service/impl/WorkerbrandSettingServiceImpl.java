@@ -69,8 +69,8 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
         List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(null);
         workerbrandSettingList.forEach(workerbrandSetting -> {
             String brandName = workerbrandSetting.getBrandName();
-            String difficulty = workerbrandSetting.getDifficulty();
-            String workerBrand = brandName + " " + difficulty;
+            String workerType = workerbrandSetting.getWorkerType();
+            String workerBrand = brandName + " " + workerType;
             Integer id = workerbrandSetting.getId();
             workerbrandMap.put(id, workerBrand);
         });

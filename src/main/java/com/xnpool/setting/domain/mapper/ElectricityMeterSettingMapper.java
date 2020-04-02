@@ -23,4 +23,6 @@ public interface ElectricityMeterSettingMapper {
     void updateById(int id);
 
     List<ElectricityMeterSettingExample> selectByOther(@Param("keyWord") String keyWord);
+
+    List<String> selectNameList(@Param("id") Integer id);
 }

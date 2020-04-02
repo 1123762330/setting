@@ -28,7 +28,7 @@ public interface MineSettingService {
 
     void updateById(int id);
 
-    HashMap<Integer, String> selectPoolNameByOther();
+    HashMap<Integer, String> selectMineNameByOther();
 
     PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 

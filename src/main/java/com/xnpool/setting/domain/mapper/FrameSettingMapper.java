@@ -28,4 +28,6 @@ public interface FrameSettingMapper {
 
     List<HashMap> selectMineFactoryAndFrame(@Param("factoryId")Integer factoryId);
     Integer selectMineId(@Param("id")Integer id);
+
+    List<String> selectFrameNameList(@Param("factoryId")Integer factoryId,@Param("id")Integer id);
 }

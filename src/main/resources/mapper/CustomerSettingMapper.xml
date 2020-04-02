@@ -255,6 +255,7 @@
             sys_tenant
         WHERE
             user_id = #{userId}
+            AND customer_setting.is_delete=0
             AND customer_setting.tenant_id = sys_tenant.id
             AND authentication !=2
         GROUP BY

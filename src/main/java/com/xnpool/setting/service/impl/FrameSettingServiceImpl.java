@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
 import com.xnpool.setting.domain.model.FrameSettingExample;
@@ -10,7 +11,9 @@ import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
 import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
 import com.xnpool.setting.domain.pojo.FrameSetting;
 import com.xnpool.setting.service.FrameSettingService;
@@ -50,6 +53,10 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(FrameSetting record) {
+        List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
+        if (frameNameList.contains(record.getFrameName())) {
+            throw new InsertException("数据已存在,请重试!");
+        }
         String framename = record.getFrameName();
         Integer number = record.getNumber();
         String detailed = framename + " 1-" + number + "层";
@@ -105,6 +112,11 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(FrameSetting record) {
+        List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
+        if (frameNameList.contains(record.getFrameName())) {
+            throw new InsertException("数据已存在,请重试!");
+        }
+
         String framename = record.getFrameName();
         Integer number = record.getNumber();
         String detailed = framename + " 1-" + number + "层";
@@ -193,7 +205,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             String factoryName = String.valueOf(hashMap.get("factory_name"));
             String mineName = String.valueOf(hashMap.get("mine_name"));
             StringBuffer nameBuffer = new StringBuffer(frameName).append("-").append(factoryName).append("-").append(mineName);
-            frameMap.put(frameId,nameBuffer.toString());
+            frameMap.put(frameId, nameBuffer.toString());
         }
         return frameMap;
     }

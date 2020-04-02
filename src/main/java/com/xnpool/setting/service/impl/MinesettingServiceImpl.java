@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.redismodel.MineSettingRedisModel;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import com.xnpool.setting.service.MineSettingService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +47,15 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(MineSetting record) {
+        List<String> list = minesettingMapper.selectMineNameList(record.getId());
+        if (list.contains(record.getMineName())) {
+            throw new InsertException("矿场名重复,请勿重复添加!");
+        }
         int rows = minesettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
         MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
-        redisToInsert(rows,"mine_setting",mineSettingRedisModel,record.getId());
+        redisToInsert(rows, "mine_setting", mineSettingRedisModel, record.getId());
+
     }
 
     @Override
@@ -59,10 +66,16 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(MineSetting record) {
+        List<String> list = minesettingMapper.selectMineNameList(record.getId());
+        if (list.contains(record.getMineName())) {
+            throw new InsertException("矿场名重复,请勿重复添加!");
+        }
+
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
         MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
-        redisToUpdate(rows,"mine_setting",mineSettingRedisModel,record.getId());
+        redisToUpdate(rows, "mine_setting", mineSettingRedisModel, record.getId());
+
     }
 
     @Override
@@ -78,11 +91,11 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         record.setUpdateTime(new Date());
         record.setId(id);
         MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
-        redisToDelete(rows,"mine_setting",mineSettingRedisModel,record.getId());
+        redisToDelete(rows, "mine_setting", mineSettingRedisModel, record.getId());
     }
 
     @Override
-    public HashMap<Integer, String> selectPoolNameByOther() {
+    public HashMap<Integer, String> selectMineNameByOther() {
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(null);
         HashMap<Integer, String> resultMap = new HashMap<>();
         mineSettingList.forEach(mineSetting -> {
@@ -103,7 +116,6 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         PageInfo<MineSetting> pageInfo = new PageInfo<>(mineSettingList);
         return pageInfo;
     }
-
 
 
 }

@@ -25,4 +25,6 @@ public interface AgreementSettingMapper {
     List<AgreementSetting> selectByOther(@Param("keyWord") String keyWord);
 
     List<HashMap> selectAgreementMap();
+
+    List<String> selectNameList(@Param("id") Integer id);
 }

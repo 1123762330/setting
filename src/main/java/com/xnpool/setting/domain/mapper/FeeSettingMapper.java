@@ -20,7 +20,9 @@ public interface FeeSettingMapper {
 
     int updateByPrimaryKey(FeeSetting record);
 
+    List<FeeSetting> selectByOther(@Param("keyWord") String keyWord);
+
     int updateById(int id);
 
-    List<FeeSetting> selectByOther(@Param("keyWord") String keyWord);
+    List<String> selectFeeNameList(@Param("id") Integer id);
 }

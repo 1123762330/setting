@@ -3,6 +3,7 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DeleteException;
+import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
@@ -56,6 +57,10 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(GroupSetting record) {
+        List<String> list = groupSettingMapper.selectGroupNameList(record.getId());
+        if (list.contains(record.getGroupName())) {
+            throw new InsertException("矿场名重复,请勿重复添加!");
+        }
         int rows = groupSettingMapper.insertSelective(record);
         record.setCreateTime(new Date());
         GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
@@ -70,6 +75,10 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(GroupSetting record) {
+        List<String> list = groupSettingMapper.selectGroupNameList(record.getId());
+        if (list.contains(record.getGroupName())) {
+            throw new InsertException("矿场名重复,请勿重复添加!");
+        }
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
         record.setUpdateTime(new Date());
         GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);

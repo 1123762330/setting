@@ -189,4 +189,11 @@
         AND customer_setting.user_id= sys_user.id
       </where>
     </select>
+
+  <select id="selectNameList" resultType="string">
+    select electricity_meter_name FROM electricity_meter_setting where  is_delete=0
+    <if test="id != null">
+      AND id!=#{id}
+    </if>
+  </select>
 </mapper>

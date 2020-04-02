@@ -123,4 +123,10 @@
     </where>
   </select>
 
+  <select id="selectMineNameList" resultType="string">
+    select mine_name FROM mine_setting where  is_delete=0
+    <if test="id != null">
+      AND id!=#{id}
+    </if>
+  </select>
 </mapper>

@@ -31,4 +31,6 @@ public interface GroupSettingMapper {
 
     List<HashMap> selectGroupAndIp();
     Integer selectMineId(@Param("id") Integer id);
+
+    List<String> selectGroupNameList(@Param("id") Integer id);
 }

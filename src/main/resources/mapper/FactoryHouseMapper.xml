@@ -161,4 +161,11 @@
   <select id="selectMineId" resultType="integer">
     select mine_id FROM factory_house where id=#{id}
   </select>
+
+  <select id="selectFactoryNameList" resultType="string">
+    select factory_name FROM factory_house where mine_id=#{mineId} AND is_delete=0
+    <if test="id != null">
+      AND id!=#{mineId}
+    </if>
+  </select>
 </mapper>

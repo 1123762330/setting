@@ -40,4 +40,12 @@
   <update id="deleteByAlgorithmId">
     update algorithm set is_delete = 1 where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--查询算法集合-->
+  <select id="selectAlgorithmName"  resultType="string">
+    <!--@mbg.generated-->
+    select algorithm_name
+    from algorithm
+    where is_delete=0
+  </select>
 </mapper>
