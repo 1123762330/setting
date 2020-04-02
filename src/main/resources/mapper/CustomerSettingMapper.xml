@@ -233,6 +233,7 @@
       WHERE
           customer_setting.is_delete = 0
           AND customer_setting.user_id = sys_user.id
+          AND sys_user.tenant_id=#{tenantId}
     </select>
 
     <select id="selectUserMap" resultType="java.util.HashMap">

@@ -91,9 +91,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        Long tenandId = getTenandId(token);
+        Long tenantId = getTenantId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord,tenandId);
+        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord,tenantId);
         System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
         WorkerDetailedExampleList.forEach(workerDetailedExample -> {
             String workerName = workerDetailedExample.getWorkerName();

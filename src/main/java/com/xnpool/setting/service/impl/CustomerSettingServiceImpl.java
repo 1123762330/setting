@@ -204,9 +204,10 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public HashMap<Integer, String> selectUserList() {
+    public HashMap<Integer, String> selectUserList(String token) {
+        Long tenantId = getTenantId(token);
         HashMap<Integer, String> resultMap = new HashMap<>();
-        List<HashMap> hashMapList = customerSettingMapper.selectUserList();
+        List<HashMap> hashMapList = customerSettingMapper.selectUserList(tenantId);
         hashMapList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
             String username = hashMap.get("username").toString();
@@ -216,9 +217,10 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public HashMap<Integer, String> selectCustomerMap() {
+    public HashMap<Integer, String> selectCustomerMap(String token) {
+        Long tenantId = getTenantId(token);
         HashMap<Integer, String> resultMap = new HashMap<>();
-        List<HashMap> hashMapList = customerSettingMapper.selectUserList();
+        List<HashMap> hashMapList = customerSettingMapper.selectUserList(tenantId);
         hashMapList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("customerId").toString());
             String username = hashMap.get("username").toString();

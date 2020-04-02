@@ -240,7 +240,7 @@
                 AND (group_name like #{keyWord})
             </if>
             AND worker_detailed.worker_id = worker_info.id
-            AND worker_info.tenant_id=#{tenandId}
+            AND worker_info.tenant_id=#{tenantId}
             AND worker_detailed.factory_id = factory_house.id
             AND worker_detailed.frame_id = frame_setting.id
             AND worker_detailed.group_id = group_setting.id

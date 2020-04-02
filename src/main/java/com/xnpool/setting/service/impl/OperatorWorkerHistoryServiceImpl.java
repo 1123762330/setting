@@ -76,9 +76,9 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        Long tenandId = getTenandId(token);
+        Long tenantId = getTenantId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<OperatorWorkerHistoryExample> operatorWorkerHistoryExamples = operatorWorkerHistoryMapper.selectWorkerHistoryList(startTime, endTime, keyWord,tenandId);
+        List<OperatorWorkerHistoryExample> operatorWorkerHistoryExamples = operatorWorkerHistoryMapper.selectWorkerHistoryList(startTime, endTime, keyWord,tenantId);
         for (OperatorWorkerHistoryExample operatorWorkerHistoryExample : operatorWorkerHistoryExamples) {
             SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//转换年月日
             try {

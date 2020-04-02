@@ -577,7 +577,7 @@ public abstract class BaseController {
 	 * @Param
 	 * @return
 	 */
-	public Long getTenandId(String token){
+	public Long getTenantId(String token){
 		Long tenant_id=-1L;
 		Map<String, String> verify = JwtUtil.verify(token);
 		if(verify!=null){
