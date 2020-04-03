@@ -24,7 +24,7 @@ public interface WorkerInfoService {
 
     int updateByPrimaryKey(WorkerInfo record);
 
-    HashMap<Integer, String> selectWorkerList(String keyWord);
+    HashMap<Integer, String> selectWorkerList();
 }
 
 

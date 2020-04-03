@@ -28,9 +28,8 @@ public class WorkerInfoController extends BaseController {
 
     @SystemLog(value = "查询矿机列表",type = LogType.MINE)
     @GetMapping("/selectWorkerList")
-    public ResponseResult selectWorkerList(String keyWord, @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        HashMap<Integer, String> workerList = workerInfoService.selectWorkerList(keyWord);
+    public ResponseResult selectWorkerList() {
+        HashMap<Integer, String> workerList = workerInfoService.selectWorkerList();
         return new ResponseResult(SUCCESS,workerList);
     }
 }

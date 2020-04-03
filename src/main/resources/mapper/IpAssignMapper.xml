@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.IpAssignMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.IpAssign">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="mine_id" property="mineId" />
+        <result column="ip_id" property="ipId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, mine_id, ip_id, create_time, update_time
+    </sql>
+
+    <!--批量保存-->
+    <insert id="batchInsert" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into ip_assign (user_id, mine_id,ip_id)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.user_id},#{item.mine_id},#{item.ip_id})
+        </foreach>
+    </insert>
+
+</mapper>

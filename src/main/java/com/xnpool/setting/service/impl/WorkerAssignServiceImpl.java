@@ -5,7 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.IpAssignMapper;
 import com.xnpool.setting.domain.pojo.MineFactoryAndFraneId;
+import com.xnpool.setting.domain.pojo.MineIdAndIP;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author  zly
@@ -30,6 +33,9 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Resource
     private WorkerAssignMapper workerAssignMapper;
+
+    @Autowired
+    private IpAssignMapper ipAssignMapper;
 
     @Autowired
     private FrameSettingService frameSettingService;
@@ -96,7 +102,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addAssignWorker(String ids,String token) {
+    public void addAssignWorker(String ids,String ipId,String token) {
         HashMap<Integer, List<MineFactoryAndFraneId>> resultMap = new HashMap<>();
         ArrayList<MineFactoryAndFraneId> list = new ArrayList<>();
         Integer userId = getUserId(token);
@@ -192,9 +198,36 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         }
         //执行保存功能
         int rows = workerAssignMapper.batchInsert(list);
-        //同步入缓存
+
+        HashMap<Integer, ArrayList<MineIdAndIP>> resultMap2 = new HashMap<>();
+        //执行ip区间分配
+        ArrayList<MineIdAndIP> ip_list = new ArrayList<>();
+        if (ipId.contains(",")){
+            String[] split = ipId.split(",");
+            for (String ip_id : split) {
+                String[] split2 = ip_id.split("-");
+                Integer mineId = Integer.valueOf(split2[0]);
+                Integer ip_id2 = Integer.valueOf(split2[1]);
+                MineIdAndIP mineIdAndIP = new MineIdAndIP(userId,mineId,ip_id2);
+                ip_list.add(mineIdAndIP);
+            }
+        }else {
+            String[] split = ipId.split("-");
+            Integer mineId = Integer.valueOf(split[0]);
+            Integer ip_id = Integer.valueOf(split[1]);
+            MineIdAndIP mineIdAndIP = new MineIdAndIP(userId,mineId,ip_id);
+            ip_list.add(mineIdAndIP);
+        }
+        //执行入IP权限表
+        Integer rows2 = ipAssignMapper.batchInsert(ip_list);
+        Map<Integer, List<MineIdAndIP>> groupByMineId = ip_list.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
+        //矿机架权限分配同步入缓存
         for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : resultMap.entrySet()) {
             redisToBatchInsert(rows, "worker_assign", list, entry.getKey());
+        }
+        //ip区间权限分配同步入缓存
+        for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
+            redisToBatchInsert(rows2, "ip_assign", list, entry.getKey());
         }
     }
 

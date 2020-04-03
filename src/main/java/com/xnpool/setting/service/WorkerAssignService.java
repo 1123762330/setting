@@ -29,7 +29,7 @@ public interface WorkerAssignService {
 
     PageInfo<UserRoleVO> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    void addAssignWorker(String ids,String token);
+    void addAssignWorker(String ids,String ipId,String token);
 
     List<Integer> selectWorkerAssign();
 }

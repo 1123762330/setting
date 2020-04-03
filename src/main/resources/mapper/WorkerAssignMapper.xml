@@ -144,7 +144,7 @@
         insert into worker_assign (user_id, mine_id,factory_id, frame_id)
         values
         <foreach collection="list" index="index" item="item" separator=",">
-            (#{item.userId},#{item.mineId},#{item.factoryId},#{item.frameId})
+            (#{item.user_id},#{item.mine_id},#{item.factory_id},#{item.frame_id})
         </foreach>
     </insert>
 

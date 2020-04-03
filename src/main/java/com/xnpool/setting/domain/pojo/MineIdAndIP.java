@@ -9,17 +9,14 @@ import java.io.Serializable;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/6 16:59
+ * @date 2020/4/2 19:09
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MineFactoryAndFraneId implements Serializable {
-
-    private static final long serialVersionUID = -5349428779634465856L;
-
+public class MineIdAndIP implements Serializable {
+    private static final long serialVersionUID = 126263305631309203L;
     private Integer user_id;
     private Integer mine_id;
-    private Integer factory_id;
-    private Integer frame_id;
+    private Integer ip_id;
 }

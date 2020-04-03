@@ -63,7 +63,7 @@ public class WorkerInfoServiceImpl implements WorkerInfoService {
      * @Param
      */
     @Override
-    public HashMap<Integer, String> selectWorkerList(String keyWord) {
+    public HashMap<Integer, String> selectWorkerList() {
         List<WorkerInfo> workers = workerInfoMapper.selectByOther(null,null,null);
         //已经入库的矿机Id
         List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
@@ -73,7 +73,7 @@ public class WorkerInfoServiceImpl implements WorkerInfoService {
             if (!comeInlist.contains(id)){
                 String workername = worker.getWorker1();
                 String workerip = worker.getIp();
-                String workernames = workername + " " + workerip;
+                String workernames =  workerip+ " " + workername;
                 resultMap.put(id, workernames);
             }
 
