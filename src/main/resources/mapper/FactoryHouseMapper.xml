@@ -168,4 +168,15 @@
       AND id!=#{mineId}
     </if>
   </select>
+
+    <select id="equalsFactoryName" resultType="java.lang.Integer">
+      SELECT
+          id
+      FROM
+          factory_house
+      WHERE
+          is_delete = 0
+          AND mine_id = #{mineId}
+          AND factory_name = #{factoryName}
+    </select>
 </mapper>

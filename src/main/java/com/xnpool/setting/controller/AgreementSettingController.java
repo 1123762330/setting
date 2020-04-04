@@ -11,6 +11,7 @@ import com.xnpool.setting.utils.UploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,7 +43,7 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:48 2020/2/7
      * @Param
      */
-    //@SystemLog(value = "添加协议",type = LogType.SYSTEM)
+    @SystemLog(value = "添加协议",type = LogType.SYSTEM)
     @PostMapping("/addAgreement")
     public ResponseResult addAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
         //上传文件到服务器上
@@ -70,18 +71,23 @@ public class AgreementSettingController extends BaseController {
      * @Date 9:49 2020/2/7
      * @Param
      */
-    @SystemLog(value = "修改协议", type = LogType.SYSTEM)
+    //@SystemLog(value = "修改协议", type = LogType.SYSTEM)
     @PutMapping("/updateAgreement")
-    public ResponseResult updateAgreement(AgreementSetting agreementSetting, @RequestParam("file") MultipartFile file) {
+    public ResponseResult updateAgreement(AgreementSetting agreementSetting, @RequestParam(value = "file", required = false) MultipartFile file) {
         //上传文件到服务器上
-        long time = System.currentTimeMillis() / 1000;
-        String originalFilename = time + "-" + file.getOriginalFilename();
-        ResponseResult result = UploadUtils.getFileToUpload(file, filePath, originalFilename);
-        if (result != null) return result;
-        //添加记录到数据库
-        agreementSetting.setPath(prifix + file.getOriginalFilename());
-        agreementSetting.setFileName(originalFilename);
-        agreementSettingService.updateByPrimaryKeySelective(agreementSetting);
+        if (file!=null&&!file.isEmpty()){
+            long time = System.currentTimeMillis() / 1000;
+            String originalFilename = time + "-" + file.getOriginalFilename();
+            ResponseResult result = UploadUtils.getFileToUpload(file, filePath, originalFilename);
+            if (result != null) return result;
+            //添加记录到数据库
+            agreementSetting.setPath(prifix + file.getOriginalFilename());
+            agreementSetting.setFileName(originalFilename);
+            agreementSettingService.updateByPrimaryKeySelective(agreementSetting);
+        }else {
+            agreementSettingService.updateByPrimaryKeySelective(agreementSetting);
+        }
+
         return new ResponseResult(SUCCESS);
 
     }

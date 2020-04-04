@@ -30,4 +30,6 @@ public interface FactoryHouseMapper {
 
     Integer selectMineId(@Param("id") Integer id);
     List<String> selectFactoryNameList(@Param("mineId") Integer mineId,@Param("id") Integer id);
+
+    Integer equalsFactoryName(@Param("factoryName")String factoryStr, @Param("mineId")Integer mineId);
 }

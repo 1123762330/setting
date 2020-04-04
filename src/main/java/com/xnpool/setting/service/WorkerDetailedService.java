@@ -45,6 +45,8 @@ public interface WorkerDetailedService {
     HashMap<String, Object> selectGroupModel(String groupName,String startIp, String endIp,String token, Integer pageNum, Integer pageSize,Long tenantId);
 
     HashMap<Integer, String> selectNullFrame(Integer frameId);
+
+    void batchIntoFrame(String token);
 }
 
 

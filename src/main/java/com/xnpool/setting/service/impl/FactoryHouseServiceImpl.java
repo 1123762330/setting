@@ -42,7 +42,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSelective(FactoryHouse record) {
+    public Integer insertSelective(FactoryHouse record) {
         List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
         if (list.contains(record.getFactoryName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
@@ -52,6 +52,7 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
         record.setCreateTime(new Date());
         FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
         redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
+        return rows;
     }
 
     @Override
@@ -119,6 +120,27 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
             });
             return resultMap;
         }
+    }
+
+    @Override
+    public HashMap<String, Integer> selectMapByFactoryName(Integer mineId) {
+        List<HashMap> hashMaps = factoryHouseMapper.selectFactoryNameByMineId(mineId);
+        if (hashMaps.isEmpty()) {
+            return null;
+        } else {
+            HashMap<String, Integer> resultMap = new HashMap<>();
+            hashMaps.forEach(hashMap -> {
+                Integer id = Integer.valueOf(hashMap.get("id").toString());
+                String factoryName = hashMap.get("factory_name").toString();
+                resultMap.put(factoryName,id);
+            });
+            return resultMap;
+        }
+    }
+
+    @Override
+    public Integer equalsFactoryName(String factoryStr, Integer mineId) {
+        return factoryHouseMapper.equalsFactoryName(factoryStr,mineId);
     }
 
 }

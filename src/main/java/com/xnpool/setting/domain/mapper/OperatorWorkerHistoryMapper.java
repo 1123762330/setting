@@ -22,7 +22,7 @@ public interface OperatorWorkerHistoryMapper {
 
     int updateMoveOutTimeById(@Param("list") List<Integer> list);
 
-    int insertTobatch(@Param("list") List<Integer> list, @Param("reason") String reason, @Param("mineId") Integer mineid, @Param("operatorId") Integer operatorId);
+    int insertTobatch( List<OperatorWorkerHistory> list);
 
     List<OperatorWorkerHistoryExample> selectWorkerHistoryList(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("keyWord") String keyword,@Param("tenantId")Long tenantId);
 }

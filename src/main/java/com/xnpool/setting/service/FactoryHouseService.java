@@ -19,7 +19,7 @@ public interface FactoryHouseService {
 
     int insert(FactoryHouse record);
 
-    void insertSelective(FactoryHouse record);
+    Integer insertSelective(FactoryHouse record);
 
     FactoryHouse selectByPrimaryKey(Integer id);
 
@@ -34,6 +34,10 @@ public interface FactoryHouseService {
     List<FactoryHouse> selectByMineId(Integer mineId);
 
     HashMap<Integer, String> selectFactoryNameByMineId(Integer mineId);
+
+    HashMap<String,Integer> selectMapByFactoryName(Integer mineId);
+
+    Integer equalsFactoryName(String factoryStr, Integer mineId);
 }
 
 

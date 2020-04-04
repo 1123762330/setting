@@ -208,4 +208,16 @@
       AND id!=#{id}
     </if>
   </select>
+
+    <select id="equalsFrameName" resultType="java.lang.Integer">
+      SELECT
+          id
+      FROM
+          frame_setting
+      WHERE
+          is_delete = 0
+          AND frame_name = #{frameName}
+          AND factory_id = #{factoryId}
+          AND mine_id = #{mineId}
+    </select>
 </mapper>

@@ -77,6 +77,18 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
         return workerbrandMap;
     }
 
+    @Override
+    public HashMap<String,Integer> selectMapByWorkerType() {
+        HashMap<String,Integer> workerbrandMap = new HashMap<>();
+        List<WorkerbrandSetting> workerbrandSettingList = workerbrandSettingMapper.selectByOther(null);
+        workerbrandSettingList.forEach(workerbrandSetting -> {
+            String workerType = workerbrandSetting.getWorkerType();
+            Integer id = workerbrandSetting.getId();
+            workerbrandMap.put(workerType, id);
+        });
+        return workerbrandMap;
+    }
+
 }
 
 

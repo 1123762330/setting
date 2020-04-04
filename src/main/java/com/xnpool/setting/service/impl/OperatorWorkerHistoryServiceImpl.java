@@ -67,11 +67,6 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
     }
 
     @Override
-    public int insertTobatch(List<Integer> list, String reason, Integer mineid, Integer operatorId) {
-        return operatorWorkerHistoryMapper.insertTobatch(list, reason, mineid, operatorId);
-    }
-
-    @Override
     public PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime, String endTime, String keyWord, int pageNum, int pageSize,String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";

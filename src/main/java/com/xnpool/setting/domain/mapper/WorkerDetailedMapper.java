@@ -1,7 +1,12 @@
 package com.xnpool.setting.domain.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xnpool.setting.domain.model.GroupModel;
-import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.model.WorkerDetailedExample;import com.xnpool.setting.domain.model.WorkerDetailedModel;import com.xnpool.setting.domain.pojo.WorkerMineVO;import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
+import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.model.WorkerDetailedExample;import com.xnpool.setting.domain.model.WorkerDetailedModel;
+import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
+import com.xnpool.setting.domain.pojo.WorkerMineVO;
+import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
+import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +15,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/3/12 12:02
  */
-public interface WorkerDetailedMapper {
+public interface WorkerDetailedMapper{
     int deleteByPrimaryKey(Integer id);
 
     int insert(WorkerDetailed record);
@@ -49,4 +54,8 @@ public interface WorkerDetailedMapper {
     List<Integer> selectIdByWorkerId(@Param("list") List<Integer> list);
 
     Integer selectMineId(@Param("id") Integer id);
+
+    int updateBatch(@Param("list")List<WorkerDetailed> list);
+
+    List<WorkerDetailed> selectModelToRedis(@Param("list")List<WorkerDetailed> list);
 }

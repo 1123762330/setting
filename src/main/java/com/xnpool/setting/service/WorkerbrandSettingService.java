@@ -28,6 +28,8 @@ public interface WorkerbrandSettingService {
     PageInfo<WorkerbrandSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 
     HashMap<Integer, String> selectWorkerbrandMap();
+
+    HashMap<String,Integer> selectMapByWorkerType();
 }
 
 

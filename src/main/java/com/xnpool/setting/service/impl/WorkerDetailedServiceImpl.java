@@ -1,29 +1,28 @@
 package com.xnpool.setting.service.impl;
 
+import java.util.Date;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.service.exception.UpdateException;
-import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.OperatorWorkerHistoryMapper;
 import com.xnpool.setting.domain.mapper.WorkerInfoMapper;
 import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.model.WorkerDetailedExample;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.model.WorkerExample;
 import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.domain.redismodel.OperatorWorkerHisRedisModel;
 import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
-import com.xnpool.setting.service.IpSettingService;
-import com.xnpool.setting.service.OperatorWorkerHistoryService;
+import com.xnpool.setting.service.*;
 import com.xnpool.setting.utils.PageUtil;
-import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
-import com.xnpool.setting.service.WorkerDetailedService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -55,6 +53,18 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
     @Autowired
     private OperatorWorkerHistoryService operatorWorkerHistoryService;
+
+    @Autowired
+    private WorkerbrandSettingService workerbrandSettingService;
+
+    @Autowired
+    private FactoryHouseService factoryHouseService;
+
+    @Autowired
+    private FrameSettingService frameSettingService;
+
+    @Autowired
+    private OperatorWorkerHistoryMapper operatorWorkerHistoryMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -148,10 +158,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer groupId = workerDetailedParam.getGroupId();
         String workerIp = workerDetailedParam.getWorkerIp();
         String remarks = workerDetailedParam.getRemarks();
-        List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(null);
+        List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(1);
         log.info("库中已经存在的矿机ID:" + workerIdList);
-        ArrayList<WorkerDetailed> list = new ArrayList<>();
-        ArrayList<WorkerDetailedRedisModel> redisModelList = new ArrayList<>();
+        ArrayList<OperatorWorkerHistory> operatorWorkerHisList = new ArrayList<>();
         WorkerDetailed workerDetailed = new WorkerDetailed();
         if (workerIdList.contains(workerIds)) {
             throw new InsertException("该矿机已经添加过!");
@@ -178,24 +187,29 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             workerDetailedRedisModel.setUpdate_time(sdf.format(new Date()));
             workerDetailedRedisModel.setWorker_ip(workerIp);
 
-            redisModelList.add(workerDetailedRedisModel);
+            OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory();
+            operatorWorkerHistory.setMineId(mineId);
+            operatorWorkerHistory.setWorkerId(Integer.valueOf(workerIds));
+            operatorWorkerHistory.setMoveOutTime(new Date());
+            operatorWorkerHistory.setComeInTime(new Date());
+            operatorWorkerHistory.setReason("");
+            operatorWorkerHistory.setOperatorId(operatorId);
+            operatorWorkerHisList.add(operatorWorkerHistory);
+
+            OperatorWorkerHisRedisModel operatorWorkerHisRedisModel = new OperatorWorkerHisRedisModel();
+            operatorWorkerHisRedisModel.setMine_id(mineId);
+            operatorWorkerHisRedisModel.setWorker_id(Integer.valueOf(workerIds));
+            operatorWorkerHisRedisModel.setMove_out_time(new Date());
+            operatorWorkerHisRedisModel.setCome_in_time(new Date());
+            operatorWorkerHisRedisModel.setReason("");
+            operatorWorkerHisRedisModel.setOperator_id(operatorId);
+            //批量入管理仓库
+            int rows = workerDetailedMapper.update(workerDetailed);
+            redisToInsert(rows, "worker_detailed", workerDetailedRedisModel, mineId);
+            //记录到操作历史表中
+            int rows2 = operatorWorkerHistoryMapper.insertTobatch(operatorWorkerHisList);
+            redisToInsert(rows2, "operator_worker_histkory", operatorWorkerHisRedisModel, mineId);
         }
-        //批量入管理仓库
-        int rows = workerDetailedMapper.update(workerDetailed);
-        //记录到操作历史表中
-        List<Integer> arrayList = new ArrayList<>();
-        arrayList.add(Integer.valueOf(workerIds));
-        String reason = "";
-        int rows2 = operatorWorkerHistoryService.insertTobatch(arrayList, reason, mineId, operatorId);
-        //出库数据同步到缓存里
-        HashMap<String, Object> operatorWorkerData = new HashMap<>();
-        operatorWorkerData.put("workerIdList", workerIdList);
-        operatorWorkerData.put("reason", reason);
-        operatorWorkerData.put("operatorId", userId);
-        //mineId = workerDetailedMapper.selectMineId(id);
-        redisToBatchInsert(rows2, "operator_worker_histkory", operatorWorkerData, mineId);
-        //批量入缓存
-        redisToBatchInsert(rows, "worker_detailed", redisModelList, mineId);
     }
 
     //入库列表
@@ -277,60 +291,21 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 Integer workerId = workerMineVO.getWorkerId();
                 workerIdList.add(workerId);
             }
-            int rows = operatorWorkerHistoryService.updateMoveOutTimeById(workerIdList);
-            if (rows != 0) {
+            int rows2 = operatorWorkerHistoryService.updateMoveOutTimeById(workerIdList);
+            if (rows2 != 0) {
                 //出库数据同步到缓存里
                 HashMap<String, Object> operatorWorkerData = new HashMap<>();
                 operatorWorkerData.put("workerIdList", workerIdList);
                 operatorWorkerData.put("reason", reason);
                 operatorWorkerData.put("operatorId", userId);
-                redisToBatchInsert(rows, "operator_worker_histkory", operatorWorkerData, entry.getKey());
-                batchMoveOut(rows, "worker_detailed", workerIdList, entry.getKey());
+                redisToBatchInsert(rows2, "operator_worker_histkory", operatorWorkerData, entry.getKey());
+                batchMoveOut(rows2, "worker_detailed", workerIdList, entry.getKey());
             } else {
                 throw new UpdateException("该矿机还未上架,无法进行下架操作");
             }
 
         }
     }
-
-    //入库操作
-    //@Override
-    //@Transactional(rollbackFor = Exception.class)
-    //public void updateComeInByid(String ids) {
-    //    ArrayList<Integer> list = new ArrayList<>();
-    //    if (ids.contains(",")) {
-    //        //全部入库
-    //        String[] split = ids.split(",");
-    //        for (int i = 0; i < split.length; i++) {
-    //            list.add(Integer.valueOf(split[i]));
-    //        }
-    //    } else {
-    //        //单个入库
-    //        list.add(Integer.valueOf(ids));
-    //    }
-    //    int rows = workerDetailedMapper.updateComeInByid(list);
-    //    //修改记录表里的出库时间
-    //    int rows2 = operatorWorkerHistoryService.updateMoveOutTimeById(list);
-    //    if (rows == 0 || rows2 == 0) {
-    //        throw new InsertException("矿机入库失败");
-    //    }
-    //    //根据批量更新的id去库里面查询矿场id
-    //    List<WorkerMineVO> workerMineVOS = workerDetailedMapper.selectByWorkerId(list);
-    //    Map<Integer, List<WorkerMineVO>> groupByMineId = workerMineVOS.stream().collect(Collectors.groupingBy(WorkerMineVO::getMineId));
-    //    for (Map.Entry<Integer, List<WorkerMineVO>> entry : groupByMineId.entrySet()) {
-    //        //同时需要记录到历史表中
-    //        List<Integer> workerIdList = new ArrayList<>();
-    //        //将该矿场下的矿机id提取到集合中
-    //        List<WorkerMineVO> WorkerMineVOList = entry.getValue();
-    //        for (WorkerMineVO workerMineVO : WorkerMineVOList) {
-    //            Integer workerId = workerMineVO.getWorkerId();
-    //            workerIdList.add(workerId);
-    //        }
-    //        //批量入库数据同步到缓存里
-    //        redisToBatchUpdate(rows, "operator_worker_histkory", workerIdList, entry.getKey());
-    //        batchComeIn(rows, "worker_detailed", workerIdList, entry.getKey());
-    //    }
-    //}
 
     //软删除
     @Override
@@ -548,6 +523,143 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             resultMap.put(id, frameNumber + "层");
         });
         return resultMap;
+    }
+
+    /**
+     * @return
+     * @Description 全部上架
+     * 1.读取worker_Info表,拿到所有的矿机ip,然后根据前端提交过来的批量矿机ip,分配给的用户id,还有分组以及矿机品牌
+     * 2.按照规则切割ip,IP规则:171.3(厂房号).5(货架号).23(二层第三台)
+     * 3.首先去判断有没有这个厂房名,有的话直接取厂房id,没有的话直接新建厂房名,然后返回厂房id
+     * 4.再去判断有没有这个货架号,因为同名货架有多个,所以把第几台拼接到货架号上,就相当于去判断有没有53这个名字的机架
+     * 5.如果有,则直接取机架ID,如果没有,则创建名字叫53的这个机架,同时在worker_detailed创建位置信息,然后取机架ID
+     * 6.最后取层数,23取2,最终将上面这零散的信息拼成一个完整的对象,封装进集合,执行批量入库
+     * @Author zly
+     * @Date 16:08 2020/4/4
+     * @Param
+     */
+    @Override
+    public void batchIntoFrame(String token) {
+        Integer operatorId = getUserId(token);
+        List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(1);
+        List<WorkerInfo> workers = workerInfoMapper.selectByOther(null, null, null);
+        //批量入数据库的集合
+        ArrayList<WorkerDetailed> list = new ArrayList<>();
+        //批量入缓存的数据集合
+        ArrayList<WorkerDetailedRedisModel> redisModelList = new ArrayList<>();
+        //历史记录表操作
+        ArrayList<OperatorWorkerHistory> operatorWorkerList = new ArrayList<>();
+        //批量入缓存的数据集合
+        ArrayList<OperatorWorkerHisRedisModel> operatorWorkerRedisList = new ArrayList<>();
+        //矿机品牌集合
+        HashMap<String, Integer> workerTypeMap = workerbrandSettingService.selectMapByWorkerType();
+        for (WorkerInfo worker : workers) {
+            Integer mineId = Integer.valueOf(worker.getMineId().toString());
+            String ip = worker.getIp();
+            Integer workerId = Integer.valueOf(worker.getId().toString());
+            if (!workerIdList.contains(workerId)) {
+                if (!StringUtils.isEmpty(ip)) {
+                    WorkerDetailed workerDetailed = new WorkerDetailed();
+                    //如果ip不为空
+                    String[] split = ip.split("\\.");
+                    String factoryStr = split[1];
+                    String frameStr = split[2];
+                    String placeStr = split[3];
+                    Integer num = Integer.valueOf(placeStr) % 10;
+                    String paiNumber = "";
+                    String Number = "";
+                    if (num == 0) {
+                        //这是第10排的
+                        Number = String.valueOf((Integer.valueOf(placeStr) / 10) - 1);
+                        paiNumber = "10";
+                    } else {
+                        Number = placeStr.substring(0, placeStr.length() - 1);
+                        paiNumber = placeStr.substring(placeStr.length() - 1);
+                    }
+
+                    frameStr = frameStr + "#" + paiNumber;
+                    Integer factoryId = factoryHouseService.equalsFactoryName(factoryStr, mineId);
+                    if (factoryId == null) {
+                        FactoryHouse factoryHouse = new FactoryHouse();
+                        factoryHouse.setFactoryName(factoryStr);
+                        factoryHouse.setMineId(mineId);
+                        factoryId = factoryHouseService.insertSelective(factoryHouse);
+                    }
+                    Integer frameId = frameSettingService.equalsFrameName(frameStr, factoryId, mineId);
+                    if (frameId == null) {
+                        FrameSetting frameSetting = new FrameSetting();
+                        frameSetting.setFrameName(frameStr);
+                        frameSetting.setFactoryId(factoryId);
+                        frameSetting.setMineId(mineId);
+                        frameSetting.setNumber(10);
+                        frameId = frameSettingService.insertSelective(frameSetting);
+                    }
+                    workerDetailed.setWorkerId(workerId);
+                    workerDetailed.setFactoryId(factoryId);
+                    //获取品牌id
+                    String mineType = worker.getMineType();
+                    Integer workerbrandId = workerTypeMap.get(mineType);
+                    workerDetailed.setWorkerbrandId(workerbrandId);
+                    workerDetailed.setFrameId(frameId);
+                    workerDetailed.setFrameNumber(Integer.valueOf(Number));
+                    workerDetailed.setMineId(mineId);
+                    workerDetailed.setIsComeIn(1);
+                    workerDetailed.setIsDelete(0);
+                    workerDetailed.setCreateTime(new Date());
+                    workerDetailed.setUpdateTime(new Date());
+                    workerDetailed.setWorkerIp(ip);
+                    list.add(workerDetailed);
+
+                    OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, mineId, workerId, null, new Date(), null, operatorId);
+                    operatorWorkerList.add(operatorWorkerHistory);
+
+                    OperatorWorkerHisRedisModel operatorWorkerHisRedisModel = new OperatorWorkerHisRedisModel(null, mineId, workerId, null, new Date(), null, operatorId);
+                    operatorWorkerRedisList.add(operatorWorkerHisRedisModel);
+                }
+            }
+        }
+
+        if (!list.isEmpty()) {
+            //批量上架
+            int rows = workerDetailedMapper.updateBatch(list);
+            //查询入缓存的数据
+            List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(list);
+            for (WorkerDetailed workerDetaile : workerDetailedRedisModels) {
+                WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
+                workerDetailedRedisModel.setId(workerDetaile.getId());
+                workerDetailedRedisModel.setWorker_id(workerDetaile.getWorkerId());
+                workerDetailedRedisModel.setUser_id(workerDetaile.getUserId());
+                workerDetailedRedisModel.setWorkerbrand_id(workerDetaile.getWorkerbrandId());
+                workerDetailedRedisModel.setFactory_id(workerDetaile.getFactoryId());
+                workerDetailedRedisModel.setFrame_id(workerDetaile.getFrameId());
+                workerDetailedRedisModel.setFrame_number(workerDetaile.getFrameNumber());
+                workerDetailedRedisModel.setGroup_id(workerDetaile.getGroupId());
+                workerDetailedRedisModel.setMine_id(workerDetaile.getMineId());
+                workerDetailedRedisModel.setIs_come_in(workerDetaile.getIsComeIn());
+                workerDetailedRedisModel.setRemarks(workerDetaile.getRemarks());
+                workerDetailedRedisModel.setIs_delete(workerDetaile.getIsDelete());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                workerDetailedRedisModel.setCreate_time(sdf.format(workerDetaile.getCreateTime()));
+                workerDetailedRedisModel.setUpdate_time(sdf.format(workerDetaile.getUpdateTime()));
+                workerDetailedRedisModel.setWorker_ip(workerDetaile.getWorkerIp());
+                redisModelList.add(workerDetailedRedisModel);
+            }
+
+            //所有操作同步入缓存
+            Map<Integer, List<WorkerDetailedRedisModel>> groupByMineId = redisModelList.stream().collect(Collectors.groupingBy(WorkerDetailedRedisModel::getMine_id));
+            for (Map.Entry<Integer, List<WorkerDetailedRedisModel>> entry : groupByMineId.entrySet()) {
+                redisToBatchUpdate(rows, "worker_detailed", entry.getValue(), entry.getKey());
+            }
+        }
+        if (!operatorWorkerRedisList.isEmpty()) {
+            int rows = operatorWorkerHistoryMapper.insertTobatch(operatorWorkerList);
+            //所有操作同步入缓存
+            Map<Integer, List<OperatorWorkerHisRedisModel>> groupByMineId = operatorWorkerRedisList.stream().collect(Collectors.groupingBy(OperatorWorkerHisRedisModel::getMine_id));
+            for (Map.Entry<Integer, List<OperatorWorkerHisRedisModel>> entry : groupByMineId.entrySet()) {
+                redisToBatchUpdate(rows, "operator_worker_histkory", entry.getValue(), entry.getKey());
+            }
+        }
+
     }
 
 }

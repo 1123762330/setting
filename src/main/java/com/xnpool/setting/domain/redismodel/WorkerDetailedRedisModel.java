@@ -16,7 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkerDetailedRedisModel implements Serializable {
-    private static final long serialVersionUID = -7638620489740163960L;
+
+    private static final long serialVersionUID = 7508791330066860280L;
     /**
      * 编号
      */

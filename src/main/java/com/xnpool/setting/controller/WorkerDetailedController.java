@@ -126,4 +126,18 @@ public class WorkerDetailedController extends BaseController {
         return new ResponseResult(SUCCESS, resultMap);
     }
 
+    /**
+     * @Description 批量上架
+     * @Author zly
+     * @Date 9:38 2020/4/4
+     * @Param
+     * @return
+     */
+    @PostMapping("/batchIntoFrame")
+    public ResponseResult batchIntoFrame(HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        workerDetailedService.batchIntoFrame(token);
+        return new ResponseResult(SUCCESS);
+    }
+
 }

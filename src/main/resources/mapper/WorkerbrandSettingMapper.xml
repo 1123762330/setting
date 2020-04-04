@@ -33,7 +33,7 @@
     from workerbrand_setting
     <where>
       is_delete = 0
-      <if test="keyWord != null">
+      <if test="keyWord != null and keyWord != ''">
         AND (brand_name like #{keyWord} or `worker_type` like #{keyWord} or `business` like #{keyWord}
             or `worker_size` like #{keyWord} or `power_waste` like #{keyWord} or difficulty like #{keyWord})
       </if>

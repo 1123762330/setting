@@ -53,7 +53,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSelective(FrameSetting record) {
+    public Integer insertSelective(FrameSetting record) {
         List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
         if (frameNameList.contains(record.getFrameName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
@@ -103,6 +103,39 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         }
         redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
         redisToBatchInsert(rows2, "worker_detailed", redisList, record.getMineId());
+        return rows;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer insertByNotExits(FrameSetting record) {
+        List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
+        if (frameNameList.contains(record.getFrameName())) {
+            throw new DataExistException("数据已存在,请勿重复添加!");
+        }
+        String framename = record.getFrameName();
+        Integer number = record.getNumber();
+        String detailed = framename + " 1-" + number + "层";
+        record.setDetailed(detailed);
+        record.setCreateTime(new Date());
+        int rows = frameSettingMapper.insertSelective(record);
+        //同时在矿机详情表生成数据
+        List<WorkerDetailed> list = new ArrayList<>();
+        List<WorkerDetailedRedisModel> redisList = new ArrayList<>();
+        for (int i = 1; i <= number; i++) {
+            WorkerDetailed workerDetailed = new WorkerDetailed();
+            workerDetailed.setFactoryId(record.getFactoryId());
+            workerDetailed.setFrameId(record.getId());
+            workerDetailed.setFrameNumber(i);
+            workerDetailed.setMineId(record.getMineId());
+            workerDetailed.setCreateTime(new Date());
+            workerDetailed.setUpdateTime(new Date());
+            list.add(workerDetailed);
+        }
+
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
+        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+        return rows;
     }
 
     @Override
@@ -209,6 +242,11 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             frameMap.put(frameId, nameBuffer.toString());
         }
         return frameMap;
+    }
+
+    @Override
+    public Integer equalsFrameName(String frameStr, Integer factoryId, Integer mineId) {
+        return frameSettingMapper.equalsFrameName(frameStr,factoryId,mineId);
     }
 
 }

@@ -30,4 +30,6 @@ public interface FrameSettingMapper {
     Integer selectMineId(@Param("id")Integer id);
 
     List<String> selectFrameNameList(@Param("factoryId")Integer factoryId,@Param("id")Integer id);
+
+    Integer equalsFrameName(@Param("frameName")String frameStr,@Param("factoryId") Integer factoryId, @Param("mineId")Integer mineId);
 }

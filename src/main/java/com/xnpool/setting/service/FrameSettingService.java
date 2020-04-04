@@ -17,7 +17,9 @@ public interface FrameSettingService {
 
     int insert(FrameSetting record);
 
-    void insertSelective(FrameSetting record);
+    Integer insertSelective(FrameSetting record);
+
+    Integer insertByNotExits(FrameSetting record);
 
     FrameSetting selectByPrimaryKey(Integer id);
 
@@ -34,6 +36,8 @@ public interface FrameSettingService {
     HashMap<Integer, String> selectFrameNameToGruop(Integer factoryId);
 
     HashMap<Integer, String> selectMineFactoryAndFrame(Integer factoryId);
+
+    Integer equalsFrameName(String frameStr, Integer factoryId, Integer mineId);
 }
 
 

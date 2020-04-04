@@ -13,6 +13,7 @@ import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
@@ -26,8 +27,8 @@ import java.util.*;
  * @Param
  * @return
  */
-@ControllerAdvice
-public abstract class BaseController {
+@Component
+public class BaseController {
 	public static final Integer SUCCESS = 200;
 	public static final Integer FAIL = 500;
 	public static final String INSERT = "insert";
@@ -151,7 +152,7 @@ public abstract class BaseController {
 	 * @return
 	 */
 	public void redisToInsert(Integer rows,String table,Object record,Integer mineId){
-		if (rows == 1) {
+		if (rows != 0) {
 			//入库成功,写缓存
 			insertRedis(table, INSERT, record,mineId);
 		} else {
@@ -167,7 +168,7 @@ public abstract class BaseController {
 	 * @return
 	 */
 	public void redisToUpdate(Integer rows,String table,Object record,Integer mineId){
-		if (rows == 1) {
+		if (rows !=0) {
 			//操作数据库成功,写缓存
 			insertRedis(table, UPDATE, record,mineId);
 		} else {
@@ -183,7 +184,7 @@ public abstract class BaseController {
 	 * @return
 	 */
 	public void redisToDelete(Integer rows,String table,Object record,Integer mineId){
-		if (rows == 1) {
+		if (rows !=0) {
 			//操作数据库成功,写缓存
 			insertRedis(table, DELETE, record,mineId);
 		} else {
