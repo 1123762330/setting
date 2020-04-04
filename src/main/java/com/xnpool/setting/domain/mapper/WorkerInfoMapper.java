@@ -21,4 +21,6 @@ public interface WorkerInfoMapper {
     int updateByPrimaryKey(WorkerInfo record);
 
     List<WorkerInfo> selectByOther(@Param("workerType")String workerType,@Param("state") Integer state, @Param("ip")String ip);
+
+    Integer selectWorkerIdByIp(@Param("workerIp")String workerIp,@Param("mineId") Integer mineId);
 }

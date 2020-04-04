@@ -152,12 +152,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer operatorId = getUserId(token);
         Integer id = workerDetailedParam.getId();
         Integer mineId = workerDetailedParam.getMineId();
-        String workerIds = workerDetailedParam.getWorkerId();
+        //String workerIds = workerDetailedParam.getWorkerId();
         Integer userId = workerDetailedParam.getUserId();
         Integer workerbrandId = workerDetailedParam.getWorkerbrandId();
         Integer groupId = workerDetailedParam.getGroupId();
         String workerIp = workerDetailedParam.getWorkerIp();
         String remarks = workerDetailedParam.getRemarks();
+        Integer workerIds= workerInfoMapper.selectWorkerIdByIp(workerIp, mineId);
         List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(1);
         log.info("库中已经存在的矿机ID:" + workerIdList);
         ArrayList<OperatorWorkerHistory> operatorWorkerHisList = new ArrayList<>();
@@ -165,9 +166,8 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         if (workerIdList.contains(workerIds)) {
             throw new InsertException("该矿机已经添加过!");
         } else {
-
             workerDetailed.setId(id);
-            workerDetailed.setWorkerId(Integer.valueOf(workerIds));
+            workerDetailed.setWorkerId(workerIds);
             workerDetailed.setWorkerIp(workerIp);
             workerDetailed.setUserId(userId);
             workerDetailed.setGroupId(groupId);
@@ -177,7 +177,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             workerDetailed.setRemarks(remarks);
 
             WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
-            workerDetailedRedisModel.setWorker_id(Integer.valueOf(workerIds));
+            workerDetailedRedisModel.setWorker_id(workerIds);
             workerDetailedRedisModel.setUser_id(userId);
             workerDetailedRedisModel.setWorkerbrand_id(workerbrandId);
             workerDetailedRedisModel.setId(id);
@@ -189,7 +189,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
             OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory();
             operatorWorkerHistory.setMineId(mineId);
-            operatorWorkerHistory.setWorkerId(Integer.valueOf(workerIds));
+            operatorWorkerHistory.setWorkerId(workerIds);
             operatorWorkerHistory.setMoveOutTime(new Date());
             operatorWorkerHistory.setComeInTime(new Date());
             operatorWorkerHistory.setReason("");
@@ -198,7 +198,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
             OperatorWorkerHisRedisModel operatorWorkerHisRedisModel = new OperatorWorkerHisRedisModel();
             operatorWorkerHisRedisModel.setMine_id(mineId);
-            operatorWorkerHisRedisModel.setWorker_id(Integer.valueOf(workerIds));
+            operatorWorkerHisRedisModel.setWorker_id(workerIds);
             operatorWorkerHisRedisModel.setMove_out_time(new Date());
             operatorWorkerHisRedisModel.setCome_in_time(new Date());
             operatorWorkerHisRedisModel.setReason("");

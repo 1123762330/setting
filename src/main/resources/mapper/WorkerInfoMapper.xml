@@ -380,4 +380,12 @@
       #{item,jdbcType=BIGINT}
     </foreach>
   </update>
+
+  <!--根据矿机IP和矿场id查询矿机id-->
+    <select id="selectWorkerIdByIp" resultType="java.lang.Integer">
+      select id
+      from worker_info
+      where ip=#{workerIp}
+      AND mine_id=#{mineId}
+    </select>
 </mapper>
