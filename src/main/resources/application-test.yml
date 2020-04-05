@@ -1,9 +1,11 @@
 server:
-  port: 8765
+  port: 8766
+  servlet:
+    context-path: /setting
 ---
 spring:
   application:
-    name: setting
+    name: mine-setting-api
 ---
 eureka:
   instance:
@@ -42,10 +44,8 @@ spring:
       # 否则报错：Loading class `com.mysql.jdbc.Driver'. This is deprecated.
       driver-class-name: com.mysql.cj.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://127.0.0.1:3306/setting?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-      #url: jdbc:mysql://59.110.233.3:43306/bpos_eth?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://127.0.0.1:3306/xnpool_mine?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
       username: root
-      #password: xO2UQ1yqZ54fR8M0
       password: root123
       #配置初始化大小/最小/最大[仅用于测试，生成环境需要修改哦]
       initial-size: 1
@@ -70,7 +70,7 @@ spring:
 #mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
-  typeAliasesPackage:  com.xnpool.setting.domain
+  typeAliasesPackage:  com.xnpool.setting.domain.mapper
   global-config:
     db-config:
       id-type: AUTO
@@ -89,14 +89,14 @@ mybatis-plus:
     cache-enabled: false
 ---
 #mysql语句需要打印就true,不需要打印就false-->注入对应的Bean(打印sql)
-  sql:
-  performanceInterceptor: true
+sql:
+performanceInterceptor: true
 ---
 spring:
   redis: #数据源1
-    host: 127.0.0.1
+    host: 112.126.65.15
     port: 6379
-    password:
+    password: xnpool#67mm
     database: 0
     jedis:
       pool:
@@ -139,5 +139,19 @@ zlt:
   tenant:
     enable: true
     ignoreTables:
-      - sys_user
       - algorithm
+      - workerbrand_setting
+    ignoreSqls:
+      - com.xnpool.setting.domain.mapper.CustomerSettingMapper.selectTenantList
+      - com.xnpool.setting.domain.mapper.CustomerSettingMapper.insertSelective
+      - com.xnpool.setting.domain.mapper.CustomerSettingMapper.deleteAuthority
+
+---
+#上传和下载文件大小设置
+spring:
+  servlet:
+    multipart:
+      #设置单个文件大小不超过10m
+      max-file-size: 10485760
+      #设置单次请求文件的总大小10m
+      max-request-size: 10485760
