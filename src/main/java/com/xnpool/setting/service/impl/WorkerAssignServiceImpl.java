@@ -43,6 +43,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     @Autowired
     private FactoryHouseService factoryHouseService;
 
+
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return workerAssignMapper.deleteByPrimaryKey(id);
@@ -199,7 +200,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         //执行保存功能
         int rows = workerAssignMapper.batchInsert(list);
 
-        HashMap<Integer, ArrayList<MineIdAndIP>> resultMap2 = new HashMap<>();
         //执行ip区间分配
         ArrayList<MineIdAndIP> ip_list = new ArrayList<>();
         if (ipId.contains(",")){

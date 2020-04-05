@@ -63,7 +63,6 @@ public class WorkerAssignController extends BaseController {
         return new ResponseResult(SUCCESS);
     }
 
-
     //判断添加的矿机架是否已经分配
     @PostMapping("/selectWorkerAssign")
     public ResponseResult selectWorkerAssign() {

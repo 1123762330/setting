@@ -99,4 +99,17 @@ public class IpSettingController extends BaseController {
         HashMap<Integer, String> resultMap = ipSettingService.selectByIPStart();
         return new ResponseResult(SUCCESS, resultMap);
     }
+
+    /**
+     * @Description 运维权限矿机Ip区间分配
+     * @Author zly
+     * @Date 13:39 2020/4/5
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectByIpStartByMineId")
+    public ResponseResult selectByIpStartByMineId(String mineName,Integer mineId) {
+        HashMap<Integer, String> resultMap = ipSettingService.selectByIpStartByMineId(mineName,mineId);
+        return new ResponseResult(SUCCESS, resultMap);
+    }
 }

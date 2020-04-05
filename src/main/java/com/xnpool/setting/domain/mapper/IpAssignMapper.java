@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xnpool.setting.domain.pojo.MineIdAndIP;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +18,5 @@ import java.util.ArrayList;
 public interface IpAssignMapper extends BaseMapper<IpAssign> {
 
     Integer batchInsert(ArrayList<MineIdAndIP> ip_list);
+    List<Integer> selectIpIdList();
 }

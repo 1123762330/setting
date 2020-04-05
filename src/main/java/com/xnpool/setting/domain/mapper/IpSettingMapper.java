@@ -25,7 +25,7 @@ public interface IpSettingMapper {
 
     //开启这个注解,就相当于这个方法不增加多租户信息
     //@SqlParser(filter = true)
-    List<IpSettingExample> selectByOther(@Param("keyWord") String keyWord);
+    List<IpSettingExample> selectByOther(@Param("keyWord") String keyWord,@Param("mineId")Integer mineId);
 
     Integer selectMineId(@Param("id")Integer id);
     List<String> selectNameList(@Param("id")Integer id);

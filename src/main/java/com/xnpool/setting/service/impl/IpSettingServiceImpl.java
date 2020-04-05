@@ -7,6 +7,7 @@ import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.mapper.IpAssignMapper;
 import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.redismodel.IpSettingRedisModel;
@@ -33,6 +34,8 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
 
     @Autowired
     private IpSettingMapper ipSettingMapper;
+    @Autowired
+    private IpAssignMapper ipAssignMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -98,14 +101,14 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(keyWord);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(keyWord,null);
         PageInfo<IpSettingExample> pageInfo = new PageInfo<>(ipSettings);
         return pageInfo;
     }
 
     @Override
     public HashMap<Integer, String> selectByIPStart() {
-        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null,null);
         if (ipSettings != null) {
             HashMap<Integer, String> resultMap = new HashMap<>();
             ipSettings.forEach(ipSetting -> {
@@ -121,8 +124,9 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
         }
     }
 
+
     public HashMap<String, String> selectIpQuJian() {
-        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null,null);
         if (ipSettings != null) {
             HashMap<String, String> resultMap = new HashMap<>();
             ipSettings.forEach(ipSetting -> {
@@ -132,6 +136,28 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
                 int lastIndexOf = startIp.lastIndexOf(".");
                 String startIp_tmp = startIp.substring(0, lastIndexOf);
                 resultMap.put(startIp_tmp, ipName);
+            });
+            return resultMap;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public HashMap<Integer, String> selectByIpStartByMineId(String mineName,Integer mineId) {
+        List<Integer> ipIdList = ipAssignMapper.selectIpIdList();
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null,mineId);
+        if (ipSettings != null) {
+            HashMap<Integer, String> resultMap = new HashMap<>();
+            ipSettings.forEach(ipSetting -> {
+                Integer id = ipSetting.getId();
+                //过滤已经分配了的IP区间
+                if (!ipIdList.contains(id)){
+                    String startIp = ipSetting.getStartIp();
+                    String endIp = ipSetting.getEndIp();
+                    String ipName = mineName+" "+startIp + "-" + endIp;
+                    resultMap.put(id, ipName);
+                }
             });
             return resultMap;
         } else {

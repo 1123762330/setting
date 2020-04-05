@@ -34,6 +34,8 @@ public interface IpSettingService {
     HashMap<Integer, String> selectByIPStart();
 
     HashMap<String, String> selectIpQuJian();
+
+    HashMap<Integer, String> selectByIpStartByMineId(String mineName,Integer mineId);
 }
 
 
