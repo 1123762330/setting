@@ -66,6 +66,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Autowired
     private OperatorWorkerHistoryMapper operatorWorkerHistoryMapper;
 
+    @Autowired
+    private MineSettingService mineSettingService;
+
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return workerDetailedMapper.deleteByPrimaryKey(id);
@@ -234,23 +237,39 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //已经入库的矿机Id
         List<Integer> comeInlist = workerDetailedMapper.selectWorkerIdlist(1);
         //List<Integer>转List<Long>
-        ArrayList<Long> comeInlistToLong = new ArrayList<>();
+        ArrayList<Long> comeInlist2 = new ArrayList<>();
         if (!comeInlist.isEmpty()) {
             for (Integer integer : comeInlist) {
-                Long workerIdToLong = Long.valueOf(integer.toString());
-                comeInlistToLong.add(workerIdToLong);
+                Long workerId = Long.valueOf(integer.toString());
+                comeInlist2.add(workerId);
             }
         }
-
+        HashMap<Integer, String> mineNameMap = mineSettingService.selectMineNameByOther();
         //遍历list集合,setIP所属区间进去
         for (WorkerInfo worker : workers) {
             int lastIndexOf = worker.getIp().lastIndexOf(".");
             String substring = worker.getIp().substring(0, lastIndexOf);
             String ip_quJian = ipMap.get(substring);
+            String mineType = worker.getMineType();
+            String worker1 = worker.getWorker1();
+            String avgHashrate = worker.getAvgHashrate();
+            String curHashrate = worker.getCurHashrate();
+            Integer mineId = Integer.valueOf(worker.getMineId().toString());
             //这里需要做个判断,判断这个矿机有没有入库,如果入库列表里有那就是1,如果没有就是0
             //过滤已经上架的机器
-            if (!comeInlistToLong.contains(worker.getId())) {
-                WorkerExample workerExample = new WorkerExample(Integer.valueOf(worker.getId().toString()), worker.getIp(), ip_quJian, Integer.valueOf(worker.getState()), 0);
+            if (!comeInlist2.contains(worker.getId())) {
+                WorkerExample workerExample = new WorkerExample();
+                workerExample.setId(Integer.valueOf(worker.getId().toString()));
+                workerExample.setIp(worker.getIp());
+                workerExample.setIpQuJian(ip_quJian);
+                workerExample.setState(Integer.valueOf(worker.getState()));
+                workerExample.setWorker1(worker1);
+                workerExample.setMineType(mineType);
+                workerExample.setCurHashrate(curHashrate);
+                workerExample.setAvgHashrate(avgHashrate);
+                workerExample.setIsComeIn(0);
+                String mineName = mineNameMap.get(mineId);
+                workerExample.setMineName(mineName);
                 result.add(workerExample);
             }
         }

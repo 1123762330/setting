@@ -40,6 +40,31 @@ public class WorkerExample implements Serializable {
     private Integer state;
 
     /**
+     * 矿机名1
+     */
+    private String worker1;
+
+    /**
+     * 矿机类型
+     */
+    private String mineType;
+
+    /**
+     * 实时算力
+     */
+    private String curHashrate;
+
+
+    /**
+     * 平均算力
+     */
+    private String avgHashrate;
+
+    /**
+     * 所属矿场
+     */
+    private String mineName;
+    /**
     * 是否入库
     */
     private Integer isComeIn;
