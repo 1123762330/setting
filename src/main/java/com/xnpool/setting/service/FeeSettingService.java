@@ -30,6 +30,8 @@ public interface FeeSettingService {
 
     PageInfo<FeeSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    HashMap<Integer,String> selectFeeMap();
+    HashMap<Integer, String> selectFeeMap();
 }
+
+
 

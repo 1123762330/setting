@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.PowerSetting;import org.apache.ibatis.anno
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 13:34
+ * @date 2020/4/6 16:31
  */
 public interface PowerSettingMapper {
     int deleteByPrimaryKey(Integer id);

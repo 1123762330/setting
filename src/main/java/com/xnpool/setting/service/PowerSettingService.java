@@ -30,3 +30,4 @@ public interface PowerSettingService {
     PageInfo<PowerSetting> selectByOther(String keyWord, int pageNum, int pageSize);
 }
 
+

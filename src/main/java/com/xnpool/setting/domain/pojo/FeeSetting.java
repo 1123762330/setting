@@ -9,14 +9,19 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 13:28
+ * @date 2020/4/6 15:36
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeeSetting implements Serializable {
-    private static final long serialVersionUID = -234259685803496422L;
+    private static final long serialVersionUID = 7192129877640077133L;
     private Integer id;
+
+    /**
+     * 矿场id
+     */
+    private Integer mineId;
 
     /**
      * 费用单价

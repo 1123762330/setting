@@ -5,6 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table agreement_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
     <result column="agreement_name" jdbcType="VARCHAR" property="agreementName" />
     <result column="file_name" jdbcType="VARCHAR" property="fileName" />
     <result column="path" jdbcType="VARCHAR" property="path" />
@@ -14,7 +15,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, agreement_name,file_name, `path`, is_delete, create_time, update_time
+    id, mine_id, agreement_name, file_name, `path`, is_delete, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -30,15 +31,20 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into agreement_setting (agreement_name,file_name, `path`, is_delete,
-      create_time, update_time)
-    values (#{agreementName,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into agreement_setting (mine_id, agreement_name, file_name, 
+      `path`, is_delete, create_time, 
+      update_time)
+    values (#{mineId,jdbcType=INTEGER}, #{agreementName,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{path,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into agreement_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mineId != null">
+        mine_id,
+      </if>
       <if test="agreementName != null">
         agreement_name,
       </if>
@@ -59,6 +65,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
+      </if>
       <if test="agreementName != null">
         #{agreementName,jdbcType=VARCHAR},
       </if>
@@ -83,6 +92,9 @@
     <!--@mbg.generated-->
     update agreement_setting
     <set>
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
+      </if>
       <if test="agreementName != null">
         agreement_name = #{agreementName,jdbcType=VARCHAR},
       </if>
@@ -107,8 +119,9 @@
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.AgreementSetting">
     <!--@mbg.generated-->
     update agreement_setting
-    set agreement_name = #{agreementName,jdbcType=VARCHAR},
-    file_name = #{fileName,jdbcType=VARCHAR},
+    set mine_id = #{mineId,jdbcType=INTEGER},
+      agreement_name = #{agreementName,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
       `path` = #{path,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

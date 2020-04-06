@@ -9,17 +9,22 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 12:49
+ * @date 2020/4/6 15:37
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AgreementSetting implements Serializable {
-    private static final long serialVersionUID = 8972091544690215549L;
+    private static final long serialVersionUID = -7749691771367187290L;
     /**
      * 编号
      */
     private Integer id;
+
+    /**
+     * 矿场id
+     */
+    private Integer mineId;
 
     /**
      * 协议名称
@@ -50,5 +55,4 @@ public class AgreementSetting implements Serializable {
      * 修改时间
      */
     private Date updateTime;
-
 }

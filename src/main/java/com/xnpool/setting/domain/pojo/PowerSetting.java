@@ -9,14 +9,19 @@ import lombok.NoArgsConstructor;
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 13:34
+ * @date 2020/4/6 16:31
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PowerSetting implements Serializable {
-    private static final long serialVersionUID = 932256797041792313L;
+    private static final long serialVersionUID = -1863983510653263844L;
     private Integer id;
+
+    /**
+     * 矿场id
+     */
+    private Integer mineId;
 
     /**
      * 电费单价/度
@@ -43,4 +48,8 @@ public class PowerSetting implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 企业id
+     */
+    private Long tenantId;
 }

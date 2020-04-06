@@ -5,15 +5,17 @@
     <!--@mbg.generated-->
     <!--@Table power_setting-->
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
     <result column="price" jdbcType="DOUBLE" property="price" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, price, description, is_delete, create_time, update_time
+    id, mine_id, price, description, is_delete, create_time, update_time, tenant_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,15 +31,20 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.PowerSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into power_setting (price, description, is_delete, 
-      create_time, update_time)
-    values (#{price,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into power_setting (mine_id, price, description, 
+      is_delete, create_time, update_time, 
+      tenant_id)
+    values (#{mineId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{tenantId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.PowerSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into power_setting
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mineId != null">
+        mine_id,
+      </if>
       <if test="price != null">
         price,
       </if>
@@ -53,8 +60,14 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mineId != null">
+        #{mineId,jdbcType=INTEGER},
+      </if>
       <if test="price != null">
         #{price,jdbcType=DOUBLE},
       </if>
@@ -70,12 +83,18 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.PowerSetting">
     <!--@mbg.generated-->
     update power_setting
     <set>
+      <if test="mineId != null">
+        mine_id = #{mineId,jdbcType=INTEGER},
+      </if>
       <if test="price != null">
         price = #{price,jdbcType=DOUBLE},
       </if>
@@ -91,17 +110,22 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.PowerSetting">
     <!--@mbg.generated-->
     update power_setting
-    set price = #{price,jdbcType=DOUBLE},
+    set mine_id = #{mineId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
       description = #{description,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      tenant_id = #{tenantId,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!--  软删除-->

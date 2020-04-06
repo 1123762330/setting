@@ -82,10 +82,12 @@ public class FeeSettingServiceImpl implements FeeSettingService {
         for (FeeSetting feeSetting : feeSettingList) {
             String feeName = feeSetting.getFeeName();
             Integer id = feeSetting.getId();
-            feeMap.put(id,feeName);
+            feeMap.put(id, feeName);
         }
         return feeMap;
     }
 
 }
+
+
 

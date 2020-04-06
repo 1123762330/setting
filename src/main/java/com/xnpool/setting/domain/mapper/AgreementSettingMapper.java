@@ -5,7 +5,7 @@ import com.xnpool.setting.domain.pojo.AgreementSetting;import org.apache.ibatis.
 /**
  * @author zly
  * @version 1.0
- * @date 2020/3/5 12:49
+ * @date 2020/4/6 15:37
  */
 public interface AgreementSettingMapper {
     int deleteByPrimaryKey(Integer id);
