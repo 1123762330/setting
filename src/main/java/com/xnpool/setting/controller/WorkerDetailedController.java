@@ -127,15 +127,31 @@ public class WorkerDetailedController extends BaseController {
     }
 
     /**
+     * @Description 全部上架
+     * @Author zly
+     * @Date 17:05 2020/4/7
+     * @Param
+     * @return
+     */
+    @SystemLog(value = "矿机全部上架",type = LogType.MINE)
+    @PostMapping("/batchIntoFrame")
+    public ResponseResult batchIntoFrame(HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        workerDetailedService.batchIntoFrame(token);
+        return new ResponseResult(SUCCESS);
+    }
+
+    /**
      * @Description 批量分配用户
      * @Author zly
      * @Date 9:38 2020/4/4
      * @Param
      * @return
      */
-    @PostMapping("/batchUpdateToUser")
+    @SystemLog(value = "矿机分配所属用户",type = LogType.MINE)
+    @PutMapping("/batchUpdateToUser")
     public ResponseResult batchUpdateToUser(String ids,Integer userId,Integer groupId,HttpServletRequest request) {
-        String token = writeLogUtil.getToken(request);
+        //String token = writeLogUtil.getToken(request);
         workerDetailedService.batchUpdateToUser(ids,userId,groupId);
         return new ResponseResult(SUCCESS);
     }

@@ -456,4 +456,14 @@
             #{item,jdbcType=INTEGER}
         </foreach>
     </update>
+
+    <select id="selectWorkerDetailedList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from worker_detailed
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
 </mapper>

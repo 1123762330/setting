@@ -16,8 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OperatorWorkerHisRedisModel implements Serializable {
-
-    private static final long serialVersionUID = -220435108835739273L;
+    private static final long serialVersionUID = 2967646280373685039L;
     /**
      * 编号
      */
@@ -36,12 +35,12 @@ public class OperatorWorkerHisRedisModel implements Serializable {
     /**
      * 出库时间
      */
-    private Date move_out_time;
+    private String move_out_time;
 
     /**
      * 入库时间
      */
-    private Date come_in_time;
+    private String come_in_time;
 
     /**
      * 出库原因

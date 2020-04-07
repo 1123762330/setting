@@ -30,6 +30,8 @@ public interface OperatorWorkerHistoryService {
 
 
     PageInfo<OperatorWorkerHistoryExample> selectWorkerHistoryList(String startTime, String endTime, String keyWord, int pageNum, int pageSize,String token);
+
+    List<OperatorWorkerHistory> selectOperatorWorkerId(List<Integer> workerIdList);
 }
 
 

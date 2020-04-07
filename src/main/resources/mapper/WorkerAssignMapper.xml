@@ -137,6 +137,7 @@
     WHERE
         sys_role_user.user_id = sys_user.id
         AND sys_role_user.role_id = sys_role.id
+        GROUP BY user_id
   </select>
 
     <!--批量保存-->

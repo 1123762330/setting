@@ -176,4 +176,13 @@
       (#{item.id,jdbcType=BIGINT},now(),#{item.reason,jdbcType=VARCHAR},#{item.operatorId,jdbcType=INTEGER},#{item.mineId,jdbcType=INTEGER})
     </foreach>
   </insert>
+
+  <select id="selectOperatorWorkerId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from operator_worker_history where  worker_id in
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+    AND move_out_time IS NULL
+  </select>
 </mapper>

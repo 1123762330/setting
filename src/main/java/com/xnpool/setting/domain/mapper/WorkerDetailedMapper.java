@@ -60,4 +60,6 @@ public interface WorkerDetailedMapper{
     List<WorkerDetailed> selectModelToRedis(@Param("list")List<WorkerDetailed> list);
 
     int batchUpdateToUser(@Param("list")List<Integer> list,@Param("userId") Integer userId,@Param("groupId")  Integer groupId);
+
+    List<WorkerDetailed> selectWorkerDetailedList(@Param("list")List<Integer> list);
 }

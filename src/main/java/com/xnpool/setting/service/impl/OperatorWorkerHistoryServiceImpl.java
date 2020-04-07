@@ -112,6 +112,11 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
         return pageInfo;
     }
 
+    @Override
+    public List<OperatorWorkerHistory> selectOperatorWorkerId(List<Integer> workerIdList) {
+        return operatorWorkerHistoryMapper.selectOperatorWorkerId(workerIdList);
+    }
+
 }
 
 
