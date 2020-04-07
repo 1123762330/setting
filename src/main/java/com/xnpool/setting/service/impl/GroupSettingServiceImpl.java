@@ -81,9 +81,9 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = groupSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdateTime(new Date());
-        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
-        redisToUpdate(rows, "group_setting", groupSettingRedisModel, record.getMineId());
+        GroupSetting groupSetting = groupSettingMapper.selectByPrimaryKey(record.getId());
+        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(groupSetting);
+        redisToUpdate(rows, "group_setting", groupSettingRedisModel, groupSetting.getMineId());
     }
 
     @Override
@@ -114,12 +114,9 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
         //    }
         //}
         int rows = groupSettingMapper.updateById(id);
-        GroupSetting record = new GroupSetting();
-        record.setUpdateTime(new Date());
-        record.setId(id);
-        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(record);
-        Integer mineId = groupSettingMapper.selectMineId(id);
-        redisToDelete(rows, "group_setting", groupSettingRedisModel, mineId);
+        GroupSetting groupSetting = groupSettingMapper.selectByPrimaryKey(id);
+        GroupSettingRedisModel groupSettingRedisModel = getGroupSettingRedisModel(groupSetting);
+        redisToDelete(rows, "group_setting", groupSettingRedisModel, groupSetting.getMineId());
     }
 
     @Override

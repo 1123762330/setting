@@ -73,9 +73,9 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = ipSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdateTime(new Date());
-        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(record);
-        redisToUpdate(rows, "ip_setting", ipSettingRedisModel, record.getMineId());
+        IpSetting ipSetting = ipSettingMapper.selectByPrimaryKey(record.getId());
+        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(ipSetting);
+        redisToUpdate(rows, "ip_setting", ipSettingRedisModel, ipSetting.getMineId());
     }
 
     @Override
@@ -87,12 +87,9 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         int rows = ipSettingMapper.updateById(id);
-        IpSetting record = new IpSetting();
-        record.setUpdateTime(new Date());
-        record.setId(id);
-        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(record);
-        Integer mineId = ipSettingMapper.selectMineId(id);
-        redisToDelete(rows, "ip_setting", ipSettingRedisModel, mineId);
+        IpSetting ipSetting = ipSettingMapper.selectByPrimaryKey(id);
+        IpSettingRedisModel ipSettingRedisModel = getIpSettingRedisModel(ipSetting);
+        redisToDelete(rows, "ip_setting", ipSettingRedisModel, ipSetting.getMineId());
     }
 
     @Override

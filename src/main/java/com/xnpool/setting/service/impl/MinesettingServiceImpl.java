@@ -73,9 +73,9 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         }
 
         int rows = minesettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdateTime(new Date());
-        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
-        redisToUpdate(rows, "mine_setting", mineSettingRedisModel, record.getId());
+        MineSetting mineSetting = minesettingMapper.selectByPrimaryKey(record.getId());
+        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(mineSetting);
+        redisToUpdate(rows, "mine_setting", mineSettingRedisModel, mineSetting.getId());
 
     }
 
@@ -88,11 +88,9 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         int rows = minesettingMapper.updateById(id);
-        MineSetting record = new MineSetting();
-        record.setUpdateTime(new Date());
-        record.setId(id);
-        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
-        redisToDelete(rows, "mine_setting", mineSettingRedisModel, record.getId());
+        MineSetting mineSetting = minesettingMapper.selectByPrimaryKey(id);
+        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(mineSetting);
+        redisToDelete(rows, "mine_setting", mineSettingRedisModel, mineSetting.getId());
     }
 
     @Override

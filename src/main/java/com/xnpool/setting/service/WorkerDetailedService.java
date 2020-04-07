@@ -47,6 +47,8 @@ public interface WorkerDetailedService {
     HashMap<Integer, String> selectNullFrame(Integer frameId);
 
     void batchIntoFrame(String token);
+
+    void batchUpdateToUser(String ids,Integer userId,Integer groupId);
 }
 
 

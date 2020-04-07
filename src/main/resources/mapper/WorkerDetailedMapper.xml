@@ -217,6 +217,8 @@
     <select id="selectMoveOutList" resultType="com.xnpool.setting.domain.model.WorkerDetailedExample">
         SELECT
         worker_detailed.id,
+        worker_detailed.user_id,
+        worker_detailed.group_id,
         worker_detailed.worker_id,
         worker_detailed.is_come_in,
         worker_detailed.remarks,
@@ -226,14 +228,12 @@
         worker_info.state,
         factory_house.factory_name,
         frame_setting.frame_name,
-        group_setting.group_name,
         workerbrand_setting.brand_name
         FROM
         worker_detailed,
         worker_info,
         factory_house,
         frame_setting,
-        group_setting,
         workerbrand_setting
         <where>
             worker_detailed.is_delete = 0
@@ -245,7 +245,6 @@
             AND worker_info.tenant_id=#{tenantId}
             AND worker_detailed.factory_id = factory_house.id
             AND worker_detailed.frame_id = frame_setting.id
-            AND worker_detailed.group_id = group_setting.id
             AND worker_detailed.workerbrand_id = workerbrand_setting.id
         </where>
     </select>
@@ -450,4 +449,11 @@
             frame_number=#{item.frameNumber}
         </foreach>
     </select>
+
+    <update id="batchUpdateToUser">
+        update worker_detailed set user_id=#{userId},group_id=#{groupId} where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </update>
 </mapper>

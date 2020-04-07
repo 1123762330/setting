@@ -68,9 +68,9 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
-        record.setUpdateTime(new Date());
-        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        redisToUpdate(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
+        FactoryHouse factoryHouse = factoryHouseMapper.selectByPrimaryKey(record.getId());
+        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(factoryHouse);
+        redisToUpdate(rows, "factory_house", factoryHouseRedisModel, factoryHouse.getMineId());
     }
 
     @Override
@@ -82,12 +82,9 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         int rows = factoryHouseMapper.updateById(id);
-        FactoryHouse record = new FactoryHouse();
-        record.setUpdateTime(new Date());
-        record.setId(id);
-        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        Integer mineId = factoryHouseMapper.selectMineId(id);
-        redisToDelete(rows, "factory_house", factoryHouseRedisModel, mineId);
+        FactoryHouse factoryHouse = factoryHouseMapper.selectByPrimaryKey(id);
+        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(factoryHouse);
+        redisToDelete(rows, "factory_house", factoryHouseRedisModel, factoryHouse.getMineId());
     }
 
     @Override

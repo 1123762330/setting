@@ -69,6 +69,12 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Autowired
     private MineSettingService mineSettingService;
 
+    @Autowired
+    private GroupSettingService groupSettingService;
+
+    @Autowired
+    private CustomerSettingService customerSettingService;
+
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return workerDetailedMapper.deleteByPrimaryKey(id);
@@ -106,37 +112,52 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         Long tenantId = getTenantId(token);
         PageHelper.startPage(pageNum, pageSize);
-        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord, tenantId);
-        System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
-        WorkerDetailedExampleList.forEach(workerDetailedExample -> {
-            String workerName = workerDetailedExample.getWorkerName();
-            if (StringUtils.isEmpty(workerName)) {
-                String frameName = workerDetailedExample.getFrameName();
-                Integer frameNumber = workerDetailedExample.getFrameNumber();
-                workerDetailedExample.setMiner("");
-                workerDetailedExample.setWorkerName("");
-                StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
-                workerDetailedExample.setFrameName(frameNameBuffer.toString());
-            } else {
-                String frameName = workerDetailedExample.getFrameName();
-                Integer frameNumber = workerDetailedExample.getFrameNumber();
-                String minerName = "";
-                String workerNameStr = "";
-                if (!workerName.contains(".")) {
-                    minerName = workerName;
-                    workerNameStr = "";
-                } else {
-                    int lastIndexOf = workerName.lastIndexOf(".");
-                    minerName = workerName.substring(0, lastIndexOf);
-                    workerNameStr = workerName.substring(lastIndexOf + 1);
-                }
-                workerDetailedExample.setMiner(minerName);
-                workerDetailedExample.setWorkerName(workerNameStr);
-                StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
-                workerDetailedExample.setFrameName(frameNameBuffer.toString());
 
-            }
-        });
+        List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(keyWord, tenantId);
+        if (!WorkerDetailedExampleList.isEmpty()){
+            HashMap<Integer, String> groupMap = groupSettingService.selectGroupMap();
+            HashMap<Integer, String> userListMap = customerSettingService.selectUserList();
+            System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
+            WorkerDetailedExampleList.forEach(workerDetailedExample -> {
+                String workerName = workerDetailedExample.getWorkerName();
+                Integer groupId = workerDetailedExample.getGroupId();
+                if(groupId!=null){
+                    String groupName = groupMap.get(groupId);
+                    workerDetailedExample.setGroupName(groupName);
+                }
+
+                Integer userId = workerDetailedExample.getUserId();
+                if (userId!=null){
+                    String userName = userListMap.get(userId);
+                    workerDetailedExample.setUsername(userName);
+                }
+                if (StringUtils.isEmpty(workerName)) {
+                    String frameName = workerDetailedExample.getFrameName();
+                    Integer frameNumber = workerDetailedExample.getFrameNumber();
+                    workerDetailedExample.setMiner("");
+                    workerDetailedExample.setWorkerName("");
+                    StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
+                    workerDetailedExample.setFrameName(frameNameBuffer.toString());
+                } else {
+                    String frameName = workerDetailedExample.getFrameName();
+                    Integer frameNumber = workerDetailedExample.getFrameNumber();
+                    String minerName = "";
+                    String workerNameStr = "";
+                    if (!workerName.contains(".")) {
+                        minerName = workerName;
+                        workerNameStr = "";
+                    } else {
+                        int lastIndexOf = workerName.lastIndexOf(".");
+                        minerName = workerName.substring(0, lastIndexOf);
+                        workerNameStr = workerName.substring(lastIndexOf + 1);
+                    }
+                    workerDetailedExample.setMiner(minerName);
+                    workerDetailedExample.setWorkerName(workerNameStr);
+                    StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
+                    workerDetailedExample.setFrameName(frameNameBuffer.toString());
+                }
+            });
+        }
         PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(WorkerDetailedExampleList);
         return pageInfo;
     }
@@ -678,7 +699,44 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 redisToBatchUpdate(rows, "operator_worker_histkory", entry.getValue(), entry.getKey());
             }
         }
+    }
 
+    @Override
+    public void batchUpdateToUser(String ids,Integer userId,Integer groupId) {
+        ArrayList<Integer> list = new ArrayList<>();
+        //批量入缓存的数据集合
+        ArrayList<WorkerDetailedRedisModel> redisModelList = new ArrayList<>();
+        if (ids.contains(",")){
+            //多个
+            String[] split = ids.split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(Integer.valueOf(split[i]));
+                WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
+                workerDetailedRedisModel.setId(Integer.valueOf(split[i]));
+                workerDetailedRedisModel.setUser_id(userId);
+                workerDetailedRedisModel.setGroup_id(groupId);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                workerDetailedRedisModel.setUpdate_time(sdf.format(new Date()));
+                redisModelList.add(workerDetailedRedisModel);
+            }
+        }else {
+            //单条
+            WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
+            workerDetailedRedisModel.setId(Integer.valueOf(ids));
+            workerDetailedRedisModel.setUser_id(userId);
+            workerDetailedRedisModel.setGroup_id(groupId);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            workerDetailedRedisModel.setUpdate_time(sdf.format(new Date()));
+            redisModelList.add(workerDetailedRedisModel);
+            list.add(Integer.valueOf(ids));
+        }
+        //批量分配用户
+        int rows = workerDetailedMapper.batchUpdateToUser(list, userId, groupId);
+        //所有操作同步入缓存
+        Map<Integer, List<WorkerDetailedRedisModel>> groupByMineId = redisModelList.stream().collect(Collectors.groupingBy(WorkerDetailedRedisModel::getMine_id));
+        for (Map.Entry<Integer, List<WorkerDetailedRedisModel>> entry : groupByMineId.entrySet()) {
+            redisToBatchUpdate(rows, "worker_detailed", entry.getValue(), entry.getKey());
+        }
     }
 
 }

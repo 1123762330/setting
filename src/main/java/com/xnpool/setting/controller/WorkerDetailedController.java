@@ -127,17 +127,19 @@ public class WorkerDetailedController extends BaseController {
     }
 
     /**
-     * @Description 批量上架
+     * @Description 批量分配用户
      * @Author zly
      * @Date 9:38 2020/4/4
      * @Param
      * @return
      */
-    @PostMapping("/batchIntoFrame")
-    public ResponseResult batchIntoFrame(HttpServletRequest request) {
+    @PostMapping("/batchUpdateToUser")
+    public ResponseResult batchUpdateToUser(String ids,Integer userId,Integer groupId,HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        workerDetailedService.batchIntoFrame(token);
+        workerDetailedService.batchUpdateToUser(ids,userId,groupId);
         return new ResponseResult(SUCCESS);
     }
+
+
 
 }

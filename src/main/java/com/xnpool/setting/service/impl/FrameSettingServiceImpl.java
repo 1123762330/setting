@@ -156,9 +156,10 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
         int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
-        record.setUpdateTime(new Date());
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
-        redisToUpdate(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+
+        FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(record.getId());
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(frameSetting);
+        redisToUpdate(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
     }
 
     @Override
@@ -170,12 +171,9 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
         int rows = frameSettingMapper.updateById(id);
-        FrameSetting record = new FrameSetting();
-        record.setUpdateTime(new Date());
-        record.setId(id);
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
-        Integer mineId = frameSettingMapper.selectMineId(id);
-        redisToDelete(rows, "frame_setting", frameSettingRedisModel, mineId);
+        FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(id);
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(frameSetting);
+        redisToDelete(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
     }
 
     @Override
