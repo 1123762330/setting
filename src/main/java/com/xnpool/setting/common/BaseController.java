@@ -450,25 +450,66 @@ public class BaseController {
 	}
 
 	public WorkerDetailedRedisModel getWorkerDetailedRedisModel(WorkerDetailed record) {
-		WorkerDetailedRedisModel redisModel = new WorkerDetailedRedisModel();
-		redisModel.setId(record.getId());
-		redisModel.setFactory_id(record.getFactoryId());
-		redisModel.setFrame_id(record.getFrameId());
-		redisModel.setFrame_number(record.getFrameNumber());
-		redisModel.setMine_id(record.getMineId());
-		redisModel.setIs_come_in(record.getIsComeIn());
-		redisModel.setRemarks(record.getRemarks());
-		redisModel.setIs_delete(record.getIsDelete());
+		WorkerDetailedRedisModel workerDetailedRedisModel = new WorkerDetailedRedisModel();
+		workerDetailedRedisModel.setId(record.getId());
+		workerDetailedRedisModel.setWorker_id(record.getWorkerId());
+		workerDetailedRedisModel.setUser_id(record.getUserId());
+		workerDetailedRedisModel.setWorkerbrand_id(record.getWorkerbrandId());
+		workerDetailedRedisModel.setFactory_id(record.getFactoryId());
+		workerDetailedRedisModel.setFrame_id(record.getFrameId());
+		workerDetailedRedisModel.setFrame_number(record.getFrameNumber());
+		workerDetailedRedisModel.setGroup_id(record.getGroupId());
+		workerDetailedRedisModel.setMine_id(record.getMineId());
+		workerDetailedRedisModel.setIs_come_in(record.getIsComeIn());
+		workerDetailedRedisModel.setRemarks(record.getRemarks());
+		workerDetailedRedisModel.setIs_delete(record.getIsDelete());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		if (record.getUpdateTime() != null) {
 			String updateTime = sdf.format(record.getUpdateTime());
-			redisModel.setUpdate_time(updateTime);
+			workerDetailedRedisModel.setUpdate_time(updateTime);
 		}
 		if (record.getCreateTime() != null) {
 			String createTime = sdf.format(record.getCreateTime());
-			redisModel.setCreate_time(createTime);
+			workerDetailedRedisModel.setCreate_time(createTime);
 		}
-		return redisModel;
+		workerDetailedRedisModel.setWorker_ip(record.getWorkerIp());
+		return workerDetailedRedisModel;
+	}
+
+	public WorkerbrandSettingRedisModel getWorkerbrandSettingRedisModel(WorkerbrandSetting record) {
+		WorkerbrandSettingRedisModel workerbrandSettingRedisModel = new WorkerbrandSettingRedisModel();
+		workerbrandSettingRedisModel.setId(record.getId());
+		workerbrandSettingRedisModel.setBrand_name(record.getBrandName());
+		workerbrandSettingRedisModel.setWorker_type(record.getWorkerType());
+		workerbrandSettingRedisModel.setBusiness(record.getBusiness());
+		workerbrandSettingRedisModel.setWorker_size(record.getWorkerSize());
+		workerbrandSettingRedisModel.setPower_waste(record.getPowerWaste());
+		workerbrandSettingRedisModel.setDifficulty(record.getDifficulty());
+		workerbrandSettingRedisModel.setIs_delete(0);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		workerbrandSettingRedisModel.setCreate_time(sdf.format(new Date()));
+		workerbrandSettingRedisModel.setUpdate_time(sdf.format(new Date()));
+		workerbrandSettingRedisModel.setAlgorithm_id(record.getAlgorithmId());
+		return workerbrandSettingRedisModel;
+	}
+
+	public OperatorWorkerHisRedisModel getOperatorWorkerHisRedisModel(OperatorWorkerHistory record) {
+		OperatorWorkerHisRedisModel operatorWorkerHisRedisModel = new OperatorWorkerHisRedisModel();
+		operatorWorkerHisRedisModel.setId(record.getId());
+		operatorWorkerHisRedisModel.setMine_id(record.getMineId());
+		operatorWorkerHisRedisModel.setWorker_id(record.getWorkerId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		operatorWorkerHisRedisModel.setReason(record.getReason());
+		operatorWorkerHisRedisModel.setOperator_id(record.getOperatorId());
+		if (record.getMoveOutTime() != null) {
+			String moveOutTime = sdf.format(record.getMoveOutTime());
+			operatorWorkerHisRedisModel.setMove_out_time(moveOutTime);
+		}
+		if ( record.getComeInTime()!= null) {
+			String comeInTime = sdf.format(record.getComeInTime());
+			operatorWorkerHisRedisModel.setCome_in_time(comeInTime);
+		}
+		return operatorWorkerHisRedisModel;
 	}
 
 	//当前时间按15分钟取整

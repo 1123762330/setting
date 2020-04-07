@@ -1,6 +1,13 @@
 package com.xnpool.setting.service.impl;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.MineSettingMapper;
+import com.xnpool.setting.domain.pojo.MineSetting;
+import com.xnpool.setting.domain.redismodel.WorkerbrandSettingRedisModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
 import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
@@ -17,10 +24,13 @@ import java.util.List;
  * @date 2020/2/6 13:22
  */
 @Service
-public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService {
+public class WorkerbrandSettingServiceImpl extends BaseController implements WorkerbrandSettingService {
 
     @Resource
     private WorkerbrandSettingMapper workerbrandSettingMapper;
+
+    @Autowired
+    private MineSettingMapper mineSettingMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -29,7 +39,14 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
 
     @Override
     public int insert(WorkerbrandSetting record) {
-        return workerbrandSettingMapper.insert(record);
+        int rows = workerbrandSettingMapper.insert(record);
+        WorkerbrandSettingRedisModel workerbrandSettingRedisModel = getWorkerbrandSettingRedisModel(record);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        for (MineSetting mineSetting : mineSettingList) {
+            Integer mineId = mineSetting.getId();
+            redisToInsert(rows, "workerbrand_setting", workerbrandSettingRedisModel, mineId);
+        }
+        return rows;
     }
 
     @Override
@@ -39,7 +56,15 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
 
     @Override
     public int updateByPrimaryKeySelective(WorkerbrandSetting record) {
-        return workerbrandSettingMapper.updateById(record);
+        int rows = workerbrandSettingMapper.updateById(record);
+        WorkerbrandSetting workerbrandSetting = workerbrandSettingMapper.selectById(record.getId());
+        WorkerbrandSettingRedisModel workerbrandSettingRedisModel = getWorkerbrandSettingRedisModel(workerbrandSetting);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        for (MineSetting mineSetting : mineSettingList) {
+            Integer mineId = mineSetting.getId();
+            redisToUpdate(rows, "workerbrand_setting", workerbrandSettingRedisModel, mineId);
+        }
+        return rows;
     }
 
     @Override
@@ -49,7 +74,15 @@ public class WorkerbrandSettingServiceImpl  implements WorkerbrandSettingService
 
     @Override
     public int updateById(int id) {
-        return workerbrandSettingMapper.deleteByIdKey(id);
+        int rows = workerbrandSettingMapper.deleteByIdKey(id);
+        WorkerbrandSetting workerbrandSetting = workerbrandSettingMapper.selectById(id);
+        WorkerbrandSettingRedisModel workerbrandSettingRedisModel = getWorkerbrandSettingRedisModel(workerbrandSetting);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        for (MineSetting mineSetting : mineSettingList) {
+            Integer mineId = mineSetting.getId();
+            redisToDelete(rows, "workerbrand_setting", workerbrandSettingRedisModel, mineId);
+        }
+        return rows;
     }
 
     @Override
