@@ -426,21 +426,7 @@
 
     <select id="selectModelToRedis" resultType="com.xnpool.setting.domain.pojo.WorkerDetailed" parameterType="java.util.List">
         SELECT
-        id,
-        worker_id,
-        user_id,
-        workerbrand_id,
-        factory_id,
-        frame_id,
-        frame_number,
-        group_id,
-        mine_id,
-        is_come_in,
-        remarks,
-        is_delete,
-        create_time,
-        update_time,
-        worker_ip
+        <include refid="Base_Column_List"/>
         FROM
         worker_detailed
         WHERE

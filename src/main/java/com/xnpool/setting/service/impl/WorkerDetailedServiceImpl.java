@@ -634,10 +634,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                         frameSetting.setNumber(10);
                         frameId = frameSettingService.insertSelectiveToBatch(frameSetting);
                         System.out.println("新增的矿机架ID"+frameId);
-                    }
-                    long frend = System.currentTimeMillis();
-                    System.out.println("机架新增耗时:"+(frend-fend));
-                    if (frameId!=null){
+
                         workerDetailed.setWorkerId(workerId);
                         workerDetailed.setFactoryId(factoryId);
                         //获取品牌id
@@ -654,6 +651,8 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                         workerDetailed.setWorkerIp(ip);
                         list.add(workerDetailed);
                     }
+                    long frend = System.currentTimeMillis();
+                    System.out.println("机架新增耗时:"+(frend-fend));
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, mineId, workerId, null, new Date(), null, operatorId);
