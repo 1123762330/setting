@@ -173,7 +173,7 @@
     insert into operator_worker_history (worker_id, come_in_time, reason, operator_id,mine_id)
     values
     <foreach collection="list" index="index" item="item" separator=",">
-      (#{item.id,jdbcType=BIGINT},now(),#{item.reason,jdbcType=VARCHAR},#{item.operatorId,jdbcType=INTEGER},#{item.mineId,jdbcType=INTEGER})
+      (#{item.workerId,jdbcType=BIGINT},now(),#{item.reason,jdbcType=VARCHAR},#{item.operatorId,jdbcType=INTEGER},#{item.mineId,jdbcType=INTEGER})
     </foreach>
   </insert>
 

@@ -52,7 +52,17 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
         record.setCreateTime(new Date());
         FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
         redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
-        return rows;
+        return record.getId();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer insertSelectiveToBatch(FactoryHouse record) {
+        int rows = factoryHouseMapper.insertSelective(record);
+        record.setCreateTime(new Date());
+        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
+        redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
+        return record.getId();
     }
 
     @Override

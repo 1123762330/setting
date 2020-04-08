@@ -49,6 +49,9 @@
 //
 //    @Test
 //    public void test() {
+//        long start1 = System.currentTimeMillis();
+//        jedisUtil.zadd("syncing:"+7+":"+142, 2020040812001987L, "jsonString");
+//        System.out.println("终极一步耗时:"+(System.currentTimeMillis()-start1));
 //        //HashSet<String> hashSet = new HashSet<>();
 //        //hashSet.add("127.0.0.1");
 //        //hashSet.add("127.0.0.2");

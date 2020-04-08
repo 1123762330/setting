@@ -368,8 +368,6 @@
       <if test="state != null and state != ''">
         AND state = #{state}
       </if>
-      AND id>=6403156
-      AND id&lt;=6403158
     </where>
   </select>
 

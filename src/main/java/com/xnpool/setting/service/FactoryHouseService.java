@@ -21,6 +21,8 @@ public interface FactoryHouseService {
 
     Integer insertSelective(FactoryHouse record);
 
+    Integer insertSelectiveToBatch(FactoryHouse record);
+
     FactoryHouse selectByPrimaryKey(Integer id);
 
     void updateByPrimaryKeySelective(FactoryHouse record);

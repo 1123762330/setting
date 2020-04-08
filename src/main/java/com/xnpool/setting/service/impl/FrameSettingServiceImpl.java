@@ -108,6 +108,44 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public Integer insertSelectiveToBatch(FrameSetting record) {
+        String framename = record.getFrameName();
+        Integer number = record.getNumber();
+        String detailed = framename + " 1-" + number + "层";
+        record.setDetailed(detailed);
+        record.setCreateTime(new Date());
+        int rows = frameSettingMapper.insertSelective(record);
+
+        long start = System.currentTimeMillis();
+        //同时在矿机详情表生成数据
+        List<WorkerDetailed> list = new ArrayList<>();
+        List<WorkerDetailedRedisModel> redisList = new ArrayList<>();
+        for (int i = 1; i <= number; i++) {
+            WorkerDetailed workerDetailed = new WorkerDetailed();
+            workerDetailed.setFactoryId(record.getFactoryId());
+            workerDetailed.setFrameId(record.getId());
+            workerDetailed.setFrameNumber(i);
+            workerDetailed.setMineId(record.getMineId());
+            workerDetailed.setCreateTime(new Date());
+            workerDetailed.setUpdateTime(new Date());
+            list.add(workerDetailed);
+        }
+        int rows2 = workerDetailedMapper.batchInsert(list);
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
+        //批量入缓存
+        for (WorkerDetailed workerDetailed : list) {
+            WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);
+            redisList.add(workerDetailedRedisModel);
+        }
+        long timeMillis = System.currentTimeMillis();
+        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+        redisToBatchInsert(rows2, "worker_detailed", redisList, record.getMineId());
+        System.out.println("=====单纯入缓存耗时:"+(System.currentTimeMillis()-timeMillis));
+        return record.getId();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer insertByNotExits(FrameSetting record) {
         List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
         if (frameNameList.contains(record.getFrameName())) {
@@ -244,7 +282,7 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
 
     @Override
     public Integer equalsFrameName(String frameStr, Integer factoryId, Integer mineId) {
-        return frameSettingMapper.equalsFrameName(frameStr,factoryId,mineId);
+        return frameSettingMapper.equalsFrameName(frameStr, factoryId, mineId);
     }
 
 }

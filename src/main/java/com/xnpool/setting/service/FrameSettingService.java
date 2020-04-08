@@ -19,6 +19,8 @@ public interface FrameSettingService {
 
     Integer insertSelective(FrameSetting record);
 
+    Integer insertSelectiveToBatch(FrameSetting record);
+
     Integer insertByNotExits(FrameSetting record);
 
     FrameSetting selectByPrimaryKey(Integer id);

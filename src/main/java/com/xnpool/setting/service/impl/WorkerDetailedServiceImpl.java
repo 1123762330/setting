@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
@@ -569,10 +570,12 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @Param
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void batchIntoFrame(String token) {
         Integer operatorId = getUserId(token);
         List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(1);
         List<WorkerInfo> workers = workerInfoMapper.selectByOther(null, null, null);
+        System.out.println("workers==="+workers.size());
         //批量入数据库的集合
         ArrayList<WorkerDetailed> list = new ArrayList<>();
         //批量入缓存的数据集合
@@ -583,6 +586,8 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         ArrayList<OperatorWorkerHisRedisModel> operatorWorkerRedisList = new ArrayList<>();
         //矿机品牌集合
         HashMap<String, Integer> workerTypeMap = workerbrandSettingService.selectMapByWorkerType();
+        long start = System.currentTimeMillis();
+        System.out.println("开始时间:"+start);
         for (WorkerInfo worker : workers) {
             Integer mineId = Integer.valueOf(worker.getMineId().toString());
             String ip = worker.getIp();
@@ -595,6 +600,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     String factoryStr = split[1];
                     String frameStr = split[2];
                     String placeStr = split[3];
+                    //if (Integer.valueOf(placeStr)<11||Integer.valueOf(placeStr)>110){
+                    //    continue;
+                    //}
                     Integer num = Integer.valueOf(placeStr) % 10;
                     String paiNumber = "";
                     String Number = "";
@@ -606,15 +614,17 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                         Number = placeStr.substring(0, placeStr.length() - 1);
                         paiNumber = placeStr.substring(placeStr.length() - 1);
                     }
-
+                    long fstart = System.currentTimeMillis();
                     frameStr = frameStr + "#" + paiNumber;
                     Integer factoryId = factoryHouseService.equalsFactoryName(factoryStr, mineId);
                     if (factoryId == null) {
                         FactoryHouse factoryHouse = new FactoryHouse();
                         factoryHouse.setFactoryName(factoryStr);
                         factoryHouse.setMineId(mineId);
-                        factoryId = factoryHouseService.insertSelective(factoryHouse);
+                        factoryId = factoryHouseService.insertSelectiveToBatch(factoryHouse);
                     }
+                    long fend = System.currentTimeMillis();
+                    System.out.println("厂房新增查询耗时:"+(fend-fstart));
                     Integer frameId = frameSettingService.equalsFrameName(frameStr, factoryId, mineId);
                     if (frameId == null) {
                         FrameSetting frameSetting = new FrameSetting();
@@ -622,23 +632,29 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                         frameSetting.setFactoryId(factoryId);
                         frameSetting.setMineId(mineId);
                         frameSetting.setNumber(10);
-                        frameId = frameSettingService.insertSelective(frameSetting);
+                        frameId = frameSettingService.insertSelectiveToBatch(frameSetting);
+                        System.out.println("新增的矿机架ID"+frameId);
                     }
-                    workerDetailed.setWorkerId(workerId);
-                    workerDetailed.setFactoryId(factoryId);
-                    //获取品牌id
-                    String mineType = worker.getMineType();
-                    Integer workerbrandId = workerTypeMap.get(mineType);
-                    workerDetailed.setWorkerbrandId(workerbrandId);
-                    workerDetailed.setFrameId(frameId);
-                    workerDetailed.setFrameNumber(Integer.valueOf(Number));
-                    workerDetailed.setMineId(mineId);
-                    workerDetailed.setIsComeIn(1);
-                    workerDetailed.setIsDelete(0);
-                    workerDetailed.setCreateTime(new Date());
-                    workerDetailed.setUpdateTime(new Date());
-                    workerDetailed.setWorkerIp(ip);
-                    list.add(workerDetailed);
+                    long frend = System.currentTimeMillis();
+                    System.out.println("机架新增耗时:"+(frend-fend));
+                    if (frameId!=null){
+                        workerDetailed.setWorkerId(workerId);
+                        workerDetailed.setFactoryId(factoryId);
+                        //获取品牌id
+                        String mineType = worker.getMineType();
+                        Integer workerbrandId = workerTypeMap.get(mineType);
+                        workerDetailed.setWorkerbrandId(workerbrandId);
+                        workerDetailed.setFrameId(frameId);
+                        workerDetailed.setFrameNumber(Integer.valueOf(Number));
+                        workerDetailed.setMineId(mineId);
+                        workerDetailed.setIsComeIn(1);
+                        workerDetailed.setIsDelete(0);
+                        workerDetailed.setCreateTime(new Date());
+                        workerDetailed.setUpdateTime(new Date());
+                        workerDetailed.setWorkerIp(ip);
+                        list.add(workerDetailed);
+                    }
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, mineId, workerId, null, new Date(), null, operatorId);
                     operatorWorkerList.add(operatorWorkerHistory);
@@ -648,7 +664,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 }
             }
         }
-
+        long wstart = System.currentTimeMillis();
         if (!list.isEmpty()) {
             //批量上架
             int rows = workerDetailedMapper.updateBatch(list);
@@ -665,6 +681,8 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 redisToBatchUpdate(rows, "worker_detailed", entry.getValue(), entry.getKey());
             }
         }
+        long wend = System.currentTimeMillis();
+        System.out.println("入详情表耗时:"+(wend-wstart));
         if (!operatorWorkerRedisList.isEmpty()) {
             int rows = operatorWorkerHistoryMapper.insertTobatch(operatorWorkerList);
             //所有操作同步入缓存
@@ -673,6 +691,9 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 redisToBatchInsert(rows, "operator_worker_histkory", entry.getValue(), entry.getKey());
             }
         }
+        long oend = System.currentTimeMillis();
+        System.out.println("历史操作耗时:"+(oend-wend));
+        System.out.println("总耗时:"+(System.currentTimeMillis()-start));
     }
 
     @Override
