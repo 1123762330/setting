@@ -27,4 +27,13 @@
         </foreach>
     </insert>
 
+    <update id="deleteByBatch" parameterType="java.util.List">
+        update ip_assign set is_del=1
+        WHERE
+        <foreach collection="list" item="item" open="( " separator=") or (" close=" )">
+            is_del=0 and user_id=#{item.user_id} and mine_id =#{item.mine_id} and
+            ip_id=#{item.ip_id}
+        </foreach>
+    </update>
+
 </mapper>

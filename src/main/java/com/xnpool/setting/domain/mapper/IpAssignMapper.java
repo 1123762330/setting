@@ -18,4 +18,6 @@ import java.util.List;
 public interface IpAssignMapper extends BaseMapper<IpAssign> {
 
     Integer batchInsert(ArrayList<MineIdAndIP> ip_list);
+
+    Integer deleteByBatch(ArrayList<MineIdAndIP> delete_ips);
 }

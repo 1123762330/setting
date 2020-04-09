@@ -115,10 +115,169 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addAssignWorker(String ids, String ipId, String token) {
+    public void addAssignWorker(String ids,String deleteIds,String deleteIps, String ipId, String token) {
+        Integer userId = getUserId(token);
+        List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
+        HashSet<String> frameSet_db = new HashSet<>();
+        HashSet<String> factorySet_db = new HashSet<>();
+        HashSet<Integer> mineSet_db = new HashSet<>();
+        for (WorkerAssign workerAssign : workerAssigns) {
+            Integer mineId = workerAssign.getMineId();
+            Integer factoryId = workerAssign.getFactoryId();
+            Integer frameId = workerAssign.getFrameId();
+            frameSet_db.add(mineId+"-"+factoryId+"-"+frameId);
+            factorySet_db.add(mineId+"-"+factoryId);
+            mineSet_db.add(mineId);
+        }
+
+        //先执行删除操作
+        HashMap<Integer, List<MineFactoryAndFraneId>> deleteResultMap = new HashMap<>();
+        ArrayList<MineFactoryAndFraneId> deleteList = new ArrayList<>();
+
+        //矿机架删除
+        if (!StringUtils.isEmpty(deleteIds)){
+            if (deleteIds.contains(",")) {
+                //多个矿机架
+                String[] split = deleteIds.split(",");
+                for (int i = 0; i < split.length; i++) {
+                    String id = split[i];
+                    String[] splitId = id.split("-");
+                    //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
+                    if (!id.contains("-")) {
+                        //直接是矿场ID
+                        if (mineSet_db.contains(id)){
+                            Integer mineId = Integer.valueOf(id);
+                            HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
+                            Set<Integer> keySet = factoryMap.keySet();
+                            HashSet<Integer> factorySet = new HashSet<>();
+                            for (Integer factoryId : keySet) {
+                                factorySet.add(factoryId);
+                            }
+                            for (Integer factoryId : factorySet) {
+                                HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
+                                Set<Integer> frameIdSet = frameNameMap.keySet();
+                                for (Integer frameId : frameIdSet) {
+                                    MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                                    deleteList.add(mineFactoryAndFraneId);
+                                }
+                            }
+                            deleteResultMap.put(Integer.valueOf(ids), deleteList);
+                        }
+
+                    } else if (splitId.length == 2) {
+                        //第二种,矿场ID-厂房ID
+                        if (factorySet_db.contains(id)){
+                            Integer mineId = Integer.valueOf(splitId[0]);
+                            Integer factoryId = Integer.valueOf(splitId[1]);
+                            HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
+                            Set<Integer> keySet = frameNameMap.keySet();
+                            for (Integer frameId : keySet) {
+                                MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                                deleteList.add(mineFactoryAndFraneId);
+                            }
+                            deleteResultMap.put(mineId, deleteList);
+                        }
+                    } else {
+                        //第三种,矿场ID-厂房ID-机架ID
+                        if (frameSet_db.contains(id)){
+                            Integer mineId = Integer.valueOf(splitId[0]);
+                            Integer factoryId = Integer.valueOf(splitId[1]);
+                            Integer frameId = Integer.valueOf(splitId[2]);
+                            MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                            deleteList.add(mineFactoryAndFraneId);
+                            deleteResultMap.put(mineId, deleteList);
+                        }
+                    }
+                }
+            } else {
+                //单个矿机架
+                //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
+                String[] splitId = deleteIds.split("-");
+                if (!ids.contains("-")) {
+                    //直接是矿场ID
+                    Integer mineId = Integer.valueOf(ids);
+                    if (mineSet_db.contains(mineId)) {
+                        HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
+                        Set<Integer> keySet = factoryMap.keySet();
+                        List<Integer> factoryIdList = new ArrayList<>();
+                        for (Integer factoryId : keySet) {
+                            factoryIdList.add(factoryId);
+                        }
+                        for (Integer factoryId : factoryIdList) {
+                            HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
+                            Set<Integer> frameIdSet = frameNameMap.keySet();
+                            for (Integer frameId : frameIdSet) {
+                                MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                                deleteList.add(mineFactoryAndFraneId);
+                            }
+                        }
+                        deleteResultMap.put(Integer.valueOf(ids), deleteList);
+                    }
+                } else if (splitId.length == 2) {
+                    //第二种,矿场ID-厂房ID
+                    if (factorySet_db.contains(ids)) {
+                        Integer mineId = Integer.valueOf(splitId[0]);
+                        Integer factoryId = Integer.valueOf(splitId[1]);
+                        HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
+                        Set<Integer> keySet = frameNameMap.keySet();
+                        for (Integer frameId : keySet) {
+                            MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                            deleteList.add(mineFactoryAndFraneId);
+                        }
+                        deleteResultMap.put(mineId, deleteList);
+                    }
+
+                } else {
+                    //第三种,矿场ID-厂房ID-机架ID
+                    if (frameSet_db.contains(ids)) {
+                        Integer mineId = Integer.valueOf(splitId[0]);
+                        Integer factoryId = Integer.valueOf(splitId[1]);
+                        Integer frameId = Integer.valueOf(splitId[2]);
+                        MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                        deleteList.add(mineFactoryAndFraneId);
+                        deleteResultMap.put(mineId, deleteList);
+                    }
+                }
+            }
+            //执行批量软删除
+            int rows3 = workerAssignMapper.batchToDelete(deleteList);
+            //矿机架权限分配同步入缓存
+            for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : deleteResultMap.entrySet()) {
+                redisToBatchDelete(rows3, "worker_assign", entry.getValue(), entry.getKey());
+            }
+        }
+        //Ip区间删除
+        ArrayList<MineIdAndIP> delete_ips = new ArrayList<>();
+        if (!StringUtils.isEmpty(deleteIps)){
+            if (deleteIds.contains(",")) {
+                String[] split = ipId.split(",");
+                for (String ip_id : split) {
+                    String[] split2 = ip_id.split("-");
+                    Integer mineId = Integer.valueOf(split2[0]);
+                    Integer ip_id2 = Integer.valueOf(split2[1]);
+                    MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id2);
+                    delete_ips.add(mineIdAndIP);
+                }
+            } else {
+                String[] split = deleteIds.split("-");
+                Integer mineId = Integer.valueOf(split[0]);
+                Integer ip_id = Integer.valueOf(split[1]);
+                MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id);
+                delete_ips.add(mineIdAndIP);
+            }
+            //删除ip
+            Integer rows4 = ipAssignMapper.deleteByBatch(delete_ips);
+            //记录缓存
+            Map<Integer, List<MineIdAndIP>> groupByMineId = delete_ips.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
+            //ip区间权限删除同步入缓存
+            for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
+                redisToBatchDelete(rows4, "ip_assign", entry.getValue(), entry.getKey());
+            }
+        }
+
+        //执行添加操作
         HashMap<Integer, List<MineFactoryAndFraneId>> resultMap = new HashMap<>();
         ArrayList<MineFactoryAndFraneId> list = new ArrayList<>();
-        Integer userId = getUserId(token);
         if (ids.contains(",")) {
             //多个矿机架
             String[] split = ids.split(",");
@@ -128,7 +287,58 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                 //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
                 if (!id.contains("-")) {
                     //直接是矿场ID
-                    Integer mineId = Integer.valueOf(id);
+                    if (!mineSet_db.contains(id)){
+                        Integer mineId = Integer.valueOf(id);
+                        HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
+                        Set<Integer> keySet = factoryMap.keySet();
+                        HashSet<Integer> factorySet = new HashSet<>();
+                        for (Integer factoryId : keySet) {
+                            factorySet.add(factoryId);
+                        }
+                        for (Integer factoryId : factorySet) {
+                            HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
+                            Set<Integer> frameIdSet = frameNameMap.keySet();
+                            for (Integer frameId : frameIdSet) {
+                                MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                                list.add(mineFactoryAndFraneId);
+                            }
+                        }
+                        resultMap.put(Integer.valueOf(ids), list);
+                    }
+
+                } else if (splitId.length == 2) {
+                    //第二种,矿场ID-厂房ID
+                    if (!factorySet_db.contains(id)){
+                        Integer mineId = Integer.valueOf(splitId[0]);
+                        Integer factoryId = Integer.valueOf(splitId[1]);
+                        HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
+                        Set<Integer> keySet = frameNameMap.keySet();
+                        for (Integer frameId : keySet) {
+                            MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                            list.add(mineFactoryAndFraneId);
+                        }
+                        resultMap.put(mineId, list);
+                    }
+                } else {
+                    //第三种,矿场ID-厂房ID-机架ID
+                    if (!frameSet_db.contains(id)){
+                        Integer mineId = Integer.valueOf(splitId[0]);
+                        Integer factoryId = Integer.valueOf(splitId[1]);
+                        Integer frameId = Integer.valueOf(splitId[2]);
+                        MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
+                        list.add(mineFactoryAndFraneId);
+                        resultMap.put(mineId, list);
+                    }
+                }
+            }
+        } else {
+            //单个矿机架
+            //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
+            String[] splitId = ids.split("-");
+            if (!ids.contains("-")) {
+                //直接是矿场ID
+                Integer mineId = Integer.valueOf(ids);
+                if(!mineSet_db.contains(mineId)){
                     HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
                     Set<Integer> keySet = factoryMap.keySet();
                     List<Integer> factoryIdList = new ArrayList<>();
@@ -144,8 +354,10 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                         }
                     }
                     resultMap.put(Integer.valueOf(ids), list);
-                } else if (splitId.length == 2) {
-                    //第二种,矿场ID-厂房ID
+                }
+            } else if (splitId.length == 2) {
+                //第二种,矿场ID-厂房ID
+                if (!factorySet_db.contains(ids)){
                     Integer mineId = Integer.valueOf(splitId[0]);
                     Integer factoryId = Integer.valueOf(splitId[1]);
                     HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
@@ -155,8 +367,11 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                         list.add(mineFactoryAndFraneId);
                     }
                     resultMap.put(mineId, list);
-                } else {
-                    //第三种,矿场ID-厂房ID-机架ID
+                }
+
+            } else {
+                //第三种,矿场ID-厂房ID-机架ID
+                if(!frameSet_db.contains(ids)){
                     Integer mineId = Integer.valueOf(splitId[0]);
                     Integer factoryId = Integer.valueOf(splitId[1]);
                     Integer frameId = Integer.valueOf(splitId[2]);
@@ -164,48 +379,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                     list.add(mineFactoryAndFraneId);
                     resultMap.put(mineId, list);
                 }
-            }
-        } else {
-            //单个矿机架
-            //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
-            String[] splitId = ids.split("-");
-            if (!ids.contains("-")) {
-                //直接是矿场ID
-                Integer mineId = Integer.valueOf(ids);
-                HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
-                Set<Integer> keySet = factoryMap.keySet();
-                List<Integer> factoryIdList = new ArrayList<>();
-                for (Integer factoryId : keySet) {
-                    factoryIdList.add(factoryId);
-                }
-                for (Integer factoryId : factoryIdList) {
-                    HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
-                    Set<Integer> frameIdSet = frameNameMap.keySet();
-                    for (Integer frameId : frameIdSet) {
-                        MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
-                        list.add(mineFactoryAndFraneId);
-                    }
-                }
-                resultMap.put(Integer.valueOf(ids), list);
-            } else if (splitId.length == 2) {
-                //第二种,矿场ID-厂房ID
-                Integer mineId = Integer.valueOf(splitId[0]);
-                Integer factoryId = Integer.valueOf(splitId[1]);
-                HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
-                Set<Integer> keySet = frameNameMap.keySet();
-                for (Integer frameId : keySet) {
-                    MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
-                    list.add(mineFactoryAndFraneId);
-                }
-                resultMap.put(mineId, list);
-            } else {
-                //第三种,矿场ID-厂房ID-机架ID
-                Integer mineId = Integer.valueOf(splitId[0]);
-                Integer factoryId = Integer.valueOf(splitId[1]);
-                Integer frameId = Integer.valueOf(splitId[2]);
-                MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
-                list.add(mineFactoryAndFraneId);
-                resultMap.put(mineId, list);
             }
 
         }
@@ -235,11 +408,11 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         Map<Integer, List<MineIdAndIP>> groupByMineId = ip_list.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
         //矿机架权限分配同步入缓存
         for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : resultMap.entrySet()) {
-            redisToBatchInsert(rows, "worker_assign", list, entry.getKey());
+            redisToBatchInsert(rows, "worker_assign", entry.getValue(), entry.getKey());
         }
         //ip区间权限分配同步入缓存
         for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
-            redisToBatchInsert(rows2, "ip_assign", list, entry.getKey());
+            redisToBatchInsert(rows2, "ip_assign", entry.getValue(), entry.getKey());
         }
     }
 

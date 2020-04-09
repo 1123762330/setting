@@ -30,4 +30,6 @@ public interface WorkerAssignMapper {
     List<HashMap> selectCountGroupByUserId();
 
     List<WorkerAssign> selectWorkerAssignList(@Param("userId") Integer userId);
+
+    int batchToDelete(ArrayList<MineFactoryAndFraneId> deleteList);
 }

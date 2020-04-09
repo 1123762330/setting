@@ -11,15 +11,9 @@
 //import com.xnpool.logaop.util.JwtUtil;
 //import com.xnpool.setting.config.ApiContext;
 //import com.xnpool.setting.controller.MineSettingController;
-//import com.xnpool.setting.domain.mapper.AlgorithmMapper;
-//import com.xnpool.setting.domain.mapper.IpSettingMapper;
-//import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
-//import com.xnpool.setting.domain.mapper.WorkerbrandSettingMapper;
+//import com.xnpool.setting.domain.mapper.*;
 //import com.xnpool.setting.domain.model.WorkerDetailedExample;
-//import com.xnpool.setting.domain.pojo.Algorithm;
-//import com.xnpool.setting.domain.pojo.IpSetting;
-//import com.xnpool.setting.domain.pojo.MineSetting;
-//import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
+//import com.xnpool.setting.domain.pojo.*;
 //import com.xnpool.setting.service.CustomerSettingService;
 //import com.xnpool.setting.service.impl.UserWebService;
 //import com.xnpool.setting.utils.JedisUtil;
@@ -39,19 +33,29 @@
 //public class SettingApplicationTests {
 //
 //    @Autowired
-//    private JedisUtil jedisUtil;
+//    private WorkerAssignMapper workerAssignMapper;
 //
-//    //@Before
-//    //public void before() {
-//    //    // 在上下文中设置当前服务商的ID
-//    //    //apiContext.setTenantId(112233L);
-//    //}
+//    @Autowired
+//    private ApiContext apiContext;
+//
+//    @Before
+//    public void before() {
+//        // 在上下文中设置当前服务商的ID
+//        //apiContext.setTenantId(112233L);
+//    }
 //
 //    @Test
 //    public void test() {
-//        long start1 = System.currentTimeMillis();
-//        jedisUtil.zadd("syncing:"+7+":"+142, 2020040812001987L, "jsonString");
-//        System.out.println("终极一步耗时:"+(System.currentTimeMillis()-start1));
+//        ArrayList<MineFactoryAndFraneId> list = new ArrayList<>();
+//        MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(49, 142, 34, 1078);
+//        MineFactoryAndFraneId mineFactoryAndFraneId2 = new MineFactoryAndFraneId(49, 142, 34, 1077);
+//        list.add(mineFactoryAndFraneId);
+//        list.add(mineFactoryAndFraneId2);
+//        apiContext.setTenantId(7L);
+//        int rows3 = workerAssignMapper.batchToDelete(list);
+//        //long start1 = System.currentTimeMillis();
+//        //jedisUtil.zadd("syncing:"+7+":"+142, 2020040812001987L, "jsonString");
+//        //System.out.println("终极一步耗时:"+(System.currentTimeMillis()-start1));
 //        //HashSet<String> hashSet = new HashSet<>();
 //        //hashSet.add("127.0.0.1");
 //        //hashSet.add("127.0.0.2");

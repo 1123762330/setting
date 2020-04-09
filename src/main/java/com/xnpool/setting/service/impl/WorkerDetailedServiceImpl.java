@@ -184,7 +184,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         String remarks = workerDetailedParam.getRemarks();
         Integer workerIds = workerInfoMapper.selectWorkerIdByIp(workerIp, mineId);
         List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(1);
-        log.info("库中已经存在的矿机ID:" + workerIdList);
+        //log.info("库中已经存在的矿机ID:" + workerIdList);
         ArrayList<OperatorWorkerHistory> operatorWorkerHisList = new ArrayList<>();
         WorkerDetailed workerDetailed = new WorkerDetailed();
         if (workerIdList.contains(workerIds)) {

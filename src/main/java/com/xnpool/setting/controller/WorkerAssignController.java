@@ -58,9 +58,9 @@ public class WorkerAssignController extends BaseController {
      */
     @SystemLog(value = "矿机权限设置",type = LogType.MINE)
     @PostMapping("/addAssignWorker")
-    public ResponseResult addAssignWorker(String ids,String ipId, HttpServletRequest request) {
+    public ResponseResult addAssignWorker(String ids,String deleteIds,String deleteIps,String ipId, HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        workerAssignService.addAssignWorker(ids,ipId,token);
+        workerAssignService.addAssignWorker(ids,deleteIds,deleteIps,ipId,token);
         return new ResponseResult(SUCCESS);
     }
 

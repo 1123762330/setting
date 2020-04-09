@@ -173,4 +173,13 @@
             is_del=0
             AND user_id = #{userId}
     </select>
+
+  <update id="batchToDelete" parameterType="java.util.List">
+    update worker_assign set is_del=1
+    WHERE
+    <foreach collection="list" item="item" open="( " separator=") or (" close=" )">
+      is_del=0 and user_id=#{item.user_id} and mine_id =#{item.mine_id} and
+      factory_id=#{item.factory_id} and frame_id =#{item.frame_id}
+    </foreach>
+  </update>
 </mapper>
