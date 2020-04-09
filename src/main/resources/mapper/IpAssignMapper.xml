@@ -10,11 +10,12 @@
         <result column="ip_id" property="ipId" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="is_del" property="isDel" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, mine_id, ip_id, create_time, update_time
+        id, user_id, mine_id, ip_id, create_time, update_time, is_del
     </sql>
 
     <!--批量保存-->
@@ -25,9 +26,5 @@
             (#{item.user_id},#{item.mine_id},#{item.ip_id})
         </foreach>
     </insert>
-
-    <select id="selectIpIdList" resultType="integer">
-        select ip_id FROM ip_assign
-    </select>
 
 </mapper>

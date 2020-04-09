@@ -22,7 +22,7 @@ public interface AlgorithmService {
 
     PageInfo<Algorithm> selectAlgorithm(String keyWord, int pageNum, int pageSize);
 
-    HashMap<Integer, String>  selectAlgorithmMap();
+    HashMap<Integer, String>  selectAlgorithmMap(String token,Long tenantId);
 
 
     int updateByPrimaryKey(Algorithm record);

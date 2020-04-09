@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.Algorithm;
 import com.xnpool.setting.service.AlgorithmService;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
@@ -25,6 +27,9 @@ import java.util.HashMap;
 public class AlgorithmController extends BaseController {
     @Autowired
     private AlgorithmService algorithmService;
+
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     /**
      * @return
@@ -92,8 +97,10 @@ public class AlgorithmController extends BaseController {
      * @return
      */
     @GetMapping("/selectAlgorithmMap")
-    public ResponseResult selectAlgorithmMap (){
-        HashMap<Integer, String> algorithmMap = algorithmService.selectAlgorithmMap();
+    public ResponseResult selectAlgorithmMap (HttpServletRequest request){
+        String token = writeLogUtil.getToken(request);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        HashMap<Integer, String> algorithmMap = algorithmService.selectAlgorithmMap(token,tenantId);
         return new ResponseResult(SUCCESS,algorithmMap);
     }
 }

@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author zly
- * @since 2020-04-03
+ * @since 2020-04-09
  */
 public interface IpAssignService extends IService<IpAssign> {
 

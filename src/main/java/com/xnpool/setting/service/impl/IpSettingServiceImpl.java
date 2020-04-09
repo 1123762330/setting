@@ -142,19 +142,15 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
 
     @Override
     public HashMap<Integer, String> selectByIpStartByMineId(String mineName,Integer mineId) {
-        List<Integer> ipIdList = ipAssignMapper.selectIpIdList();
         List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null,mineId);
         if (ipSettings != null) {
             HashMap<Integer, String> resultMap = new HashMap<>();
             ipSettings.forEach(ipSetting -> {
                 Integer id = ipSetting.getId();
-                //过滤已经分配了的IP区间
-                if (!ipIdList.contains(id)){
                     String startIp = ipSetting.getStartIp();
                     String endIp = ipSetting.getEndIp();
                     String ipName = mineName+" "+startIp + "-" + endIp;
                     resultMap.put(id, ipName);
-                }
             });
             return resultMap;
         } else {

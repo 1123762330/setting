@@ -13,10 +13,9 @@ import java.util.List;
  * </p>
  *
  * @author zly
- * @since 2020-04-03
+ * @since 2020-04-09
  */
 public interface IpAssignMapper extends BaseMapper<IpAssign> {
 
     Integer batchInsert(ArrayList<MineIdAndIP> ip_list);
-    List<Integer> selectIpIdList();
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author zly
- * @since 2020-04-03
+ * @since 2020-04-09
  */
 @Service
 public class IpAssignServiceImpl extends ServiceImpl<IpAssignMapper, IpAssign> implements IpAssignService {

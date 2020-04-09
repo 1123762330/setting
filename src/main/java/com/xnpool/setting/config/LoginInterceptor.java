@@ -1,13 +1,12 @@
 package com.xnpool.setting.config;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.logaop.util.WriteLogUtil;
+import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.common.PassToken;
 import com.xnpool.setting.common.UserLoginToken;
-import com.xnpool.setting.utils.TokenUtil;
+import com.xnpool.setting.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +30,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class LoginInterceptor extends BaseController implements HandlerInterceptor {
 
 	@Autowired
 	private ApiContext apiContext;
@@ -49,17 +48,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 		//获取token
 		String token = writeLogUtil.getToken(request);
-		Long tenant_id=-1L;
-		Map<String, String> verify = JwtUtil.verify(token);
-		if(verify!=null){
-			Object enterpriseIdObj = verify.get("tenant_id");
-			if(!StringUtils.isEmpty(enterpriseIdObj)&&!"null".equals(enterpriseIdObj)){
-				String data = enterpriseIdObj.toString();
-				if(!data.contains(",")){
-					tenant_id = Long.valueOf(data);
-				}
-			}
-		}
+		Long tenant_id = getTenantId(token);
 		apiContext.setTenantId(tenant_id);
 		// 如果不是映射到方法直接通过
 		if(!(object instanceof HandlerMethod)){

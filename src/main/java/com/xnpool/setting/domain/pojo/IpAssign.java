@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author zly
- * @since 2020-04-03
+ * @since 2020-04-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -53,6 +53,11 @@ public class IpAssign implements Serializable {
      * 修改时间
      */
     private LocalDateTime updateTime;
+
+    /**
+     * 0:未删除,1:已删除
+     */
+    private Integer isDel;
 
 
 }

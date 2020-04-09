@@ -5,6 +5,8 @@ import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
 import com.xnpool.setting.domain.pojo.WorkerAssign;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,7 +31,14 @@ public interface WorkerAssignService {
 
     PageInfo<UserRoleVO> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    void addAssignWorker(String ids,String ipId,String token);
+    void addAssignWorker(String ids, String ipId, String token);
 
-    List<Integer> selectWorkerAssign();
+    HashMap<Integer, HashMap<String, Integer>> selectAssignMineMap(String token);
+
+    HashMap<Integer, HashMap<String, Integer>> selectAssignFactoryMap(String token,Integer mineId);
+
+    HashMap<Integer, HashMap<String, Integer>> selectAssignFrameMap(String token, Integer factoryId);
+
+    HashMap<Integer, HashMap<String, Integer>> selectAssignIPMap(String token,String mineName, Integer mineId);
 }
+

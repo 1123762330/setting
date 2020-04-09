@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -64,9 +65,41 @@ public class WorkerAssignController extends BaseController {
     }
 
     //判断添加的矿机架是否已经分配
-    @PostMapping("/selectWorkerAssign")
-    public ResponseResult selectWorkerAssign() {
-        List<Integer> list = workerAssignService.selectWorkerAssign();
-        return new ResponseResult(SUCCESS,list);
+    //@PostMapping("/selectWorkerAssign")
+    //public ResponseResult selectWorkerAssign() {
+    //    List<Integer> list = workerAssignService.selectWorkerAssign();
+    //    return new ResponseResult(SUCCESS,list);
+    //}
+
+    @SystemLog(value = "运维设置查询矿场列表",type = LogType.MINE)
+    @GetMapping("/selectAssignMineMap")
+    public ResponseResult selectAssignMineMap(HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignMineMap(token);
+        return new ResponseResult(SUCCESS,mineMap);
+    }
+
+    @SystemLog(value = "运维设置查询厂房列表",type = LogType.MINE)
+    @GetMapping("/selectAssignFactoryMap")
+    public ResponseResult selectAssignFactoryMap(HttpServletRequest request,Integer mineId) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignFactoryMap(token,mineId);
+        return new ResponseResult(SUCCESS,mineMap);
+    }
+
+    @SystemLog(value = "运维设置查询机架列表",type = LogType.MINE)
+    @GetMapping("/selectAssignFrameMap")
+    public ResponseResult selectAssignFrameMap(HttpServletRequest request,Integer factoryId) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignFrameMap(token,factoryId);
+        return new ResponseResult(SUCCESS,mineMap);
+    }
+
+    @SystemLog(value = "运维设置查询IP区间列表",type = LogType.MINE)
+    @GetMapping("/selectAssignIPMap")
+    public ResponseResult selectAssignIPMap(HttpServletRequest request,String mineName,Integer mineId) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignIPMap(token, mineName,mineId);
+        return new ResponseResult(SUCCESS,mineMap);
     }
 }

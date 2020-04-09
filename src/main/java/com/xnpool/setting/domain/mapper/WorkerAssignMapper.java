@@ -1,18 +1,14 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.MineFactoryAndFraneId;
-import com.xnpool.setting.domain.pojo.UserRoleVO;
-import com.xnpool.setting.domain.pojo.WorkerAssign;
+import com.xnpool.setting.domain.pojo.MineFactoryAndFraneId;import com.xnpool.setting.domain.pojo.UserRoleVO;import com.xnpool.setting.domain.pojo.WorkerAssign;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;import java.util.HashMap;import java.util.List;
 
 /**
- * @author  zly
- * @date  2020/3/6 14:57
+ * @author zly
  * @version 1.0
+ * @date 2020/4/9 14:34
  */
 public interface WorkerAssignMapper {
     int deleteByPrimaryKey(Integer id);
@@ -31,7 +27,7 @@ public interface WorkerAssignMapper {
 
     int batchInsert(ArrayList<MineFactoryAndFraneId> list);
 
-    List<Integer> selectWorkerAssign();
-
     List<HashMap> selectCountGroupByUserId();
+
+    List<WorkerAssign> selectWorkerAssignList(@Param("userId") Integer userId);
 }

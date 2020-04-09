@@ -148,7 +148,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "矿机分配所属用户",type = LogType.MINE)
+    //@SystemLog(value = "矿机分配所属用户",type = LogType.MINE)
     @PutMapping("/batchUpdateToUser")
     public ResponseResult batchUpdateToUser(String ids,Integer userId,Integer groupId,HttpServletRequest request) {
         //String token = writeLogUtil.getToken(request);

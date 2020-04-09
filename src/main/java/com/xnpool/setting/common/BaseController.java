@@ -599,7 +599,7 @@ public class BaseController {
 	 */
 	public Integer getUserId(String token){
 		Integer userId=0;
-		Map<String, String> verify = JwtUtil.verify(token);
+		Map<String, Object> verify = JwtUtil.verify(token);
 		System.out.println("解析的token:"+verify);
 		if (verify != null) {
 			Object userIdObj = verify.get("id");
@@ -621,7 +621,7 @@ public class BaseController {
 	 */
 	public Long getTenantId(String token){
 		Long tenant_id=-1L;
-		Map<String, String> verify = JwtUtil.verify(token);
+		Map<String, Object> verify = JwtUtil.verify(token);
 		if(verify!=null){
 			Object tenantIdObj = verify.get("tenant_id");
 			if(!StringUtils.isEmpty(tenantIdObj)&&!"null".equals(tenantIdObj)){
