@@ -167,7 +167,7 @@ public class CustomerSettingController extends BaseController {
     @GetMapping("/authorizeToken")
     public ResponseResult authorizeToken (String userId){
         String authorizeToken = customerSettingService.authorizeToken(userId);
-        return new ResponseResult(SUCCESS,authorizeToken);
+        return new ResponseResult(SUCCESS,"",authorizeToken);
     }
 
 }

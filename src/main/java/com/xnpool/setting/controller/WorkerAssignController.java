@@ -64,9 +64,8 @@ public class WorkerAssignController extends BaseController {
      */
     //@SystemLog(value = "矿机权限设置",type = LogType.MINE)
     @PostMapping("/addAssignWorker")
-    public ResponseResult addAssignWorker(String ids,String deleteIds,String deleteIps,String ipId, HttpServletRequest request) {
-        String token = writeLogUtil.getToken(request);
-        workerAssignService.addAssignWorker(ids,deleteIds,deleteIps,ipId,token);
+    public ResponseResult addAssignWorker(String ids,String deleteIds,String deleteIps,String ipId, Integer userId) {
+        workerAssignService.addAssignWorker(ids,deleteIds,deleteIps,ipId,userId);
         return new ResponseResult(SUCCESS);
     }
 
@@ -79,33 +78,29 @@ public class WorkerAssignController extends BaseController {
 
     @SystemLog(value = "运维设置查询矿场列表",type = LogType.MINE)
     @GetMapping("/selectAssignMineMap")
-    public ResponseResult selectAssignMineMap(HttpServletRequest request) {
-        String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignMineMap(token);
+    public ResponseResult selectAssignMineMap(Integer userId) {
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignMineMap(userId);
         return new ResponseResult(SUCCESS,mineMap);
     }
 
     @SystemLog(value = "运维设置查询厂房列表",type = LogType.MINE)
     @GetMapping("/selectAssignFactoryMap")
-    public ResponseResult selectAssignFactoryMap(HttpServletRequest request,Integer mineId) {
-        String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignFactoryMap(token,mineId);
+    public ResponseResult selectAssignFactoryMap(Integer userId,Integer mineId) {
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignFactoryMap(userId,mineId);
         return new ResponseResult(SUCCESS,mineMap);
     }
 
     @SystemLog(value = "运维设置查询机架列表",type = LogType.MINE)
     @GetMapping("/selectAssignFrameMap")
-    public ResponseResult selectAssignFrameMap(HttpServletRequest request,Integer factoryId) {
-        String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignFrameMap(token,factoryId);
+    public ResponseResult selectAssignFrameMap(Integer userId,Integer factoryId) {
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignFrameMap(userId,factoryId);
         return new ResponseResult(SUCCESS,mineMap);
     }
 
     @SystemLog(value = "运维设置查询IP区间列表",type = LogType.MINE)
     @GetMapping("/selectAssignIPMap")
-    public ResponseResult selectAssignIPMap(HttpServletRequest request,String mineName,Integer mineId) {
-        String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignIPMap(token, mineName,mineId);
+    public ResponseResult selectAssignIPMap(Integer userId,String mineName,Integer mineId) {
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignIPMap(userId, mineName,mineId);
         return new ResponseResult(SUCCESS,mineMap);
     }
 

@@ -1,6 +1,7 @@
 package com.xnpool.setting.service.impl;
 import java.time.LocalDateTime;
 
+import com.alibaba.fastjson.JSONPath;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,8 +12,10 @@ import com.xnpool.setting.domain.mapper.*;
 import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.domain.redismodel.SysUserRedisModel;
+import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +63,9 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private UserCenterAPI userCenterAPI;
 
 
     @Override
@@ -121,8 +127,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addAssignWorker(String ids, String deleteIds, String deleteIps, String ipId, String token) {
-        Integer userId = getUserId(token);
+    public void addAssignWorker(String ids, String deleteIds, String deleteIps, String ipId, Integer userId) {
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<String> frameSet_db = new HashSet<>();
         HashSet<String> factorySet_db = new HashSet<>();
@@ -393,10 +398,15 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         //添加机架成功后用户信息缓存到redis里面去
         SysUser sysUser = sysUserMapper.selectById(userId);
         SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
-        List<Integer> mineIdList = getMineId(token);
-        for (Integer mineId : mineIdList) {
-            redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+        JSONObject jsonObject = userCenterAPI.authorizeToken(userId.toString());
+        if (!StringUtils.isEmpty(jsonObject)){
+            String access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
+            List<Integer> mineIdList = getMineId(access_token);
+            for (Integer mineId : mineIdList) {
+                redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+            }
         }
+
         //执行ip区间分配
         ArrayList<MineIdAndIP> ip_list = new ArrayList<>();
         if (ipId.contains(",")) {
@@ -429,8 +439,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Object>> selectAssignMineMap(String token) {
-        Integer userId = getUserId(token);
+    public HashMap<Integer, HashMap<String, Object>> selectAssignMineMap(Integer userId) {
         List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<Integer> set = new HashSet<>();
@@ -458,8 +467,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Object>> selectAssignFactoryMap(String token, Integer mineId) {
-        Integer userId = getUserId(token);
+    public HashMap<Integer, HashMap<String, Object>> selectAssignFactoryMap(Integer userId, Integer mineId) {
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<Integer> set = new HashSet<>();
         for (WorkerAssign workerAssign : workerAssigns) {
@@ -490,8 +498,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Object>> selectAssignFrameMap(String token, Integer factoryId) {
-        Integer userId = getUserId(token);
+    public HashMap<Integer, HashMap<String, Object>> selectAssignFrameMap(Integer userId, Integer factoryId) {
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<Integer> set = new HashSet<>();
         for (WorkerAssign workerAssign : workerAssigns) {
@@ -521,8 +528,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Object>> selectAssignIPMap(String token, String mineName, Integer mineId) {
-        Integer userId = getUserId(token);
+    public HashMap<Integer, HashMap<String, Object>> selectAssignIPMap(Integer userId ,String mineName, Integer mineId) {
         QueryWrapper<IpAssign> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_del", 0);
         queryWrapper.eq("user_id", userId);
