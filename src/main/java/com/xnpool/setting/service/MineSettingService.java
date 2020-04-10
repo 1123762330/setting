@@ -30,7 +30,7 @@ public interface MineSettingService {
 
     HashMap<Integer, String> selectMineNameByOther();
 
-    PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize,String token);
 
 
 }

@@ -43,9 +43,9 @@ public class SysUserRedisModel implements Serializable {
 
     private String type;
 
-    private String create_time;
+    private LocalDateTime  create_time;
 
-    private String update_time;
+    private LocalDateTime  update_time;
 
     private String company;
 

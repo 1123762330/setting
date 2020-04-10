@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -535,15 +536,18 @@ public class BaseController {
 		sysUserRedisModel.setTenant_id(sysUser.getTenantId());
 		sysUserRedisModel.setContact_person(sysUser.getContactPerson());
 		sysUserRedisModel.setAddress(sysUser.getAddress());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (sysUser.getCreateTime() != null) {
-			String createTime = sdf.format(sysUser.getCreateTime());
-			sysUserRedisModel.setCreate_time(createTime);
-		}
-		if ( sysUser.getUpdateTime()!= null) {
-			String updateTime = sdf.format(sysUser.getUpdateTime());
-			sysUserRedisModel.setUpdate_time(updateTime);
-		}
+		sysUserRedisModel.setCreate_time(sysUser.getCreateTime());
+		sysUserRedisModel.setUpdate_time(sysUser.getUpdateTime());
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//if (sysUser.getCreateTime() != null) {
+		//	LocalDateTime createTime1 = sysUser.getCreateTime();
+		//	String createTime = sdf.format(sysUser.getCreateTime());
+		//	sysUserRedisModel.setCreate_time(createTime);
+		//}
+		//if ( sysUser.getUpdateTime()!= null) {
+		//	String updateTime = sdf.format(sysUser.getUpdateTime());
+		//	sysUserRedisModel.setUpdate_time(updateTime);
+		//}
 		return sysUserRedisModel;
 	}
 

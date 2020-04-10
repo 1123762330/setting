@@ -106,13 +106,21 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     }
 
     @Override
-    public PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
+        List<Integer> mineIds = getMineId(token);
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
+        ArrayList<MineSetting> resultList = new ArrayList<>();
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(keyWord);
-        PageInfo<MineSetting> pageInfo = new PageInfo<>(mineSettingList);
+        for (MineSetting mineSetting : mineSettingList) {
+            Integer id = mineSetting.getId();
+            if (mineIds.contains(id)){
+                resultList.add(mineSetting);
+            }
+        }
+        PageInfo<MineSetting> pageInfo = new PageInfo<>(resultList);
         return pageInfo;
     }
 

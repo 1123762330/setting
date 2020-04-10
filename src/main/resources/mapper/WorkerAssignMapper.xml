@@ -160,6 +160,7 @@
             count( id ) AS count
         FROM
             worker_assign
+        WHERE is_del=0
         GROUP BY
             user_id
     </select>

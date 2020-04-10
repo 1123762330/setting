@@ -69,7 +69,7 @@ public class AlgorithmServiceImpl extends BaseController implements AlgorithmSer
         //首先去缓存里进行查询这个用户名下的所有的矿机类型
         //存到一个list的集合,然后遍历,同数据库查询的矿机品牌做对比,然后取算法id
         Integer userId = getUserId(token);
-        System.out.println(userId);
+        //System.out.println(userId);
         String startTimekey = HASHRATE_DATA +userId+":"+tenantId.toString()+ ":*";
         Set<String> hashKeySet = jedisUtil.scan(startTimekey);
         HashSet<String> workertypeSet = new HashSet<>();
