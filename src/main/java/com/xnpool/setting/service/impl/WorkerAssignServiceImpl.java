@@ -1,4 +1,5 @@
 package com.xnpool.setting.service.impl;
+import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
@@ -9,10 +10,12 @@ import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.*;
 import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.domain.redismodel.SysUserRedisModel;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,6 +57,9 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Autowired
     private IpSettingMapper ipSettingMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
 
     @Override
@@ -115,7 +121,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addAssignWorker(String ids,String deleteIds,String deleteIps, String ipId, String token) {
+    public void addAssignWorker(String ids, String deleteIds, String deleteIps, String ipId, String token) {
         Integer userId = getUserId(token);
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<String> frameSet_db = new HashSet<>();
@@ -125,8 +131,8 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             Integer mineId = workerAssign.getMineId();
             Integer factoryId = workerAssign.getFactoryId();
             Integer frameId = workerAssign.getFrameId();
-            frameSet_db.add(mineId+"-"+factoryId+"-"+frameId);
-            factorySet_db.add(mineId+"-"+factoryId);
+            frameSet_db.add(mineId + "-" + factoryId + "-" + frameId);
+            factorySet_db.add(mineId + "-" + factoryId);
             mineSet_db.add(mineId);
         }
 
@@ -135,7 +141,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         ArrayList<MineFactoryAndFraneId> deleteList = new ArrayList<>();
 
         //矿机架删除
-        if (!StringUtils.isEmpty(deleteIds)){
+        if (!StringUtils.isEmpty(deleteIds)) {
             if (deleteIds.contains(",")) {
                 //多个矿机架
                 String[] split = deleteIds.split(",");
@@ -145,7 +151,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                     //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
                     if (!id.contains("-")) {
                         //直接是矿场ID
-                        if (mineSet_db.contains(id)){
+                        if (mineSet_db.contains(id)) {
                             Integer mineId = Integer.valueOf(id);
                             HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
                             Set<Integer> keySet = factoryMap.keySet();
@@ -166,7 +172,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
                     } else if (splitId.length == 2) {
                         //第二种,矿场ID-厂房ID
-                        if (factorySet_db.contains(id)){
+                        if (factorySet_db.contains(id)) {
                             Integer mineId = Integer.valueOf(splitId[0]);
                             Integer factoryId = Integer.valueOf(splitId[1]);
                             HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
@@ -179,7 +185,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                         }
                     } else {
                         //第三种,矿场ID-厂房ID-机架ID
-                        if (frameSet_db.contains(id)){
+                        if (frameSet_db.contains(id)) {
                             Integer mineId = Integer.valueOf(splitId[0]);
                             Integer factoryId = Integer.valueOf(splitId[1]);
                             Integer frameId = Integer.valueOf(splitId[2]);
@@ -248,7 +254,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         }
         //Ip区间删除
         ArrayList<MineIdAndIP> delete_ips = new ArrayList<>();
-        if (!StringUtils.isEmpty(deleteIps)){
+        if (!StringUtils.isEmpty(deleteIps)) {
             if (deleteIds.contains(",")) {
                 String[] split = ipId.split(",");
                 for (String ip_id : split) {
@@ -287,7 +293,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                 //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
                 if (!id.contains("-")) {
                     //直接是矿场ID
-                    if (!mineSet_db.contains(id)){
+                    if (!mineSet_db.contains(id)) {
                         Integer mineId = Integer.valueOf(id);
                         HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
                         Set<Integer> keySet = factoryMap.keySet();
@@ -308,7 +314,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
                 } else if (splitId.length == 2) {
                     //第二种,矿场ID-厂房ID
-                    if (!factorySet_db.contains(id)){
+                    if (!factorySet_db.contains(id)) {
                         Integer mineId = Integer.valueOf(splitId[0]);
                         Integer factoryId = Integer.valueOf(splitId[1]);
                         HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
@@ -321,7 +327,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                     }
                 } else {
                     //第三种,矿场ID-厂房ID-机架ID
-                    if (!frameSet_db.contains(id)){
+                    if (!frameSet_db.contains(id)) {
                         Integer mineId = Integer.valueOf(splitId[0]);
                         Integer factoryId = Integer.valueOf(splitId[1]);
                         Integer frameId = Integer.valueOf(splitId[2]);
@@ -338,7 +344,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             if (!ids.contains("-")) {
                 //直接是矿场ID
                 Integer mineId = Integer.valueOf(ids);
-                if(!mineSet_db.contains(mineId)){
+                if (!mineSet_db.contains(mineId)) {
                     HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
                     Set<Integer> keySet = factoryMap.keySet();
                     List<Integer> factoryIdList = new ArrayList<>();
@@ -357,7 +363,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                 }
             } else if (splitId.length == 2) {
                 //第二种,矿场ID-厂房ID
-                if (!factorySet_db.contains(ids)){
+                if (!factorySet_db.contains(ids)) {
                     Integer mineId = Integer.valueOf(splitId[0]);
                     Integer factoryId = Integer.valueOf(splitId[1]);
                     HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(factoryId);
@@ -371,7 +377,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
             } else {
                 //第三种,矿场ID-厂房ID-机架ID
-                if(!frameSet_db.contains(ids)){
+                if (!frameSet_db.contains(ids)) {
                     Integer mineId = Integer.valueOf(splitId[0]);
                     Integer factoryId = Integer.valueOf(splitId[1]);
                     Integer frameId = Integer.valueOf(splitId[2]);
@@ -384,7 +390,13 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         }
         //执行保存功能
         int rows = workerAssignMapper.batchInsert(list);
-
+        //添加机架成功后用户信息缓存到redis里面去
+        SysUser sysUser = sysUserMapper.selectById(userId);
+        SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
+        List<Integer> mineIdList = getMineId(token);
+        for (Integer mineId : mineIdList) {
+            redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+        }
         //执行ip区间分配
         ArrayList<MineIdAndIP> ip_list = new ArrayList<>();
         if (ipId.contains(",")) {
@@ -417,7 +429,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Integer>> selectAssignMineMap(String token) {
+    public HashMap<Integer, HashMap<String, Object>> selectAssignMineMap(String token) {
         Integer userId = getUserId(token);
         List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
@@ -425,18 +437,20 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         for (WorkerAssign workerAssign : workerAssigns) {
             set.add(workerAssign.getMineId());
         }
-        HashMap<Integer, HashMap<String, Integer>> resultMap = new HashMap<>();
+        HashMap<Integer, HashMap<String, Object>> resultMap = new HashMap<>();
         mineSettingList.forEach(mineSetting -> {
             Integer id = mineSetting.getId();
-            if (set.contains(id)){
-                HashMap<String, Integer> map = new HashMap<>();
+            if (set.contains(id)) {
+                HashMap<String, Object> map = new HashMap<>();
                 String mineName = mineSetting.getMineName();
-                map.put(mineName,1);
+                map.put("name", mineName);
+                map.put("checked", true);
                 resultMap.put(id, map);
-            }else {
-                HashMap<String, Integer> map = new HashMap<>();
+            } else {
+                HashMap<String, Object> map = new HashMap<>();
                 String mineName = mineSetting.getMineName();
-                map.put(mineName,0);
+                map.put("name", mineName);
+                map.put("checked", false);
                 resultMap.put(id, map);
             }
         });
@@ -444,28 +458,30 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Integer>> selectAssignFactoryMap(String token,Integer mineId) {
+    public HashMap<Integer, HashMap<String, Object>> selectAssignFactoryMap(String token, Integer mineId) {
         Integer userId = getUserId(token);
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<Integer> set = new HashSet<>();
         for (WorkerAssign workerAssign : workerAssigns) {
             set.add(workerAssign.getFactoryId());
         }
-        HashMap<Integer, HashMap<String, Integer>> resultMap = new HashMap<>();
+        HashMap<Integer, HashMap<String, Object>> resultMap = new HashMap<>();
         List<HashMap> hashMaps = factoryHouseMapper.selectFactoryNameByMineId(mineId);
         if (!hashMaps.isEmpty()) {
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                if (set.contains(id)){
+                if (set.contains(id)) {
                     String factoryName = hashMap.get("factory_name").toString();
-                    HashMap<String, Integer> map = new HashMap<>();
-                    map.put(factoryName,1);
-                    resultMap.put(id,map);
-                }else {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("name", factoryName);
+                    map.put("checked", true);
+                    resultMap.put(id, map);
+                } else {
                     String factoryName = hashMap.get("factory_name").toString();
-                    HashMap<String, Integer> map = new HashMap<>();
-                    map.put(factoryName,0);
-                    resultMap.put(id,map);
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("name", factoryName);
+                    map.put("checked", false);
+                    resultMap.put(id, map);
                 }
             });
         }
@@ -474,27 +490,29 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Integer>> selectAssignFrameMap(String token, Integer factoryId) {
+    public HashMap<Integer, HashMap<String, Object>> selectAssignFrameMap(String token, Integer factoryId) {
         Integer userId = getUserId(token);
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<Integer> set = new HashSet<>();
         for (WorkerAssign workerAssign : workerAssigns) {
             set.add(workerAssign.getFrameId());
         }
-        HashMap<Integer, HashMap<String, Integer>> resultMap = new HashMap<>();
+        HashMap<Integer, HashMap<String, Object>> resultMap = new HashMap<>();
         List<HashMap> hashMaps = frameSettingMapper.selectFrameNameByFactoryId(factoryId);
         if (!hashMaps.isEmpty()) {
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                if (set.contains(id)){
-                    HashMap<String, Integer> map = new HashMap<>();
+                if (set.contains(id)) {
                     String frameName = hashMap.get("frame_name").toString();
-                    map.put(frameName,1);
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("name", frameName);
+                    map.put("checked", true);
                     resultMap.put(id, map);
-                }else {
-                    HashMap<String, Integer> map = new HashMap<>();
+                } else {
                     String frameName = hashMap.get("frame_name").toString();
-                    map.put(frameName,0);
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("name", frameName);
+                    map.put("checked", false);
                     resultMap.put(id, map);
                 }
             });
@@ -503,35 +521,37 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    public HashMap<Integer, HashMap<String, Integer>> selectAssignIPMap(String token,String mineName, Integer mineId) {
+    public HashMap<Integer, HashMap<String, Object>> selectAssignIPMap(String token, String mineName, Integer mineId) {
         Integer userId = getUserId(token);
         QueryWrapper<IpAssign> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("is_del",0);
-        queryWrapper.eq("user_id",userId);
+        queryWrapper.eq("is_del", 0);
+        queryWrapper.eq("user_id", userId);
         List<IpAssign> ipAssigns = ipAssignMapper.selectList(queryWrapper);
         HashSet<Integer> set = new HashSet<>();
         for (IpAssign ipAssign : ipAssigns) {
             set.add(ipAssign.getIpId());
         }
 
-        HashMap<Integer, HashMap<String, Integer>> resultMap = new HashMap<>();
-        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null,mineId);
+        HashMap<Integer, HashMap<String, Object>> resultMap = new HashMap<>();
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null, mineId);
         if (ipSettings != null) {
             ipSettings.forEach(ipSetting -> {
                 Integer id = ipSetting.getId();
-                if (set.contains(id)){
+                if (set.contains(id)) {
                     String startIp = ipSetting.getStartIp();
                     String endIp = ipSetting.getEndIp();
-                    String ipName = mineName+" "+startIp + "-" + endIp;
-                    HashMap<String, Integer> map = new HashMap<>();
-                    map.put(ipName,1);
+                    String ipName = mineName + " " + startIp + "-" + endIp;
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("name", ipName);
+                    map.put("checked", true);
                     resultMap.put(id, map);
-                }else {
+                } else {
                     String startIp = ipSetting.getStartIp();
                     String endIp = ipSetting.getEndIp();
-                    String ipName = mineName+" "+startIp + "-" + endIp;
-                    HashMap<String, Integer> map = new HashMap<>();
-                    map.put(ipName,0);
+                    String ipName = mineName + " " + startIp + "-" + endIp;
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("name", ipName);
+                    map.put("checked", false);
                     resultMap.put(id, map);
                 }
             });

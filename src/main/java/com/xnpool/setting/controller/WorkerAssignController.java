@@ -8,7 +8,10 @@ import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.pojo.SysUser;
 import com.xnpool.setting.domain.pojo.UserRoleVO;
+import com.xnpool.setting.domain.redismodel.SysUserRedisModel;
 import com.xnpool.setting.service.WorkerAssignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class WorkerAssignController extends BaseController {
     private WorkerAssignService workerAssignService;
     @Autowired
     private WriteLogUtil writeLogUtil;
+
+    @Autowired
+    private ApiContext apiContext;
 
     /**
      * @Description 用户角色列表
@@ -75,7 +81,7 @@ public class WorkerAssignController extends BaseController {
     @GetMapping("/selectAssignMineMap")
     public ResponseResult selectAssignMineMap(HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignMineMap(token);
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignMineMap(token);
         return new ResponseResult(SUCCESS,mineMap);
     }
 
@@ -83,7 +89,7 @@ public class WorkerAssignController extends BaseController {
     @GetMapping("/selectAssignFactoryMap")
     public ResponseResult selectAssignFactoryMap(HttpServletRequest request,Integer mineId) {
         String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignFactoryMap(token,mineId);
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignFactoryMap(token,mineId);
         return new ResponseResult(SUCCESS,mineMap);
     }
 
@@ -91,7 +97,7 @@ public class WorkerAssignController extends BaseController {
     @GetMapping("/selectAssignFrameMap")
     public ResponseResult selectAssignFrameMap(HttpServletRequest request,Integer factoryId) {
         String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignFrameMap(token,factoryId);
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignFrameMap(token,factoryId);
         return new ResponseResult(SUCCESS,mineMap);
     }
 
@@ -99,7 +105,33 @@ public class WorkerAssignController extends BaseController {
     @GetMapping("/selectAssignIPMap")
     public ResponseResult selectAssignIPMap(HttpServletRequest request,String mineName,Integer mineId) {
         String token = writeLogUtil.getToken(request);
-        HashMap<Integer, HashMap<String, Integer>> mineMap = workerAssignService.selectAssignIPMap(token, mineName,mineId);
+        HashMap<Integer, HashMap<String, Object>> mineMap = workerAssignService.selectAssignIPMap(token, mineName,mineId);
         return new ResponseResult(SUCCESS,mineMap);
+    }
+
+    /**
+     * @Description 修改用户时同步用户信息
+     * @Author zly
+     * @Date 12:18 2020/4/10
+     * @Param
+     * @return
+     */
+    @PutMapping("/syncingUpdateUser")
+    public ResponseResult syncingUpdateUser (SysUser sysUser, String token){
+        ResponseResult responseResult = syncinUser(sysUser, token);
+        return responseResult;
+    }
+
+    /**
+     * @Description 删除用户时同步用户信息
+     * @Author zly
+     * @Date 12:26 2020/4/10
+     * @Param
+     * @return
+     */
+    @DeleteMapping("/syncinDeleteUser")
+    public ResponseResult syncinDeleteUser (SysUser sysUser, String token){
+        ResponseResult responseResult = syncinUser(sysUser, token);
+        return responseResult;
     }
 }

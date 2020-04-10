@@ -129,4 +129,8 @@
       AND id!=#{id}
     </if>
   </select>
+
+  <select id="selectMineId" resultType="integer">
+    select id FROM mine_setting where  is_delete=0
+  </select>
 </mapper>

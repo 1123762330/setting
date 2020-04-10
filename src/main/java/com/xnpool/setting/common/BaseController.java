@@ -1,12 +1,15 @@
 package com.xnpool.setting.common;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.service.exception.UpdateException;
 import com.xnpool.logaop.util.JwtUtil;
+import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.mapper.MineSettingMapper;
 import com.xnpool.setting.domain.pojo.*;
 import com.xnpool.setting.domain.redismodel.*;
 import com.xnpool.setting.utils.JedisUtil;
@@ -57,6 +60,9 @@ public class BaseController {
 
 	@Autowired
 	private ApiContext apiContext;
+
+	@Autowired
+	private MineSettingMapper mineSettingMapper;
 
 
 	//@ExceptionHandler({ServiceException.class})
@@ -512,6 +518,35 @@ public class BaseController {
 		return operatorWorkerHisRedisModel;
 	}
 
+	public SysUserRedisModel getSysUserRedisModel(SysUser sysUser) {
+		SysUserRedisModel sysUserRedisModel = new SysUserRedisModel();
+		sysUserRedisModel.setId(sysUser.getId());
+		sysUserRedisModel.setUsername(sysUser.getUsername());
+		sysUserRedisModel.setPassword(sysUser.getPassword());
+		sysUserRedisModel.setNickname(sysUser.getNickname());
+		sysUserRedisModel.setHead_img_url(sysUser.getHeadImgUrl());
+		sysUserRedisModel.setMobile(sysUser.getMobile());
+		sysUserRedisModel.setSex(sysUser.getSex());
+		sysUserRedisModel.setEnabled(sysUser.getEnabled());
+		sysUserRedisModel.setType(sysUser.getType());
+		sysUserRedisModel.setCompany(sysUser.getCompany());
+		sysUserRedisModel.setOpen_id(sysUser.getOpenId());
+		sysUserRedisModel.setIs_del(sysUser.getIsDel());
+		sysUserRedisModel.setTenant_id(sysUser.getTenantId());
+		sysUserRedisModel.setContact_person(sysUser.getContactPerson());
+		sysUserRedisModel.setAddress(sysUser.getAddress());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (sysUser.getCreateTime() != null) {
+			String createTime = sdf.format(sysUser.getCreateTime());
+			sysUserRedisModel.setCreate_time(createTime);
+		}
+		if ( sysUser.getUpdateTime()!= null) {
+			String updateTime = sdf.format(sysUser.getUpdateTime());
+			sysUserRedisModel.setUpdate_time(updateTime);
+		}
+		return sysUserRedisModel;
+	}
+
 	//当前时间按15分钟取整
 	public HashMap<String, Date> nowTimeAfter15min(){
 		Calendar calendar = new GregorianCalendar();
@@ -632,5 +667,62 @@ public class BaseController {
 			}
 		}
 		return tenant_id;
+	}
+
+	/**
+	 * @Description	从token中获取矿场id
+	 * @Author zly
+	 * @Date 11:52 2020/4/10
+	 * @Param
+	 * @return
+	 */
+	public List<Integer> getMineId(String token){
+		List<Integer> list = new ArrayList<>();
+		Map<String, Object> verify = JwtUtil.verify(token);
+		System.out.println(verify);
+		if(verify!=null){
+			Object mineIdObj = verify.get("mine_id");
+			JSONArray array = JSONObject.parseArray(mineIdObj.toString());
+			if (array.size()==1){
+				Integer mineId= Integer.valueOf(array.get(0).toString());
+				if (mineId==-1){
+					//查询全部矿场id
+					List<Integer> selectMineId = mineSettingMapper.selectMineId();
+					return selectMineId;
+				}else {
+					list.add(mineId);
+					return list;
+				}
+			}else{
+				for (Object obj : array) {
+					list.add(Integer.valueOf(obj.toString()));
+				}
+				return list;
+			}
+		}else {
+			return null;
+		}
+	}
+
+	/**
+	 * @Description	同步用户信息
+	 * @Author zly
+	 * @Date 12:32 2020/4/10
+	 * @Param
+	 * @return
+	 */
+	public ResponseResult syncinUser(SysUser sysUser, String token){
+		try {
+			Long tenantId = getTenantId(token);
+			apiContext.setTenantId(tenantId);
+			List<Integer> list = getMineId(token);
+			for (Integer mineId : list) {
+				SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
+				redisToInsert(1, "sys_user", sysUserRedisModel,mineId );
+			}
+		}catch (Exception e){
+			return new ResponseResult(FAIL,"同步缓存失败!");
+		}
+		return new ResponseResult(SUCCESS);
 	}
 }

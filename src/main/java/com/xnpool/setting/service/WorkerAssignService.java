@@ -33,12 +33,12 @@ public interface WorkerAssignService {
 
     void addAssignWorker(String ids,String deleteIds,String deleteIps,String ipId, String token);
 
-    HashMap<Integer, HashMap<String, Integer>> selectAssignMineMap(String token);
+    HashMap<Integer, HashMap<String, Object>> selectAssignMineMap(String token);
 
-    HashMap<Integer, HashMap<String, Integer>> selectAssignFactoryMap(String token,Integer mineId);
+    HashMap<Integer, HashMap<String, Object>> selectAssignFactoryMap(String token,Integer mineId);
 
-    HashMap<Integer, HashMap<String, Integer>> selectAssignFrameMap(String token, Integer factoryId);
+    HashMap<Integer, HashMap<String, Object>> selectAssignFrameMap(String token, Integer factoryId);
 
-    HashMap<Integer, HashMap<String, Integer>> selectAssignIPMap(String token,String mineName, Integer mineId);
+    HashMap<Integer, HashMap<String, Object>> selectAssignIPMap(String token,String mineName, Integer mineId);
 }
 

@@ -25,4 +25,6 @@ public interface MineSettingMapper {
     List<MineSetting> selectByOther(@Param("keyWord") String keyWord);
 
     List<String> selectMineNameList(@Param("id") Integer id);
+
+    List<Integer> selectMineId();
 }
