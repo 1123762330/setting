@@ -31,7 +31,7 @@ public interface FrameSettingService {
 
     void updateById(int id);
 
-    PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token);
 
     HashMap<Integer, String> selectFrameNameByFactoryId(Integer factoryId);
 

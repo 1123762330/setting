@@ -6,6 +6,7 @@ import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
+import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.domain.model.FrameSettingExample;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;
 import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
@@ -215,12 +216,20 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     }
 
     @Override
-    public PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
+        List<Integer> mineIds = getMineId(token);
+        ArrayList<FrameSettingExample> resultList = new ArrayList<>();
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
         List<FrameSettingExample> frameSettingExamples = frameSettingMapper.selectByOther(keyWord);
+        for (FrameSettingExample frameSettingExample : frameSettingExamples) {
+            Integer id = frameSettingExample.getMineId();
+            if (mineIds.contains(id)){
+                resultList.add(frameSettingExample);
+            }
+        }
         PageInfo<FrameSettingExample> pageInfo = new PageInfo<>(frameSettingExamples);
         return pageInfo;
     }

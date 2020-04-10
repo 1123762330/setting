@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
@@ -32,6 +34,8 @@ public class FactoryHouseController extends BaseController {
     private FactoryHouseService factoryHouseService;
     @Autowired
     private FrameSettingService frameSettingService;
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     /**
      * @return
@@ -93,8 +97,10 @@ public class FactoryHouseController extends BaseController {
     @GetMapping("/selectFactoryHouse")
     public ResponseResult selectFactoryHouse(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                              @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<FactoryHouseExample> pageInfo = factoryHouseService.selectByOther(keyWord, pageNum, pageSize);
+                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                             HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        PageInfo<FactoryHouseExample> pageInfo = factoryHouseService.selectByOther(keyWord, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, pageInfo);
     }
 

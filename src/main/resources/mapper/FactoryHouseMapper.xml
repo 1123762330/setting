@@ -132,7 +132,8 @@
     factory_house.mine_id,
     factory_house.create_time,
     factory_house.update_time,
-    mine_setting.mine_name
+    mine_setting.mine_name,
+    mine_setting.id AS mineId
     FROM
     factory_house,
     mine_setting

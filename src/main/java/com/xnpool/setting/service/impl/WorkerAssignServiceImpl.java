@@ -394,16 +394,22 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
         }
         //执行保存功能
-        int rows = workerAssignMapper.batchInsert(list);
-        //添加机架成功后用户信息缓存到redis里面去
-        SysUser sysUser = sysUserMapper.selectById(userId);
-        SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
-        JSONObject jsonObject = userCenterAPI.authorizeToken(userId.toString());
-        if (!StringUtils.isEmpty(jsonObject)){
-            String access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
-            List<Integer> mineIdList = getMineId(access_token);
-            for (Integer mineId : mineIdList) {
-                redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+        if (!list.isEmpty()){
+            int rows = workerAssignMapper.batchInsert(list);
+            //矿机架权限分配同步入缓存
+            for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : resultMap.entrySet()) {
+                redisToBatchInsert(rows, "worker_assign", entry.getValue(), entry.getKey());
+            }
+            //添加机架成功后用户信息缓存到redis里面去
+            SysUser sysUser = sysUserMapper.selectById(userId);
+            SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
+            JSONObject jsonObject = userCenterAPI.authorizeToken(userId.toString());
+            if (!StringUtils.isEmpty(jsonObject)){
+                String access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
+                List<Integer> mineIdList = getMineId(access_token);
+                for (Integer mineId : mineIdList) {
+                    redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+                }
             }
         }
 
@@ -426,15 +432,13 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             ip_list.add(mineIdAndIP);
         }
         //执行入IP权限表
-        Integer rows2 = ipAssignMapper.batchInsert(ip_list);
-        Map<Integer, List<MineIdAndIP>> groupByMineId = ip_list.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
-        //矿机架权限分配同步入缓存
-        for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : resultMap.entrySet()) {
-            redisToBatchInsert(rows, "worker_assign", entry.getValue(), entry.getKey());
-        }
-        //ip区间权限分配同步入缓存
-        for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
-            redisToBatchInsert(rows2, "ip_assign", entry.getValue(), entry.getKey());
+        if (!ip_list.isEmpty()){
+            Integer rows2 = ipAssignMapper.batchInsert(ip_list);
+            Map<Integer, List<MineIdAndIP>> groupByMineId = ip_list.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
+            //ip区间权限分配同步入缓存
+            for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
+                redisToBatchInsert(rows2, "ip_assign", entry.getValue(), entry.getKey());
+            }
         }
     }
 

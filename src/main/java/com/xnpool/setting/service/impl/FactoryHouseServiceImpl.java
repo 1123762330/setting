@@ -6,6 +6,7 @@ import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
+import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.domain.redismodel.FactoryHouseRedisModel;
 import org.springframework.stereotype.Service;
 
@@ -98,13 +99,21 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     }
 
     @Override
-    public PageInfo<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
+        List<Integer> mineIds = getMineId(token);
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
+        ArrayList<FactoryHouseExample> resultList = new ArrayList<>();
         PageHelper.startPage(pageNum, pageSize);
         List<FactoryHouseExample> factoryHouses = factoryHouseMapper.selectByOther(keyWord);
-        PageInfo<FactoryHouseExample> pageInfo = new PageInfo<>(factoryHouses);
+        for (FactoryHouseExample factoryHouse : factoryHouses) {
+            Integer id = factoryHouse.getMineId();
+            if (mineIds.contains(id)){
+                resultList.add(factoryHouse);
+            }
+        }
+        PageInfo<FactoryHouseExample> pageInfo = new PageInfo<>(resultList);
         return pageInfo;
     }
 

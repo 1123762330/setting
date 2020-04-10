@@ -42,4 +42,9 @@ public class FactoryHouseExample implements Serializable {
      * 所属矿场
      */
     private String mineName;
+
+    /**
+     * 所属矿场ID
+     */
+    private Integer mineId;
 }
