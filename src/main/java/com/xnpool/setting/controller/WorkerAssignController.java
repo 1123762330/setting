@@ -62,7 +62,7 @@ public class WorkerAssignController extends BaseController {
      * @Date 15:28 2020/2/6
      * @Param
      */
-    //@SystemLog(value = "矿机权限设置",type = LogType.MINE)
+    @SystemLog(value = "矿机权限设置",type = LogType.MINE)
     @PostMapping("/addAssignWorker")
     public ResponseResult addAssignWorker(String ids,String deleteIds,String deleteIps,String ipId, Integer userId) {
         workerAssignService.addAssignWorker(ids,deleteIds,deleteIps,ipId,userId);
