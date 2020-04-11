@@ -18,7 +18,7 @@ public interface MineSettingService {
 
     int insert(MineSetting record);
 
-    void insertSelective(MineSetting record);
+    void insertSelective(MineSetting record,String token);
 
     MineSetting selectByPrimaryKey(Integer id);
 
@@ -28,7 +28,7 @@ public interface MineSettingService {
 
     void updateById(int id);
 
-    HashMap<Integer, String> selectMineNameByOther();
+    HashMap<Integer, String> selectMineNameByOther(String token);
 
     PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize,String token);
 

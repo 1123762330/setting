@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
+import com.xnpool.logaop.service.exception.UnAuthorisedException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.redismodel.MineSettingRedisModel;
 import lombok.extern.slf4j.Slf4j;
@@ -47,15 +48,21 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSelective(MineSetting record) {
-        List<String> list = minesettingMapper.selectMineNameList(record.getId());
-        if (list.contains(record.getMineName())) {
-            throw new DataExistException("数据已存在,请勿重复添加!");
+    public void insertSelective(MineSetting record,String token) {
+        List<Integer> mineId = getMineId(token);
+        if (mineId.contains(-1)){
+            List<String> list = minesettingMapper.selectMineNameList(record.getId());
+            if (list.contains(record.getMineName())) {
+                throw new DataExistException("数据已存在,请勿重复添加!");
+            }
+            int rows = minesettingMapper.insertSelective(record);
+            record.setCreateTime(new Date());
+            MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
+            redisToInsert(rows, "mine_setting", mineSettingRedisModel, record.getId());
+        }else {
+            throw new UnAuthorisedException("只有管理员才能添加矿场");
         }
-        int rows = minesettingMapper.insertSelective(record);
-        record.setCreateTime(new Date());
-        MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
-        redisToInsert(rows, "mine_setting", mineSettingRedisModel, record.getId());
+
 
     }
 
@@ -94,13 +101,17 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     }
 
     @Override
-    public HashMap<Integer, String> selectMineNameByOther() {
+    public HashMap<Integer, String> selectMineNameByOther(String token) {
+        List<Integer> mineIds = getMineId(token);
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(null);
         HashMap<Integer, String> resultMap = new HashMap<>();
         mineSettingList.forEach(mineSetting -> {
             Integer id = mineSetting.getId();
-            String mineName = mineSetting.getMineName();
-            resultMap.put(id, mineName);
+            if (mineIds.contains(id)){
+                String mineName = mineSetting.getMineName();
+                resultMap.put(id, mineName);
+            }
+
         });
         return resultMap;
     }
@@ -108,11 +119,11 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Override
     public PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
         List<Integer> mineIds = getMineId(token);
+        ArrayList<MineSetting> resultList = new ArrayList<>();
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         PageHelper.startPage(pageNum, pageSize);
-        ArrayList<MineSetting> resultList = new ArrayList<>();
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(keyWord);
         for (MineSetting mineSetting : mineSettingList) {
             Integer id = mineSetting.getId();

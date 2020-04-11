@@ -48,9 +48,9 @@ public class BaseController {
 	//矿机平均算力图(有效)
 	public static final String HASHRATE_DATA = "xnpool:user:hashrate:";
 	//用户矿机总数量
-	public static final String USERWORKER_TOTAL = "xnpool:user:mine:ship";
+	public static final String USERWORKER_TOTAL = "xnpool:user:tenant:mine:total:count:";
 	//用户矿机在线总数量
-	public static final String USERWORKER_ONLINE_TOTAL = "xnpool:user:mine:onLine:count";
+	public static final String USERWORKER_ONLINE_TOTAL = "xnpool:user:tenant:mine:onLine:count:";
 
 
 	@Autowired
@@ -105,7 +105,7 @@ public class BaseController {
 	//}
 
 	//执行添加数据到缓存里面
-	public void insertRedis(String table, String user, Object record,Integer mineId) {
+	public void insertRedis(String table, String user, Object record, Integer mineId) {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		hashMap.put("table", table);
 		hashMap.put("use", user);
@@ -115,10 +115,10 @@ public class BaseController {
 		try {
 			String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
 			Long global_id = primaryKeyUtils.orderId(orderIdPrefix);
-			if (mineId==null){
-				jedisUtil.zadd("syncing:"+apiContext.getTenantId(), Double.valueOf(global_id), jsonString);
-			}else {
-				jedisUtil.zadd("syncing:"+apiContext.getTenantId()+":"+mineId, Double.valueOf(global_id), jsonString);
+			if (mineId == null) {
+				jedisUtil.zadd("syncing:" + apiContext.getTenantId(), Double.valueOf(global_id), jsonString);
+			} else {
+				jedisUtil.zadd("syncing:" + apiContext.getTenantId() + ":" + mineId, Double.valueOf(global_id), jsonString);
 			}
 		} catch (Exception e) {
 			throw new InsertException("添加缓存失败");
@@ -126,13 +126,13 @@ public class BaseController {
 	}
 
 	/**
-	 * @Description	批量添加
+	 * @return
+	 * @Description 批量添加
 	 * @Author zly
 	 * @Date 16:02 2020/2/26
 	 * @Param
-	 * @return
 	 */
-	private void insertRedisToBatch(String table, String user, HashMap<String, Object> data,Integer mineId) {
+	private void insertRedisToBatch(String table, String user, HashMap<String, Object> data, Integer mineId) {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		hashMap.put("table", table);
 		hashMap.put("use", user);
@@ -141,10 +141,10 @@ public class BaseController {
 		try {
 			String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
 			Long global_id = primaryKeyUtils.orderId(orderIdPrefix);
-			if (mineId==null){
-				jedisUtil.zadd("syncing:"+apiContext.getTenantId(), Double.valueOf(global_id), jsonString);
-			}else {
-				jedisUtil.zadd("syncing:"+apiContext.getTenantId()+":"+mineId, Double.valueOf(global_id), jsonString);
+			if (mineId == null) {
+				jedisUtil.zadd("syncing:" + apiContext.getTenantId(), Double.valueOf(global_id), jsonString);
+			} else {
+				jedisUtil.zadd("syncing:" + apiContext.getTenantId() + ":" + mineId, Double.valueOf(global_id), jsonString);
 			}
 		} catch (Exception e) {
 			throw new InsertException("添加缓存失败");
@@ -152,163 +152,163 @@ public class BaseController {
 	}
 
 	/**
+	 * @return
 	 * @Description 新增数据
 	 * @Author zly
 	 * @Date 15:22 2020/2/21
 	 * @Param
-	 * @return
 	 */
-	public void redisToInsert(Integer rows,String table,Object record,Integer mineId){
+	public void redisToInsert(Integer rows, String table, Object record, Integer mineId) {
 		if (rows != 0) {
 			//入库成功,写缓存
-			insertRedis(table, INSERT, record,mineId);
+			insertRedis(table, INSERT, record, mineId);
 		} else {
 			throw new InsertException("添加失败");
 		}
 	}
 
 	/**
-	 * @Description	修改数据
+	 * @return
+	 * @Description 修改数据
 	 * @Author zly
 	 * @Date 15:26 2020/2/21
 	 * @Param
-	 * @return
 	 */
-	public void redisToUpdate(Integer rows,String table,Object record,Integer mineId){
-		if (rows !=0) {
+	public void redisToUpdate(Integer rows, String table, Object record, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
-			insertRedis(table, UPDATE, record,mineId);
+			insertRedis(table, UPDATE, record, mineId);
 		} else {
 			throw new UpdateException("修改失败");
 		}
 	}
 
 	/**
-	 * @Description	删除数据
+	 * @return
+	 * @Description 删除数据
 	 * @Author zly
 	 * @Date 15:28 2020/2/21
 	 * @Param
-	 * @return
 	 */
-	public void redisToDelete(Integer rows,String table,Object record,Integer mineId){
-		if (rows !=0) {
+	public void redisToDelete(Integer rows, String table, Object record, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
-			insertRedis(table, DELETE, record,mineId);
+			insertRedis(table, DELETE, record, mineId);
 		} else {
 			throw new UpdateException("修改失败");
 		}
 	}
 
 	/**
+	 * @return
 	 * @Description 批量出库数据
 	 * @Author zly
 	 * @Date 15:32 2020/2/21
 	 * @Param
-	 * @return
 	 */
-	public void batchComeIn(Integer rows, String table, Object recordList,Integer mineId){
-		if (rows !=0) {
+	public void batchComeIn(Integer rows, String table, Object recordList, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			hashMap.put("list",recordList);
-			hashMap.put("updateTime",sdf.format(new Date()));
-			insertRedisToBatch(table, BATCHCOMEIN, hashMap,mineId);
+			hashMap.put("list", recordList);
+			hashMap.put("updateTime", sdf.format(new Date()));
+			insertRedisToBatch(table, BATCHCOMEIN, hashMap, mineId);
 		} else {
 			throw new UpdateException("批量入库失败");
 		}
 	}
 
 	/**
-	 * @Description	批量出库数据
+	 * @return
+	 * @Description 批量出库数据
 	 * @Author zly
 	 * @Date 15:35 2020/2/21
 	 * @Param
-	 * @return
 	 */
-	public void batchMoveOut(Integer rows, String table,Object recordList,Integer mineId){
-		if (rows !=0) {
+	public void batchMoveOut(Integer rows, String table, Object recordList, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			hashMap.put("list",recordList);
-			hashMap.put("updateTime",sdf.format(new Date()));
-			insertRedisToBatch(table, BATCHMOVEOUT, hashMap,mineId);
+			hashMap.put("list", recordList);
+			hashMap.put("updateTime", sdf.format(new Date()));
+			insertRedisToBatch(table, BATCHMOVEOUT, hashMap, mineId);
 		} else {
 			throw new UpdateException("批量出库失败");
 		}
 	}
 
 	/**
-	 * @Description	批量删除数据
+	 * @return
+	 * @Description 批量删除数据
 	 * @Author zly
 	 * @Date 15:37 2020/2/21
 	 * @Param
-	 * @return
 	 */
-	public void redisToBatchDelete(Integer rows, String table, Object recordList,Integer mineId){
-		if (rows !=0) {
+	public void redisToBatchDelete(Integer rows, String table, Object recordList, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			hashMap.put("list",recordList);
-			hashMap.put("updateTime",sdf.format(new Date()));
-			insertRedis(table, BATCHDELETE, hashMap.toString(),mineId);
+			hashMap.put("list", recordList);
+			hashMap.put("updateTime", sdf.format(new Date()));
+			insertRedis(table, BATCHDELETE, hashMap.toString(), mineId);
 		} else {
 			throw new DeleteException("批量删除失败");
 		}
 	}
 
 	/**
-	 * @Description	批量更新操作
+	 * @return
+	 * @Description 批量更新操作
 	 * @Author zly
 	 * @Date 16:03 2020/2/26
 	 * @Param
-	 * @return
 	 */
-	public void redisToBatchInsert(Integer rows, String table, Object recordList, Integer mineId){
-		if (rows !=0) {
+	public void redisToBatchInsert(Integer rows, String table, Object recordList, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			hashMap.put("list",recordList);
-			hashMap.put("updateTime",sdf.format(new Date()));
-			insertRedisToBatch(table, BATCHINSERT, hashMap,mineId);
+			hashMap.put("list", recordList);
+			hashMap.put("updateTime", sdf.format(new Date()));
+			insertRedisToBatch(table, BATCHINSERT, hashMap, mineId);
 		} else {
 			throw new DeleteException("批量添加失败");
 		}
 	}
 
 	/**
-	 * @Description	批量更新操作
+	 * @return
+	 * @Description 批量更新操作
 	 * @Author zly
 	 * @Date 16:03 2020/2/26
 	 * @Param
-	 * @return
 	 */
-	public void redisToBatchUpdate(Integer rows, String table, Object recordList, Integer mineId){
-		if (rows !=0) {
+	public void redisToBatchUpdate(Integer rows, String table, Object recordList, Integer mineId) {
+		if (rows != 0) {
 			//操作数据库成功,写缓存
 			HashMap<String, Object> hashMap = new HashMap<>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			hashMap.put("list",recordList);
-			hashMap.put("updateTime",sdf.format(new Date()));
-			insertRedisToBatch(table, BATCHUPDATE, hashMap,mineId);
+			hashMap.put("list", recordList);
+			hashMap.put("updateTime", sdf.format(new Date()));
+			insertRedisToBatch(table, BATCHUPDATE, hashMap, mineId);
 		} else {
 			throw new DeleteException("批量更新失败");
 		}
 	}
 
 	/**
-	 * @Description	计算时间(传入的是秒值)
+	 * @return
+	 * @Description 计算时间(传入的是秒值)
 	 * @Author zly
 	 * @Date 10:46 2020/3/11
 	 * @Param
-	 * @return
 	 */
-	public String calculTime(Long totalTime){
+	public String calculTime(Long totalTime) {
 		String DateTimes = null;
-		if (totalTime !=0L) {
+		if (totalTime != 0L) {
 			long days = totalTime / (60 * 60 * 24);
 			long hours = (totalTime % (60 * 60 * 24)) / (60 * 60);
 			long minutes = (totalTime % (60 * 60)) / 60;
@@ -327,29 +327,32 @@ public class BaseController {
 	}
 
 	/**
-	 * @Description	ip地址转长整型
+	 * @return
+	 * @Description ip地址转长整型
 	 * @Author zly
 	 * @Date 10:38 2020/3/12
 	 * @Param
-	 * @return
 	 */
 	public static long getStringIpToLong(String ip) {
 		long result = 0;
-		java.util.StringTokenizer token = new java.util.StringTokenizer(ip,".");
-		result += Long.parseLong(token.nextToken())<<24;
-		result += Long.parseLong(token.nextToken())<<16;
-		result += Long.parseLong(token.nextToken())<<8;
+		java.util.StringTokenizer token = new java.util.StringTokenizer(ip, ".");
+		result += Long.parseLong(token.nextToken()) << 24;
+		result += Long.parseLong(token.nextToken()) << 16;
+		result += Long.parseLong(token.nextToken()) << 8;
 		result += Long.parseLong(token.nextToken());
 		return result;
 	}
 
 	//长整型转ip字符串
-	public static String longToIp(long ipLong){
+	public static String longToIp(long ipLong) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(ipLong>>>24);sb.append(".");
-		sb.append(String.valueOf((ipLong&0x00FFFFFF)>>>16));sb.append(".");
-		sb.append(String.valueOf((ipLong&0x0000FFFF)>>>8));sb.append(".");
-		sb.append(String.valueOf(ipLong&0x000000FF));
+		sb.append(ipLong >>> 24);
+		sb.append(".");
+		sb.append(String.valueOf((ipLong & 0x00FFFFFF) >>> 16));
+		sb.append(".");
+		sb.append(String.valueOf((ipLong & 0x0000FFFF) >>> 8));
+		sb.append(".");
+		sb.append(String.valueOf(ipLong & 0x000000FF));
 		return sb.toString();
 	}
 
@@ -361,12 +364,12 @@ public class BaseController {
 		mineSettingRedisModel.setDescription(record.getDescription());
 		mineSettingRedisModel.setIs_delete(record.getIsDelete());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (record.getUpdateTime()!=null){
+		if (record.getUpdateTime() != null) {
 			String updateTime = sdf.format(record.getUpdateTime());
 			mineSettingRedisModel.setUpdate_time(updateTime);
 		}
-		if (record.getCreateTime()!=null){
-			String createTime= sdf.format(record.getCreateTime());
+		if (record.getCreateTime() != null) {
+			String createTime = sdf.format(record.getCreateTime());
 			mineSettingRedisModel.setCreate_time(createTime);
 		}
 		return mineSettingRedisModel;
@@ -379,18 +382,17 @@ public class BaseController {
 		factoryHouseRedisModel.setDescription(record.getDescription());
 		factoryHouseRedisModel.setMine_id(record.getMineId());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (record.getUpdateTime()!=null){
+		if (record.getUpdateTime() != null) {
 			String updateTime = sdf.format(record.getUpdateTime());
 			factoryHouseRedisModel.setUpdate_time(updateTime);
 		}
-		if (record.getCreateTime()!=null){
-			String createTime= sdf.format(record.getCreateTime());
+		if (record.getCreateTime() != null) {
+			String createTime = sdf.format(record.getCreateTime());
 			factoryHouseRedisModel.setCreate_time(createTime);
 		}
 		factoryHouseRedisModel.setIs_delete(record.getIsDelete());
 		return factoryHouseRedisModel;
 	}
-
 
 	public FrameSettingRedisModel getFrameSettingRedisModel(FrameSetting record) {
 		FrameSettingRedisModel redisModel = new FrameSettingRedisModel();
@@ -400,19 +402,18 @@ public class BaseController {
 		redisModel.setFactory_id(record.getFactoryId());
 		redisModel.setMine_id(record.getMineId());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (record.getUpdateTime()!=null){
+		if (record.getUpdateTime() != null) {
 			String updateTime = sdf.format(record.getUpdateTime());
 			redisModel.setUpdate_time(updateTime);
 		}
-		if (record.getCreateTime()!=null){
-			String createTime= sdf.format(record.getCreateTime());
+		if (record.getCreateTime() != null) {
+			String createTime = sdf.format(record.getCreateTime());
 			redisModel.setCreate_time(createTime);
 		}
 		redisModel.setIs_delete(record.getIsDelete());
 		redisModel.setDetailed(record.getDetailed());
 		return redisModel;
 	}
-
 
 	public GroupSettingRedisModel getGroupSettingRedisModel(GroupSetting record) {
 		GroupSettingRedisModel redisModel = new GroupSettingRedisModel();
@@ -424,18 +425,16 @@ public class BaseController {
 		redisModel.setFrame_id(record.getFrameId());
 		redisModel.setIs_delete(record.getIsDelete());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (record.getUpdateTime()!=null){
+		if (record.getUpdateTime() != null) {
 			String updateTime = sdf.format(record.getUpdateTime());
 			redisModel.setUpdate_time(updateTime);
 		}
-		if (record.getCreateTime()!=null){
-			String createTime= sdf.format(record.getCreateTime());
+		if (record.getCreateTime() != null) {
+			String createTime = sdf.format(record.getCreateTime());
 			redisModel.setCreate_time(createTime);
 		}
 		return redisModel;
 	}
-
-
 
 	public IpSettingRedisModel getIpSettingRedisModel(IpSetting record) {
 		IpSettingRedisModel redisModel = new IpSettingRedisModel();
@@ -500,25 +499,6 @@ public class BaseController {
 		return workerbrandSettingRedisModel;
 	}
 
-	public OperatorWorkerHisRedisModel getOperatorWorkerHisRedisModel(OperatorWorkerHistory record) {
-		OperatorWorkerHisRedisModel operatorWorkerHisRedisModel = new OperatorWorkerHisRedisModel();
-		operatorWorkerHisRedisModel.setId(record.getId());
-		operatorWorkerHisRedisModel.setMine_id(record.getMineId());
-		operatorWorkerHisRedisModel.setWorker_id(record.getWorkerId());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		operatorWorkerHisRedisModel.setReason(record.getReason());
-		operatorWorkerHisRedisModel.setOperator_id(record.getOperatorId());
-		if (record.getMoveOutTime() != null) {
-			String moveOutTime = sdf.format(record.getMoveOutTime());
-			operatorWorkerHisRedisModel.setMove_out_time(moveOutTime);
-		}
-		if ( record.getComeInTime()!= null) {
-			String comeInTime = sdf.format(record.getComeInTime());
-			operatorWorkerHisRedisModel.setCome_in_time(comeInTime);
-		}
-		return operatorWorkerHisRedisModel;
-	}
-
 	public SysUserRedisModel getSysUserRedisModel(SysUser sysUser) {
 		SysUserRedisModel sysUserRedisModel = new SysUserRedisModel();
 		sysUserRedisModel.setId(sysUser.getId());
@@ -538,27 +518,43 @@ public class BaseController {
 		sysUserRedisModel.setAddress(sysUser.getAddress());
 		sysUserRedisModel.setCreate_time(sysUser.getCreateTime());
 		sysUserRedisModel.setUpdate_time(sysUser.getUpdateTime());
-		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		//if (sysUser.getCreateTime() != null) {
-		//	LocalDateTime createTime1 = sysUser.getCreateTime();
-		//	String createTime = sdf.format(sysUser.getCreateTime());
-		//	sysUserRedisModel.setCreate_time(createTime);
-		//}
-		//if ( sysUser.getUpdateTime()!= null) {
-		//	String updateTime = sdf.format(sysUser.getUpdateTime());
-		//	sysUserRedisModel.setUpdate_time(updateTime);
-		//}
 		return sysUserRedisModel;
 	}
 
+	public WorkerAssignRedisModel getWorkerAssignRedisModel(WorkerAssign workerAssign) {
+		WorkerAssignRedisModel workerAssignRedisModel = new WorkerAssignRedisModel();
+		workerAssignRedisModel.setId(workerAssign.getId());
+		workerAssignRedisModel.setUser_id(workerAssign.getUserId());
+		workerAssignRedisModel.setMine_id(workerAssign.getMineId());
+		workerAssignRedisModel.setFactory_id(workerAssign.getFactoryId());
+		workerAssignRedisModel.setFrame_id(workerAssign.getFrameId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		workerAssignRedisModel.setCreate_time(sdf.format(new Date()));
+		workerAssignRedisModel.setUpdate_time(sdf.format(new Date()));
+		workerAssignRedisModel.setIs_del(workerAssign.getIsDel());
+		return workerAssignRedisModel;
+	}
+
+	public IpAssignRedisModel getIpAssignRedisModel(IpAssign ipAssign) {
+		IpAssignRedisModel ipAssignRedisModel = new IpAssignRedisModel();
+		ipAssignRedisModel.setId(ipAssign.getId());
+		ipAssignRedisModel.setUser_id(ipAssign.getUserId());
+		ipAssignRedisModel.setMine_id(ipAssign.getMineId());
+		ipAssignRedisModel.setIp_id(ipAssign.getIpId());
+		ipAssignRedisModel.setCreate_time(ipAssign.getCreateTime());
+		ipAssignRedisModel.setUpdate_time(ipAssign.getCreateTime());
+		ipAssignRedisModel.setIs_del(0);
+		return ipAssignRedisModel;
+	}
+
 	//当前时间按15分钟取整
-	public HashMap<String, Date> nowTimeAfter15min(){
+	public HashMap<String, Date> nowTimeAfter15min() {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(new Date());
 		int min = calendar.get(Calendar.MINUTE);
 		if (min >= 45) {
 			calendar.set(Calendar.MINUTE, 45);
-		}else if (min >= 30) {
+		} else if (min >= 30) {
 			calendar.set(Calendar.MINUTE, 30);
 		} else if (min >= 15) {
 			calendar.set(Calendar.MINUTE, 15);
@@ -572,13 +568,13 @@ public class BaseController {
 		calendar.add(calendar.DATE, -1);
 		Date startDate = calendar.getTime();
 		HashMap<String, Date> hashMap = new HashMap<>();
-		hashMap.put("startDate",startDate);
-		hashMap.put("endDate",endDate);
+		hashMap.put("startDate", startDate);
+		hashMap.put("endDate", endDate);
 		return hashMap;
 	}
 
 	//切割1天的时间戳,按传入的分钟数划分
-	public HashMap<Object, Object> qiegeMin(int min){
+	public HashMap<Object, Object> qiegeMin(int min) {
 		HashMap<String, Date> stringDateHashMap = nowTimeAfter15min();
 		Date startDate = stringDateHashMap.get("startDate");
 		Date endDate = stringDateHashMap.get("endDate");
@@ -600,46 +596,46 @@ public class BaseController {
 				startDate = calendar2.getTime();
 			}
 		}
-		HashMap shiJianMap=new HashMap<>();
+		HashMap shiJianMap = new HashMap<>();
 		//遍历24小时的键
 		for (String timeStr : list) {
-			shiJianMap.put(timeStr,"0");
+			shiJianMap.put(timeStr, "0");
 		}
 		return shiJianMap;
 	}
 
 	/**
-	 * @Description	获取token的数据
+	 * @return
+	 * @Description 获取token的数据
 	 * @Author zly
 	 * @Date 8:57 2020/3/20
 	 * @Param
-	 * @return
 	 */
-	public HashMap<String, Object> getTokenData(String token){
+	public HashMap<String, Object> getTokenData(String token) {
 		JSONObject jsonObject = TokenUtil.verify(token);
 		Integer success = jsonObject.getInteger("success");
 		HashMap<String, Object> result = new HashMap<>();
-		if (success==200){
+		if (success == 200) {
 			JSONObject data = jsonObject.getJSONObject("data");
 			Integer userId = data.getInteger("id");
 			Integer tenant_id = data.getInteger("tenant_id");
-			result.put("userId",userId);
-			result.put("tenantId",tenant_id);
+			result.put("userId", userId);
+			result.put("tenantId", tenant_id);
 		}
 		return result;
 	}
 
 	/**
-	 * @Description	从token中获取用户id
+	 * @return
+	 * @Description 从token中获取用户id
 	 * @Author zly
 	 * @Date 16:38 2020/3/30
 	 * @Param
-	 * @return
 	 */
-	public Integer getUserId(String token){
-		Integer userId=0;
+	public Integer getUserId(String token) {
+		Integer userId = 0;
 		Map<String, Object> verify = JwtUtil.verify(token);
-		System.out.println("解析的token:"+verify);
+		System.out.println("解析的token:" + verify);
 		if (verify != null) {
 			Object userIdObj = verify.get("id");
 			if (userIdObj != null) {
@@ -651,21 +647,22 @@ public class BaseController {
 		}
 		return userId;
 	}
+
 	/**
+	 * @return
 	 * @Description 从token中获取企业id
 	 * @Author zly
 	 * @Date 16:38 2020/3/30
 	 * @Param
-	 * @return
 	 */
-	public Long getTenantId(String token){
-		Long tenant_id=-1L;
+	public Long getTenantId(String token) {
+		Long tenant_id = -1L;
 		Map<String, Object> verify = JwtUtil.verify(token);
-		if(verify!=null){
+		if (verify != null) {
 			Object tenantIdObj = verify.get("tenant_id");
-			if(!StringUtils.isEmpty(tenantIdObj)&&!"null".equals(tenantIdObj)){
+			if (!StringUtils.isEmpty(tenantIdObj) && !"null".equals(tenantIdObj)) {
 				String data = tenantIdObj.toString();
-				if(!data.contains(",")){
+				if (!data.contains(",")) {
 					tenant_id = Long.valueOf(data);
 				}
 			}
@@ -674,59 +671,75 @@ public class BaseController {
 	}
 
 	/**
-	 * @Description	从token中获取矿场id
+	 * @return
+	 * @Description 从token中获取矿场id
 	 * @Author zly
 	 * @Date 11:52 2020/4/10
 	 * @Param
-	 * @return
 	 */
-	public List<Integer> getMineId(String token){
+	public List<Integer> getMineId(String token) {
 		List<Integer> list = new ArrayList<>();
 		Map<String, Object> verify = JwtUtil.verify(token);
 		System.out.println(verify);
-		if(verify!=null){
+		if (verify != null) {
 			Object mineIdObj = verify.get("mine_id");
 			JSONArray array = JSONObject.parseArray(mineIdObj.toString());
-			if (array.size()==1){
-				Integer mineId= Integer.valueOf(array.get(0).toString());
-				if (mineId==-1){
+			if (array.size() == 1) {
+				Integer mineId = Integer.valueOf(array.get(0).toString());
+				if (mineId == -1) {
 					//查询全部矿场id
 					List<Integer> selectMineId = mineSettingMapper.selectMineId();
 					return selectMineId;
-				}else {
+				} else {
 					list.add(mineId);
 					return list;
 				}
-			}else{
+			} else {
 				for (Object obj : array) {
 					list.add(Integer.valueOf(obj.toString()));
 				}
 				return list;
 			}
-		}else {
+		} else {
 			return null;
 		}
 	}
 
 	/**
-	 * @Description	同步用户信息
+	 * @return
+	 * @Description 同步用户信息
 	 * @Author zly
 	 * @Date 12:32 2020/4/10
 	 * @Param
-	 * @return
 	 */
-	public ResponseResult syncinUser(SysUser sysUser, String token){
+	public ResponseResult syncinUser(SysUser sysUser, String token) {
 		try {
 			Long tenantId = getTenantId(token);
 			apiContext.setTenantId(tenantId);
 			List<Integer> list = getMineId(token);
 			for (Integer mineId : list) {
 				SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
-				redisToInsert(1, "sys_user", sysUserRedisModel,mineId );
+				redisToInsert(1, "sys_user", sysUserRedisModel, mineId);
 			}
-		}catch (Exception e){
-			return new ResponseResult(FAIL,"同步缓存失败!");
+		} catch (Exception e) {
+			return new ResponseResult(FAIL, "同步缓存失败!");
 		}
 		return new ResponseResult(SUCCESS);
+	}
+
+	public Map<String,List> groupList(List list) {
+		int listSize=list.size();
+		int toIndex=100;
+		Map<String,List> map =new HashMap(); //用map存起来新的分组后数据
+		int keyToken =0;
+		for(int i=0;i<list.size();i+=100){
+			if(i+100>listSize){//作用为toIndex最后没有100条数据则剩余几条newList中就装几条
+				toIndex=listSize-i;
+			}
+			List newList = list.subList(i,i+toIndex);
+			map.put("keyName"+keyToken, newList);
+			keyToken++;
+		}
+		return map;
 	}
 }

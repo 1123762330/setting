@@ -65,8 +65,10 @@ public class WorkerDetailedController extends BaseController {
                                                  @RequestParam(value = "state", required = false,defaultValue = "")Integer state,
                                                  @RequestParam(value = "ip", required = false,defaultValue = "")String ip,
                                                  @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        HashMap<String, Object>  workerPageInfo = workerDetailedService.selectComeInWorkerList(workerType,state,ip, pageNum, pageSize);
+                                                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                                 HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<String, Object>  workerPageInfo = workerDetailedService.selectComeInWorkerList(workerType,state,ip, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, workerPageInfo);
     }
 
@@ -133,7 +135,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    @SystemLog(value = "矿机全部上架",type = LogType.MINE)
+    //@SystemLog(value = "矿机全部上架",type = LogType.MINE)
     @PostMapping("/batchIntoFrame")
     public ResponseResult batchIntoFrame(HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);

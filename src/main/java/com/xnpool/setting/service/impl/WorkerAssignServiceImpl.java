@@ -1,4 +1,5 @@
 package com.xnpool.setting.service.impl;
+import java.util.Date;
 import java.time.LocalDateTime;
 
 import com.alibaba.fastjson.JSONPath;
@@ -11,7 +12,9 @@ import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.*;
 import com.xnpool.setting.domain.model.IpSettingExample;
 import com.xnpool.setting.domain.pojo.*;
+import com.xnpool.setting.domain.redismodel.IpAssignRedisModel;
 import com.xnpool.setting.domain.redismodel.SysUserRedisModel;
+import com.xnpool.setting.domain.redismodel.WorkerAssignRedisModel;
 import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
@@ -142,9 +145,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         }
 
         //先执行删除操作
-        HashMap<Integer, List<MineFactoryAndFraneId>> deleteResultMap = new HashMap<>();
         ArrayList<MineFactoryAndFraneId> deleteList = new ArrayList<>();
-
         //矿机架删除
         if (!StringUtils.isEmpty(deleteIds)) {
             if (deleteIds.contains(",")) {
@@ -172,7 +173,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                                     deleteList.add(mineFactoryAndFraneId);
                                 }
                             }
-                            deleteResultMap.put(Integer.valueOf(ids), deleteList);
                         }
 
                     } else if (splitId.length == 2) {
@@ -186,7 +186,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                                 MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                                 deleteList.add(mineFactoryAndFraneId);
                             }
-                            deleteResultMap.put(mineId, deleteList);
                         }
                     } else {
                         //第三种,矿场ID-厂房ID-机架ID
@@ -196,7 +195,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                             Integer frameId = Integer.valueOf(splitId[2]);
                             MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                             deleteList.add(mineFactoryAndFraneId);
-                            deleteResultMap.put(mineId, deleteList);
                         }
                     }
                 }
@@ -222,7 +220,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                                 deleteList.add(mineFactoryAndFraneId);
                             }
                         }
-                        deleteResultMap.put(Integer.valueOf(ids), deleteList);
                     }
                 } else if (splitId.length == 2) {
                     //第二种,矿场ID-厂房ID
@@ -235,7 +232,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                             MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                             deleteList.add(mineFactoryAndFraneId);
                         }
-                        deleteResultMap.put(mineId, deleteList);
                     }
 
                 } else {
@@ -246,16 +242,19 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                         Integer frameId = Integer.valueOf(splitId[2]);
                         MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                         deleteList.add(mineFactoryAndFraneId);
-                        deleteResultMap.put(mineId, deleteList);
                     }
                 }
             }
             //执行批量软删除
             int rows3 = workerAssignMapper.batchToDelete(deleteList);
-            //矿机架权限分配同步入缓存
-            for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : deleteResultMap.entrySet()) {
-                redisToBatchDelete(rows3, "worker_assign", entry.getValue(), entry.getKey());
+            List<WorkerAssign> workerAssigns_db = workerAssignMapper.selectByCondition(deleteList,1);
+            //删除矿机架权限分配同步入缓存
+            for (WorkerAssign workerAssign : workerAssigns_db) {
+                WorkerAssignRedisModel workerAssignRedisModel = getWorkerAssignRedisModel(workerAssign);
+                redisToDelete(rows3, "worker_assign", workerAssignRedisModel, workerAssignRedisModel.getMine_id());
             }
+
+
         }
         //Ip区间删除
         ArrayList<MineIdAndIP> delete_ips = new ArrayList<>();
@@ -278,16 +277,16 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             }
             //删除ip
             Integer rows4 = ipAssignMapper.deleteByBatch(delete_ips);
-            //记录缓存
-            Map<Integer, List<MineIdAndIP>> groupByMineId = delete_ips.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
+
+            List<IpAssign> ipAssigns = ipAssignMapper.selectByOther(delete_ips, 1);
             //ip区间权限删除同步入缓存
-            for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
-                redisToBatchDelete(rows4, "ip_assign", entry.getValue(), entry.getKey());
+            for (IpAssign ipAssign : ipAssigns) {
+                IpAssignRedisModel ipAssignRedisModel = getIpAssignRedisModel(ipAssign);
+                redisToDelete(rows4, "ip_assign", ipAssignRedisModel, ipAssign.getMineId());
             }
         }
 
         //执行添加操作
-        HashMap<Integer, List<MineFactoryAndFraneId>> resultMap = new HashMap<>();
         ArrayList<MineFactoryAndFraneId> list = new ArrayList<>();
         if (ids.contains(",")) {
             //多个矿机架
@@ -314,7 +313,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                                 list.add(mineFactoryAndFraneId);
                             }
                         }
-                        resultMap.put(Integer.valueOf(ids), list);
                     }
 
                 } else if (splitId.length == 2) {
@@ -328,7 +326,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                             MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                             list.add(mineFactoryAndFraneId);
                         }
-                        resultMap.put(mineId, list);
                     }
                 } else {
                     //第三种,矿场ID-厂房ID-机架ID
@@ -338,7 +335,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                         Integer frameId = Integer.valueOf(splitId[2]);
                         MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                         list.add(mineFactoryAndFraneId);
-                        resultMap.put(mineId, list);
                     }
                 }
             }
@@ -364,7 +360,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                             list.add(mineFactoryAndFraneId);
                         }
                     }
-                    resultMap.put(Integer.valueOf(ids), list);
                 }
             } else if (splitId.length == 2) {
                 //第二种,矿场ID-厂房ID
@@ -377,7 +372,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                         MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                         list.add(mineFactoryAndFraneId);
                     }
-                    resultMap.put(mineId, list);
                 }
 
             } else {
@@ -388,7 +382,6 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                     Integer frameId = Integer.valueOf(splitId[2]);
                     MineFactoryAndFraneId mineFactoryAndFraneId = new MineFactoryAndFraneId(userId, mineId, factoryId, frameId);
                     list.add(mineFactoryAndFraneId);
-                    resultMap.put(mineId, list);
                 }
             }
 
@@ -396,10 +389,14 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         //执行保存功能
         if (!list.isEmpty()){
             int rows = workerAssignMapper.batchInsert(list);
+            List<WorkerAssign> workerAssigns_db = workerAssignMapper.selectByCondition(list,0);
             //矿机架权限分配同步入缓存
-            for (Map.Entry<Integer, List<MineFactoryAndFraneId>> entry : resultMap.entrySet()) {
-                redisToBatchInsert(rows, "worker_assign", entry.getValue(), entry.getKey());
+            for (WorkerAssign workerAssign : workerAssigns_db) {
+                WorkerAssignRedisModel workerAssignRedisModel = getWorkerAssignRedisModel(workerAssign);
+                redisToInsert(rows, "worker_assign", workerAssignRedisModel, workerAssignRedisModel.getMine_id());
             }
+
+
             //添加机架成功后用户信息缓存到redis里面去
             SysUser sysUser = sysUserMapper.selectById(userId);
             SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
@@ -434,10 +431,11 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         //执行入IP权限表
         if (!ip_list.isEmpty()){
             Integer rows2 = ipAssignMapper.batchInsert(ip_list);
-            Map<Integer, List<MineIdAndIP>> groupByMineId = ip_list.stream().collect(Collectors.groupingBy(MineIdAndIP::getMine_id));
+            List<IpAssign> ipAssigns = ipAssignMapper.selectByOther(ip_list, 0);
             //ip区间权限分配同步入缓存
-            for (Map.Entry<Integer, List<MineIdAndIP>> entry : groupByMineId.entrySet()) {
-                redisToBatchInsert(rows2, "ip_assign", entry.getValue(), entry.getKey());
+            for (IpAssign ipAssign : ipAssigns) {
+                IpAssignRedisModel ipAssignRedisModel = getIpAssignRedisModel(ipAssign);
+                redisToInsert(rows2, "ip_assign", ipAssignRedisModel, ipAssign.getMineId());
             }
         }
     }

@@ -183,4 +183,16 @@
       factory_id=#{item.factory_id} and frame_id =#{item.frame_id}
     </foreach>
   </update>
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+      SELECT
+      <include refid="Base_Column_List" />
+      FROM
+      worker_assign
+      WHERE
+      <foreach collection="list" item="item" open="( " separator=") or (" close=" )">
+        is_del=#{isDel} and user_id=#{item.user_id} and mine_id =#{item.mine_id} and
+        factory_id=#{item.factory_id} and frame_id =#{item.frame_id}
+      </foreach>
+    </select>
 </mapper>

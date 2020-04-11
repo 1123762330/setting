@@ -34,7 +34,7 @@ public interface WorkerDetailedService {
 
     void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token);
 
-    HashMap<String, Object>  selectComeInWorkerList(String workerType, Integer state, String ip, int pageNum, int pageSize);
+    HashMap<String, Object>  selectComeInWorkerList(String workerType, Integer state, String ip, int pageNum, int pageSize,String token);
 
     void updateMoveOutByid(String ids, String reason, String token);
 

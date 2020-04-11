@@ -250,7 +250,7 @@
     </select>
 
     <!--    批量添加-->
-    <insert id="batchInsert" keyProperty="id" parameterType="java.util.List" useGeneratedKeys="true">
+    <insert id="batchInsert" keyProperty="id" parameterType="java.util.List"  keyColumn="id" useGeneratedKeys="true">
         insert into worker_detailed (worker_id,user_id, factory_id, frame_id,frame_number, group_id,
         mine_id,create_time,workerbrand_id,worker_ip)
         values
@@ -283,15 +283,6 @@
             AND worker_id IS NOT NULl
         </where>
     </select>
-
-    <!--矿机矿场列表-->
-    <select id="selectByWorkerId" resultType="com.xnpool.setting.domain.pojo.WorkerMineVO">
-        select worker_id,mine_id FROM worker_detailed where is_delete=0 AND id in
-        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
-            #{item,jdbcType=BIGINT}
-        </foreach>
-    </select>
-
     <!--软删除-->
     <update id="updateById">
         update worker_detailed set is_delete = 1 where worker_id in
@@ -431,7 +422,7 @@
         worker_detailed
         WHERE
         <foreach collection="list" item="item" open="( " separator=") or (" close=" )">
-            is_delete = 0 and is_come_in = 1 and mine_id=#{item.mineId} and factory_id=#{item.factoryId} and frame_id =#{item.frameId} and
+            is_delete =#{item.isDelete} and is_come_in = #{item.isComeIn} and mine_id=#{item.mineId} and factory_id=#{item.factoryId} and frame_id =#{item.frameId} and
             frame_number=#{item.frameNumber}
         </foreach>
     </select>

@@ -65,9 +65,13 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setDetailed(detailed);
         record.setCreateTime(new Date());
         int rows = frameSettingMapper.insertSelective(record);
+
+        //机架数据同步入缓存
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
+        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+
         //同时在矿机详情表生成数据
         List<WorkerDetailed> list = new ArrayList<>();
-        List<WorkerDetailedRedisModel> redisList = new ArrayList<>();
         for (int i = 1; i <= number; i++) {
             WorkerDetailed workerDetailed = new WorkerDetailed();
             workerDetailed.setFactoryId(record.getFactoryId());
@@ -79,31 +83,11 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             list.add(workerDetailed);
         }
         int rows2 = workerDetailedMapper.batchInsert(list);
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
         //批量入缓存
         for (WorkerDetailed workerDetailed : list) {
-            WorkerDetailedRedisModel redisModel = new WorkerDetailedRedisModel();
-            redisModel.setId(workerDetailed.getId());
-            redisModel.setFactory_id(workerDetailed.getFactoryId());
-            redisModel.setFrame_id(workerDetailed.getFrameId());
-            redisModel.setFrame_number(workerDetailed.getFrameNumber());
-            redisModel.setMine_id(workerDetailed.getMineId());
-            redisModel.setIs_come_in(0);
-            redisModel.setRemarks("");
-            redisModel.setIs_delete(0);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            if (record.getUpdateTime() != null) {
-                String updateTime = sdf.format(record.getUpdateTime());
-                redisModel.setUpdate_time(updateTime);
-            }
-            if (record.getCreateTime() != null) {
-                String createTime = sdf.format(record.getCreateTime());
-                redisModel.setCreate_time(createTime);
-            }
-            redisList.add(redisModel);
+            WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);
+            redisToInsert(rows2, "worker_detailed", workerDetailedRedisModel, record.getMineId());
         }
-        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
-        redisToBatchInsert(rows2, "worker_detailed", redisList, record.getMineId());
         return rows;
     }
 
@@ -117,31 +101,32 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         record.setCreateTime(new Date());
         int rows = frameSettingMapper.insertSelective(record);
 
-        long start = System.currentTimeMillis();
+        //执行入缓存操作
+        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
+        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+
         //同时在矿机详情表生成数据
         List<WorkerDetailed> list = new ArrayList<>();
-        List<WorkerDetailedRedisModel> redisList = new ArrayList<>();
         for (int i = 1; i <= number; i++) {
             WorkerDetailed workerDetailed = new WorkerDetailed();
             workerDetailed.setFactoryId(record.getFactoryId());
             workerDetailed.setFrameId(record.getId());
             workerDetailed.setFrameNumber(i);
             workerDetailed.setMineId(record.getMineId());
+            workerDetailed.setIsComeIn(0);
+            workerDetailed.setIsDelete(0);
             workerDetailed.setCreateTime(new Date());
             workerDetailed.setUpdateTime(new Date());
             list.add(workerDetailed);
         }
         int rows2 = workerDetailedMapper.batchInsert(list);
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
-        //批量入缓存
+        //详情表同步入缓存
+        //System.out.println("批量查询详情表返回的自增id:"+list);
+        //List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(list);
         for (WorkerDetailed workerDetailed : list) {
             WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);
-            redisList.add(workerDetailedRedisModel);
+            redisToInsert(rows2, "worker_detailed", workerDetailedRedisModel, workerDetailed.getMineId());
         }
-        long timeMillis = System.currentTimeMillis();
-        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
-        redisToBatchInsert(rows2, "worker_detailed", redisList, record.getMineId());
-        System.out.println("=====单纯入缓存耗时:"+(System.currentTimeMillis()-timeMillis));
         return record.getId();
     }
 

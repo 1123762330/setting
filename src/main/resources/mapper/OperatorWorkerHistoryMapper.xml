@@ -169,7 +169,7 @@
     AND move_out_time IS NULL
   </update>
 
-  <insert id="insertTobatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertTobatch" keyProperty="id" parameterType="java.util.List" keyColumn="id" useGeneratedKeys="true">
     insert into operator_worker_history (worker_id, come_in_time, reason, operator_id,mine_id)
     values
     <foreach collection="list" index="index" item="item" separator=",">

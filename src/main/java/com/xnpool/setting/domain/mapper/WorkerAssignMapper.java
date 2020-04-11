@@ -32,4 +32,7 @@ public interface WorkerAssignMapper {
     List<WorkerAssign> selectWorkerAssignList(@Param("userId") Integer userId);
 
     int batchToDelete(ArrayList<MineFactoryAndFraneId> deleteList);
+
+    List<WorkerAssign> selectByCondition(@Param("list")List<MineFactoryAndFraneId> list,@Param("isDel")Integer isDel);
+
 }

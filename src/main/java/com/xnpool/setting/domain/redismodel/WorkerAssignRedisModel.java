@@ -1,10 +1,11 @@
-package com.xnpool.setting.domain.pojo;
+package com.xnpool.setting.domain.redismodel;
 
-import java.io.Serializable;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author zly
@@ -14,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkerAssign implements Serializable {
-    private static final long serialVersionUID = 4123075871043269198L;
+public class WorkerAssignRedisModel implements Serializable {
+    private static final long serialVersionUID = -3985819446101485362L;
     /**
      * 编号
      */
@@ -24,35 +25,35 @@ public class WorkerAssign implements Serializable {
     /**
      * 用户id
      */
-    private Integer userId;
+    private Integer user_id;
 
     /**
      * 矿场id
      */
-    private Integer mineId;
+    private Integer mine_id;
 
     /**
      * 厂房id
      */
-    private Integer factoryId;
+    private Integer factory_id;
 
     /**
      * 矿机架id
      */
-    private Integer frameId;
+    private Integer frame_id;
 
     /**
      * 创建时间
      */
-    private Date createTime;
+    private String create_time;
 
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private String update_time;
 
     /**
      * 是否删除,0:未,1:已删除
      */
-    private Byte isDel;
+    private Byte is_del;
 }

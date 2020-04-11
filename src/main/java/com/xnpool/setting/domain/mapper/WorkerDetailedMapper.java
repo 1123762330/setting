@@ -1,11 +1,7 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xnpool.setting.domain.model.GroupModel;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;import com.xnpool.setting.domain.model.WorkerDetailedExample;import com.xnpool.setting.domain.model.WorkerDetailedModel;
-import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
-import com.xnpool.setting.domain.pojo.WorkerMineVO;
-import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import org.apache.ibatis.annotations.Param;import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +33,6 @@ public interface WorkerDetailedMapper{
     int updateMoveOutByid(@Param("list") List<Integer> list);
 
     List<Integer> selectWorkerIdlist(@Param("is_come_in") Integer is_come_in);
-
-    List<WorkerMineVO> selectByWorkerId(List<Integer> list);
 
     int updateById(ArrayList<Integer> list);
 

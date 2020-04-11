@@ -30,7 +30,7 @@
         delete from group_setting
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
+    <insert id="insert" parameterType="com.xnpool.setting.domain.pojo.GroupSetting" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into group_setting (id, group_name, ip_id,
         factory_id, mine_id, frame_id,
@@ -41,7 +41,7 @@
         #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting">
+    <insert id="insertSelective" parameterType="com.xnpool.setting.domain.pojo.GroupSetting" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into group_setting
         <trim prefix="(" suffix=")" suffixOverrides=",">

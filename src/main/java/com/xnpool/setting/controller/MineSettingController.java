@@ -49,8 +49,9 @@ public class MineSettingController extends BaseController{
      */
     @SystemLog(value = "添加矿场",type = LogType.SYSTEM)
     @PostMapping("/addMineSetting")
-    public ResponseResult addMineSetting(MineSetting mineSetting) {
-        mineSettingService.insertSelective(mineSetting);
+    public ResponseResult addMineSetting(MineSetting mineSetting,HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        mineSettingService.insertSelective(mineSetting,token);
         return new ResponseResult(SUCCESS);
     }
 
@@ -113,8 +114,9 @@ public class MineSettingController extends BaseController{
      * @Param
      */
     @GetMapping("/selectMineName")
-    public ResponseResult selectMineSetting() {
-        HashMap<Integer, String> resultMap = mineSettingService.selectMineNameByOther();
+    public ResponseResult selectMineSetting(HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<Integer, String> resultMap = mineSettingService.selectMineNameByOther(token);
         return new ResponseResult(SUCCESS, resultMap);
     }
 
