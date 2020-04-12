@@ -369,7 +369,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer userId = getUserId(token);
         PageHelper.startPage(pageNum, pageSize);
         List<WorkerDetailedModel> workerDetailedModels = workerDetailedMapper.selectAllWorkerDetailed(startIpToLong, endIpToLong, userId, tenantId);
-        System.out.println("用户网站的矿机详情列表:" + workerDetailedModels);
+        log.info("用户网站的矿机详情列表:" + workerDetailedModels.size());
         for (WorkerDetailedModel workerDetailedModel : workerDetailedModels) {
             String frameName = workerDetailedModel.getFrameName();
             String frameNumber = workerDetailedModel.getFrameNumber();

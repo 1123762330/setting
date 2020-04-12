@@ -33,6 +33,11 @@ public class MineSettingRedisModel implements Serializable {
     private String description;
 
     /**
+     * 该矿场下的机架层数
+     */
+    private Integer frame_num;
+
+    /**
      * 是否删除，0:否，1:是
      */
     private Integer is_delete;

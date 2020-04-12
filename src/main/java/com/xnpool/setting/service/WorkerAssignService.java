@@ -31,7 +31,7 @@ public interface WorkerAssignService {
 
     PageInfo<UserRoleVO> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    void addAssignWorker(String ids,String deleteIds,String deleteIps,String ipId, Integer userId);
+    void addAssignWorker(String ids,String delIds,String delIps,String ipId, Integer userId);
 
     HashMap<Integer, HashMap<String, Object>> selectAssignMineMap(Integer userId);
 

@@ -250,20 +250,20 @@ public class UserWebService extends BaseController {
     public HashMap<String, Integer> getWorkerTotal(String token,Long tenantId) {
         //后期从token中获取用户Id
         Integer userId = getUserId(token);
-        Boolean totalHexists = jedisUtil.hexists(USERWORKER_TOTAL+tenantId, String.valueOf(userId));
+        Boolean totalHexists = jedisUtil.hexists(USERWORKER_TOTAL+userId, String.valueOf(tenantId));
         int total = 0;
         if (totalHexists) {
-            String totalStr = jedisUtil.hget(USERWORKER_TOTAL+tenantId, String.valueOf(userId));
+            String totalStr = jedisUtil.hget(USERWORKER_TOTAL+userId, String.valueOf(tenantId));
             if (!StringUtils.isEmpty(totalStr)) {
                 total =Integer.valueOf(totalStr);
             }
             log.info(userId + "用户的redis中取出的矿机个数是" + total);
         }
 
-        Boolean hexists = jedisUtil.hexists(USERWORKER_ONLINE_TOTAL+tenantId, String.valueOf(userId));
+        Boolean hexists = jedisUtil.hexists(USERWORKER_ONLINE_TOTAL+userId, String.valueOf(tenantId));
         String onLineSize = "0";
         if (hexists) {
-            onLineSize = jedisUtil.hget(USERWORKER_ONLINE_TOTAL+tenantId, String.valueOf(userId));
+            onLineSize = jedisUtil.hget(USERWORKER_ONLINE_TOTAL+userId, String.valueOf(tenantId));
             log.info(userId + "用户的redis中取出的在线矿机总数是" + onLineSize);
         }
         HashMap<String, Integer> resultMap = new HashMap<>();

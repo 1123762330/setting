@@ -129,8 +129,8 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void addAssignWorker(String ids, String deleteIds, String deleteIps, String ipId, Integer userId) {
+    //@Transactional(rollbackFor = Exception.class)
+    public void addAssignWorker(String ids, String delIds, String delIps, String ipId, Integer userId) {
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<String> frameSet_db = new HashSet<>();
         HashSet<String> factorySet_db = new HashSet<>();
@@ -144,13 +144,21 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             mineSet_db.add(mineId);
         }
 
+        HashSet<String> ipIdSetByIpAssigns= new HashSet<>();
+        List<IpAssign> ipAssignsList = ipAssignMapper.selectIpAssignList(userId);
+        for (IpAssign ipAssign : ipAssignsList) {
+            Integer mineId = ipAssign.getMineId();
+            Integer ip_id = ipAssign.getIpId();
+            ipIdSetByIpAssigns.add(mineId+"-"+ip_id);
+        }
+
         //先执行删除操作
         ArrayList<MineFactoryAndFraneId> deleteList = new ArrayList<>();
         //矿机架删除
-        if (!StringUtils.isEmpty(deleteIds)) {
-            if (deleteIds.contains(",")) {
+        if (!StringUtils.isEmpty(delIds)) {
+            if (delIds.contains(",")) {
                 //多个矿机架
-                String[] split = deleteIds.split(",");
+                String[] split = delIds.split(",");
                 for (int i = 0; i < split.length; i++) {
                     String id = split[i];
                     String[] splitId = id.split("-");
@@ -201,7 +209,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             } else {
                 //单个矿机架
                 //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
-                String[] splitId = deleteIds.split("-");
+                String[] splitId = delIds.split("-");
                 if (!ids.contains("-")) {
                     //直接是矿场ID
                     Integer mineId = Integer.valueOf(ids);
@@ -258,8 +266,8 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         }
         //Ip区间删除
         ArrayList<MineIdAndIP> delete_ips = new ArrayList<>();
-        if (!StringUtils.isEmpty(deleteIps)) {
-            if (deleteIds.contains(",")) {
+        if (!StringUtils.isEmpty(delIps)) {
+            if (delIps.contains(",")) {
                 String[] split = ipId.split(",");
                 for (String ip_id : split) {
                     String[] split2 = ip_id.split("-");
@@ -269,7 +277,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                     delete_ips.add(mineIdAndIP);
                 }
             } else {
-                String[] split = deleteIds.split("-");
+                String[] split = delIps.split("-");
                 Integer mineId = Integer.valueOf(split[0]);
                 Integer ip_id = Integer.valueOf(split[1]);
                 MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id);
@@ -415,18 +423,22 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         if (ipId.contains(",")) {
             String[] split = ipId.split(",");
             for (String ip_id : split) {
-                String[] split2 = ip_id.split("-");
-                Integer mineId = Integer.valueOf(split2[0]);
-                Integer ip_id2 = Integer.valueOf(split2[1]);
-                MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id2);
-                ip_list.add(mineIdAndIP);
+                if (!ipIdSetByIpAssigns.contains(ipId)){
+                    String[] split2 = ip_id.split("-");
+                    Integer mineId = Integer.valueOf(split2[0]);
+                    Integer ip_id2 = Integer.valueOf(split2[1]);
+                    MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id2);
+                    ip_list.add(mineIdAndIP);
+                }
             }
         } else {
-            String[] split = ipId.split("-");
-            Integer mineId = Integer.valueOf(split[0]);
-            Integer ip_id = Integer.valueOf(split[1]);
-            MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id);
-            ip_list.add(mineIdAndIP);
+            if (!ipIdSetByIpAssigns.contains(ipId)){
+                String[] split = ipId.split("-");
+                Integer mineId = Integer.valueOf(split[0]);
+                Integer ip_id = Integer.valueOf(split[1]);
+                MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id);
+                ip_list.add(mineIdAndIP);
+            }
         }
         //执行入IP权限表
         if (!ip_list.isEmpty()){

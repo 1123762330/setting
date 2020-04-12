@@ -19,10 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.xnpool.setting.common.BaseController.HASHRATE_DATA;
 
@@ -65,7 +62,7 @@ public class AlgorithmServiceImpl extends BaseController implements AlgorithmSer
     }
 
     @Override
-    public HashMap<Integer, String> selectAlgorithmMap(String token,Long tenantId) {
+    public HashMap<Integer, String> selectExistAlgorithm(String token,Long tenantId) {
         //首先去缓存里进行查询这个用户名下的所有的矿机类型
         //存到一个list的集合,然后遍历,同数据库查询的矿机品牌做对比,然后取算法id
         Integer userId = getUserId(token);
@@ -109,6 +106,18 @@ public class AlgorithmServiceImpl extends BaseController implements AlgorithmSer
             Integer algorithmId = workerbrandMap.get(workerType);
             String algorithmName = hashMap_db.get(algorithmId);
             resultMap.put(algorithmId,algorithmName);
+        }
+        return resultMap;
+    }
+
+    @Override
+    public HashMap<Integer, String> selectAlgorithmMap() {
+        List<HashMap> hashMapList = algorithmMapper.selectAlgorithmMap();
+        HashMap<Integer, String> resultMap = new HashMap<>();
+        for (HashMap hashMap : hashMapList) {
+            String algorithm_name = hashMap.get("algorithm_name").toString();
+            Integer id = Integer.valueOf(hashMap.get("id").toString());
+            resultMap.put(id, algorithm_name);
         }
         return resultMap;
     }

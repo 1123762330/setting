@@ -4,13 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
+import com.xnpool.logaop.service.exception.UpdateException;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.mapper.MineSettingMapper;
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.domain.model.FrameSettingExample;
+import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;
 import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
 import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,7 @@ import java.util.List;
  * @date 2020/2/4 20:04
  */
 @Service
+@Slf4j
 public class FrameSettingServiceImpl extends BaseController implements FrameSettingService {
 
     @Resource
@@ -41,6 +46,9 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
 
     @Autowired
     private WorkerDetailedMapper workerDetailedMapper;
+
+    @Autowired
+    private MineSettingMapper mineSettingMapper;
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -55,12 +63,15 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer insertSelective(FrameSetting record) {
+        Integer mineId = record.getMineId();
+        MineSetting mineSetting = mineSettingMapper.selectByPrimaryKey(mineId);
+        Integer number = mineSetting.getFrameNum();
         List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
         if (frameNameList.contains(record.getFrameName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         String framename = record.getFrameName();
-        Integer number = record.getNumber();
+        record.setNumber(number);
         String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
         record.setCreateTime(new Date());
@@ -170,9 +181,19 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(FrameSetting record) {
+        //首先去详情表查询该机架是否在使用
         List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
         if (frameNameList.contains(record.getFrameName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
+        }
+
+        Integer mineId = record.getMineId();
+        if (mineId!=null){
+            FrameSetting frameSetting_db = frameSettingMapper.selectByPrimaryKey(record.getId());
+            Integer mineId_db = frameSetting_db.getMineId();
+            if (mineId!=mineId_db){
+                throw new UpdateException("如需更换矿场,请先删除该机架!");
+            }
         }
 
         String framename = record.getFrameName();
@@ -194,10 +215,19 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateById(int id) {
-        int rows = frameSettingMapper.updateById(id);
-        FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(id);
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(frameSetting);
-        redisToDelete(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
+        List<Integer> list = workerDetailedMapper.selectNotExistWorkerFrame(id);
+        List<Integer> existList = workerDetailedMapper.selectExistWorkerFrame(id);
+        if (existList.size()!=0){
+            throw new DataExistException("该机架上存在已上架的矿机,请先下架再删除!");
+        }else {
+            int rows2 = workerDetailedMapper.updateById(list);
+            log.info("成功删除机架条数:"+rows2);
+            int rows = frameSettingMapper.updateById(id);
+            FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(id);
+            FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(frameSetting);
+            redisToDelete(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
+        }
+
     }
 
     @Override

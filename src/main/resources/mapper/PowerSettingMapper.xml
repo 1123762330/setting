@@ -7,6 +7,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="mine_id" jdbcType="INTEGER" property="mineId" />
     <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="base_price" jdbcType="DOUBLE" property="basePrice" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -15,7 +16,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, mine_id, price, description, is_delete, create_time, update_time, tenant_id
+    id, mine_id, price, base_price, description, is_delete, create_time, update_time, 
+    tenant_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -31,12 +33,12 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.PowerSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into power_setting (mine_id, price, description, 
-      is_delete, create_time, update_time, 
-      tenant_id)
-    values (#{mineId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{description,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{tenantId,jdbcType=BIGINT})
+    insert into power_setting (mine_id, price, base_price, 
+      description, is_delete, create_time, 
+      update_time, tenant_id)
+    values (#{mineId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{basePrice,jdbcType=DOUBLE}, 
+      #{description,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{tenantId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.PowerSetting" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -47,6 +49,9 @@
       </if>
       <if test="price != null">
         price,
+      </if>
+      <if test="basePrice != null">
+        base_price,
       </if>
       <if test="description != null">
         description,
@@ -70,6 +75,9 @@
       </if>
       <if test="price != null">
         #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="basePrice != null">
+        #{basePrice,jdbcType=DOUBLE},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -98,6 +106,9 @@
       <if test="price != null">
         price = #{price,jdbcType=DOUBLE},
       </if>
+      <if test="basePrice != null">
+        base_price = #{basePrice,jdbcType=DOUBLE},
+      </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
@@ -121,6 +132,7 @@
     update power_setting
     set mine_id = #{mineId,jdbcType=INTEGER},
       price = #{price,jdbcType=DOUBLE},
+      base_price = #{basePrice,jdbcType=DOUBLE},
       description = #{description,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

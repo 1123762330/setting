@@ -47,4 +47,14 @@
         </foreach>
     </select>
 
+    <select id="selectIpAssignList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        ip_assign
+        WHERE
+        is_del=0
+        AND user_id = #{userId}
+    </select>
+
 </mapper>

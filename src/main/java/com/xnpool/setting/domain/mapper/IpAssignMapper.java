@@ -23,4 +23,5 @@ public interface IpAssignMapper extends BaseMapper<IpAssign> {
     Integer deleteByBatch(ArrayList<MineIdAndIP> delete_ips);
 
     List<IpAssign> selectByOther(@Param("list") List<MineIdAndIP> ip_list, @Param("isDel")Integer isDel);
+    List<IpAssign> selectIpAssignList(@Param("userId")Integer userId);
 }

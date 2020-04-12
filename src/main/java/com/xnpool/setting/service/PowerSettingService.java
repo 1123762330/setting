@@ -1,6 +1,7 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
+import com.xnpool.setting.domain.model.PowerSettingExample;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 
 import java.util.List;
@@ -27,7 +28,8 @@ public interface PowerSettingService {
 
     int updateById(int id);
 
-    PageInfo<PowerSetting> selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 }
+
 
 

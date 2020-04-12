@@ -285,7 +285,7 @@
     </select>
     <!--软删除-->
     <update id="updateById">
-        update worker_detailed set is_delete = 1 where worker_id in
+        update worker_detailed set is_delete = 1 where id in
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=BIGINT}
         </foreach>
@@ -442,5 +442,29 @@
         <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
             #{item,jdbcType=INTEGER}
         </foreach>
+    </select>
+
+    <select id="selectNotExistWorkerFrame" resultType="integer">
+        SELECT
+            id
+        FROM
+            worker_detailed
+        WHERE
+            frame_id = #{frameId}
+            AND worker_id IS NULL
+            AND worker_ip IS NULL
+            AND is_delete=0;
+    </select>
+
+    <select id="selectExistWorkerFrame" resultType="integer">
+        SELECT
+        id
+        FROM
+        worker_detailed
+        WHERE
+        frame_id = #{frameId}
+        AND worker_id IS NOT NULL
+        AND worker_ip IS NOT NULL
+        AND is_delete=0;
     </select>
 </mapper>

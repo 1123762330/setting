@@ -60,7 +60,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
             MineSettingRedisModel mineSettingRedisModel = getMineSettingRedisModel(record);
             redisToInsert(rows, "mine_setting", mineSettingRedisModel, record.getId());
         }else {
-            throw new UnAuthorisedException("只有管理员才能添加矿场");
+            throw new InsertException("只有管理员才能添加矿场");
         }
 
 

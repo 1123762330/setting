@@ -7,6 +7,7 @@ import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
+import com.xnpool.setting.domain.model.PowerSettingExample;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.service.PowerSettingService;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +84,7 @@ public class PowerSettingController extends BaseController {
     public ResponseResult selectFrameList( @RequestParam(value = "keyWord", required=false,defaultValue = "")String keyWord,
                                            @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<PowerSetting> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize);
+        PageInfo<PowerSettingExample> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, pageInfo);
     }
 }

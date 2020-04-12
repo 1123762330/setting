@@ -1,10 +1,11 @@
-package com.xnpool.setting.domain.pojo;
+package com.xnpool.setting.domain.model;
 
-import java.io.Serializable;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author zly
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PowerSetting implements Serializable {
+public class PowerSettingExample implements Serializable {
     private static final long serialVersionUID = 3358273796109874387L;
     private Integer id;
 
@@ -22,6 +23,11 @@ public class PowerSetting implements Serializable {
      * 矿场id
      */
     private Integer mineId;
+
+    /**
+     * 所属矿场
+     */
+    private String mineName;
 
     /**
      * 电费单价/度
@@ -37,24 +43,4 @@ public class PowerSetting implements Serializable {
      * 描述
      */
     private String description;
-
-    /**
-     * 是否删除,0:否,1:是
-     */
-    private Integer isDelete;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
-
-    /**
-     * 企业id
-     */
-    private Long tenantId;
 }

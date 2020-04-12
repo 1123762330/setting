@@ -90,6 +90,21 @@ public class AlgorithmController extends BaseController {
     }
 
     /**
+     * @Description 用户算法列表集合
+     * @Author zly
+     * @Date 16:56 2020/3/19
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectExistAlgorithm")
+    public ResponseResult selectExistAlgorithm (HttpServletRequest request){
+        String token = writeLogUtil.getToken(request);
+        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        HashMap<Integer, String> algorithmMap = algorithmService.selectExistAlgorithm(token,tenantId);
+        return new ResponseResult(SUCCESS,algorithmMap);
+    }
+
+    /**
      * @Description 算法列表集合
      * @Author zly
      * @Date 16:56 2020/3/19
@@ -97,10 +112,8 @@ public class AlgorithmController extends BaseController {
      * @return
      */
     @GetMapping("/selectAlgorithmMap")
-    public ResponseResult selectAlgorithmMap (HttpServletRequest request){
-        String token = writeLogUtil.getToken(request);
-        Long tenantId=Long.valueOf(request.getHeader("tenantId"));
-        HashMap<Integer, String> algorithmMap = algorithmService.selectAlgorithmMap(token,tenantId);
+    public ResponseResult selectAlgorithmMap (){
+        HashMap<Integer, String> algorithmMap = algorithmService.selectAlgorithmMap();
         return new ResponseResult(SUCCESS,algorithmMap);
     }
 }

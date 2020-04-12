@@ -34,7 +34,7 @@ public interface WorkerDetailedMapper{
 
     List<Integer> selectWorkerIdlist(@Param("is_come_in") Integer is_come_in);
 
-    int updateById(ArrayList<Integer> list);
+    int updateById(List<Integer> list);
 
     List<WorkerDetailedModel> selectAllWorkerDetailed(@Param("startIp") Long startIp,
                                                       @Param("endIp") Long endIp,
@@ -56,4 +56,8 @@ public interface WorkerDetailedMapper{
     int batchUpdateToUser(@Param("list")List<Integer> list,@Param("userId") Integer userId,@Param("groupId")  Integer groupId);
 
     List<WorkerDetailed> selectWorkerDetailedList(@Param("list")List<Integer> list);
+
+    List<Integer> selectNotExistWorkerFrame(@Param("frameId")Integer frameId);
+
+    List<Integer> selectExistWorkerFrame(@Param("frameId")Integer frameId);
 }
