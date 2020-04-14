@@ -116,6 +116,7 @@ public class MineSettingController extends BaseController{
     @GetMapping("/selectMineName")
     public ResponseResult selectMineSetting(HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
+        log.info("=======");
         HashMap<Integer, String> resultMap = mineSettingService.selectMineNameByOther(token);
         return new ResponseResult(SUCCESS, resultMap);
     }

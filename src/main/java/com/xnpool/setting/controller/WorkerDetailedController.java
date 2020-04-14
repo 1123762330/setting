@@ -9,6 +9,7 @@ import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.WorkerDetailedExample;
+import com.xnpool.setting.domain.pojo.MoveOutParam;
 import com.xnpool.setting.domain.pojo.WorkerDetailedParam;
 import com.xnpool.setting.domain.model.WorkerExample;
 import com.xnpool.setting.service.WorkerDetailedService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * 矿机出入库管理
@@ -44,13 +46,28 @@ public class WorkerDetailedController extends BaseController {
      */
     @SystemLog(value = "查询矿机出库列表",type = LogType.MINE)
     @GetMapping("/selectMoveOutList")
-    public ResponseResult selectMoveOutList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+    public ResponseResult selectMoveOutList(MoveOutParam moveOutParam,
                                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                             HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(keyWord, pageNum, pageSize,token);
+        PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(moveOutParam, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, workerExamplePageInfo);
+    }
+
+    /**
+     * @Description 过滤下拉列表
+     * @Author zly
+     * @Date 17:06 2020/4/14
+     * @Param
+     * @return
+     */
+    @SystemLog(value = "查询下拉列表",type = LogType.MINE)
+    @GetMapping("/selectDropownList")
+    public ResponseResult selectDropownList(HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        HashMap<String, HashSet> resultMap = workerDetailedService.selectDropownList(token);
+        return new ResponseResult(SUCCESS, resultMap);
     }
 
     /**

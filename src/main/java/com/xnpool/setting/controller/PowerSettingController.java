@@ -70,7 +70,7 @@ public class PowerSettingController extends BaseController {
      * @Date 15:34 2020/2/6
      * @Param
      */
-    //@SystemLog(value = "删除电费设置",type = LogType.SYSTEM)
+    @SystemLog(value = "删除电费设置",type = LogType.SYSTEM)
     @DeleteMapping("/deletePowerRateById")
     public ResponseResult deletePowerRateById(int id) {
         //删除电费之前应该先查查有没有应用到这个电费的地方

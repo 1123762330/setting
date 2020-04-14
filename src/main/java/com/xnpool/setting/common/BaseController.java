@@ -3,10 +3,7 @@ package com.xnpool.setting.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.xnpool.logaop.service.exception.CheckException;
-import com.xnpool.logaop.service.exception.DeleteException;
-import com.xnpool.logaop.service.exception.InsertException;
-import com.xnpool.logaop.service.exception.UpdateException;
+import com.xnpool.logaop.service.exception.*;
 import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.config.ApiContext;
@@ -16,11 +13,14 @@ import com.xnpool.setting.domain.redismodel.*;
 import com.xnpool.setting.utils.JedisUtil;
 import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.TokenUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -636,7 +636,7 @@ public class BaseController {
      */
     public Integer getUserId(String token) {
         Integer userId = 0;
-        Map<String, Object> verify = JwtUtil.verify(token);
+        Map<String, Object> verify = verify(token);
         System.out.println("解析的token:" + verify);
         if (verify != null) {
             Object userIdObj = verify.get("id");
@@ -659,7 +659,7 @@ public class BaseController {
      */
     public Long getTenantId(String token) {
         Long tenant_id = -1L;
-        Map<String, Object> verify = JwtUtil.verify(token);
+        Map<String, Object> verify = verify(token);
         if (verify != null) {
             Object tenantIdObj = verify.get("tenant_id");
             if (!StringUtils.isEmpty(tenantIdObj) && !"null".equals(tenantIdObj)) {
@@ -681,7 +681,7 @@ public class BaseController {
      */
     public List<Integer> getMineId(String token) {
         List<Integer> list = new ArrayList<>();
-        Map<String, Object> verify = JwtUtil.verify(token);
+        Map<String, Object> verify = verify(token);
         if (verify != null) {
             Object mineIdObj = verify.get("mine_id");
             if (!StringUtils.isEmpty(mineIdObj)) {
@@ -711,7 +711,7 @@ public class BaseController {
     }
 
     public Integer getSuperMineId(String token) {
-        Map<String, Object> verify = JwtUtil.verify(token);
+        Map<String, Object> verify = verify(token);
         if (verify != null) {
             Object mineIdObj = verify.get("mine_id");
             if (!StringUtils.isEmpty(mineIdObj)) {
@@ -763,5 +763,35 @@ public class BaseController {
             keyToken++;
         }
         return map;
+    }
+
+    public static Map<String, Object> verify(String token) {
+        HashMap<String, Object> reslut = new HashMap();
+        if (token != null) {
+            try {
+                Claims claims = (Claims) Jwts.parser().setSigningKey("test_key".getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
+                String username = claims.get("user_name").toString();
+                String roles = "";
+
+                try {
+                    roles = claims.get("authorities").toString();
+                } catch (Exception var8) {
+                    System.err.println("==authorities is null=");
+                }
+
+                String tenant_id = claims.get("tenant_id").toString();
+                Object mine_id = claims.get("mine_id");
+                String id = claims.get("id").toString();
+                reslut.put("username", username);
+                reslut.put("roles", roles);
+                reslut.put("tenant_id", tenant_id);
+                reslut.put("mine_id", mine_id);
+                reslut.put("id", id);
+                return reslut;
+            } catch (Exception var9) {
+                throw new TokenException("token解析失败");
+            }
+        }
+        return null;
     }
 }

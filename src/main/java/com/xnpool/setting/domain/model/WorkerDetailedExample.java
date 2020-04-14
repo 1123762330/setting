@@ -53,6 +53,11 @@ public class WorkerDetailedExample implements Serializable {
     private String workerName;
 
     /**
+     * 矿机品牌id
+     */
+    private Integer workerbrandId;
+
+    /**
      * 矿机品牌
      */
     private String brandName;
@@ -61,6 +66,11 @@ public class WorkerDetailedExample implements Serializable {
      * 矿机ip
      */
     private String ip;
+
+    /**
+     * 长整型矿机ip
+     */
+    private Long ipLong;
 
     /**
      * 厂房名称

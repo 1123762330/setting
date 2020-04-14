@@ -24,7 +24,7 @@ public interface WorkerDetailedMapper{
 
     int updateByPrimaryKey(WorkerDetailed record);
 
-    List<WorkerDetailedExample> selectMoveOutList(@Param("keyWord") String keyWord,@Param("tenantId")Long tenantId);
+    List<WorkerDetailedExample> selectMoveOutList(@Param("tenantId")Long tenantId);
 
     int batchInsert(List<WorkerDetailed> list);
 

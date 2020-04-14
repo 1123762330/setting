@@ -8,6 +8,7 @@ import com.xnpool.setting.domain.model.WorkerExample;
 import com.xnpool.setting.domain.pojo.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public interface WorkerDetailedService {
 
     int updateByPrimaryKey(WorkerDetailed record);
 
-    PageInfo<WorkerDetailedExample> selectMoveOutList(String keyWord, int pageNum, int pageSize,String token);
+    PageInfo<WorkerDetailedExample> selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize,String token);
 
     void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token);
 
@@ -49,6 +50,8 @@ public interface WorkerDetailedService {
     void batchIntoFrame(String token);
 
     void batchUpdateToUser(String ids,Integer userId,Integer groupId);
+
+    HashMap<String, HashSet> selectDropownList(String token);
 }
 
 

@@ -50,9 +50,6 @@ public class UserWebController extends BaseController {
     @Autowired
     private ApiContext apiContext;
 
-    @Autowired
-    private MineSettingMapper mineSettingMapper;
-
     /**
      * @Description 用户网站查询矿机详情列表
      * @Author zly
@@ -106,7 +103,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "查询用户矿机算力曲线图",type = LogType.SURVER)
+    @SystemLog(value = "查询用户矿机算力曲线图",type = LogType.SURVER)
     @GetMapping("/getWorkerHashByDay")
     public ResponseResult getPoolWorkerHashByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
@@ -122,7 +119,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
+    @SystemLog(value = "查询用户矿机在线数量图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotalByDay")
     public ResponseResult getWorkerTotalByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
@@ -131,7 +128,7 @@ public class UserWebController extends BaseController {
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
 
-    //@SystemLog(value = "用户饼状图",type = LogType.SURVER)
+    @SystemLog(value = "用户饼状图",type = LogType.SURVER)
     @GetMapping("/getWorkerTotal")
     public ResponseResult getWorkerTotal(HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
@@ -157,6 +154,7 @@ public class UserWebController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询企业列表",type = LogType.SYSTEM)
     @GetMapping("/selectTenantList")
     public ResponseResult selectTenantList (HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
