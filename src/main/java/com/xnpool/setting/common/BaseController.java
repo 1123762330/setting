@@ -3,6 +3,7 @@ package com.xnpool.setting.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.service.exception.UpdateException;
@@ -700,6 +701,26 @@ public class BaseController {
                         list.add(Integer.valueOf(obj.toString()));
                     }
                     return list;
+                }
+            }else {
+                throw new CheckException("未获取到该账户的数据权限,权限为空");
+            }
+        }else {
+            throw new CheckException("token解析失败!");
+        }
+    }
+
+    public Integer getSuperMineId(String token) {
+        Map<String, Object> verify = JwtUtil.verify(token);
+        if (verify != null) {
+            Object mineIdObj = verify.get("mine_id");
+            if (!StringUtils.isEmpty(mineIdObj)) {
+                JSONArray array = JSONObject.parseArray(mineIdObj.toString());
+                if (array.size() == 1) {
+                    Integer mineId = Integer.valueOf(array.get(0).toString());
+                    if (mineId == -1) {
+                        return mineId;
+                    }
                 }
             }
         }

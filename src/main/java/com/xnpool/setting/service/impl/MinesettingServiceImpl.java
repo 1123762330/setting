@@ -49,8 +49,9 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSelective(MineSetting record,String token) {
-        List<Integer> mineId = getMineId(token);
-        if (mineId.contains(-1)){
+        //List<Integer> mineId = getMineId(token);
+        Integer superMineId = getSuperMineId(token);
+        if (superMineId!=null&&superMineId==-1){
             List<String> list = minesettingMapper.selectMineNameList(record.getId());
             if (list.contains(record.getMineName())) {
                 throw new DataExistException("数据已存在,请勿重复添加!");
@@ -62,8 +63,6 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
         }else {
             throw new InsertException("只有管理员才能添加矿场");
         }
-
-
     }
 
     @Override
@@ -103,6 +102,7 @@ public class MinesettingServiceImpl extends BaseController implements MineSettin
     @Override
     public HashMap<Integer, String> selectMineNameByOther(String token) {
         List<Integer> mineIds = getMineId(token);
+        log.info("获取到的数据权限矿场id为:"+mineIds);
         List<MineSetting> mineSettingList = minesettingMapper.selectByOther(null);
         HashMap<Integer, String> resultMap = new HashMap<>();
         mineSettingList.forEach(mineSetting -> {

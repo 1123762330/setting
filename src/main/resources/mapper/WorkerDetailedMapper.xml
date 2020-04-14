@@ -226,6 +226,7 @@
         worker_info.worker1 AS workerName,
         worker_info.ip,
         worker_info.state,
+        worker_info.mine_id,
         factory_house.factory_name,
         frame_setting.frame_name,
         workerbrand_setting.brand_name

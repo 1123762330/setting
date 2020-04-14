@@ -28,7 +28,7 @@ public interface PowerSettingService {
 
     int updateById(int id);
 
-    PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
+    PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token);
 }
 
 

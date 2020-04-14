@@ -46,7 +46,8 @@ public class WorkerDetailedController extends BaseController {
     @GetMapping("/selectMoveOutList")
     public ResponseResult selectMoveOutList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,HttpServletRequest request) {
+                                            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                            HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
         PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(keyWord, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, workerExamplePageInfo);

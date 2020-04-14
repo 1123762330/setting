@@ -36,7 +36,7 @@ public class FeeSettingController extends BaseController {
      * @Date 16:08 2020/2/6
      * @Param
      */
-    @SystemLog(value = "添加费用设置",type = LogType.SYSTEM)
+    //@SystemLog(value = "添加费用设置",type = LogType.SYSTEM)
     @PostMapping("/addFee")
     public ResponseResult addFee(FeeSetting feeSetting) {
         feeSettingService.insertSelective(feeSetting);

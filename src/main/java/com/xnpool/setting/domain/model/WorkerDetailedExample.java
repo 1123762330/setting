@@ -97,4 +97,16 @@ public class WorkerDetailedExample implements Serializable {
     */
     private String remarks;
 
+    /**
+     * 矿场id
+     */
+    private Integer mineId;
+
+    /**
+     * 所属矿场
+     */
+    private String mineName;
+
+
+
 }

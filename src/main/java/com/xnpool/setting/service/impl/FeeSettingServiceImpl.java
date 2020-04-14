@@ -37,7 +37,7 @@ public class FeeSettingServiceImpl implements FeeSettingService {
 
     @Override
     public int insertSelective(FeeSetting record) {
-        List<String> list = feeSettingMapper.selectFeeNameList(record.getId());
+        List<String> list = feeSettingMapper.selectFeeNameList(null);
         if (list.contains(record.getFeeName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }

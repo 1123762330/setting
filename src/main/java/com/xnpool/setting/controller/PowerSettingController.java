@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.PowerSettingExample;
 import com.xnpool.setting.domain.pojo.PowerSetting;
@@ -13,6 +14,8 @@ import com.xnpool.setting.service.PowerSettingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.*;
 public class PowerSettingController extends BaseController {
     @Autowired
     private PowerSettingService powerSettingService;
+
+    @Autowired
+    private WriteLogUtil writeLogUtil;
 
     /**
      * @return
@@ -81,10 +87,12 @@ public class PowerSettingController extends BaseController {
      */
     @SystemLog(value = "查询电费设置列表",type = LogType.SYSTEM)
     @GetMapping("/selectPowerRateList")
-    public ResponseResult selectFrameList( @RequestParam(value = "keyWord", required=false,defaultValue = "")String keyWord,
-                                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<PowerSettingExample> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize);
+    public ResponseResult selectFrameList(@RequestParam(value = "keyWord", required=false,defaultValue = "")String keyWord,
+                                          @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
+                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                          HttpServletRequest request) {
+        String token = writeLogUtil.getToken(request);
+        PageInfo<PowerSettingExample> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, pageInfo);
     }
 }

@@ -1,7 +1,7 @@
 package com.xnpool.setting.config;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 public class ApiContext {
     private static final String KEY_CURRENT_TENANT_ID = "KEY_CURRENT_TENANT_ID";
-    private static final Map<String, Object> mContext = new HashMap<>();
+    private static final Map<String, Object> mContext = Maps.newConcurrentMap();
 
     public void setTenantId(Long tenantId) {
         mContext.put(KEY_CURRENT_TENANT_ID, tenantId);

@@ -64,6 +64,11 @@ public class WorkerExample implements Serializable {
      * 所属矿场
      */
     private String mineName;
+
+    /**
+     * 所属矿场
+     */
+    private Integer mineId;
     /**
     * 是否入库
     */

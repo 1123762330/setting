@@ -77,11 +77,11 @@ public class PowerSettingServiceImpl implements PowerSettingService {
     }
 
     @Override
-    public PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        HashMap<Integer, String> mineNameMap = mineSettingService.selectMineNameByOther(null);
+        HashMap<Integer, String> mineNameMap = mineSettingService.selectMineNameByOther(token);
         List<PowerSettingExample> list = new ArrayList<>();
         PageHelper.startPage(pageNum, pageSize);
         List<PowerSetting> powerSettings = powerSettingMapper.selectByOther(keyWord);
