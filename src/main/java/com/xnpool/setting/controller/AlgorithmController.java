@@ -96,6 +96,7 @@ public class AlgorithmController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "查询用户的算法列表",type = LogType.SYSTEM)
     @GetMapping("/selectExistAlgorithm")
     public ResponseResult selectExistAlgorithm (HttpServletRequest request){
         String token = writeLogUtil.getToken(request);

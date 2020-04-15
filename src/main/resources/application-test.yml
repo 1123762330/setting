@@ -94,9 +94,9 @@ performanceInterceptor: true
 ---
 spring:
   redis: #数据源1
-    host: 112.126.65.15
+    host: 127.0.0.1
     port: 6379
-    password: xnpool#67mm
+    password:
     database: 0
     jedis:
       pool:

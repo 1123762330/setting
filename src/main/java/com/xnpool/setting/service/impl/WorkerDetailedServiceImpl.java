@@ -192,11 +192,11 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             }
             //过滤未分配用户的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                filterList = filterList.stream().filter(a -> a.getUsername().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
             }
             //过滤未分配矿机品牌的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                filterList = filterList.stream().filter(a -> a.getBrandName().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
             }
         }
         //过滤矿场
@@ -208,11 +208,11 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             }
             //过滤未分配用户的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                filterList = filterList.stream().filter(a -> a.getUsername().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
             }
             //过滤未分配矿机品牌的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                filterList = filterList.stream().filter(a -> a.getBrandName().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
             }
         }
         //过滤机架
@@ -220,24 +220,24 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
             //过滤未分配用户的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                filterList = filterList.stream().filter(a -> a.getUsername().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
             }
             //过滤未分配矿机品牌的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                filterList = filterList.stream().filter(a -> a.getBrandName().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
             }
         }
         //过滤未分配用户的
         if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-            filterList = filterList.stream().filter(a -> a.getUsername().equals("")).collect(Collectors.toList());
+            filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
             //过滤未分配矿机品牌的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                filterList = filterList.stream().filter(a -> a.getBrandName().equals("")).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
             }
         }
         //过滤未分配矿机品牌的
         if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-            filterList = filterList.stream().filter(a -> a.getBrandName().equals("")).collect(Collectors.toList());
+            filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
         }
         PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
         return pageInfo;
@@ -676,8 +676,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                                 factoryHouse.setMineId(mineId);
                                 factoryId = factoryHouseService.insertSelectiveToBatch(factoryHouse);
                             }
-                            long fend = System.currentTimeMillis();
-                            log.info("厂房新增查询耗时:" + (fend - fstart));
                             Integer frameId = frameSettingService.equalsFrameName(frameStr, factoryId, mineId);
                             if (frameId == null) {
                                 FrameSetting frameSetting = new FrameSetting();
@@ -719,8 +717,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                                 workerDetailed.setWorkerIp(ip);
                                 list.add(workerDetailed);
                             }
-                            long frend = System.currentTimeMillis();
-                            log.info("机架新增耗时:" + (frend - fend));
                             OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, mineId, workerId, null, new Date(), null, operatorId);
                             operatorWorkerList.add(operatorWorkerHistory);
                         }
@@ -732,14 +728,26 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         long wstart = System.currentTimeMillis();
         if (!list.isEmpty()&&list.size()!=0) {
             //批量上架
-            log.info("需要批量上架的条数:"+list.size());
-            Integer rows = workerDetailedMapper.updateBatch(list);
-            log.info("批量上架成功条数:"+rows);
+            Map<String, List> groupList = groupList(list);
+            Integer count=0;
+            for (Map.Entry<String, List> entry : groupList.entrySet()) {
+                log.info("需要批量上架的条数:"+entry.getValue().size());
+                Integer rows = workerDetailedMapper.updateBatch(entry.getValue());
+                count+=rows;
+                log.info("批量上架成功条数:"+count);
+            }
+            log.info("完成批量上架");
+            //Integer rows = workerDetailedMapper.updateBatch(list);
             //查询入缓存的数据
-            List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(list);
-            for (WorkerDetailed workerDetaile : workerDetailedRedisModels) {
+            List<WorkerDetailed> arrayList = new ArrayList<>();
+            for (Map.Entry<String, List> entry : groupList.entrySet()) {
+                List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(entry.getValue());
+                arrayList.addAll(workerDetailedRedisModels);
+            }
+            log.info("查询数据入缓存集合条数:"+arrayList.size());
+            for (WorkerDetailed workerDetaile : arrayList) {
                 WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetaile);
-                redisToUpdate(rows, "worker_detailed", workerDetailedRedisModel, workerDetaile.getMineId());
+                redisToUpdate(count, "worker_detailed", workerDetailedRedisModel, workerDetaile.getMineId());
             }
         }
         long wend = System.currentTimeMillis();

@@ -637,7 +637,6 @@ public class BaseController {
     public Integer getUserId(String token) {
         Integer userId = 0;
         Map<String, Object> verify = verify(token);
-        System.out.println("解析的token:" + verify);
         if (verify != null) {
             Object userIdObj = verify.get("id");
             if (userIdObj != null) {
@@ -751,11 +750,11 @@ public class BaseController {
 
     public Map<String, List> groupList(List list) {
         int listSize = list.size();
-        int toIndex = 100;
+        int toIndex = 3000;
         Map<String, List> map = new HashMap(); //用map存起来新的分组后数据
         int keyToken = 0;
-        for (int i = 0; i < list.size(); i += 100) {
-            if (i + 100 > listSize) {//作用为toIndex最后没有100条数据则剩余几条newList中就装几条
+        for (int i = 0; i < list.size(); i += 3000) {
+            if (i + 3000 > listSize) {//作用为toIndex最后没有100条数据则剩余几条newList中就装几条
                 toIndex = listSize - i;
             }
             List newList = list.subList(i, i + toIndex);
