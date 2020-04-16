@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zly
@@ -111,7 +112,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize) {
+    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,Integer authorize) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -138,6 +139,9 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
+        if (authorize==1){
+            customerSettingExamples = customerSettingExamples.stream().filter(a -> a.getAuthentication()==authorize).collect(Collectors.toList());
+        }
         //log.info("数据库查询的客户列表:" + customerSettingExamples.size());
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         //log.info("客户设置列表" + customerSettingExamples);
@@ -284,7 +288,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     public String authorizeToken(String userId) {
         Integer userId_db = customerSettingMapper.selectAuthorizedToYes(Integer.valueOf(userId));
         String access_token="";
-        if(userId.equals(String.valueOf(userId_db))){
+        if(Integer.valueOf(userId)==userId_db){
             //用户一致,可以发送授权token
             JSONObject jsonObject = userCenterAPI.authorizeToken(userId);
             log.info("fegin请求返回的数据:"+jsonObject);

@@ -96,8 +96,9 @@ public class CustomerSettingController extends BaseController {
     @GetMapping("/selectCustomerList")
     public ResponseResult selectCustomerList (@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
-                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize){
-        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize);
+                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                              @RequestParam(value = "authorize", required = false, defaultValue = "0") Integer authorize){
+        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize,authorize);
         return new ResponseResult(SUCCESS,pageInfo);
     }
 
