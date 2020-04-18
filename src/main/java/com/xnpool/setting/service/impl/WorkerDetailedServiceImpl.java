@@ -618,7 +618,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
      * @return
      * @Description 全部上架
      * 1.读取worker_Info表,拿到所有的矿机ip,然后根据前端提交过来的批量矿机ip,分配给的用户id,还有分组以及矿机品牌
-     * 2.按照规则切割ip,IP规则:171.3(厂房号).5(货架号).23(二层第三台)
+     * 2.按照规则切割ip,IP规则:171.3(厂房号).5(货架号).23(二层第三排)
      * 3.首先去判断有没有这个厂房名,有的话直接取厂房id,没有的话直接新建厂房名,然后返回厂房id
      * 4.再去判断有没有这个货架号,因为同名货架有多个,所以把第几台拼接到货架号上,就相当于去判断有没有53这个名字的机架
      * 5.如果有,则直接取机架ID,如果没有,则创建名字叫53的这个机架,同时在worker_detailed创建位置信息,然后取机架ID
@@ -668,7 +668,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                                 paiNumber = placeStr.substring(placeStr.length() - 1);
                             }
                             long fstart = System.currentTimeMillis();
-                            frameStr = frameStr + "#" + paiNumber;
                             Integer factoryId = factoryHouseService.equalsFactoryName(factoryStr, mineId);
                             if (factoryId == null) {
                                 FactoryHouse factoryHouse = new FactoryHouse();
@@ -676,13 +675,16 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                                 factoryHouse.setMineId(mineId);
                                 factoryId = factoryHouseService.insertSelectiveToBatch(factoryHouse);
                             }
-                            Integer frameId = frameSettingService.equalsFrameName(frameStr, factoryId, mineId);
+                            Integer frameId = frameSettingService.equalsFrameName(Integer.valueOf(frameStr),Integer.valueOf(paiNumber), factoryId, mineId);
                             if (frameId == null) {
                                 FrameSetting frameSetting = new FrameSetting();
-                                frameSetting.setFrameName(frameStr);
                                 frameSetting.setFactoryId(factoryId);
                                 frameSetting.setMineId(mineId);
                                 frameSetting.setNumber(10);
+                                frameSetting.setStorageRacksNum(Integer.valueOf(frameStr));
+                                frameSetting.setRowNum(Integer.valueOf(paiNumber));
+                                frameStr = frameStr + "#" + paiNumber;
+                                frameSetting.setFrameName(frameStr);
                                 frameId = frameSettingService.insertSelectiveToBatch(frameSetting);
                                 log.info("新增的矿机架ID" + frameId);
                                 workerDetailed.setWorkerId(workerId);
@@ -741,13 +743,13 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             //查询入缓存的数据
             List<WorkerDetailed> arrayList = new ArrayList<>();
             for (Map.Entry<String, List> entry : groupList.entrySet()) {
-                List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(entry.getValue());
-                arrayList.addAll(workerDetailedRedisModels);
+                List<WorkerDetailed> lists = workerDetailedMapper.selectModelToRedis(entry.getValue());
+                arrayList.addAll(lists);
             }
             log.info("查询数据入缓存集合条数:"+arrayList.size());
-            for (WorkerDetailed workerDetaile : arrayList) {
-                WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetaile);
-                redisToUpdate(count, "worker_detailed", workerDetailedRedisModel, workerDetaile.getMineId());
+            for (WorkerDetailed workerDetailed : arrayList) {
+                WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);
+                redisToUpdate(count, "worker_detailed", workerDetailedRedisModel, workerDetailedRedisModel.getMine_id());
             }
         }
         long wend = System.currentTimeMillis();

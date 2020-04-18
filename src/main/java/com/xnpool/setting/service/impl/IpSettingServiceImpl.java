@@ -149,7 +149,7 @@ public class IpSettingServiceImpl extends BaseController implements IpSettingSer
                 Integer id = ipSetting.getId();
                     String startIp = ipSetting.getStartIp();
                     String endIp = ipSetting.getEndIp();
-                    String ipName = mineName+" "+startIp + "-" + endIp;
+                    String ipName = startIp + "-" + endIp;
                     resultMap.put(id, ipName);
             });
             return resultMap;

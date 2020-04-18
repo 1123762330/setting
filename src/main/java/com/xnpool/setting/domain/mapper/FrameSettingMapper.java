@@ -1,35 +1,35 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.FrameSetting;import com.xnpool.setting.domain.model.FrameSettingExample;import org.apache.ibatis.annotations.Param;import java.util.HashMap;import java.util.List;
+import com.xnpool.setting.domain.model.FrameSettingExample;
+import com.xnpool.setting.domain.pojo.FeeSetting;
+import com.xnpool.setting.domain.pojo.FrameSetting;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/5 13:03
+ * @since 2020-04-17
  */
-public interface FrameSettingMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface FrameSettingMapper extends BaseMapper<FrameSetting> {
 
-    int insert(FrameSetting record);
-
-    int insertSelective(FrameSetting record);
-
-    FrameSetting selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(FrameSetting record);
-
-    int updateByPrimaryKey(FrameSetting record);
-
-    int updateById(int id);
+    int deleteByKeyId(Integer id);
 
     List<FrameSettingExample> selectByOther(@Param("keyWord") String keyWord);
 
     List<HashMap> selectFrameNameByFactoryId(Integer factoryId);
 
-    List<HashMap> selectMineFactoryAndFrame(@Param("factoryId")Integer factoryId);
-    Integer selectMineId(@Param("id")Integer id);
+    Integer equalsFrameName(@Param("storageRacksNum")Integer storageRacksNum,
+                            @Param("rowNum")Integer rowNum,
+                            @Param("factoryId") Integer factoryId,@Param("mineId")  Integer mineId);
 
-    List<String> selectFrameNameList(@Param("factoryId")Integer factoryId,@Param("id")Integer id);
+    List<HashMap> selectMineFactoryAndFrame(@Param("factoryId") Integer factoryId);
 
-    Integer equalsFrameName(@Param("frameName")String frameStr,@Param("factoryId") Integer factoryId, @Param("mineId")Integer mineId);
+    Integer isExist(FrameSetting record);
 }

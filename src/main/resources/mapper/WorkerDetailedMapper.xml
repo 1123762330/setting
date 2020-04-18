@@ -370,6 +370,7 @@
         FROM
             worker_detailed
         WHERE
+            is_delete=0
             frame_id = #{frameId}
             AND is_come_in=0
     </select>

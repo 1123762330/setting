@@ -1,30 +1,47 @@
 package com.xnpool.setting.domain.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
+ * <p>
+ * 
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/5 13:03
+ * @since 2020-04-17
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class FrameSetting implements Serializable {
-    private static final long serialVersionUID = -8883990864667195110L;
+
+    private static final long serialVersionUID = 8675364598920429203L;
     /**
      * 机架Id
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
      * 机架名称
      */
     private String frameName;
+
+    /**
+     * 货架编号
+     */
+    private Integer storageRacksNum;
+
+    /**
+     * 排数
+     */
+    private Integer rowNum;
 
     /**
      * 机架层数
@@ -44,12 +61,12 @@ public class FrameSetting implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 是否删除,0:否,1:是
@@ -60,5 +77,11 @@ public class FrameSetting implements Serializable {
      * 矿机详细信息
      */
     private String detailed;
+
+    /**
+     * 企业id
+     */
+    private Long tenantId;
+
 
 }

@@ -1,37 +1,27 @@
 package com.xnpool.setting.service;
 
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.FrameSetting;
 import com.xnpool.setting.domain.model.FrameSettingExample;
+import com.xnpool.setting.domain.pojo.FrameSetting;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.HashMap;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/4 20:04
+ * @since 2020-04-17
  */
-public interface FrameSettingService {
+public interface FrameSettingService extends IService<FrameSetting> {
 
-    int deleteByPrimaryKey(Integer id);
+    void deleteById(int id);
 
-    int insert(FrameSetting record);
+    Integer addFrame(FrameSetting entity);
 
-    Integer insertSelective(FrameSetting record);
-
-    Integer insertSelectiveToBatch(FrameSetting record);
-
-    Integer insertByNotExits(FrameSetting record);
-
-    FrameSetting selectByPrimaryKey(Integer id);
-
-    void updateByPrimaryKeySelective(FrameSetting record);
-
-    int updateByPrimaryKey(FrameSetting record);
-
-    void updateById(int id);
-
-    PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token);
+    PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token);
 
     HashMap<Integer, String> selectFrameNameByFactoryId(Integer factoryId);
 
@@ -39,8 +29,9 @@ public interface FrameSettingService {
 
     HashMap<Integer, String> selectMineFactoryAndFrame(Integer factoryId);
 
-    Integer equalsFrameName(String frameStr, Integer factoryId, Integer mineId);
+    Integer equalsFrameName(Integer frameStr,Integer paiNumber, Integer factoryId, Integer mineId);
+
+    Integer insertSelectiveToBatch(FrameSetting frameSetting);
+
+    void updateFrame(FrameSetting frameSetting);
 }
-
-
-

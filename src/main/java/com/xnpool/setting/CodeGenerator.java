@@ -70,11 +70,11 @@ public class CodeGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDbType(DbType.MYSQL);        //数据库类型	该类内置了常用的数据库类型【必须】
-        dsc.setUrl("jdbc:mysql://112.126.65.15:3306/xnpool_mine?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
+        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/xnpool_mine?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("mine#mysql&nm45");
+        dsc.setPassword("root123");
         mpg.setDataSource(dsc);
 
         // 包配置

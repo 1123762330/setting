@@ -1,223 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xnpool.setting.domain.mapper.FrameSettingMapper">
-  <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.FrameSetting">
-    <!--@mbg.generated-->
-    <!--@Table frame_setting-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="frame_name" jdbcType="VARCHAR" property="frameName" />
-    <result column="number" jdbcType="INTEGER" property="number" />
-    <result column="factory_id" jdbcType="INTEGER" property="factoryId" />
-    <result column="mine_id" jdbcType="INTEGER" property="mineId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
-    <result column="detailed" jdbcType="VARCHAR" property="detailed" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, frame_name, `number`, factory_id, mine_id, create_time, update_time, is_delete, 
-    detailed
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from frame_setting
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from frame_setting
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FrameSetting" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into frame_setting (frame_name, `number`, factory_id, 
-      mine_id, create_time, update_time, 
-      is_delete, detailed)
-    values (#{frameName,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{factoryId,jdbcType=INTEGER}, 
-      #{mineId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=INTEGER}, #{detailed,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xnpool.setting.domain.pojo.FrameSetting" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into frame_setting
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="frameName != null">
-        frame_name,
-      </if>
-      <if test="number != null">
-        `number`,
-      </if>
-      <if test="factoryId != null">
-        factory_id,
-      </if>
-      <if test="mineId != null">
-        mine_id,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="isDelete != null">
-        is_delete,
-      </if>
-      <if test="detailed != null">
-        detailed,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="frameName != null">
-        #{frameName,jdbcType=VARCHAR},
-      </if>
-      <if test="number != null">
-        #{number,jdbcType=INTEGER},
-      </if>
-      <if test="factoryId != null">
-        #{factoryId,jdbcType=INTEGER},
-      </if>
-      <if test="mineId != null">
-        #{mineId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="detailed != null">
-        #{detailed,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xnpool.setting.domain.pojo.FrameSetting">
-    <!--@mbg.generated-->
-    update frame_setting
-    <set>
-      <if test="frameName != null">
-        frame_name = #{frameName,jdbcType=VARCHAR},
-      </if>
-      <if test="number != null">
-        `number` = #{number,jdbcType=INTEGER},
-      </if>
-      <if test="factoryId != null">
-        factory_id = #{factoryId,jdbcType=INTEGER},
-      </if>
-      <if test="mineId != null">
-        mine_id = #{mineId,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=INTEGER},
-      </if>
-      <if test="detailed != null">
-        detailed = #{detailed,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.xnpool.setting.domain.pojo.FrameSetting">
-    <!--@mbg.generated-->
-    update frame_setting
-    set frame_name = #{frameName,jdbcType=VARCHAR},
-      `number` = #{number,jdbcType=INTEGER},
-      factory_id = #{factoryId,jdbcType=INTEGER},
-      mine_id = #{mineId,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=INTEGER},
-      detailed = #{detailed,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 
-<!--  软删除-->
-  <update id="updateById">
-    update frame_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
-  </update>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.FrameSetting">
+        <id column="id" property="id" />
+        <result column="frame_name" property="frameName" />
+        <result column="storage_racks_num" property="storageRacksNum" />
+        <result column="row_num" property="rowNum" />
+        <result column="number" property="number" />
+        <result column="factory_id" property="factoryId" />
+        <result column="mine_id" property="mineId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="detailed" property="detailed" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
 
-<!--  按照条件查询矿机架列表-->
-  <select id="selectByOther" resultType="com.xnpool.setting.domain.model.FrameSettingExample">
-    SELECT
-      frame_setting.id,
-      frame_setting.frame_name,
-      frame_setting.number,
-      frame_setting.factory_id,
-      frame_setting.mine_id,
-      frame_setting.is_delete,
-      frame_setting.create_time,
-      frame_setting.update_time,
-      frame_setting.detailed,
-      factory_house.factory_name,
-      mine_setting.mine_name
-    FROM
-      frame_setting,
-      factory_house,
-      mine_setting
-    <where>
-      frame_setting.is_delete = 0
-      <if test="keyWord != null and keyWord != ''">
-        AND ( frame_setting.frame_name like #{keyWord} or frame_setting.number like #{keyWord})
-      </if>
-      AND frame_setting.factory_id = factory_house.id
-      AND frame_setting.mine_id = mine_setting.id
-    </where>
-  </select>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, frame_name, storage_racks_num, row_num, number, factory_id, mine_id, create_time, update_time, is_delete, detailed, tenant_id
+    </sql>
 
-<!--  根据厂房ID查询矿机架列表-->
-  <select id="selectFrameNameByFactoryId" resultType="java.util.HashMap">
-    select id,frame_name,number FROM frame_setting where factory_id=#{factoryId} AND is_delete=0
-  </select>
 
-  <!--运维权限设置-->
-  <select id="selectMineFactoryAndFrame" resultType="hashmap">
-    SELECT
+    <!--  软删除-->
+    <update id="deleteByKeyId">
+        update frame_setting set is_delete = 1 where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--  按照条件查询矿机架列表-->
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.model.FrameSettingExample">
+        SELECT
+        frame_setting.id,
+        frame_setting.frame_name,
+        frame_setting.number,
+        frame_setting.factory_id,
+        frame_setting.mine_id,
+        frame_setting.is_delete,
+        frame_setting.create_time,
+        frame_setting.update_time,
+        frame_setting.detailed,
+        frame_setting.storage_racks_num,
+        frame_setting.row_num,
+        factory_house.factory_name,
+        mine_setting.mine_name
+        FROM
+        frame_setting,
+        factory_house,
+        mine_setting
+        <where>
+            frame_setting.is_delete = 0
+            <if test="keyWord != null and keyWord != ''">
+                AND ( frame_setting.frame_name like #{keyWord} or frame_setting.number like #{keyWord})
+            </if>
+            AND frame_setting.factory_id = factory_house.id
+            AND frame_setting.mine_id = mine_setting.id
+        </where>
+    </select>
+
+    <!--  根据厂房ID查询矿机架列表-->
+    <select id="selectFrameNameByFactoryId" resultType="java.util.HashMap">
+        select id,frame_name,number,storage_racks_num,row_num FROM frame_setting where factory_id=#{factoryId} AND is_delete=0
+    </select>
+
+    <select id="equalsFrameName" resultType="java.lang.Integer">
+        SELECT
+        id
+        FROM
+        frame_setting
+        WHERE
+        is_delete = 0
+        AND storage_racks_num= #{storageRacksNum}
+        AND row_num= #{rowNum}
+        AND factory_id = #{factoryId}
+        AND mine_id = #{mineId}
+    </select>
+
+    <!--运维权限设置-->
+    <select id="selectMineFactoryAndFrame" resultType="hashmap">
+        SELECT
         frame_setting.id AS frameId,
         frame_setting.frame_name,
+        frame_setting.storage_racks_num,
+        frame_setting.row_num,
         factory_house.id AS factoryId,
         factory_house.factory_name,
         mine_setting.id AS mineId,
         mine_setting.mine_name
-    FROM
+        FROM
         frame_setting,
         factory_house,
         mine_setting
-    WHERE
+        WHERE
         frame_setting.factory_id = #{factoryId}
         AND frame_setting.mine_id = mine_setting.id
         AND frame_setting.is_delete=0
-  </select>
+    </select>
 
-  <select id="selectMineId" resultType="integer">
-    select mine_id FROM frame_setting where id=#{id}
-  </select>
-
-  <select id="selectFrameNameList" resultType="string">
-    select frame_name FROM frame_setting where factory_id=#{factoryId} AND is_delete=0
-    <if test="id != null">
-      AND id!=#{id}
-    </if>
-  </select>
-
-    <select id="equalsFrameName" resultType="java.lang.Integer">
-      SELECT
-          id
-      FROM
-          frame_setting
-      WHERE
-          is_delete = 0
-          AND frame_name = #{frameName}
-          AND factory_id = #{factoryId}
-          AND mine_id = #{mineId}
+    <select id="isExist" resultType="java.lang.Integer">
+        SELECT
+        id
+        FROM
+        frame_setting
+        <where>
+            frame_setting.is_delete=0
+            AND frame_setting.storage_racks_num = #{storageRacksNum}
+            AND frame_setting.row_num  = #{rowNum}
+            <if test="id != null">
+                AND id!=#{id}
+            </if>
+        </where>
     </select>
 </mapper>

@@ -160,7 +160,7 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
                 groupSettingExample.setFramenameDetailed(null);
                 String[] split = frameid.split(",");
                 for (int i = 0; i < split.length; i++) {
-                    FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(Integer.valueOf(split[i]));
+                    FrameSetting frameSetting = frameSettingMapper.selectById(Integer.valueOf(split[i]));
                     String detailed = frameSetting.getDetailed();
                     if (groupSettingExample.getFramenameDetailed() != null) {
                         String manyFramename = groupSettingExample.getFramenameDetailed() + "," + detailed;

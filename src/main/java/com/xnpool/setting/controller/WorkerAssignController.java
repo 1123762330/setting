@@ -62,12 +62,13 @@ public class WorkerAssignController extends BaseController {
      * @Date 15:28 2020/2/6
      * @Param
      */
-    @SystemLog(value = "矿机权限设置",type = LogType.MINE)
+    //@SystemLog(value = "矿机权限设置",type = LogType.MINE)
     @PostMapping("/addAssignWorker")
     public ResponseResult addAssignWorker(@RequestParam("ids")String ids,
                                           @RequestParam(value = "deleteIds",required = false,defaultValue = "")String deleteIds,
                                           @RequestParam(value = "deleteIps",required = false,defaultValue = "") String deleteIps,
-                                          @RequestParam("ipId")String ipId,@RequestParam("userId") Integer userId) {
+                                          @RequestParam(value = "ipId",required = false,defaultValue = "")String ipId,
+                                          @RequestParam("userId") Integer userId) {
         workerAssignService.addAssignWorker(ids,deleteIds,deleteIps,ipId,userId);
         return new ResponseResult(SUCCESS);
     }
@@ -114,6 +115,7 @@ public class WorkerAssignController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "修改用户同步入缓存",type = LogType.SYSTEM)
     @PutMapping("/syncingUpdateUser")
     public ResponseResult syncingUpdateUser (SysUser sysUser, String token){
         ResponseResult responseResult = syncinUser(sysUser, token);
@@ -127,6 +129,7 @@ public class WorkerAssignController extends BaseController {
      * @Param
      * @return
      */
+    @SystemLog(value = "删除用户同步入缓存",type = LogType.SYSTEM)
     @DeleteMapping("/syncinDeleteUser")
     public ResponseResult syncinDeleteUser (SysUser sysUser, String token){
         ResponseResult responseResult = syncinUser(sysUser, token);

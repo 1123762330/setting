@@ -24,6 +24,16 @@ public class FrameSettingExample implements Serializable {
     private String frameName;
 
     /**
+     * 货架编号
+     */
+    private Integer storageRacksNum;
+
+    /**
+     * 排数
+     */
+    private Integer rowNum;
+
+    /**
     * 机架层数
     */
     private Integer number;

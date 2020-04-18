@@ -3,83 +3,79 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
-import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.logaop.service.exception.UpdateException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.MineSettingMapper;
 import com.xnpool.setting.domain.mapper.WorkerDetailedMapper;
-import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.domain.model.FrameSettingExample;
+import com.xnpool.setting.domain.pojo.FrameSetting;
+import com.xnpool.setting.domain.mapper.FrameSettingMapper;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.domain.pojo.WorkerDetailed;
 import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
 import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
+import com.xnpool.setting.service.FrameSettingService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-
-import com.xnpool.setting.domain.mapper.FrameSettingMapper;
-import com.xnpool.setting.domain.pojo.FrameSetting;
-import com.xnpool.setting.service.FrameSettingService;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 /**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/4 20:04
+ * @since 2020-04-17
  */
 @Service
 @Slf4j
-public class FrameSettingServiceImpl extends BaseController implements FrameSettingService {
-
-    @Resource
-    private FrameSettingMapper frameSettingMapper;
-
+public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, FrameSetting>  implements FrameSettingService {
+    @Autowired
+    private BaseController baseController;
     @Autowired
     private WorkerDetailedMapper workerDetailedMapper;
+
+    @Autowired
+    private FrameSettingMapper frameSettingMapper;
 
     @Autowired
     private MineSettingMapper mineSettingMapper;
 
     @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return frameSettingMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int insert(FrameSetting record) {
-        return frameSettingMapper.insert(record);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer insertSelective(FrameSetting record) {
+    public Integer addFrame(FrameSetting record) {
         Integer mineId = record.getMineId();
         MineSetting mineSetting = mineSettingMapper.selectByPrimaryKey(mineId);
         Integer number = mineSetting.getFrameNum();
-        List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
-        if (frameNameList.contains(record.getFrameName())) {
+        Integer exist = frameSettingMapper.isExist(record);
+        if (exist!=null) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         String framename = record.getFrameName();
+        if (StringUtils.isEmpty(framename)){
+            Integer storageRacksNum = record.getStorageRacksNum();
+            Integer rowNum = record.getRowNum();
+            framename=storageRacksNum+"#"+rowNum;
+            record.setFrameName(framename);
+        }
         record.setNumber(number);
         String detailed = framename + " 1-" + number + "层";
         record.setDetailed(detailed);
-        record.setCreateTime(new Date());
-        int rows = frameSettingMapper.insertSelective(record);
+        record.setCreateTime(LocalDateTime.now());
+        int rows = frameSettingMapper.insert(record);
 
         //机架数据同步入缓存
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
-        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+        FrameSettingRedisModel frameSettingRedisModel = baseController.getFrameSettingRedisModel(record);
+        baseController.redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
 
         //同时在矿机详情表生成数据
         List<WorkerDetailed> list = new ArrayList<>();
@@ -96,144 +92,33 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         int rows2 = workerDetailedMapper.batchInsert(list);
         //批量入缓存
         for (WorkerDetailed workerDetailed : list) {
-            WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);
-            redisToInsert(rows2, "worker_detailed", workerDetailedRedisModel, record.getMineId());
+            WorkerDetailedRedisModel workerDetailedRedisModel = baseController.getWorkerDetailedRedisModel(workerDetailed);
+            baseController.redisToInsert(rows2, "worker_detailed", workerDetailedRedisModel, record.getMineId());
         }
         return rows;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer insertSelectiveToBatch(FrameSetting record) {
-        String framename = record.getFrameName();
-        Integer number = record.getNumber();
-        String detailed = framename + " 1-" + number + "层";
-        record.setDetailed(detailed);
-        record.setCreateTime(new Date());
-        int rows = frameSettingMapper.insertSelective(record);
-
-        //执行入缓存操作
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
-        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
-
-        //同时在矿机详情表生成数据
-        List<WorkerDetailed> list = new ArrayList<>();
-        for (int i = 1; i <= number; i++) {
-            WorkerDetailed workerDetailed = new WorkerDetailed();
-            workerDetailed.setFactoryId(record.getFactoryId());
-            workerDetailed.setFrameId(record.getId());
-            workerDetailed.setFrameNumber(i);
-            workerDetailed.setMineId(record.getMineId());
-            workerDetailed.setIsComeIn(0);
-            workerDetailed.setIsDelete(0);
-            workerDetailed.setCreateTime(new Date());
-            workerDetailed.setUpdateTime(new Date());
-            list.add(workerDetailed);
-        }
-        int rows2 = workerDetailedMapper.batchInsert(list);
-        //详情表同步入缓存
-        //System.out.println("批量查询详情表返回的自增id:"+list);
-        //List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(list);
-        for (WorkerDetailed workerDetailed : list) {
-            WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);
-            redisToInsert(rows2, "worker_detailed", workerDetailedRedisModel, workerDetailed.getMineId());
-        }
-        return record.getId();
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Integer insertByNotExits(FrameSetting record) {
-        List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
-        if (frameNameList.contains(record.getFrameName())) {
-            throw new DataExistException("数据已存在,请勿重复添加!");
-        }
-        String framename = record.getFrameName();
-        Integer number = record.getNumber();
-        String detailed = framename + " 1-" + number + "层";
-        record.setDetailed(detailed);
-        record.setCreateTime(new Date());
-        int rows = frameSettingMapper.insertSelective(record);
-        //同时在矿机详情表生成数据
-        List<WorkerDetailed> list = new ArrayList<>();
-        List<WorkerDetailedRedisModel> redisList = new ArrayList<>();
-        for (int i = 1; i <= number; i++) {
-            WorkerDetailed workerDetailed = new WorkerDetailed();
-            workerDetailed.setFactoryId(record.getFactoryId());
-            workerDetailed.setFrameId(record.getId());
-            workerDetailed.setFrameNumber(i);
-            workerDetailed.setMineId(record.getMineId());
-            workerDetailed.setCreateTime(new Date());
-            workerDetailed.setUpdateTime(new Date());
-            list.add(workerDetailed);
-        }
-
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(record);
-        redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
-        return rows;
-    }
-
-    @Override
-    public FrameSetting selectByPrimaryKey(Integer id) {
-        return frameSettingMapper.selectByPrimaryKey(id);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateByPrimaryKeySelective(FrameSetting record) {
-        //首先去详情表查询该机架是否在使用
-        List<String> frameNameList = frameSettingMapper.selectFrameNameList(record.getFactoryId(), record.getId());
-        if (frameNameList.contains(record.getFrameName())) {
-            throw new DataExistException("数据已存在,请勿重复添加!");
-        }
-
-        Integer mineId = record.getMineId();
-        if (mineId!=null){
-            FrameSetting frameSetting_db = frameSettingMapper.selectByPrimaryKey(record.getId());
-            Integer mineId_db = frameSetting_db.getMineId();
-            if (mineId!=mineId_db){
-                throw new UpdateException("如需更换矿场,请先删除该机架!");
-            }
-        }
-
-        String framename = record.getFrameName();
-        Integer number = record.getNumber();
-        String detailed = framename + " 1-" + number + "层";
-        record.setDetailed(detailed);
-        int rows = frameSettingMapper.updateByPrimaryKeySelective(record);
-
-        FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(record.getId());
-        FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(frameSetting);
-        redisToUpdate(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
-    }
-
-    @Override
-    public int updateByPrimaryKey(FrameSetting record) {
-        return frameSettingMapper.updateByPrimaryKey(record);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateById(int id) {
+    public void deleteById(int id) {
         List<Integer> list = workerDetailedMapper.selectNotExistWorkerFrame(id);
         List<Integer> existList = workerDetailedMapper.selectExistWorkerFrame(id);
-        if (existList.size()!=0){
+        if (existList.size() != 0) {
             throw new DataExistException("该机架上存在已上架的矿机,请先下架再删除!");
-        }else {
+        } else {
             int rows2 = workerDetailedMapper.updateById(list);
-            log.info("成功删除机架条数:"+rows2);
-            int rows = frameSettingMapper.updateById(id);
-            FrameSetting frameSetting = frameSettingMapper.selectByPrimaryKey(id);
-            FrameSettingRedisModel frameSettingRedisModel = getFrameSettingRedisModel(frameSetting);
-            redisToDelete(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
+            log.info("成功删除机架条数:" + rows2);
+            int rows = frameSettingMapper.deleteByKeyId(id);
+            FrameSetting frameSetting = frameSettingMapper.selectById(id);
+            FrameSettingRedisModel frameSettingRedisModel = baseController.getFrameSettingRedisModel(frameSetting);
+            baseController.redisToDelete(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
         }
-
     }
 
     @Override
-    public PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
-        List<Integer> mineIds = getMineId(token);
-        ArrayList<FrameSettingExample> resultList = new ArrayList<>();
+    public PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
+        List<Integer> mineIds = baseController.getMineId(token);
+        List<FrameSettingExample> resultList = new ArrayList<>();
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
@@ -241,11 +126,18 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         List<FrameSettingExample> frameSettingExamples = frameSettingMapper.selectByOther(keyWord);
         for (FrameSettingExample frameSettingExample : frameSettingExamples) {
             Integer id = frameSettingExample.getMineId();
-            if (mineIds.contains(id)){
+            if (mineIds.contains(id)) {
+                String frameName = frameSettingExample.getFrameName();
+                if (StringUtils.isEmpty(frameName)){
+                    Integer storageRacksNum = frameSettingExample.getStorageRacksNum();
+                    Integer rowNum = frameSettingExample.getRowNum();
+                    frameName=storageRacksNum+"#"+rowNum;
+                    frameSettingExample.setFrameName(frameName);
+                }
                 resultList.add(frameSettingExample);
             }
         }
-        PageInfo<FrameSettingExample> pageInfo = new PageInfo<>(frameSettingExamples);
+        PageInfo<FrameSettingExample> pageInfo = new PageInfo<>(resultList);
         return pageInfo;
     }
 
@@ -258,8 +150,18 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             HashMap<Integer, String> resultMap = new HashMap<>();
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
-                String factoryName = hashMap.get("frame_name").toString();
-                resultMap.put(id, factoryName);
+                //在这里需要去查询该矿机架是否还有空位
+                List<HashMap> hashMapList = workerDetailedMapper.selectNullFrame(id);
+                if (!hashMapList.isEmpty()){
+                    String frame_name = hashMap.get("frame_name").toString();
+                    if (StringUtils.isEmpty(frame_name)){
+                        String storage_racks_num = hashMap.get("storage_racks_num").toString();
+                        String row_num = hashMap.get("row_num").toString();
+                        frame_name=storage_racks_num+"#"+row_num;
+                    }
+                    resultMap.put(id, frame_name);
+                }
+
             });
             return resultMap;
         }
@@ -281,6 +183,11 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
                 StringBuffer frameName = new StringBuffer(hashMap.get("frame_name").toString());
+                if (StringUtils.isEmpty(frameName.toString())){
+                    String storage_racks_num = hashMap.get("storage_racks_num").toString();
+                    String row_num = hashMap.get("row_num").toString();
+                    frameName=new StringBuffer(storage_racks_num).append("#").append(row_num);
+                }
                 StringBuffer number = new StringBuffer(hashMap.get("number").toString());
                 StringBuffer resultStr = frameName.append("  1-" + number + "层");
                 resultMap.put(id, resultStr.toString());
@@ -295,21 +202,89 @@ public class FrameSettingServiceImpl extends BaseController implements FrameSett
         HashMap<Integer, String> frameMap = new HashMap<>();
         for (HashMap hashMap : mineFactoryAndFrameList) {
             Integer frameId = (Integer) hashMap.get("frameId");
-            String frameName = String.valueOf(hashMap.get("frame_name"));
+            StringBuffer frameName = new StringBuffer(String.valueOf(hashMap.get("frame_name")));
+            if (StringUtils.isEmpty(frameName.toString())){
+                String storage_racks_num = hashMap.get("storage_racks_num").toString();
+                String row_num = hashMap.get("row_num").toString();
+                frameName=new StringBuffer(storage_racks_num).append("#").append(row_num);
+            }
             String factoryName = String.valueOf(hashMap.get("factory_name"));
             String mineName = String.valueOf(hashMap.get("mine_name"));
-            StringBuffer nameBuffer = new StringBuffer(frameName).append("-").append(factoryName).append("-").append(mineName);
+            StringBuffer nameBuffer = frameName.append("-").append(factoryName).append("-").append(mineName);
             frameMap.put(frameId, nameBuffer.toString());
         }
         return frameMap;
     }
 
     @Override
-    public Integer equalsFrameName(String frameStr, Integer factoryId, Integer mineId) {
-        return frameSettingMapper.equalsFrameName(frameStr, factoryId, mineId);
+    public Integer equalsFrameName(Integer frameStr,Integer paiNumber, Integer factoryId, Integer mineId) {
+        return frameSettingMapper.equalsFrameName(frameStr,paiNumber, factoryId, mineId);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer insertSelectiveToBatch(FrameSetting record) {
+        String framename = record.getFrameName();
+        Integer number = record.getNumber();
+        String detailed = framename + " 1-" + number + "层";
+        record.setDetailed(detailed);
+        record.setCreateTime(LocalDateTime.now());
+        int rows = frameSettingMapper.insert(record);
+
+        //执行入缓存操作
+        FrameSettingRedisModel frameSettingRedisModel = baseController.getFrameSettingRedisModel(record);
+        baseController.redisToInsert(rows, "frame_setting", frameSettingRedisModel, record.getMineId());
+
+        //同时在矿机详情表生成数据
+        List<WorkerDetailed> list = new ArrayList<>();
+        for (int i = 1; i <= number; i++) {
+            WorkerDetailed workerDetailed = new WorkerDetailed();
+            workerDetailed.setFactoryId(record.getFactoryId());
+            workerDetailed.setFrameId(record.getId());
+            workerDetailed.setFrameNumber(i);
+            workerDetailed.setMineId(record.getMineId());
+            workerDetailed.setIsComeIn(0);
+            workerDetailed.setIsDelete(0);
+            workerDetailed.setCreateTime(new Date());
+            workerDetailed.setUpdateTime(new Date());
+            list.add(workerDetailed);
+        }
+        int rows2 = workerDetailedMapper.batchInsert(list);
+        //详情表同步入缓存
+        //System.out.println("批量查询详情表返回的自增id:"+list);
+        //List<WorkerDetailed> workerDetailedRedisModels = workerDetailedMapper.selectModelToRedis(list);
+        for (WorkerDetailed workerDetailed : list) {
+            WorkerDetailedRedisModel workerDetailedRedisModel = baseController.getWorkerDetailedRedisModel(workerDetailed);
+            baseController.redisToInsert(rows2, "worker_detailed", workerDetailedRedisModel, workerDetailed.getMineId());
+        }
+        return record.getId();
+    }
+
+    @Override
+    public void updateFrame(FrameSetting record) {
+        //首先去详情表查询该机架是否在使用
+        Integer exist = frameSettingMapper.isExist(record);
+        if (exist!=null) {
+            throw new DataExistException("数据已存在,请勿重复添加!");
+        }
+
+        Integer mineId = record.getMineId();
+        if (mineId != null) {
+            FrameSetting frameSetting_db = frameSettingMapper.selectById(record.getId());
+            Integer mineId_db = frameSetting_db.getMineId();
+            if (mineId != mineId_db) {
+                throw new UpdateException("如需更换矿场,请先删除该机架!");
+            }
+        }
+
+        String framename = record.getFrameName();
+        Integer number = record.getNumber();
+        String detailed = framename + " 1-" + number + "层";
+        record.setDetailed(detailed);
+        int rows = frameSettingMapper.updateById(record);
+
+        FrameSetting frameSetting = frameSettingMapper.selectById(record.getId());
+        FrameSettingRedisModel frameSettingRedisModel = baseController.getFrameSettingRedisModel(frameSetting);
+        baseController.redisToUpdate(rows, "frame_setting", frameSettingRedisModel, frameSetting.getMineId());
+    }
 }
-
-
-

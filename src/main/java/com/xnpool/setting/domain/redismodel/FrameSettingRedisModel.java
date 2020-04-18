@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -17,15 +18,22 @@ import java.util.Date;
 @NoArgsConstructor
 public class FrameSettingRedisModel implements Serializable {
     private static final long serialVersionUID = 2235329115946148787L;
-    /**
-     * 机架Id
-     */
     private Integer id;
 
     /**
      * 机架名称
      */
     private String frame_name;
+
+    /**
+     * 货架编号
+     */
+    private Integer storage_racks_num;
+
+    /**
+     * 排数
+     */
+    private Integer row_num;
 
     /**
      * 机架层数
@@ -45,12 +53,12 @@ public class FrameSettingRedisModel implements Serializable {
     /**
      * 创建时间
      */
-    private String create_time;
+    private LocalDateTime create_time;
 
     /**
      * 修改时间
      */
-    private String update_time;
+    private LocalDateTime update_time;
 
     /**
      * 是否删除,0:否,1:是

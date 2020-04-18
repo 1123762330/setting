@@ -18,6 +18,7 @@ import com.xnpool.setting.domain.redismodel.WorkerAssignRedisModel;
 import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  * @date 2020/3/6 14:57
  */
 @Service
+@Slf4j
 public class WorkerAssignServiceImpl extends BaseController implements WorkerAssignService {
 
     @Resource
@@ -129,7 +131,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
     }
 
     @Override
-    //@Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void addAssignWorker(String ids, String delIds, String delIps, String ipId, Integer userId) {
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<String> frameSet_db = new HashSet<>();
@@ -165,7 +167,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                     //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
                     if (!id.contains("-")) {
                         //直接是矿场ID
-                        if (mineSet_db.contains(id)) {
+                        if (mineSet_db.contains(Integer.valueOf(id))) {
                             Integer mineId = Integer.valueOf(id);
                             HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
                             Set<Integer> keySet = factoryMap.keySet();
@@ -305,7 +307,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                 //做三层判断,第一是否是矿场Id,第二,是否是厂房id,第三,是否是直接的机架id
                 if (!id.contains("-")) {
                     //直接是矿场ID
-                    if (!mineSet_db.contains(id)) {
+                    if (!mineSet_db.contains(Integer.valueOf(id))) {
                         Integer mineId = Integer.valueOf(id);
                         HashMap<Integer, String> factoryMap = factoryHouseService.selectFactoryNameByMineId(mineId);
                         Set<Integer> keySet = factoryMap.keySet();
@@ -398,6 +400,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         if (!list.isEmpty()){
             int rows = workerAssignMapper.batchInsert(list);
             List<WorkerAssign> workerAssigns_db = workerAssignMapper.selectByCondition(list,0);
+            log.info("入缓存的workerAssigns_db:"+workerAssigns_db);
             //矿机架权限分配同步入缓存
             for (WorkerAssign workerAssign : workerAssigns_db) {
                 WorkerAssignRedisModel workerAssignRedisModel = getWorkerAssignRedisModel(workerAssign);
@@ -420,26 +423,29 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
         //执行ip区间分配
         ArrayList<MineIdAndIP> ip_list = new ArrayList<>();
-        if (ipId.contains(",")) {
-            String[] split = ipId.split(",");
-            for (String ip_id : split) {
+        if (!StringUtils.isEmpty(ipId)){
+            if (ipId.contains(",")) {
+                String[] split = ipId.split(",");
+                for (String ip_id : split) {
+                    if (!ipIdSetByIpAssigns.contains(ipId)){
+                        String[] split2 = ip_id.split("-");
+                        Integer mineId = Integer.valueOf(split2[0]);
+                        Integer ip_id2 = Integer.valueOf(split2[1]);
+                        MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id2);
+                        ip_list.add(mineIdAndIP);
+                    }
+                }
+            } else {
                 if (!ipIdSetByIpAssigns.contains(ipId)){
-                    String[] split2 = ip_id.split("-");
-                    Integer mineId = Integer.valueOf(split2[0]);
-                    Integer ip_id2 = Integer.valueOf(split2[1]);
-                    MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id2);
+                    String[] split = ipId.split("-");
+                    Integer mineId = Integer.valueOf(split[0]);
+                    Integer ip_id = Integer.valueOf(split[1]);
+                    MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id);
                     ip_list.add(mineIdAndIP);
                 }
             }
-        } else {
-            if (!ipIdSetByIpAssigns.contains(ipId)){
-                String[] split = ipId.split("-");
-                Integer mineId = Integer.valueOf(split[0]);
-                Integer ip_id = Integer.valueOf(split[1]);
-                MineIdAndIP mineIdAndIP = new MineIdAndIP(userId, mineId, ip_id);
-                ip_list.add(mineIdAndIP);
-            }
         }
+
         //执行入IP权限表
         if (!ip_list.isEmpty()){
             Integer rows2 = ipAssignMapper.batchInsert(ip_list);

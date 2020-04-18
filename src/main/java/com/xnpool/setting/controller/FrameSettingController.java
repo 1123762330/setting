@@ -2,6 +2,7 @@ package com.xnpool.setting.controller;
 
 import com.github.pagehelper.PageInfo;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
@@ -17,13 +18,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 矿机架设置
+ * <p>
+ *  前端控制器
+ * </p>
  *
  * @author zly
  * @version 1.0
  * @date 2020/2/4 20:06
+ * @since 2020-04-17
  */
 @RestController
 @Slf4j
@@ -45,7 +51,7 @@ public class FrameSettingController extends BaseController {
     @SystemLog(value = "添加矿机架",type = LogType.SYSTEM)
     @PostMapping("/addFrame")
     public ResponseResult addFrame(FrameSetting frameSetting) {
-        frameSettingService.insertSelective(frameSetting);
+        frameSettingService.addFrame(frameSetting);
         return new ResponseResult(SUCCESS);
     }
 
@@ -59,7 +65,7 @@ public class FrameSettingController extends BaseController {
     @SystemLog(value = "修改矿机架",type = LogType.SYSTEM)
     @PutMapping("/updateFrame")
     public ResponseResult updateFrame(FrameSetting frameSetting) {
-        frameSettingService.updateByPrimaryKeySelective(frameSetting);
+        frameSettingService.updateFrame(frameSetting);
         return new ResponseResult(SUCCESS);
     }
 
@@ -73,7 +79,7 @@ public class FrameSettingController extends BaseController {
     @SystemLog(value = "删除矿机架",type = LogType.SYSTEM)
     @DeleteMapping("/deleteFrameById")
     public ResponseResult deleteFrameById(int id) {
-        frameSettingService.updateById(id);
+        frameSettingService.deleteById(id);
         return new ResponseResult(SUCCESS);
     }
 
@@ -133,6 +139,5 @@ public class FrameSettingController extends BaseController {
         HashMap<Integer, String> resultMap = frameSettingService.selectMineFactoryAndFrame(factoryId);
         return new ResponseResult(SUCCESS,resultMap);
     }
-
-
 }
+

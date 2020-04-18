@@ -15,6 +15,7 @@ import com.xnpool.setting.utils.PrimaryKeyUtils;
 import com.xnpool.setting.utils.TokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,7 @@ import java.util.*;
  * @return
  */
 @Component
+@Slf4j
 public class BaseController {
     public static final Integer SUCCESS = 200;
     public static final Integer FAIL = 500;
@@ -403,15 +405,8 @@ public class BaseController {
         redisModel.setNumber(record.getNumber());
         redisModel.setFactory_id(record.getFactoryId());
         redisModel.setMine_id(record.getMineId());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (record.getUpdateTime() != null) {
-            String updateTime = sdf.format(record.getUpdateTime());
-            redisModel.setUpdate_time(updateTime);
-        }
-        if (record.getCreateTime() != null) {
-            String createTime = sdf.format(record.getCreateTime());
-            redisModel.setCreate_time(createTime);
-        }
+        redisModel.setUpdate_time(record.getUpdateTime());
+        redisModel.setCreate_time(record.getCreateTime());
         redisModel.setIs_delete(record.getIsDelete());
         redisModel.setDetailed(record.getDetailed());
         return redisModel;
@@ -701,10 +696,10 @@ public class BaseController {
                     }
                     return list;
                 }
-            }else {
+            } else {
                 throw new CheckException("未获取到该账户的数据权限,权限为空");
             }
-        }else {
+        } else {
             throw new CheckException("token解析失败!");
         }
     }
@@ -738,6 +733,7 @@ public class BaseController {
             Long tenantId = getTenantId(token);
             apiContext.setTenantId(tenantId);
             List<Integer> list = getMineId(token);
+            log.info("sysUser=="+sysUser+"; list==="+list);
             for (Integer mineId : list) {
                 SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
                 redisToInsert(1, "sys_user", sysUserRedisModel, mineId);
