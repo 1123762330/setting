@@ -567,7 +567,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                 if (set.contains(id)) {
                     String startIp = ipSetting.getStartIp();
                     String endIp = ipSetting.getEndIp();
-                    String ipName = mineName + " " + startIp + "-" + endIp;
+                    String ipName = startIp + "-" + endIp;
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("name", ipName);
                     map.put("checked", true);
@@ -575,7 +575,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
                 } else {
                     String startIp = ipSetting.getStartIp();
                     String endIp = ipSetting.getEndIp();
-                    String ipName = mineName + " " + startIp + "-" + endIp;
+                    String ipName = startIp + "-" + endIp;
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("name", ipName);
                     map.put("checked", false);
