@@ -450,6 +450,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         if (!ip_list.isEmpty()){
             Integer rows2 = ipAssignMapper.batchInsert(ip_list);
             List<IpAssign> ipAssigns = ipAssignMapper.selectByOther(ip_list, 0);
+            log.info("入缓存的ip数据:"+ipAssigns);
             //ip区间权限分配同步入缓存
             for (IpAssign ipAssign : ipAssigns) {
                 IpAssignRedisModel ipAssignRedisModel = getIpAssignRedisModel(ipAssign);
