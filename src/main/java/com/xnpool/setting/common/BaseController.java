@@ -807,6 +807,7 @@ public class BaseController {
                 reslut.put("id", id);
                 return reslut;
             } catch (Exception var9) {
+                log.error("token解析失败:"+token);
                 throw new TokenException("token解析失败");
             }
         }
