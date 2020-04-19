@@ -728,7 +728,7 @@ public class BaseController {
      * @Date 12:32 2020/4/10
      * @Param
      */
-    public ResponseResult syncinUser(SysUser sysUser, String token) {
+    public ResponseResult syncinUserUpdate(SysUser sysUser, String token) {
         try {
             Long tenantId = getTenantId(token);
             apiContext.setTenantId(tenantId);
@@ -736,7 +736,30 @@ public class BaseController {
             log.info("sysUser=="+sysUser+"; list==="+list);
             for (Integer mineId : list) {
                 SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
-                redisToInsert(1, "sys_user", sysUserRedisModel, mineId);
+                redisToUpdate(1, "sys_user", sysUserRedisModel, mineId);
+            }
+        } catch (Exception e) {
+            return new ResponseResult(FAIL, "同步缓存失败!");
+        }
+        return new ResponseResult(SUCCESS);
+    }
+
+    /**
+     * @return
+     * @Description 删除同步用户信息
+     * @Author zly
+     * @Date 12:32 2020/4/10
+     * @Param
+     */
+    public ResponseResult syncinUserDelete(SysUser sysUser, String token) {
+        try {
+            Long tenantId = getTenantId(token);
+            apiContext.setTenantId(tenantId);
+            List<Integer> list = getMineId(token);
+            log.info("sysUser=="+sysUser+"; list==="+list);
+            for (Integer mineId : list) {
+                SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
+                redisToDelete(1, "sys_user", sysUserRedisModel, mineId);
             }
         } catch (Exception e) {
             return new ResponseResult(FAIL, "同步缓存失败!");

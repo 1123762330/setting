@@ -117,8 +117,8 @@ public class WorkerAssignController extends BaseController {
      */
     @SystemLog(value = "修改用户同步入缓存",type = LogType.SYSTEM)
     @PutMapping("/syncingUpdateUser")
-    public ResponseResult syncingUpdateUser (SysUser sysUser, String token){
-        ResponseResult responseResult = syncinUser(sysUser, token);
+    public ResponseResult syncingUpdateUser (@RequestBody SysUser sysUser, String token){
+        ResponseResult responseResult = syncinUserUpdate(sysUser, token);
         return responseResult;
     }
 
@@ -131,8 +131,8 @@ public class WorkerAssignController extends BaseController {
      */
     @SystemLog(value = "删除用户同步入缓存",type = LogType.SYSTEM)
     @DeleteMapping("/syncinDeleteUser")
-    public ResponseResult syncinDeleteUser (SysUser sysUser, String token){
-        ResponseResult responseResult = syncinUser(sysUser, token);
+    public ResponseResult syncinDeleteUser (@RequestBody SysUser sysUser, String token){
+        ResponseResult responseResult = syncinUserDelete(sysUser, token);
         return responseResult;
     }
 }

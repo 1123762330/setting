@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.service.exception.DataNotExistException;
 import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.*;
@@ -412,12 +413,22 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             SysUser sysUser = sysUserMapper.selectById(userId);
             SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
             JSONObject jsonObject = userCenterAPI.authorizeToken(userId.toString());
-            if (!StringUtils.isEmpty(jsonObject)){
-                String access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
-                List<Integer> mineIdList = getMineId(access_token);
-                for (Integer mineId : mineIdList) {
-                    redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+            log.info("读取的用户信息:"+jsonObject);
+            if (jsonObject!=null&&!StringUtils.isEmpty(jsonObject)){
+                Integer status = jsonObject.getInt("status");
+                if (status==200){
+                    String access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
+                    List<Integer> mineIdList = getMineId(access_token);
+                    for (Integer mineId : mineIdList) {
+                        redisToInsert(rows, "sys_user", sysUserRedisModel,mineId );
+                    }
+                }else {
+                    String resp_msg = jsonObject.getString("resp_msg");
+                    throw new DataNotExistException(resp_msg);
                 }
+
+            }else {
+                throw new DataNotExistException("未获取到当前用户信息,请重试");
             }
         }
 
