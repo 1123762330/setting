@@ -51,8 +51,8 @@ public class WorkerDetailedController extends BaseController {
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                             HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        PageInfo<WorkerDetailedExample> workerExamplePageInfo = workerDetailedService.selectMoveOutList(moveOutParam, pageNum, pageSize,token);
-        return new ResponseResult(SUCCESS, workerExamplePageInfo);
+        Object moveOutList = workerDetailedService.selectMoveOutList(moveOutParam, pageNum, pageSize, token);
+        return new ResponseResult(SUCCESS, moveOutList);
     }
 
     /**

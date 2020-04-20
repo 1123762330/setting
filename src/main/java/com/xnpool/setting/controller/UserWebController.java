@@ -108,6 +108,7 @@ public class UserWebController extends BaseController {
     public ResponseResult getPoolWorkerHashByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
         Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
         Map<Object, Object>  workerHashByDay = userWebService.getWorkerHashByDay(algorithmId,token,tenantId);
         return new ResponseResult(SUCCESS,workerHashByDay);
     }
@@ -124,6 +125,7 @@ public class UserWebController extends BaseController {
     public ResponseResult getWorkerTotalByDay(Integer algorithmId,HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
         Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
         Map<Object, Object>  workerTotalByDay = userWebService.getWorkerTotalByDay(token,algorithmId,tenantId);
         return new ResponseResult(SUCCESS,workerTotalByDay);
     }
@@ -133,6 +135,7 @@ public class UserWebController extends BaseController {
     public ResponseResult getWorkerTotal(HttpServletRequest request){
         String token = writeLogUtil.getToken(request);
         Long tenantId=Long.valueOf(request.getHeader("tenantId"));
+        apiContext.setTenantId(Long.valueOf(tenantId));
         HashMap<String, Integer> hashMap = userWebService.getWorkerTotal(token,tenantId);
         return new ResponseResult(SUCCESS,hashMap);
     }

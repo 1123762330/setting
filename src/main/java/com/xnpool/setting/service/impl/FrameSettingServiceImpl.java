@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
@@ -122,7 +123,8 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
-        PageHelper.startPage(pageNum, pageSize);
+
+        PageHelper.startPage(pageNum,pageSize);
         List<FrameSettingExample> frameSettingExamples = frameSettingMapper.selectByOther(keyWord);
         for (FrameSettingExample frameSettingExample : frameSettingExamples) {
             Integer id = frameSettingExample.getMineId();

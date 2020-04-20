@@ -44,7 +44,7 @@ spring:
       # 否则报错：Loading class `com.mysql.jdbc.Driver'. This is deprecated.
       driver-class-name: com.mysql.cj.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://112.126.65.15:3306/xnpool_mine?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://182.92.235.178:3306/xnpool_mine?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
       username: root
       password: mine#mysql&nm45
       #配置初始化大小/最小/最大[仅用于测试，生成环境需要修改哦]
@@ -94,7 +94,7 @@ performanceInterceptor: true
 ---
 spring:
   redis: #数据源1
-    host: 112.126.65.15
+    host: 182.92.235.178
     port: 6379
     password: xnpool#67mm
     database: 0

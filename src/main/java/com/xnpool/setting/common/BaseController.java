@@ -403,6 +403,8 @@ public class BaseController {
         redisModel.setId(record.getId());
         redisModel.setFrame_name(record.getFrameName());
         redisModel.setNumber(record.getNumber());
+        redisModel.setStorage_racks_num(record.getStorageRacksNum());
+        redisModel.setRow_num(record.getRowNum());
         redisModel.setFactory_id(record.getFactoryId());
         redisModel.setMine_id(record.getMineId());
         redisModel.setUpdate_time(record.getUpdateTime());
@@ -785,9 +787,16 @@ public class BaseController {
 
     public static Map<String, Object> verify(String token) {
         HashMap<String, Object> reslut = new HashMap();
-        if (token != null) {
+        if (token == null) {
+            reslut.put("username", "匿名");
+            reslut.put("roles", "游客");
+            reslut.put("tenant_id", "-2");
+            reslut.put("mine_id", (Object)null);
+            reslut.put("id", "-1");
+            return reslut;
+        } else {
             try {
-                Claims claims = (Claims) Jwts.parser().setSigningKey("test_key".getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
+                Claims claims = (Claims)Jwts.parser().setSigningKey("test_key".getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
                 String username = claims.get("user_name").toString();
                 String roles = "";
 
@@ -807,10 +816,14 @@ public class BaseController {
                 reslut.put("id", id);
                 return reslut;
             } catch (Exception var9) {
-                log.error("token解析失败:"+token);
-                throw new TokenException("token解析失败");
+                HashMap<String, Object> err = new HashMap();
+                err.put("username", "error");
+                err.put("roles", var9.getMessage());
+                err.put("tenant_id", "-2");
+                err.put("mine_id", (Object)null);
+                err.put("id", "-1");
+                return err;
             }
         }
-        return null;
     }
 }

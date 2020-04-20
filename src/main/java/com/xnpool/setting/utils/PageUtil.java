@@ -44,7 +44,7 @@ public class PageUtil {
 
         if (fromIndex >= count) {
             resultMap.put("total", count);
-            resultMap.put("pageCount", pageCount);
+            resultMap.put("pages", pageCount);
             resultMap.put("list", null);
             resultMap.put("pageNum", pageNum);
             resultMap.put("pageSize", pageSize);
@@ -60,7 +60,7 @@ public class PageUtil {
         //List pageList = list.subList(fromIndex, toIndex);
         List pageList = new ArrayList<>(list.subList(fromIndex, toIndex));
         resultMap.put("total", count);
-        resultMap.put("pageCount", pageCount);
+        resultMap.put("pages", pageCount);
         resultMap.put("list", pageList);
         resultMap.put("pageNum", pageNum);
         resultMap.put("pageSize", pageSize);

@@ -31,7 +31,7 @@ public interface WorkerDetailedService {
 
     int updateByPrimaryKey(WorkerDetailed record);
 
-    PageInfo<WorkerDetailedExample> selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize,String token);
+    Object selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize,String token);
 
     void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,String token);
 
