@@ -94,11 +94,13 @@ public class CustomerSettingController extends BaseController {
      */
     @SystemLog(value = "查询客户列表",type = LogType.SYSTEM)
     @GetMapping("/selectCustomerList")
-    public ResponseResult selectCustomerList (@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
+    public ResponseResult selectCustomerList (@RequestParam(value = "username", required = false, defaultValue = "") String username,
+                                              @RequestParam(value = "agreementName", required = false, defaultValue = "") String agreementName,
+                                              @RequestParam(value = "groupName", required = false, defaultValue = "") String groupName,
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                               @RequestParam(value = "authorize", required = false, defaultValue = "0") Integer authorize){
-        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(keyWord, pageNum, pageSize,authorize);
+        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(username,agreementName,groupName, pageNum, pageSize,authorize);
         return new ResponseResult(SUCCESS,pageInfo);
     }
 

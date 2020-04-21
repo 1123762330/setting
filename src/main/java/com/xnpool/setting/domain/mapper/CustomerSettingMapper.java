@@ -22,7 +22,7 @@ public interface CustomerSettingMapper {
 
     int updateById(int id);
 
-    List<CustomerSettingExample> selectByOther(@Param("keyWord") String keyWord, @Param("managerUserId") Integer managerUserId);
+    List<CustomerSettingExample> selectByOther();
 
     void updateAttestationById(@Param("list") List<String> list, @Param("isPass") int isPass);
 

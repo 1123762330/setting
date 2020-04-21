@@ -204,9 +204,6 @@
         AND customer_setting.user_id = sys_user.id
         AND customer_setting.tenant_id = sys_tenant.id
         AND authentication!=2
-            <if test="keyWord != null and keyWord != ''">
-                    AND customer_setting.remarks like #{keyWord}
-            </if>
         </where>
     </select>
 

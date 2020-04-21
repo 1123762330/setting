@@ -28,7 +28,7 @@ public interface CustomerSettingService {
 
     void updateById(int id);
 
-    PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,Integer authorize);
+    PageInfo<CustomerSettingExample> selectByOther(String username,String agreementName,String groupName, int pageNum, int pageSize,Integer authorize);
 
     void updateAttestationById(String cusId, int isPass);
 

@@ -109,7 +109,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
     @Override
-    public Object selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize, String token) {
+    public PageInfo<WorkerDetailedExample> selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize, String token) {
         List<Integer> mineIds = getMineId(token);
         Long tenantId = getTenantId(token);
         String frameName_param = moveOutParam.getFrameName();
@@ -117,266 +117,143 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         String ipStr_param = moveOutParam.getIpStr();
         String notExistBrand_param = moveOutParam.getNotExistBrand();
         String notExistUser_param = moveOutParam.getNotExistUser();
+        List<WorkerDetailedExample> WorkerDetailedExampleList=new ArrayList<>();
         if (StringUtils.isEmpty(ipStr_param)&StringUtils.isEmpty(mineName_param)&StringUtils.isEmpty(frameName_param)&StringUtils.isEmpty(notExistBrand_param)&StringUtils.isEmpty(notExistUser_param)){
             //没得搜索条件
             PageHelper.startPage(pageNum, pageSize);
-            List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
-            if (!WorkerDetailedExampleList.isEmpty()) {
-                HashMap<Integer, String> groupMap = groupSettingService.selectGroupMap();
-                HashMap<Integer, String> userListMap = customerSettingService.selectUserList();
-                HashMap<Integer, String> mineNameMap = mineSettingService.selectMineNameByOther(token);
-                HashMap<Integer, String> workerbrandMap = workerbrandSettingService.selectWorkerbrandMap();
-                //System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
-                WorkerDetailedExampleList.forEach(workerDetailedExample -> {
-                    //判断有没有这个矿场的数据权限
-                    Integer mineId = workerDetailedExample.getMineId();
-                    if (mineIds.contains(mineId)){
-                        Integer groupId = workerDetailedExample.getGroupId();
-                        if (groupId != null) {
-                            String groupName = groupMap.get(groupId);
-                            workerDetailedExample.setGroupName(groupName);
-                        }
-
-                        Integer userId = workerDetailedExample.getUserId();
-                        if (userId != null) {
-                            String userName = userListMap.get(userId);
-                            workerDetailedExample.setUsername(userName);
-                        }
-
-                        String workerName = workerDetailedExample.getWorkerName();
-                        if (StringUtils.isEmpty(workerName)) {
-                            workerDetailedExample.setMiner("");
-                            workerDetailedExample.setWorkerName("");
-                        } else {
-                            String minerName = "";
-                            String workerNameStr = "";
-                            if (!workerName.contains(".")) {
-                                minerName = workerName;
-                                workerNameStr = "";
-                            } else {
-                                int lastIndexOf = workerName.lastIndexOf(".");
-                                minerName = workerName.substring(0, lastIndexOf);
-                                workerNameStr = workerName.substring(lastIndexOf + 1);
-                            }
-                            workerDetailedExample.setMiner(minerName);
-                            workerDetailedExample.setWorkerName(workerNameStr);
-                        }
-
-                        String mineName = mineNameMap.get(mineId);
-                        workerDetailedExample.setMineName(mineName);
-
-                        String frameName = workerDetailedExample.getFrameName();
-                        Integer frameNumber = workerDetailedExample.getFrameNumber();
-                        StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
-                        workerDetailedExample.setFrameName(frameNameBuffer.toString());
-
-                        Integer workerbrandId = workerDetailedExample.getWorkerbrandId();
-                        if (!StringUtils.isEmpty(workerbrandId)){
-                            String workerbrandName = workerbrandMap.get(workerbrandId);
-                            workerDetailedExample.setBrandName(workerbrandName);
-                        }
-                    }
-                });
-            }
-            List<WorkerDetailedExample> filterList=WorkerDetailedExampleList;
-            //过滤ip区间的
-            if (!StringUtils.isEmpty(moveOutParam.getIpStr())) {
-                String ipStr = moveOutParam.getIpStr();
-                String[] split = ipStr.split("-");
-                String startIp = split[0];
-                String endIp = split[1];
-                long startIpToLong = getStringIpToLong(startIp);
-                long endIpToLong = getStringIpToLong(endIp);
-                filterList = filterList.stream().filter(a -> a.getIpLong()>=startIpToLong&&a.getIpLong()<=endIpToLong).collect(Collectors.toList());
-                //过滤矿场
-                if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
-                    filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
-                }
-                //过滤机架
-                if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
-                    filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
-                }
-                //过滤未分配用户的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                    filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                }
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
-            }
-            //过滤矿场
-            if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
-                filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
-                //过滤机架
-                if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
-                    filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
-                }
-                //过滤未分配用户的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                    filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                }
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
-            }
-            //过滤机架
-            if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
-                filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
-                //过滤未分配用户的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                    filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                }
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
-            }
-            //过滤未分配用户的
-            if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
-            }
-            //过滤未分配矿机品牌的
-            if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-            }
-            PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
-            return pageInfo;
+            WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
         }else {
             //有搜索条件
-            List<WorkerDetailedExample> WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
-            if (!WorkerDetailedExampleList.isEmpty()) {
-                HashMap<Integer, String> groupMap = groupSettingService.selectGroupMap();
-                HashMap<Integer, String> userListMap = customerSettingService.selectUserList();
-                HashMap<Integer, String> mineNameMap = mineSettingService.selectMineNameByOther(token);
-                HashMap<Integer, String> workerbrandMap = workerbrandSettingService.selectWorkerbrandMap();
-                //System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
-                WorkerDetailedExampleList.forEach(workerDetailedExample -> {
-                    //判断有没有这个矿场的数据权限
-                    Integer mineId = workerDetailedExample.getMineId();
-                    if (mineIds.contains(mineId)){
-                        Integer groupId = workerDetailedExample.getGroupId();
-                        if (groupId != null) {
-                            String groupName = groupMap.get(groupId);
-                            workerDetailedExample.setGroupName(groupName);
-                        }
+            WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
+        }
 
-                        Integer userId = workerDetailedExample.getUserId();
-                        if (userId != null) {
-                            String userName = userListMap.get(userId);
-                            workerDetailedExample.setUsername(userName);
-                        }
-
-                        String workerName = workerDetailedExample.getWorkerName();
-                        if (StringUtils.isEmpty(workerName)) {
-                            workerDetailedExample.setMiner("");
-                            workerDetailedExample.setWorkerName("");
-                        } else {
-                            String minerName = "";
-                            String workerNameStr = "";
-                            if (!workerName.contains(".")) {
-                                minerName = workerName;
-                                workerNameStr = "";
-                            } else {
-                                int lastIndexOf = workerName.lastIndexOf(".");
-                                minerName = workerName.substring(0, lastIndexOf);
-                                workerNameStr = workerName.substring(lastIndexOf + 1);
-                            }
-                            workerDetailedExample.setMiner(minerName);
-                            workerDetailedExample.setWorkerName(workerNameStr);
-                        }
-
-                        String mineName = mineNameMap.get(mineId);
-                        workerDetailedExample.setMineName(mineName);
-
-                        String frameName = workerDetailedExample.getFrameName();
-                        Integer frameNumber = workerDetailedExample.getFrameNumber();
-                        StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
-                        workerDetailedExample.setFrameName(frameNameBuffer.toString());
-
-                        Integer workerbrandId = workerDetailedExample.getWorkerbrandId();
-                        if (!StringUtils.isEmpty(workerbrandId)){
-                            String workerbrandName = workerbrandMap.get(workerbrandId);
-                            workerDetailedExample.setBrandName(workerbrandName);
-                        }
+        //重新set用户名,分组名和矿机名等等
+        if (!WorkerDetailedExampleList.isEmpty()) {
+            HashMap<Integer, String> groupMap = groupSettingService.selectGroupMap();
+            HashMap<Integer, String> userListMap = customerSettingService.selectUserList();
+            HashMap<Integer, String> mineNameMap = mineSettingService.selectMineNameByOther(token);
+            HashMap<Integer, String> workerbrandMap = workerbrandSettingService.selectWorkerbrandMap();
+            //System.out.println("查询的矿机出库列表是:" + WorkerDetailedExampleList);
+            WorkerDetailedExampleList.forEach(workerDetailedExample -> {
+                //判断有没有这个矿场的数据权限
+                Integer mineId = workerDetailedExample.getMineId();
+                if (mineIds.contains(mineId)){
+                    Integer groupId = workerDetailedExample.getGroupId();
+                    if (groupId != null) {
+                        String groupName = groupMap.get(groupId);
+                        workerDetailedExample.setGroupName(groupName);
                     }
-                });
-            }
-            List<WorkerDetailedExample> filterList=WorkerDetailedExampleList;
-            //过滤ip区间的
-            if (!StringUtils.isEmpty(moveOutParam.getIpStr())) {
-                String ipStr = moveOutParam.getIpStr();
-                String[] split = ipStr.split("-");
-                String startIp = split[0];
-                String endIp = split[1];
-                long startIpToLong = getStringIpToLong(startIp);
-                long endIpToLong = getStringIpToLong(endIp);
-                filterList = filterList.stream().filter(a -> a.getIpLong()>=startIpToLong&&a.getIpLong()<=endIpToLong).collect(Collectors.toList());
-                //过滤矿场
-                if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
-                    filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
+
+                    Integer userId = workerDetailedExample.getUserId();
+                    if (userId != null) {
+                        String userName = userListMap.get(userId);
+                        workerDetailedExample.setUsername(userName);
+                    }
+
+                    String workerName = workerDetailedExample.getWorkerName();
+                    if (StringUtils.isEmpty(workerName)) {
+                        workerDetailedExample.setMiner("");
+                        workerDetailedExample.setWorkerName("");
+                    } else {
+                        String minerName = "";
+                        String workerNameStr = "";
+                        if (!workerName.contains(".")) {
+                            minerName = workerName;
+                            workerNameStr = "";
+                        } else {
+                            int lastIndexOf = workerName.lastIndexOf(".");
+                            minerName = workerName.substring(0, lastIndexOf);
+                            workerNameStr = workerName.substring(lastIndexOf + 1);
+                        }
+                        workerDetailedExample.setMiner(minerName);
+                        workerDetailedExample.setWorkerName(workerNameStr);
+                    }
+
+                    String mineName = mineNameMap.get(mineId);
+                    workerDetailedExample.setMineName(mineName);
+
+                    String frameName = workerDetailedExample.getFrameName();
+                    Integer frameNumber = workerDetailedExample.getFrameNumber();
+                    StringBuffer frameNameBuffer = new StringBuffer(frameName).append(" ").append(frameNumber).append("层");
+                    workerDetailedExample.setFrameName(frameNameBuffer.toString());
+
+                    Integer workerbrandId = workerDetailedExample.getWorkerbrandId();
+                    if (!StringUtils.isEmpty(workerbrandId)){
+                        String workerbrandName = workerbrandMap.get(workerbrandId);
+                        workerDetailedExample.setBrandName(workerbrandName);
+                    }
                 }
-                //过滤机架
-                if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
-                    filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
-                }
-                //过滤未分配用户的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                    filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                }
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
-            }
+            });
+        }
+        List<WorkerDetailedExample> filterList=WorkerDetailedExampleList;
+        //过滤ip区间的
+        if (!StringUtils.isEmpty(moveOutParam.getIpStr())) {
+            String ipStr = moveOutParam.getIpStr();
+            String[] split = ipStr.split("-");
+            String startIp = split[0];
+            String endIp = split[1];
+            long startIpToLong = getStringIpToLong(startIp);
+            long endIpToLong = getStringIpToLong(endIp);
+            filterList = filterList.stream().filter(a -> a.getIpLong()>=startIpToLong&&a.getIpLong()<=endIpToLong).collect(Collectors.toList());
             //过滤矿场
             if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
                 filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
-                //过滤机架
-                if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
-                    filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
-                }
-                //过滤未分配用户的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                    filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                }
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
             }
             //过滤机架
             if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
                 filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
-                //过滤未分配用户的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
-                    filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                }
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
             }
             //过滤未分配用户的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
                 filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
-                //过滤未分配矿机品牌的
-                if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
-                    filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
-                }
             }
             //过滤未分配矿机品牌的
             if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
                 filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
             }
-            HashMap<String, Object> startPage = PageUtil.startPage(filterList, pageNum, pageSize);
-            return startPage;
         }
+        //过滤矿场
+        if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
+            filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
+            //过滤机架
+            if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
+                filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
+            }
+            //过滤未分配用户的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
+                filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
+            }
+            //过滤未分配矿机品牌的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
+            }
+        }
+        //过滤机架
+        if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
+            filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
+            //过滤未分配用户的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
+                filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
+            }
+            //过滤未分配矿机品牌的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
+            }
+        }
+        //过滤未分配用户的
+        if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
+            filterList = filterList.stream().filter(a -> a.getUsername()==null||StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
+            //过滤未分配矿机品牌的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
+                filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
+            }
+        }
+        //过滤未分配矿机品牌的
+        if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
+            filterList = filterList.stream().filter(a -> a.getBrandName()==null||StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
+        }
+        PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
+        return pageInfo;
 
     }
 

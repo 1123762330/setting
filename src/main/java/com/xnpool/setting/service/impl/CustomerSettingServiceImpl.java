@@ -112,37 +112,21 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public PageInfo<CustomerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,Integer authorize) {
-        if (!StringUtils.isEmpty(keyWord)) {
-            keyWord = "%" + keyWord + "%";
-        }
+    public PageInfo<CustomerSettingExample> selectByOther(String username,String agreementName,String groupName,int pageNum, int pageSize,Integer authorize) {
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
-        //HashMap<String, Object> tokenData = getTokenData(token);
-        Integer managerUserId = null;
-        //if (tokenData!=null){
-        //    managerUserId = Integer.valueOf(tokenData.get("userId").toString());
-        //}else {
-        //    throw new CheckException("校验token失败!");
-        //}
-        //管理员和用户角色
-        //HashMap<Integer, String> roleMap = new HashMap<>();
-        //List<HashMap> UserRoleList = customerSettingMapper.selectUserRole();
-        //UserRoleList.forEach(hashMap -> {
-        //    Object user_id = hashMap.get("user_id");
-        //    if (!StringUtils.isEmpty(user_id)) {
-        //        Integer userId = Integer.valueOf(String.valueOf(user_id));
-        //        String roleName = String.valueOf(hashMap.get("roleName"));
-        //        roleMap.put(userId, roleName);
-        //    }
-        //
-        //});
-        PageHelper.startPage(pageNum, pageSize);
         //这里后面合并需要做关联查询,查询客户的一些基本信息
-        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(keyWord, managerUserId);
+        List<CustomerSettingExample> customerSettingExamples=new ArrayList<>();
+        if (StringUtils.isEmpty(username)&StringUtils.isEmpty(agreementName)&StringUtils.isEmpty(groupName)){
+            PageHelper.startPage(pageNum, pageSize);
+            customerSettingExamples = customerSettingMapper.selectByOther();
+        }else {
+            customerSettingExamples = customerSettingMapper.selectByOther();
+        }
+
+
         if (authorize==1){
             customerSettingExamples = customerSettingExamples.stream().filter(a -> a.getAuthentication()==authorize).collect(Collectors.toList());
         }
-        //log.info("数据库查询的客户列表:" + customerSettingExamples.size());
         //解决多个协议ID问题和多个菜单栏ID问题,先去查出相应的map集合,然后遍历该实体类进行拼接封装
         //log.info("客户设置列表" + customerSettingExamples);
         customerSettingExamples.forEach(customerSettingExample -> {
@@ -173,23 +157,41 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
                     String[] split = groupId.split(",");
                     StringBuffer groupNameNameStr = null;
                     for (int i = 0; i < split.length; i++) {
-                        String groupName = groupNameHashMap.get(Integer.valueOf(split[i]));
+                        String groupName_db = groupNameHashMap.get(Integer.valueOf(split[i]));
                         if (groupNameNameStr == null) {
-                            groupNameNameStr = new StringBuffer().append(groupName);
+                            groupNameNameStr = new StringBuffer().append(groupName_db);
                         } else {
-                            groupNameNameStr = groupNameNameStr.append(",").append(groupName);
+                            groupNameNameStr = groupNameNameStr.append(",").append(groupName_db);
                         }
                     }
                     customerSettingExample.setGroupName(groupNameNameStr.toString());
                 } else {
-                    String groupName = groupNameHashMap.get(Integer.valueOf(groupId));
-                    customerSettingExample.setGroupName(groupName);
+                    String groupName_db = groupNameHashMap.get(Integer.valueOf(groupId));
+                    customerSettingExample.setGroupName(groupName_db);
                 }
             }
-            //Integer managerUserId_db = customerSettingExample.getManagerUserId();
-            //String roleName = roleMap.get(managerUserId_db);
-            //customerSettingExample.setRoleName(roleName);
         });
+        //用户名不为空
+        if (!StringUtils.isEmpty(username)){
+            customerSettingExamples = customerSettingExamples.stream().filter(a -> a.getUserName().contains(username)).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(agreementName)){
+                customerSettingExamples = customerSettingExamples.stream().filter(a -> agreementName.equals(a.getAgreementName())).collect(Collectors.toList());
+            }
+            if (!StringUtils.isEmpty(groupName)){
+                customerSettingExamples = customerSettingExamples.stream().filter(a -> groupName.equals(a.getGroupName())).collect(Collectors.toList());
+            }
+        }
+        //协议名不为空
+        if (!StringUtils.isEmpty(agreementName)){
+            customerSettingExamples = customerSettingExamples.stream().filter(a -> agreementName.equals(a.getAgreementName())).collect(Collectors.toList());
+            if (!StringUtils.isEmpty(groupName)){
+                customerSettingExamples = customerSettingExamples.stream().filter(a -> groupName.equals(a.getGroupName())).collect(Collectors.toList());
+            }
+        }
+        //分组名不为空
+        if (!StringUtils.isEmpty(groupName)){
+            customerSettingExamples = customerSettingExamples.stream().filter(a -> groupName.equals(a.getGroupName())).collect(Collectors.toList());
+        }
         PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
         return pageInfo;
     }
