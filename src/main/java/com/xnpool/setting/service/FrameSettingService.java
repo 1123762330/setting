@@ -1,5 +1,6 @@
 package com.xnpool.setting.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.model.FrameSettingExample;
 import com.xnpool.setting.domain.pojo.FrameSetting;
@@ -21,7 +22,7 @@ public interface FrameSettingService extends IService<FrameSetting> {
 
     Integer addFrame(FrameSetting entity);
 
-    PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token);
+    Page<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token);
 
     HashMap<Integer, String> selectFrameNameByFactoryId(Integer factoryId);
 

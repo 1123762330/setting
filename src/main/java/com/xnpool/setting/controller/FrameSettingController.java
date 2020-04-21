@@ -1,5 +1,6 @@
 package com.xnpool.setting.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,15 +91,15 @@ public class FrameSettingController extends BaseController {
      * @Date 14:58 2020/2/4
      * @Param
      */
-    @SystemLog(value = "查询矿机架列表",type = LogType.SYSTEM)
+    //@SystemLog(value = "查询矿机架列表",type = LogType.SYSTEM)
     @GetMapping("/selectFrameList")
     public ResponseResult selectFrameList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                           HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        PageInfo<FrameSettingExample> frameSettingExamplePageInfo = frameSettingService.selectByOther(keyWord, pageNum, pageSize,token);
-        return new ResponseResult(SUCCESS, frameSettingExamplePageInfo);
+        Page<FrameSettingExample> page = frameSettingService.selectByOther(keyWord, pageNum, pageSize, token);
+        return new ResponseResult(SUCCESS, page);
     }
 
     /**

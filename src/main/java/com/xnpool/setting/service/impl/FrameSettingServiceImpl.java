@@ -17,6 +17,7 @@ import com.xnpool.setting.domain.redismodel.FrameSettingRedisModel;
 import com.xnpool.setting.domain.redismodel.WorkerDetailedRedisModel;
 import com.xnpool.setting.service.FrameSettingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xnpool.setting.utils.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author zly
@@ -39,7 +40,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, FrameSetting>  implements FrameSettingService {
+public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, FrameSetting> implements FrameSettingService {
     @Autowired
     private BaseController baseController;
     @Autowired
@@ -58,14 +59,14 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
         MineSetting mineSetting = mineSettingMapper.selectByPrimaryKey(mineId);
         Integer number = mineSetting.getFrameNum();
         Integer exist = frameSettingMapper.isExist(record);
-        if (exist!=null) {
+        if (exist != null) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         String framename = record.getFrameName();
-        if (StringUtils.isEmpty(framename)){
+        if (StringUtils.isEmpty(framename)) {
             Integer storageRacksNum = record.getStorageRacksNum();
             Integer rowNum = record.getRowNum();
-            framename=storageRacksNum+"#"+rowNum;
+            framename = storageRacksNum + "#" + rowNum;
             record.setFrameName(framename);
         }
         record.setNumber(number);
@@ -117,30 +118,30 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
     }
 
     @Override
-    public PageInfo<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
+    public Page<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
         List<Integer> mineIds = baseController.getMineId(token);
         List<FrameSettingExample> resultList = new ArrayList<>();
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
+        Page<FrameSettingExample> page = new Page<>(pageNum, pageSize);
+        List<FrameSettingExample> frameSettingExamples = frameSettingMapper.selectByOther(keyWord, page);
 
-        PageHelper.startPage(pageNum,pageSize);
-        List<FrameSettingExample> frameSettingExamples = frameSettingMapper.selectByOther(keyWord);
         for (FrameSettingExample frameSettingExample : frameSettingExamples) {
             Integer id = frameSettingExample.getMineId();
             if (mineIds.contains(id)) {
                 String frameName = frameSettingExample.getFrameName();
-                if (StringUtils.isEmpty(frameName)){
+                if (StringUtils.isEmpty(frameName)) {
                     Integer storageRacksNum = frameSettingExample.getStorageRacksNum();
                     Integer rowNum = frameSettingExample.getRowNum();
-                    frameName=storageRacksNum+"#"+rowNum;
+                    frameName = storageRacksNum + "#" + rowNum;
                     frameSettingExample.setFrameName(frameName);
                 }
                 resultList.add(frameSettingExample);
             }
         }
-        PageInfo<FrameSettingExample> pageInfo = new PageInfo<>(resultList);
-        return pageInfo;
+        page.setRecords(resultList);
+        return page;
     }
 
     @Override
@@ -154,12 +155,12 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
                 //在这里需要去查询该矿机架是否还有空位
                 List<HashMap> hashMapList = workerDetailedMapper.selectNullFrame(id);
-                if (!hashMapList.isEmpty()){
+                if (!hashMapList.isEmpty()) {
                     String frame_name = hashMap.get("frame_name").toString();
-                    if (StringUtils.isEmpty(frame_name)){
+                    if (StringUtils.isEmpty(frame_name)) {
                         String storage_racks_num = hashMap.get("storage_racks_num").toString();
                         String row_num = hashMap.get("row_num").toString();
-                        frame_name=storage_racks_num+"#"+row_num;
+                        frame_name = storage_racks_num + "#" + row_num;
                     }
                     resultMap.put(id, frame_name);
                 }
@@ -185,10 +186,10 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
             hashMaps.forEach(hashMap -> {
                 Integer id = Integer.valueOf(hashMap.get("id").toString());
                 StringBuffer frameName = new StringBuffer(hashMap.get("frame_name").toString());
-                if (StringUtils.isEmpty(frameName.toString())){
+                if (StringUtils.isEmpty(frameName.toString())) {
                     String storage_racks_num = hashMap.get("storage_racks_num").toString();
                     String row_num = hashMap.get("row_num").toString();
-                    frameName=new StringBuffer(storage_racks_num).append("#").append(row_num);
+                    frameName = new StringBuffer(storage_racks_num).append("#").append(row_num);
                 }
                 StringBuffer number = new StringBuffer(hashMap.get("number").toString());
                 StringBuffer resultStr = frameName.append("  1-" + number + "层");
@@ -205,10 +206,10 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
         for (HashMap hashMap : mineFactoryAndFrameList) {
             Integer frameId = (Integer) hashMap.get("frameId");
             StringBuffer frameName = new StringBuffer(String.valueOf(hashMap.get("frame_name")));
-            if (StringUtils.isEmpty(frameName.toString())){
+            if (StringUtils.isEmpty(frameName.toString())) {
                 String storage_racks_num = hashMap.get("storage_racks_num").toString();
                 String row_num = hashMap.get("row_num").toString();
-                frameName=new StringBuffer(storage_racks_num).append("#").append(row_num);
+                frameName = new StringBuffer(storage_racks_num).append("#").append(row_num);
             }
             String factoryName = String.valueOf(hashMap.get("factory_name"));
             String mineName = String.valueOf(hashMap.get("mine_name"));
@@ -219,8 +220,8 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
     }
 
     @Override
-    public Integer equalsFrameName(Integer frameStr,Integer paiNumber, Integer factoryId, Integer mineId) {
-        return frameSettingMapper.equalsFrameName(frameStr,paiNumber, factoryId, mineId);
+    public Integer equalsFrameName(Integer frameStr, Integer paiNumber, Integer factoryId, Integer mineId) {
+        return frameSettingMapper.equalsFrameName(frameStr, paiNumber, factoryId, mineId);
     }
 
     @Override
@@ -266,7 +267,7 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
     public void updateFrame(FrameSetting record) {
         //首先去详情表查询该机架是否在使用
         Integer exist = frameSettingMapper.isExist(record);
-        if (exist!=null) {
+        if (exist != null) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
 
