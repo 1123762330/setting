@@ -153,7 +153,7 @@ public class WorkerDetailedController extends BaseController {
      * @Param
      * @return
      */
-    //@SystemLog(value = "矿机全部上架",type = LogType.MINE)
+    @SystemLog(value = "矿机全部上架",type = LogType.MINE)
     @PostMapping("/batchIntoFrame")
     public ResponseResult batchIntoFrame(HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);

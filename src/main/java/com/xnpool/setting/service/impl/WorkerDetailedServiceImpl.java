@@ -696,6 +696,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                             if (factoryId == null) {
                                 FactoryHouse factoryHouse = new FactoryHouse();
                                 factoryHouse.setFactoryName(factoryStr);
+                                factoryHouse.setFactoryNum(Integer.valueOf(factoryStr));
                                 factoryHouse.setMineId(mineId);
                                 factoryId = factoryHouseService.insertSelectiveToBatch(factoryHouse);
                             }
