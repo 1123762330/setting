@@ -3,6 +3,7 @@ package com.xnpool.setting.domain.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -14,9 +15,14 @@ import java.util.Date;
 public class FactoryHouseExample implements Serializable {
     private static final long serialVersionUID = 5665965644910905456L;
     /**
-     * 厂房编号
+     * 主键
      */
     private Integer id;
+
+    /**
+     * 厂房编号
+     */
+    private Integer factoryNum;
 
     /**
      * 厂房名称
@@ -31,12 +37,12 @@ public class FactoryHouseExample implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 所属矿场

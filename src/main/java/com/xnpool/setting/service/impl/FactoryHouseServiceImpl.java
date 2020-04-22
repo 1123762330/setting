@@ -1,125 +1,116 @@
 package com.xnpool.setting.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xnpool.logaop.service.exception.DataExistException;
-import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
-import com.xnpool.setting.domain.pojo.MineSetting;
-import com.xnpool.setting.domain.redismodel.FactoryHouseRedisModel;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
+import com.xnpool.setting.domain.redismodel.FactoryHouseRedisModel;
 import com.xnpool.setting.service.FactoryHouseService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/4 15:29
+ * @since 2020-04-22
  */
 @Service
-public class FactoryHouseServiceImpl extends BaseController implements FactoryHouseService {
-
+public class FactoryHouseServiceImpl extends ServiceImpl<FactoryHouseMapper, FactoryHouse> implements FactoryHouseService {
     @Resource
     private FactoryHouseMapper factoryHouseMapper;
 
-    @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return factoryHouseMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int insert(FactoryHouse record) {
-        return factoryHouseMapper.insert(record);
-    }
+    @Autowired
+    private BaseController baseController;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Integer insertSelective(FactoryHouse record) {
-        List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
-        if (list.contains(record.getFactoryName())) {
-            throw new DataExistException("数据已存在,请勿重复添加!");
+    public Integer addFactoryHouse(FactoryHouse record) {
+        List<FactoryHouse> factoryHouses = factoryHouseMapper.selectFactoryByMineId(record.getMineId(), record.getId());
+        List<String> factoryNameList = new ArrayList<>();
+        List<Integer> factoryNumList = new ArrayList<>();
+        factoryHouses.forEach(factoryHouse -> {
+            Integer factoryNum = factoryHouse.getFactoryNum();
+            String factoryName = factoryHouse.getFactoryName();
+            factoryNameList.add(factoryName);
+            factoryNumList.add(factoryNum);
+        });
+        if (factoryNameList.contains(record.getFactoryName())) {
+            throw new DataExistException("厂房名称已存在,请勿重复添加!");
+        }
+        if (factoryNumList.contains(record.getFactoryNum())) {
+            throw new DataExistException("厂房编号已存在,请勿重复添加!");
         }
 
-        int rows = factoryHouseMapper.insertSelective(record);
-        record.setCreateTime(new Date());
-        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
+        int rows = factoryHouseMapper.insert(record);
+        FactoryHouse factoryHouse = factoryHouseMapper.selectById(record.getId());
+        FactoryHouseRedisModel factoryHouseRedisModel = baseController.getFactoryHouseRedisModel(factoryHouse);
+        baseController.redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
         return record.getId();
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Integer insertSelectiveToBatch(FactoryHouse record) {
-        int rows = factoryHouseMapper.insertSelective(record);
-        record.setCreateTime(new Date());
-        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(record);
-        redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
-        return record.getId();
-    }
-
-    @Override
-    public FactoryHouse selectByPrimaryKey(Integer id) {
-        return factoryHouseMapper.selectByPrimaryKey(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateByPrimaryKeySelective(FactoryHouse record) {
-        List<String> list = factoryHouseMapper.selectFactoryNameList(record.getMineId(),record.getId());
-        if (list.contains(record.getFactoryName())) {
-            throw new DataExistException("数据已存在,请勿重复添加!");
+        List<FactoryHouse> factoryHouses = factoryHouseMapper.selectFactoryByMineId(record.getMineId(), record.getId());
+        List<String> factoryNameList = new ArrayList<>();
+        List<Integer> factoryNumList = new ArrayList<>();
+        factoryHouses.forEach(factoryHouse -> {
+            Integer factoryNum = factoryHouse.getFactoryNum();
+            String factoryName = factoryHouse.getFactoryName();
+            factoryNameList.add(factoryName);
+            factoryNumList.add(factoryNum);
+        });
+        if (factoryNameList.contains(record.getFactoryName())) {
+            throw new DataExistException("厂房名称已存在,请勿重复添加!");
         }
-        int rows = factoryHouseMapper.updateByPrimaryKeySelective(record);
-        FactoryHouse factoryHouse = factoryHouseMapper.selectByPrimaryKey(record.getId());
-        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(factoryHouse);
-        redisToUpdate(rows, "factory_house", factoryHouseRedisModel, factoryHouse.getMineId());
-    }
-
-    @Override
-    public int updateByPrimaryKey(FactoryHouse record) {
-        return factoryHouseMapper.updateByPrimaryKey(record);
+        if (factoryNumList.contains(record.getFactoryNum())) {
+            throw new DataExistException("厂房编号已存在,请勿重复添加!");
+        }
+        int rows = factoryHouseMapper.updateById(record);
+        FactoryHouse factoryHouse = factoryHouseMapper.selectById(record.getId());
+        FactoryHouseRedisModel factoryHouseRedisModel = baseController.getFactoryHouseRedisModel(factoryHouse);
+        baseController.redisToUpdate(rows, "factory_house", factoryHouseRedisModel, factoryHouse.getMineId());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateById(int id) {
-        int rows = factoryHouseMapper.updateById(id);
-        FactoryHouse factoryHouse = factoryHouseMapper.selectByPrimaryKey(id);
-        FactoryHouseRedisModel factoryHouseRedisModel = getFactoryHouseRedisModel(factoryHouse);
-        redisToDelete(rows, "factory_house", factoryHouseRedisModel, factoryHouse.getMineId());
+    public void deleteById(int id) {
+        int rows = factoryHouseMapper.deleteByKeyId(id);
+        FactoryHouse factoryHouse = factoryHouseMapper.selectById(id);
+        FactoryHouseRedisModel factoryHouseRedisModel = baseController.getFactoryHouseRedisModel(factoryHouse);
+        baseController.redisToDelete(rows, "factory_house", factoryHouseRedisModel, factoryHouse.getMineId());
     }
 
     @Override
-    public PageInfo<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
-        List<Integer> mineIds = getMineId(token);
+    public Page<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
+        List<Integer> mineIds = baseController.getMineId(token);
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
         ArrayList<FactoryHouseExample> resultList = new ArrayList<>();
-        PageHelper.startPage(pageNum, pageSize);
-        List<FactoryHouseExample> factoryHouses = factoryHouseMapper.selectByOther(keyWord);
+        Page<FactoryHouseExample> page = new Page<>(pageNum, pageSize);
+        List<FactoryHouseExample> factoryHouses = factoryHouseMapper.selectByOther(keyWord,page);
         for (FactoryHouseExample factoryHouse : factoryHouses) {
             Integer id = factoryHouse.getMineId();
             if (mineIds.contains(id)){
                 resultList.add(factoryHouse);
             }
         }
-        PageInfo<FactoryHouseExample> pageInfo = new PageInfo<>(resultList);
-        return pageInfo;
-    }
-
-    @Override
-    public List<FactoryHouse> selectByMineId(Integer mineId) {
-        return factoryHouseMapper.selectByMineId(mineId);
+        page.setRecords(resultList);
+        return page;
     }
 
     @Override
@@ -139,27 +130,23 @@ public class FactoryHouseServiceImpl extends BaseController implements FactoryHo
     }
 
     @Override
-    public HashMap<String, Integer> selectMapByFactoryName(Integer mineId) {
-        List<HashMap> hashMaps = factoryHouseMapper.selectFactoryNameByMineId(mineId);
-        if (hashMaps.isEmpty()) {
-            return null;
-        } else {
-            HashMap<String, Integer> resultMap = new HashMap<>();
-            hashMaps.forEach(hashMap -> {
-                Integer id = Integer.valueOf(hashMap.get("id").toString());
-                String factoryName = hashMap.get("factory_name").toString();
-                resultMap.put(factoryName,id);
-            });
-            return resultMap;
-        }
+    public Integer equalsFactoryNum(String factoryNum, Integer mineId) {
+        return factoryHouseMapper.equalsFactoryNum(factoryNum,mineId);
     }
 
     @Override
-    public Integer equalsFactoryName(String factoryStr, Integer mineId) {
-        return factoryHouseMapper.equalsFactoryName(factoryStr,mineId);
+    public List<FactoryHouse> selectByMineId(int id) {
+        List<FactoryHouse> factoryHouses = factoryHouseMapper.selectByMineId(id);
+        return factoryHouses;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer insertSelectiveToBatch(FactoryHouse record) {
+        int rows = factoryHouseMapper.insert(record);
+        FactoryHouse factoryHouse = factoryHouseMapper.selectById(record.getId());
+        FactoryHouseRedisModel factoryHouseRedisModel = baseController.getFactoryHouseRedisModel(factoryHouse);
+        baseController.redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
+        return record.getId();
+    }
 }
-
-
-

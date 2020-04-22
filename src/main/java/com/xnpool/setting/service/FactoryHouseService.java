@@ -1,46 +1,37 @@
 package com.xnpool.setting.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
+import com.xnpool.setting.domain.pojo.FactoryHouse;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.HashMap;
 import java.util.List;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/4 15:29
+ * @since 2020-04-22
  */
-public interface FactoryHouseService {
+public interface FactoryHouseService extends IService<FactoryHouse> {
 
+    Integer addFactoryHouse(FactoryHouse factoryHouse);
 
-    int deleteByPrimaryKey(Integer id);
+    void updateByPrimaryKeySelective(FactoryHouse factoryHouse);
 
-    int insert(FactoryHouse record);
+    void deleteById(int id);
 
-    Integer insertSelective(FactoryHouse record);
-
-    Integer insertSelectiveToBatch(FactoryHouse record);
-
-    FactoryHouse selectByPrimaryKey(Integer id);
-
-    void updateByPrimaryKeySelective(FactoryHouse record);
-
-    int updateByPrimaryKey(FactoryHouse record);
-
-    void updateById(int id);
-
-    PageInfo<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize,String token);
-
-    List<FactoryHouse> selectByMineId(Integer mineId);
+    Page<FactoryHouseExample> selectByOther(String keyWord, int pageNum, int pageSize, String token);
 
     HashMap<Integer, String> selectFactoryNameByMineId(Integer mineId);
 
-    HashMap<String,Integer> selectMapByFactoryName(Integer mineId);
+    Integer equalsFactoryNum(String factoryNum, Integer mineId);
 
-    Integer equalsFactoryName(String factoryStr, Integer mineId);
+    List<FactoryHouse> selectByMineId(int id);
+
+    Integer insertSelectiveToBatch(FactoryHouse factoryHouse);
 }
-
-
-

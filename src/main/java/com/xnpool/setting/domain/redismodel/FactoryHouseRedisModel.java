@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -40,12 +41,12 @@ public class FactoryHouseRedisModel implements Serializable {
     /**
      * 创建时间
      */
-    private String create_time;
+    private LocalDateTime create_time;
 
     /**
      * 修改时间
      */
-    private String update_time;
+    private LocalDateTime update_time;
 
     /**
      * 是否删除,0:否,1:是

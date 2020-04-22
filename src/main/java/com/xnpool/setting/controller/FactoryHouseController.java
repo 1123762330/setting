@@ -1,15 +1,15 @@
 package com.xnpool.setting.controller;
 
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-
-
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
+import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.service.FactoryHouseService;
 import com.xnpool.setting.service.FrameSettingService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
- * 厂房设置
+ * <p>
+ *  厂房设置
+ * </p>
  *
  * @author zly
- * @version 1.0
- * @date 2020/2/4 15:30
+ * @since 2020-04-22
  */
 @RestController
 @Slf4j
@@ -47,7 +48,7 @@ public class FactoryHouseController extends BaseController {
     @SystemLog(value = "添加厂房设置", type = LogType.SYSTEM)
     @PostMapping("/addFactoryHouse")
     public ResponseResult addFactoryHouse(FactoryHouse factoryHouse) {
-        factoryHouseService.insertSelective(factoryHouse);
+        factoryHouseService.addFactoryHouse(factoryHouse);
         return new ResponseResult(SUCCESS);
     }
 
@@ -80,7 +81,7 @@ public class FactoryHouseController extends BaseController {
         if (frameNameMap != null && !frameNameMap.isEmpty()) {
             return new ResponseResult(FAIL, "该厂房下存在矿机架,请先移除该厂房下的矿机架");
         } else {
-            factoryHouseService.updateById(id);
+            factoryHouseService.deleteById(id);
             return new ResponseResult(SUCCESS);
 
         }
@@ -100,8 +101,8 @@ public class FactoryHouseController extends BaseController {
                                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                              HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        PageInfo<FactoryHouseExample> pageInfo = factoryHouseService.selectByOther(keyWord, pageNum, pageSize,token);
-        return new ResponseResult(SUCCESS, pageInfo);
+        Page<FactoryHouseExample> factoryHouseExamplePage = factoryHouseService.selectByOther(keyWord, pageNum, pageSize, token);
+        return new ResponseResult(SUCCESS, factoryHouseExamplePage);
     }
 
     /**

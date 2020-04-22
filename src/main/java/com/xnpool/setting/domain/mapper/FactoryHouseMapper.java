@@ -1,36 +1,33 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.FactoryHouse;import com.xnpool.setting.domain.model.FactoryHouseExample;import org.apache.ibatis.annotations.Param;import java.util.HashMap;import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xnpool.setting.domain.model.FactoryHouseExample;
+import com.xnpool.setting.domain.pojo.FactoryHouse;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/5 12:59
+ * @since 2020-04-22
  */
-public interface FactoryHouseMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface FactoryHouseMapper extends BaseMapper<FactoryHouse> {
 
-    int insert(FactoryHouse record);
+    List<FactoryHouse> selectFactoryByMineId(@Param("mineId") Integer mineId,@Param("id")  Integer id);
 
-    int insertSelective(FactoryHouse record);
+    int deleteByKeyId(int id);
 
-    FactoryHouse selectByPrimaryKey(Integer id);
+    List<FactoryHouseExample> selectByOther(@Param("keyWord") String keyWord, Page<FactoryHouseExample> page);
 
-    int updateByPrimaryKeySelective(FactoryHouse record);
+    List<HashMap> selectFactoryNameByMineId(Integer mineId);
 
-    int updateByPrimaryKey(FactoryHouse record);
+    Integer equalsFactoryNum(@Param("factoryNum")String factoryNum,@Param("mineId") Integer mineId);
 
-    int updateById(int id);
-
-    List<FactoryHouseExample> selectByOther(@Param("keyWord") String keyWord);
-
-    List<FactoryHouse> selectByMineId(@Param("mineId") Integer mineId);
-
-    List<HashMap> selectFactoryNameByMineId(@Param("mineId") Integer mineId);
-
-    Integer selectMineId(@Param("id") Integer id);
-
-    List<String> selectFactoryNameList(@Param("mineId") Integer mineId,@Param("id") Integer id);
-
-    Integer equalsFactoryName(@Param("factoryName")String factoryStr, @Param("mineId")Integer mineId);
+    List<FactoryHouse> selectByMineId(int id);
 }

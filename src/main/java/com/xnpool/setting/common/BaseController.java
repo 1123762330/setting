@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xnpool.logaop.service.exception.*;
-import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.mapper.MineSettingMapper;
@@ -19,11 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -379,14 +376,8 @@ public class BaseController {
         factoryHouseRedisModel.setDescription(record.getDescription());
         factoryHouseRedisModel.setMine_id(record.getMineId());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (record.getUpdateTime() != null) {
-            String updateTime = sdf.format(record.getUpdateTime());
-            factoryHouseRedisModel.setUpdate_time(updateTime);
-        }
-        if (record.getCreateTime() != null) {
-            String createTime = sdf.format(record.getCreateTime());
-            factoryHouseRedisModel.setCreate_time(createTime);
-        }
+        factoryHouseRedisModel.setUpdate_time(record.getUpdateTime());
+        factoryHouseRedisModel.setCreate_time(record.getCreateTime());
         factoryHouseRedisModel.setIs_delete(record.getIsDelete());
         return factoryHouseRedisModel;
     }
@@ -728,7 +719,7 @@ public class BaseController {
             Long tenantId = getTenantId(token);
             apiContext.setTenantId(tenantId);
             List<Integer> list = getMineId(token);
-            log.info("sysUser=="+sysUser+"; list==="+list);
+            log.info("sysUser==" + sysUser + "; list===" + list);
             for (Integer mineId : list) {
                 SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
                 redisToUpdate(1, "sys_user", sysUserRedisModel, mineId);
@@ -751,7 +742,7 @@ public class BaseController {
             Long tenantId = getTenantId(token);
             apiContext.setTenantId(tenantId);
             List<Integer> list = getMineId(token);
-            log.info("sysUser=="+sysUser+"; list==="+list);
+            log.info("sysUser==" + sysUser + "; list===" + list);
             for (Integer mineId : list) {
                 SysUserRedisModel sysUserRedisModel = getSysUserRedisModel(sysUser);
                 redisToDelete(1, "sys_user", sysUserRedisModel, mineId);
@@ -784,12 +775,12 @@ public class BaseController {
             reslut.put("username", "匿名");
             reslut.put("roles", "游客");
             reslut.put("tenant_id", "-2");
-            reslut.put("mine_id", (Object)null);
+            reslut.put("mine_id", (Object) null);
             reslut.put("id", "-1");
             return reslut;
         } else {
             try {
-                Claims claims = (Claims)Jwts.parser().setSigningKey("test_key".getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
+                Claims claims = (Claims) Jwts.parser().setSigningKey("test_key".getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
                 String username = claims.get("user_name").toString();
                 String roles = "";
 
@@ -813,7 +804,7 @@ public class BaseController {
                 err.put("username", "error");
                 err.put("roles", var9.getMessage());
                 err.put("tenant_id", "-2");
-                err.put("mine_id", (Object)null);
+                err.put("mine_id", (Object) null);
                 err.put("id", "-1");
                 return err;
             }

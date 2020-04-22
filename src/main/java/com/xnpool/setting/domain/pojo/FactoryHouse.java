@@ -1,25 +1,38 @@
 package com.xnpool.setting.domain.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
+ * <p>
+ * 
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/5 12:59
+ * @since 2020-04-22
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class FactoryHouse implements Serializable {
-    private static final long serialVersionUID = -6876932242393257931L;
+
+
+    private static final long serialVersionUID = 4898864496390972670L;
+    /**
+     * 主键
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 厂房编号
      */
-    private Integer id;
+    private Integer factoryNum;
 
     /**
      * 厂房名称
@@ -39,16 +52,17 @@ public class FactoryHouse implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 是否删除,0:否,1:是
      */
     private Integer isDelete;
+
 
 }

@@ -2,7 +2,6 @@ package com.xnpool.setting.service.impl;
 
 import java.util.Date;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DeleteException;
 import com.xnpool.logaop.service.exception.InsertException;
-import com.xnpool.logaop.service.exception.UpdateException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.mapper.OperatorWorkerHistoryMapper;
@@ -694,7 +692,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                                 paiNumber = placeStr.substring(placeStr.length() - 1);
                             }
                             long fstart = System.currentTimeMillis();
-                            Integer factoryId = factoryHouseService.equalsFactoryName(factoryStr, mineId);
+                            Integer factoryId = factoryHouseService.equalsFactoryNum(factoryStr, mineId);
                             if (factoryId == null) {
                                 FactoryHouse factoryHouse = new FactoryHouse();
                                 factoryHouse.setFactoryName(factoryStr);

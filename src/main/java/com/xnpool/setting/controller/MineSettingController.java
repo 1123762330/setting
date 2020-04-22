@@ -2,7 +2,6 @@ package com.xnpool.setting.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
@@ -80,8 +79,8 @@ public class MineSettingController extends BaseController {
     @SystemLog(value = "删除矿场",type = LogType.SYSTEM)
     @DeleteMapping("/deleteMineSetting")
     public ResponseResult deleteMineSetting(int id) {
-        List<FactoryHouse> factoryHouses = factoryHouseService.selectByMineId(id);
-        if (factoryHouses.isEmpty()) {
+        List<FactoryHouse> factoryHouse2s = factoryHouseService.selectByMineId(id);
+        if (factoryHouse2s.isEmpty()) {
             mineSettingService.deleteById(id);
             return new ResponseResult(SUCCESS);
         } else {

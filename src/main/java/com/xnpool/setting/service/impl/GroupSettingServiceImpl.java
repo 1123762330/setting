@@ -3,8 +3,6 @@ package com.xnpool.setting.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
-import com.xnpool.logaop.service.exception.DeleteException;
-import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.FactoryHouseMapper;
 import com.xnpool.setting.domain.mapper.FrameSettingMapper;
@@ -25,7 +23,6 @@ import org.springframework.util.StringUtils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author zly
@@ -178,7 +175,7 @@ public class GroupSettingServiceImpl extends BaseController implements GroupSett
                 groupSettingExample.setFactoryName(null);
                 String[] split = factoryid.split(",");
                 for (int i = 0; i < split.length; i++) {
-                    FactoryHouse factoryHouse = factoryHouseMapper.selectByPrimaryKey(Integer.valueOf(split[i]));
+                    FactoryHouse factoryHouse = factoryHouseMapper.selectById(Integer.valueOf(split[i]));
                     String factoryname = factoryHouse.getFactoryName();
                     if (groupSettingExample.getFactoryName() != null) {
                         String manyFrame = groupSettingExample.getFactoryName() + "," + factoryname;

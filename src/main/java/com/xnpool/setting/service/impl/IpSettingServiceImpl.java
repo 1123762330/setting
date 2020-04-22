@@ -1,19 +1,14 @@
 package com.xnpool.setting.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
-import com.xnpool.logaop.service.exception.InsertException;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.mapper.IpAssignMapper;
 import com.xnpool.setting.domain.model.IpSettingExample;
-import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.xnpool.setting.domain.redismodel.IpSettingRedisModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.domain.mapper.IpSettingMapper;
 import com.xnpool.setting.service.IpSettingService;
