@@ -7,6 +7,7 @@ import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.mapper.MineSettingMapper;
 import com.xnpool.setting.domain.pojo.MineSetting;
 import com.xnpool.setting.domain.redismodel.WorkerbrandSettingRedisModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xnpool.setting.domain.pojo.WorkerbrandSetting;
@@ -18,12 +19,8 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author zly
- * @version 1.0
- * @date 2020/2/6 13:22
- */
 @Service
+@Slf4j
 public class WorkerbrandSettingServiceImpl extends BaseController implements WorkerbrandSettingService {
 
     @Resource
@@ -41,7 +38,7 @@ public class WorkerbrandSettingServiceImpl extends BaseController implements Wor
     public int insert(WorkerbrandSetting record) {
         int rows = workerbrandSettingMapper.insert(record);
         WorkerbrandSettingRedisModel workerbrandSettingRedisModel = getWorkerbrandSettingRedisModel(record);
-        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null,null);
         for (MineSetting mineSetting : mineSettingList) {
             Integer mineId = mineSetting.getId();
             redisToInsert(rows, "workerbrand_setting", workerbrandSettingRedisModel, mineId);
@@ -59,7 +56,7 @@ public class WorkerbrandSettingServiceImpl extends BaseController implements Wor
         int rows = workerbrandSettingMapper.updateById(record);
         WorkerbrandSetting workerbrandSetting = workerbrandSettingMapper.selectById(record.getId());
         WorkerbrandSettingRedisModel workerbrandSettingRedisModel = getWorkerbrandSettingRedisModel(workerbrandSetting);
-        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null,null);
         for (MineSetting mineSetting : mineSettingList) {
             Integer mineId = mineSetting.getId();
             redisToUpdate(rows, "workerbrand_setting", workerbrandSettingRedisModel, mineId);
@@ -77,7 +74,7 @@ public class WorkerbrandSettingServiceImpl extends BaseController implements Wor
         int rows = workerbrandSettingMapper.deleteByIdKey(id);
         WorkerbrandSetting workerbrandSetting = workerbrandSettingMapper.selectById(id);
         WorkerbrandSettingRedisModel workerbrandSettingRedisModel = getWorkerbrandSettingRedisModel(workerbrandSetting);
-        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null,null);
         for (MineSetting mineSetting : mineSettingList) {
             Integer mineId = mineSetting.getId();
             redisToDelete(rows, "workerbrand_setting", workerbrandSettingRedisModel, mineId);

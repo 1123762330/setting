@@ -1,8 +1,8 @@
 package com.xnpool.setting.controller;
 
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-
-
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
@@ -21,16 +21,17 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 矿场设置
+ * <p>
+ *  矿场设置
+ * </p>
  *
  * @author zly
- * @version 1.0
- * @date 2020/2/3 12:48
+ * @since 2020-04-22
  */
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/mineSetting")
-public class MineSettingController extends BaseController{
+public class MineSettingController extends BaseController {
     @Autowired
     private MineSettingService mineSettingService;
 
@@ -49,9 +50,9 @@ public class MineSettingController extends BaseController{
      */
     @SystemLog(value = "添加矿场",type = LogType.SYSTEM)
     @PostMapping("/addMineSetting")
-    public ResponseResult addMineSetting(MineSetting mineSetting,HttpServletRequest request) {
+    public ResponseResult addMineSetting(MineSetting mineSetting, HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        mineSettingService.insertSelective(mineSetting,token);
+        mineSettingService.save(mineSetting,token);
         return new ResponseResult(SUCCESS);
     }
 
@@ -65,7 +66,7 @@ public class MineSettingController extends BaseController{
     @SystemLog(value = "修改矿场",type = LogType.SYSTEM)
     @PutMapping("/updateMineSetting")
     public ResponseResult updateMineSetting(MineSetting mineSetting) {
-        mineSettingService.updateByPrimaryKeySelective(mineSetting);
+        mineSettingService.updateByKeyId(mineSetting);
         return new ResponseResult(SUCCESS);
     }
 
@@ -81,7 +82,7 @@ public class MineSettingController extends BaseController{
     public ResponseResult deleteMineSetting(int id) {
         List<FactoryHouse> factoryHouses = factoryHouseService.selectByMineId(id);
         if (factoryHouses.isEmpty()) {
-            mineSettingService.updateById(id);
+            mineSettingService.deleteById(id);
             return new ResponseResult(SUCCESS);
         } else {
             return new ResponseResult(FAIL, "该矿场下面有厂房,请先删除该矿场下的所有厂房");
@@ -102,8 +103,8 @@ public class MineSettingController extends BaseController{
                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                             HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
-        PageInfo<MineSetting> mineSettingPageInfo = mineSettingService.selectByOther(keyWord, pageNum, pageSize,token);
-        return new ResponseResult(SUCCESS, mineSettingPageInfo);
+        Page<MineSetting> mineSettingPage = mineSettingService.selectByOther(keyWord, pageNum, pageSize, token);
+        return new ResponseResult(SUCCESS, mineSettingPage);
     }
 
     /**
@@ -119,7 +120,4 @@ public class MineSettingController extends BaseController{
         HashMap<Integer, String> resultMap = mineSettingService.selectMineNameByOther(token);
         return new ResponseResult(SUCCESS, resultMap);
     }
-
-
-
 }

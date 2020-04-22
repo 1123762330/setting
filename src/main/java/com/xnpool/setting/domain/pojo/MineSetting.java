@@ -1,24 +1,31 @@
 package com.xnpool.setting.domain.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
+ * <p>
+ * 
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/4/12 17:32
+ * @since 2020-04-22
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class MineSetting implements Serializable {
-    private static final long serialVersionUID = 7462120523210376937L;
+
+    private static final long serialVersionUID = 777269658102635794L;
     /**
      * 矿场编号
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -44,15 +51,12 @@ public class MineSetting implements Serializable {
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 生成时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    /**
-     * 企业id
-     */
-    private Long tenantId;
+
 }

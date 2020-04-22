@@ -1,39 +1,29 @@
 package com.xnpool.setting.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.MineSetting;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/3 12:46
+ * @since 2020-04-22
  */
-public interface MineSettingService {
+public interface MineSettingService extends IService<MineSetting> {
 
+    void save(MineSetting mineSetting, String token);
 
-    int deleteByPrimaryKey(Integer id);
+    void deleteById(int id);
 
-    int insert(MineSetting record);
+    void updateByKeyId(MineSetting mineSetting);
 
-    void insertSelective(MineSetting record, String token);
-
-    MineSetting selectByPrimaryKey(Integer id);
-
-    void updateByPrimaryKeySelective(MineSetting record);
-
-    int updateByPrimaryKey(MineSetting record);
-
-    void updateById(int id);
+    Page<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize, String token);
 
     HashMap<Integer, String> selectMineNameByOther(String token);
-
-    PageInfo<MineSetting> selectByOther(String keyWord, int pageNum, int pageSize, String token);
 }
-
-
-
-
-

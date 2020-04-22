@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -45,11 +46,11 @@ public class MineSettingRedisModel implements Serializable {
     /**
      * 修改时间
      */
-    private String update_time;
+    private LocalDateTime update_time;
 
     /**
      * 生成时间
      */
-    private String create_time;
+    private LocalDateTime create_time;
 
 }

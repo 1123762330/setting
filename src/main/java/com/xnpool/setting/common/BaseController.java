@@ -367,15 +367,8 @@ public class BaseController {
         mineSettingRedisModel.setDescription(record.getDescription());
         mineSettingRedisModel.setIs_delete(record.getIsDelete());
         mineSettingRedisModel.setFrame_num(record.getFrameNum());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (record.getUpdateTime() != null) {
-            String updateTime = sdf.format(record.getUpdateTime());
-            mineSettingRedisModel.setUpdate_time(updateTime);
-        }
-        if (record.getCreateTime() != null) {
-            String createTime = sdf.format(record.getCreateTime());
-            mineSettingRedisModel.setCreate_time(createTime);
-        }
+        mineSettingRedisModel.setUpdate_time(record.getUpdateTime());
+        mineSettingRedisModel.setCreate_time(record.getCreateTime());
         return mineSettingRedisModel;
     }
 

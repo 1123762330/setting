@@ -24,15 +24,12 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
 import com.xnpool.setting.service.WorkerAssignService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author zly
@@ -472,7 +469,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
 
     @Override
     public HashMap<Integer, HashMap<String, Object>> selectAssignMineMap(Integer userId) {
-        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null);
+        List<MineSetting> mineSettingList = mineSettingMapper.selectByOther(null,null);
         List<WorkerAssign> workerAssigns = workerAssignMapper.selectWorkerAssignList(userId);
         HashSet<Integer> set = new HashSet<>();
         for (WorkerAssign workerAssign : workerAssigns) {

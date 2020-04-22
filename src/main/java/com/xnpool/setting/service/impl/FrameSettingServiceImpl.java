@@ -56,7 +56,7 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
     @Transactional(rollbackFor = Exception.class)
     public Integer addFrame(FrameSetting record) {
         Integer mineId = record.getMineId();
-        MineSetting mineSetting = mineSettingMapper.selectByPrimaryKey(mineId);
+        MineSetting mineSetting = mineSettingMapper.selectById(mineId);
         Integer number = mineSetting.getFrameNum();
         Integer exist = frameSettingMapper.isExist(record);
         if (exist != null) {
