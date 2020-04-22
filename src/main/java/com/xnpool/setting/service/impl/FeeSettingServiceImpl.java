@@ -2,6 +2,7 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.logaop.service.exception.InsertException;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author zly
@@ -41,6 +43,11 @@ public class FeeSettingServiceImpl implements FeeSettingService {
         if (list.contains(record.getFeeName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
+        Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+        boolean matches = pattern.matcher(record.getFeePrice().toString()).matches();
+        if (!matches){
+            throw new CheckException("费用金额只能为数字");
+        }
         return feeSettingMapper.insertSelective(record);
     }
 
@@ -51,6 +58,11 @@ public class FeeSettingServiceImpl implements FeeSettingService {
 
     @Override
     public int updateByPrimaryKeySelective(FeeSetting record) {
+        Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+        boolean matches = pattern.matcher(record.getFeePrice().toString()).matches();
+        if (!matches){
+            throw new CheckException("费用金额只能为数字");
+        }
         return feeSettingMapper.updateByPrimaryKeySelective(record);
     }
 

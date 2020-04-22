@@ -2,12 +2,15 @@ package com.xnpool.setting.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.setting.domain.model.PowerSettingExample;
 import com.xnpool.setting.service.MineSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import com.xnpool.setting.domain.mapper.PowerSettingMapper;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 import com.xnpool.setting.service.PowerSettingService;
@@ -16,6 +19,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author zly
@@ -47,6 +51,12 @@ public class PowerSettingServiceImpl implements PowerSettingService {
         if (list.contains(record.getDescription())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
+        Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+        boolean matches = pattern.matcher(record.getBasePrice().toString()).matches();
+        boolean matches2 = pattern.matcher(record.getPrice().toString()).matches();
+        if (!matches || !matches2) {
+            throw new CheckException("费用金额只能为数字");
+        }
         return powerSettingMapper.insertSelective(record);
     }
 
@@ -60,6 +70,12 @@ public class PowerSettingServiceImpl implements PowerSettingService {
         List<String> list = powerSettingMapper.selectNameList(record.getId());
         if (list.contains(record.getDescription())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
+        }
+        Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+        boolean matches = pattern.matcher(record.getBasePrice().toString()).matches();
+        boolean matches2 = pattern.matcher(record.getPrice().toString()).matches();
+        if (!matches || !matches2) {
+            throw new CheckException("费用金额只能为数字");
         }
         return powerSettingMapper.updateByPrimaryKeySelective(record);
     }
@@ -75,7 +91,7 @@ public class PowerSettingServiceImpl implements PowerSettingService {
     }
 
     @Override
-    public PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token) {
+    public PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token) {
         if (!StringUtils.isEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
         }
