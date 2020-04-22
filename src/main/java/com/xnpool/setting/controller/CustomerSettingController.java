@@ -97,7 +97,7 @@ public class CustomerSettingController extends BaseController {
                                               @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                               @RequestParam(value = "authorize", required = false, defaultValue = "0") Integer authorize){
-        PageInfo<CustomerSettingExample> pageInfo = customerSettingService.selectByOther(username,agreementName,groupName, pageNum, pageSize,authorize);
+        Object pageInfo = customerSettingService.selectByOther(username,agreementName,groupName, pageNum, pageSize,authorize);
         return new ResponseResult(SUCCESS,pageInfo);
     }
 

@@ -107,7 +107,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     }
 
     @Override
-    public PageInfo<WorkerDetailedExample> selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize, String token) {
+    public Object selectMoveOutList(MoveOutParam moveOutParam, int pageNum, int pageSize, String token) {
         List<Integer> mineIds = getMineId(token);
         Long tenantId = getTenantId(token);
         String frameName_param = moveOutParam.getFrameName();
@@ -250,8 +250,15 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
             filterList = filterList.stream().filter(a -> a.getBrandName() == null || StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
         }
-        PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
-        return pageInfo;
+
+        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)) {
+            PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
+            return pageInfo;
+        }else {
+            HashMap<String, Object> page = PageUtil.startPage(filterList, pageNum, pageSize);
+            return page;
+        }
+
 
     }
 

@@ -15,6 +15,7 @@ import com.xnpool.setting.domain.pojo.UserRoleVO;
 import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.AgreementSettingService;
 import com.xnpool.setting.service.GroupSettingService;
+import com.xnpool.setting.utils.PageUtil;
 import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
@@ -112,7 +113,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     }
 
     @Override
-    public PageInfo<CustomerSettingExample> selectByOther(String username, String agreementName, String groupName, int pageNum, int pageSize, Integer authorize) {
+    public Object selectByOther(String username, String agreementName, String groupName, int pageNum, int pageSize, Integer authorize) {
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = new ArrayList<>();
@@ -194,8 +195,14 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         if (!StringUtils.isEmpty(groupName)) {
             customerSettingExamples = customerSettingExamples.stream().filter(a -> groupName.equals(a.getGroupName())).collect(Collectors.toList());
         }
-        PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
-        return pageInfo;
+        if (StringUtils.isEmpty(username) & StringUtils.isEmpty(agreementName) & StringUtils.isEmpty(groupName)) {
+            PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
+            return pageInfo;
+        } else {
+            HashMap<String, Object> page = PageUtil.startPage(customerSettingExamples, pageNum, pageSize);
+            return page;
+        }
+
     }
 
     @Override
