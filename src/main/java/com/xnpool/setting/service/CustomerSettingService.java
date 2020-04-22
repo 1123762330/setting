@@ -5,6 +5,7 @@ import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @author zly
@@ -45,6 +46,8 @@ public interface CustomerSettingService {
     int insertSelective(CustomerSetting record);
 
     String authorizeToken(String userId);
+
+    HashMap<String, HashSet<String>> selectCustomDropList(Integer authorize);
 }
 
 

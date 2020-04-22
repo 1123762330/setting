@@ -20,10 +20,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 客户设置
@@ -173,4 +170,10 @@ public class CustomerSettingController extends BaseController {
         return new ResponseResult(SUCCESS,"",authorizeToken);
     }
 
+    @SystemLog(value = "客户列表下拉列表",type = LogType.SYSTEM)
+    @GetMapping("/selectCustomDropList")
+    public ResponseResult selectCustomDropList (@RequestParam(value = "authorize", required = false, defaultValue = "0") Integer authorize){
+        HashMap<String, HashSet<String>> dropList = customerSettingService.selectCustomDropList(authorize);
+        return new ResponseResult(SUCCESS,dropList);
+    }
 }
