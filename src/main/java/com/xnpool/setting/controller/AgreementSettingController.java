@@ -36,6 +36,8 @@ public class AgreementSettingController extends BaseController {
     @Value("${config.filePath}")
     private String filePath;
 
+    @Value("${config.prifix_2}")
+    private String prifix_2;
     /**
      * @return
      * @Description 添加协议
@@ -56,7 +58,7 @@ public class AgreementSettingController extends BaseController {
             ResponseResult result = UploadUtils.getFileToUpload(file, filePath, originalFilename);
             if (200 != result.getStatus()) return result;
             //添加记录到数据库
-            agreementSetting.setPath(prifix + originalFilename);
+            agreementSetting.setPath(prifix_2 + originalFilename);
             agreementSetting.setFileName(file.getOriginalFilename());
             agreementSettingService.insertSelective(agreementSetting);
             return new ResponseResult(SUCCESS);
@@ -81,7 +83,7 @@ public class AgreementSettingController extends BaseController {
             ResponseResult result = UploadUtils.getFileToUpload(file, filePath, originalFilename);
             if (result != null) return result;
             //添加记录到数据库
-            agreementSetting.setPath(prifix + file.getOriginalFilename());
+            agreementSetting.setPath(prifix_2 + file.getOriginalFilename());
             agreementSetting.setFileName(originalFilename);
             agreementSettingService.updateByPrimaryKeySelective(agreementSetting);
         }else {
