@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.OperationMapper">
+
+    <insert id="insertWinLog" keyProperty="id" parameterType="com.xnpool.logaop.entity.Operation" useGeneratedKeys="true">
+        INSERT INTO t_operation (client_ip,username,oper_type,method,oper_event,req_param,req_type,oper_time,
+        role,status,run_time,remark,tenant_id,scope)
+        VALUE (#{clientIp},#{username},#{operType},#{method},#{operEvent},#{reqParam},#{reqType},#{operTime},
+        #{role},#{status},#{runTime},#{remark},#{tenantId},#{scope})
+    </insert>
+</mapper>

@@ -12,6 +12,12 @@ public class OperationServiceImpl implements IOperationService {
     OperationMapper operationMapper;
     @Override
     public void saveLog(Operation operation) {
-        operationMapper.insert(operation);
+        Long tenantId = operation.getTenantId();
+        if(tenantId==null){//mybatis多租户自动注入
+            operationMapper.insert(operation);
+        }else {
+            //用户端请求头tenantId注入
+            operationMapper.insertWinLog(operation);
+        }
     }
 }

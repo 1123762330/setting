@@ -132,6 +132,7 @@ spring:
 config:
   filePath: /extPath/static/
   prifix: /upload/word/
+  prifix_2: /pushweb/push_web/upload/
 
 #多租户配置是否启用
 zlt:

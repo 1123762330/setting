@@ -34,6 +34,9 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 	@Value("${config.prifix}")
 	private String prifix;
 
+	@Value("${config.prifix_2}")
+	private String prifix_2;
+
 	@Bean
 	public LoginInterceptor authenticationInterceptor() {
 		return new LoginInterceptor();
@@ -63,6 +66,7 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 		//addResourceLocations是图片存放的真实路径
 		//registry.addResourceHandler("/image/**").addResourceLocations("file:D://java-work/xnProject/setting/extPath/static/");
 		registry.addResourceHandler(prifix+"**").addResourceLocations("file:" + filePaths);
+		registry.addResourceHandler(prifix_2+"**").addResourceLocations("file:" + filePaths);
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 	}
 
