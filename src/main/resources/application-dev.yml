@@ -72,6 +72,8 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
   typeAliasesPackage:  com.xnpool.setting.domain.mapper
   global-config:
+    #开启注解,过滤某些不需要启用多租户的方法
+    sql-parser-cache: true
     db-config:
       id-type: AUTO
       field-strategy: not_empty
@@ -80,8 +82,6 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
       db-type: mysql
-      #开启注解,过滤某些不需要启用多租户的方法
-      #sql-parser-cache: true
     refresh: true
 
   configuration:
@@ -132,7 +132,7 @@ spring:
 config:
   filePath: /extPath/static/
   prifix: /upload/word/
-  prifix_2: /pushweb/push_web/upload/
+  prifix_2: /setting/pushweb/push_web/upload/
 
 #多租户配置是否启用
 zlt:

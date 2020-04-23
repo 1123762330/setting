@@ -9,12 +9,15 @@ package com.xnpool.setting.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.request.async.TimeoutCallableProcessingInterceptor;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,12 +64,20 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		String filePaths = System.getProperty("user.dir")+filePath;
+		File path = null;
+		try {
+			path = new File(ResourceUtils.getURL("classpath:").getPath());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		//静态文件目录
+		String filePath = path.getParentFile().getParentFile().getParent() + File.separator + "extPath" + File.separator + "static" + File.separator;
 		//addResourceHandler是指你想在url请求的路径
 		//addResourceLocations是图片存放的真实路径
+		System.out.println("文件路径:"+filePath);
 		//registry.addResourceHandler("/image/**").addResourceLocations("file:D://java-work/xnProject/setting/extPath/static/");
-		registry.addResourceHandler(prifix+"**").addResourceLocations("file:" + filePaths);
-		registry.addResourceHandler(prifix_2+"**").addResourceLocations("file:" + filePaths);
+		registry.addResourceHandler(prifix+"**").addResourceLocations(filePath);
+		registry.addResourceHandler(prifix_2+"**").addResourceLocations(filePath);
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 	}
 
