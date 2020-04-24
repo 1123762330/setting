@@ -29,6 +29,11 @@ public class MoveOutParam implements Serializable {
     private String mineName="";
 
     /**
+     * 厂房过滤
+     */
+    private String factoryName="";
+
+    /**
      * 机架过滤
      */
     private String frameName="";

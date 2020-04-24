@@ -113,10 +113,12 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         String frameName_param = moveOutParam.getFrameName();
         String mineName_param = moveOutParam.getMineName();
         String ipStr_param = moveOutParam.getIpStr();
+        String factoryName_param = moveOutParam.getFactoryName();
         String notExistBrand_param = moveOutParam.getNotExistBrand();
         String notExistUser_param = moveOutParam.getNotExistUser();
         List<WorkerDetailedExample> WorkerDetailedExampleList = new ArrayList<>();
-        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)) {
+        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param)
+                & StringUtils.isEmpty(notExistUser_param)&StringUtils.isEmpty(factoryName_param)) {
             //没得搜索条件
             PageHelper.startPage(pageNum, pageSize);
             WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
@@ -195,7 +197,11 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             filterList = filterList.stream().filter(a -> a.getIpLong() >= startIpToLong && a.getIpLong() <= endIpToLong).collect(Collectors.toList());
             //过滤矿场
             if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
-                filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
+                filterList = filterList.stream().filter(a -> moveOutParam.getMineName().equals(a.getMineName())).collect(Collectors.toList());
+            }
+            //过滤厂房
+            if (!StringUtils.isEmpty(moveOutParam.getFactoryName())) {
+                filterList = filterList.stream().filter(a -> moveOutParam.getFactoryName().equals(a.getFactoryName())).collect(Collectors.toList());
             }
             //过滤机架
             if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
@@ -212,7 +218,27 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         //过滤矿场
         if (!StringUtils.isEmpty(moveOutParam.getMineName())) {
-            filterList = filterList.stream().filter(a -> a.getMineName().equals(moveOutParam.getMineName())).collect(Collectors.toList());
+            filterList = filterList.stream().filter(a -> moveOutParam.getMineName().equals(a.getMineName())).collect(Collectors.toList());
+            //过滤厂房
+            if (!StringUtils.isEmpty(moveOutParam.getFactoryName())) {
+                filterList = filterList.stream().filter(a -> moveOutParam.getFactoryName().equals(a.getFactoryName())).collect(Collectors.toList());
+            }
+            //过滤机架
+            if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
+                filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
+            }
+            //过滤未分配用户的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistUser())) {
+                filterList = filterList.stream().filter(a -> a.getUsername() == null || StringUtils.isEmpty(a.getUsername())).collect(Collectors.toList());
+            }
+            //过滤未分配矿机品牌的
+            if (!StringUtils.isEmpty(moveOutParam.getNotExistBrand())) {
+                filterList = filterList.stream().filter(a -> a.getBrandName() == null || StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
+            }
+        }
+        //过滤厂房
+        if (!StringUtils.isEmpty(moveOutParam.getFactoryName())) {
+            filterList = filterList.stream().filter(a -> moveOutParam.getFactoryName().equals(a.getFactoryName())).collect(Collectors.toList());
             //过滤机架
             if (!StringUtils.isEmpty(moveOutParam.getFrameName())) {
                 filterList = filterList.stream().filter(a -> a.getFrameName().contains(moveOutParam.getFrameName())).collect(Collectors.toList());
@@ -826,6 +852,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
         HashSet<String> ipSet = new HashSet<>();
         HashSet<String> mineNameSet = new HashSet<>();
+        HashSet<String> factoryNameSet = new HashSet<>();
         HashSet<String> frameNameSet = new HashSet<>();
         if (!WorkerDetailedExampleList.isEmpty()) {
             HashMap<Integer, String> groupMap = groupSettingService.selectGroupMap();
@@ -869,7 +896,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     }
                     mineNameSet.add(workerDetailedExample.getMineName());
                     frameNameSet.add(frameName);
-
+                    String factoryName = workerDetailedExample.getFactoryName();
+                    if (!StringUtils.isEmpty(factoryName)){
+                        factoryNameSet.add(factoryName);
+                    }
                 }
             });
         }
@@ -877,6 +907,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         resultMap.put("ipSet", ipSet);
         resultMap.put("mineNameSet", mineNameSet);
         resultMap.put("frameNameSet", frameNameSet);
+        resultMap.put("factoryNameSet", factoryNameSet);
         return resultMap;
     }
 
