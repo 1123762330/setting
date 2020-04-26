@@ -117,8 +117,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         String notExistBrand_param = moveOutParam.getNotExistBrand();
         String notExistUser_param = moveOutParam.getNotExistUser();
         List<WorkerDetailedExample> WorkerDetailedExampleList = new ArrayList<>();
-        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param)
-                & StringUtils.isEmpty(notExistUser_param)&StringUtils.isEmpty(factoryName_param)) {
+        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)&StringUtils.isEmpty(factoryName_param)) {
             //没得搜索条件
             PageHelper.startPage(pageNum, pageSize);
             WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
@@ -277,7 +276,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             filterList = filterList.stream().filter(a -> a.getBrandName() == null || StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
         }
 
-        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)) {
+        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)&StringUtils.isEmpty(factoryName_param)) {
             PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
             return pageInfo;
         }else {

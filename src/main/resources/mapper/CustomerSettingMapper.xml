@@ -186,6 +186,7 @@
         customer_setting.id,
         sys_user.username AS userName,
         sys_tenant.type AS cusType,
+        sys_user.id AS userId,
         sys_user.contact_person,
         sys_user.mobile,
         sys_user.address,

@@ -18,6 +18,10 @@ public class CustomerSettingExample implements Serializable {
      */
     private Integer id;
 
+    /**
+     * 用户id
+     */
+    private Integer userId;
 
     /**
      * 客户名称
