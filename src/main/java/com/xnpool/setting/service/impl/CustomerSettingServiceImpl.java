@@ -298,6 +298,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     public String authorizeToken(String userId) {
         Integer userId_db = customerSettingMapper.selectAuthorizedToYes(Integer.valueOf(userId));
+        log.info("userId_db是:" + userId_db);
         String access_token = "";
         if (Integer.valueOf(userId) == userId_db) {
             //用户一致,可以发送授权token
