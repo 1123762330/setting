@@ -33,11 +33,6 @@ import java.util.List;
 public class WorkerAssignController extends BaseController {
     @Autowired
     private WorkerAssignService workerAssignService;
-    @Autowired
-    private WriteLogUtil writeLogUtil;
-
-    @Autowired
-    private ApiContext apiContext;
 
     /**
      * @Description 用户角色列表

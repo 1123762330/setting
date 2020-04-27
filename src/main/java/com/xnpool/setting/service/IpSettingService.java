@@ -1,41 +1,37 @@
 package com.xnpool.setting.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.model.IpSettingExample;
+import com.xnpool.setting.domain.pojo.IpParam;
 import com.xnpool.setting.domain.pojo.IpSetting;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/5 12:38
+ * @since 2020-04-27
  */
-public interface IpSettingService {
+public interface IpSettingService extends IService<IpSetting> {
 
+    Integer insertSelective(IpSetting ipSetting);
 
-    int deleteByPrimaryKey(Integer id);
+    Integer deleteById(int id);
 
-    int insert(IpSetting record);
+    Page<IpSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    void insertSelective(IpSetting record);
-
-    IpSetting selectByPrimaryKey(Integer id);
-
-    void updateByPrimaryKeySelective(IpSetting record);
-
-    int updateByPrimaryKey(IpSetting record);
-
-    void updateById(int id);
-
-    PageInfo<IpSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
+    void updateByPrimaryKeySelective(IpSetting ipSetting);
 
     HashMap<Integer, String> selectByIPStart();
 
+    HashMap<Integer, String> selectByIpStartByMineId(String mineName, Integer mineId);
+
+    void batchSaveIp(IpParam ipParam);
+
     HashMap<String, String> selectIpQuJian();
-
-    HashMap<Integer, String> selectByIpStartByMineId(String mineName,Integer mineId);
 }
-
-

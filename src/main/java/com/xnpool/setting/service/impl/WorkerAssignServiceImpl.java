@@ -110,7 +110,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
             Integer count = Integer.valueOf(hashMap.get("count").toString());
             conutMap.put(user_id, count);
         });
-        List<UserRoleVO> userRoleVOS = workerAssignMapper.selectByOther();
+        List<UserRoleVO> userRoleVOS = workerAssignMapper.selectByOther(keyWord);
         for (UserRoleVO userRoleVO : userRoleVOS) {
             Integer userId = userRoleVO.getUserId();
             if (userId == null) {
@@ -564,7 +564,7 @@ public class WorkerAssignServiceImpl extends BaseController implements WorkerAss
         }
 
         HashMap<Integer, HashMap<String, Object>> resultMap = new HashMap<>();
-        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null, mineId);
+        List<IpSettingExample> ipSettings = ipSettingMapper.selectByOther(null, mineId,null);
         if (ipSettings != null) {
             ipSettings.forEach(ipSetting -> {
                 Integer id = ipSetting.getId();

@@ -1,35 +1,28 @@
 package com.xnpool.setting.service;
 
-import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
-import com.xnpool.setting.domain.model.CustomerSettingExample;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/10 10:35
+ * @since 2020-04-27
  */
-public interface CustomerSettingService {
+public interface CustomerSettingService extends IService<CustomerSetting> {
 
+    Integer insertSelective(CustomerSetting customerSetting, String token);
 
-    int deleteByPrimaryKey(Integer id);
+    Integer updateByPrimaryKeySelective(CustomerSetting customerSetting);
 
-    int insert(CustomerSetting record);
+    Integer deleteById(int id);
 
-    int insertSelective(CustomerSetting record,String token);
-
-    CustomerSetting selectByPrimaryKey(Integer id);
-
-    void updateByPrimaryKeySelective(CustomerSetting record);
-
-    int updateByPrimaryKey(CustomerSetting record);
-
-    void updateById(int id);
-
-    Object selectByOther(String username,String agreementName,String groupName, int pageNum, int pageSize,Integer authorize);
+    Object selectByOther(String username, String agreementName, String groupName, int pageNum, int pageSize, Integer authorize);
 
     void updateAttestationById(String cusId, int isPass);
 
@@ -43,20 +36,7 @@ public interface CustomerSettingService {
 
     void deleteAuthority(String tenantId, String token);
 
-    int insertSelective(CustomerSetting record);
-
     String authorizeToken(String userId);
 
     HashMap<String, HashSet<String>> selectCustomDropList(Integer authorize);
 }
-
-
-
-
-
-
-
-
-
-
-

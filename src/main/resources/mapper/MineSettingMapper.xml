@@ -11,11 +11,12 @@
         <result column="is_delete" property="isDelete" />
         <result column="update_time" property="updateTime" />
         <result column="create_time" property="createTime" />
+        <result column="ip_prefix" property="ipPrefix" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, mine_name, description, frame_num, is_delete, update_time, create_time, tenant_id
+        id, mine_name, description, frame_num, is_delete, update_time, create_time,ip_prefix, tenant_id
     </sql>
 
     <select id="selectMineNameList" resultType="java.lang.String">

@@ -1,24 +1,31 @@
 package com.xnpool.setting.domain.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
+ * <p>
+ * 
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/26 23:01
+ * @since 2020-04-27
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class CustomerSetting implements Serializable {
-    private static final long serialVersionUID = 858913058394170912L;
+
+    private static final long serialVersionUID = 2758335580132766052L;
     /**
      * 编号
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -59,12 +66,12 @@ public class CustomerSetting implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 管理员id
@@ -72,7 +79,14 @@ public class CustomerSetting implements Serializable {
     private Integer managerUserId;
 
     /**
+     * 客户级别
+     */
+    private Integer cusLevelId;
+
+    /**
      * 企业id
      */
     private Long tenantId;
+
+
 }

@@ -43,4 +43,9 @@ public class IpSettingExample implements Serializable {
      */
     private String mineName;
 
+    /**
+     * 是否启用
+     */
+    private boolean isToInt;
+
 }

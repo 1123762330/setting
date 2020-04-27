@@ -1,13 +1,13 @@
 package com.xnpool.setting.controller;
 
-import com.github.pagehelper.PageInfo;
 
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.IpSettingExample;
+import com.xnpool.setting.domain.pojo.IpParam;
 import com.xnpool.setting.domain.pojo.IpSetting;
 import com.xnpool.setting.service.IpSettingService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+
 /**
  * ip字段设置
  *
@@ -67,7 +68,7 @@ public class IpSettingController extends BaseController {
     @SystemLog(value = "删除ip区间段",type = LogType.SYSTEM)
     @DeleteMapping("/deleteIpById")
     public ResponseResult deleteIPById(int id) {
-        ipSettingService.updateById(id);
+        ipSettingService.deleteById(id);
         return new ResponseResult(SUCCESS);
     }
 
@@ -83,7 +84,7 @@ public class IpSettingController extends BaseController {
     public ResponseResult selectIPList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                        @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<IpSettingExample> ipSettingPageInfo = ipSettingService.selectByOther(keyWord, pageNum, pageSize);
+        Page<IpSettingExample> ipSettingPageInfo = ipSettingService.selectByOther(keyWord, pageNum, pageSize);
         return new ResponseResult(SUCCESS, ipSettingPageInfo);
     }
 
@@ -111,5 +112,19 @@ public class IpSettingController extends BaseController {
     public ResponseResult selectByIpStartByMineId(String mineName,Integer mineId) {
         HashMap<Integer, String> resultMap = ipSettingService.selectByIpStartByMineId(mineName,mineId);
         return new ResponseResult(SUCCESS, resultMap);
+    }
+
+    /**
+     * @Description 批量添加ip
+     * @Author zly
+     * @Date 13:55 2020/4/27
+     * @Param
+     * @return
+     */
+    @SystemLog(value = "批量添加ip",type = LogType.SYSTEM)
+    @PostMapping("/batch_save_ip")
+    public ResponseResult batchSaveIp(IpParam ipParam) {
+        ipSettingService.batchSaveIp(ipParam);
+        return new ResponseResult(SUCCESS);
     }
 }

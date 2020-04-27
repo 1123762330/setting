@@ -36,7 +36,7 @@ public class MineSetting implements Serializable {
     /**
      * 备注
      */
-    private String description;
+    private String description="";
 
     /**
      * 该矿场下的机架层数
@@ -58,5 +58,9 @@ public class MineSetting implements Serializable {
      */
     private LocalDateTime createTime;
 
+    /**
+     * ip前缀
+     */
+    private Integer ipPrefix;
 
 }

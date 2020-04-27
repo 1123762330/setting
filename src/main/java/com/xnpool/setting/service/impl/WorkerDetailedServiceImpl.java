@@ -32,9 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- *@author zly
- *@version 1.0
- *@date 2020/2/23 12:52
+ * @author zly
+ * @version 1.0
+ * @date 2020/2/23 12:52
  */
 @Service
 @Slf4j
@@ -75,6 +75,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
 
     @Autowired
     private ApiContext apiContext;
+
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -117,7 +118,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         String notExistBrand_param = moveOutParam.getNotExistBrand();
         String notExistUser_param = moveOutParam.getNotExistUser();
         List<WorkerDetailedExample> WorkerDetailedExampleList = new ArrayList<>();
-        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)&StringUtils.isEmpty(factoryName_param)) {
+        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param) & StringUtils.isEmpty(factoryName_param)) {
             //没得搜索条件
             PageHelper.startPage(pageNum, pageSize);
             WorkerDetailedExampleList = workerDetailedMapper.selectMoveOutList(tenantId);
@@ -276,10 +277,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             filterList = filterList.stream().filter(a -> a.getBrandName() == null || StringUtils.isEmpty(a.getBrandName())).collect(Collectors.toList());
         }
 
-        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param)&StringUtils.isEmpty(factoryName_param)) {
+        if (StringUtils.isEmpty(ipStr_param) & StringUtils.isEmpty(mineName_param) & StringUtils.isEmpty(frameName_param) & StringUtils.isEmpty(notExistBrand_param) & StringUtils.isEmpty(notExistUser_param) & StringUtils.isEmpty(factoryName_param)) {
             PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
             return pageInfo;
-        }else {
+        } else {
             HashMap<String, Object> page = PageUtil.startPage(filterList, pageNum, pageSize);
             return page;
         }
@@ -711,10 +712,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                         String factoryStr = split[1];
                         String frameStr = split[2];
                         String placeStr = split[3];
+                        String paiNumber = "";
+                        String Number = "";
                         if (Integer.valueOf(placeStr) > 10 && Integer.valueOf(placeStr) < 111) {
                             Integer num = Integer.valueOf(placeStr) % 10;
-                            String paiNumber = "";
-                            String Number = "";
                             if (num == 0) {
                                 //这是第10排的
                                 Number = String.valueOf((Integer.valueOf(placeStr) / 10) - 1);
@@ -723,63 +724,68 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                                 Number = placeStr.substring(0, placeStr.length() - 1);
                                 paiNumber = placeStr.substring(placeStr.length() - 1);
                             }
-                            long fstart = System.currentTimeMillis();
-                            Integer factoryId = factoryHouseService.equalsFactoryNum(factoryStr, mineId);
-                            if (factoryId == null) {
-                                FactoryHouse factoryHouse = new FactoryHouse();
-                                factoryHouse.setFactoryName(factoryStr);
-                                factoryHouse.setFactoryNum(Integer.valueOf(factoryStr));
-                                factoryHouse.setMineId(mineId);
-                                factoryId = factoryHouseService.insertSelectiveToBatch(factoryHouse);
-                            }
-                            Integer frameId = frameSettingService.equalsFrameName(Integer.valueOf(frameStr), Integer.valueOf(paiNumber), factoryId, mineId);
-                            if (frameId == null) {
-                                FrameSetting frameSetting = new FrameSetting();
-                                frameSetting.setFactoryId(factoryId);
-                                frameSetting.setMineId(mineId);
-                                frameSetting.setNumber(10);
-                                frameSetting.setStorageRacksNum(Integer.valueOf(frameStr));
-                                frameSetting.setRowNum(Integer.valueOf(paiNumber));
-                                frameStr = frameStr + "#" + paiNumber;
-                                frameSetting.setFrameName(frameStr);
-                                frameId = frameSettingService.insertSelectiveToBatch(frameSetting);
-                                log.info("新增的矿机架ID" + frameId);
-                                workerDetailed.setWorkerId(workerId);
-                                workerDetailed.setFactoryId(factoryId);
-                                //获取品牌id
-                                String mineType = worker.getMineType();
-                                Integer workerbrandId = workerTypeMap.get(mineType);
-                                workerDetailed.setWorkerbrandId(workerbrandId);
-                                workerDetailed.setFrameId(frameId);
-                                workerDetailed.setFrameNumber(Integer.valueOf(Number));
-                                workerDetailed.setMineId(mineId);
-                                workerDetailed.setIsComeIn(1);
-                                workerDetailed.setIsDelete(0);
-                                workerDetailed.setCreateTime(new Date());
-                                workerDetailed.setUpdateTime(new Date());
-                                workerDetailed.setWorkerIp(ip);
-                                list.add(workerDetailed);
-                            } else {
-                                workerDetailed.setWorkerId(workerId);
-                                workerDetailed.setFactoryId(factoryId);
-                                //获取品牌id
-                                String mineType = worker.getMineType();
-                                Integer workerbrandId = workerTypeMap.get(mineType);
-                                workerDetailed.setWorkerbrandId(workerbrandId);
-                                workerDetailed.setFrameId(frameId);
-                                workerDetailed.setFrameNumber(Integer.valueOf(Number));
-                                workerDetailed.setMineId(mineId);
-                                workerDetailed.setIsComeIn(1);
-                                workerDetailed.setIsDelete(0);
-                                workerDetailed.setCreateTime(new Date());
-                                workerDetailed.setUpdateTime(new Date());
-                                workerDetailed.setWorkerIp(ip);
-                                list.add(workerDetailed);
-                            }
-                            OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, mineId, workerId, null, new Date(), null, operatorId);
-                            operatorWorkerList.add(operatorWorkerHistory);
+                        }else if (Integer.valueOf(placeStr) > 0 && Integer.valueOf(placeStr) < 11) {
+                            //这是第11排的
+                            Number = placeStr;
+                            paiNumber = "11";
+                        } else {
+                            //ip不符合规则
+                            continue;
                         }
-
+                        Integer factoryId = factoryHouseService.equalsFactoryNum(factoryStr, mineId);
+                        if (factoryId == null) {
+                            FactoryHouse factoryHouse = new FactoryHouse();
+                            factoryHouse.setFactoryName(factoryStr);
+                            factoryHouse.setFactoryNum(Integer.valueOf(factoryStr));
+                            factoryHouse.setMineId(mineId);
+                            factoryId = factoryHouseService.insertSelectiveToBatch(factoryHouse);
+                        }
+                        Integer frameId = frameSettingService.equalsFrameName(Integer.valueOf(frameStr), Integer.valueOf(paiNumber), factoryId, mineId);
+                        if (frameId == null) {
+                            FrameSetting frameSetting = new FrameSetting();
+                            frameSetting.setFactoryId(factoryId);
+                            frameSetting.setMineId(mineId);
+                            frameSetting.setNumber(10);
+                            frameSetting.setStorageRacksNum(Integer.valueOf(frameStr));
+                            frameSetting.setRowNum(Integer.valueOf(paiNumber));
+                            frameStr = frameStr + "#" + paiNumber;
+                            frameSetting.setFrameName(frameStr);
+                            frameId = frameSettingService.insertSelectiveToBatch(frameSetting);
+                            log.info("新增的矿机架ID" + frameId);
+                            workerDetailed.setWorkerId(workerId);
+                            workerDetailed.setFactoryId(factoryId);
+                            //获取品牌id
+                            String mineType = worker.getMineType();
+                            Integer workerbrandId = workerTypeMap.get(mineType);
+                            workerDetailed.setWorkerbrandId(workerbrandId);
+                            workerDetailed.setFrameId(frameId);
+                            workerDetailed.setFrameNumber(Integer.valueOf(Number));
+                            workerDetailed.setMineId(mineId);
+                            workerDetailed.setIsComeIn(1);
+                            workerDetailed.setIsDelete(0);
+                            workerDetailed.setCreateTime(new Date());
+                            workerDetailed.setUpdateTime(new Date());
+                            workerDetailed.setWorkerIp(ip);
+                            list.add(workerDetailed);
+                        } else {
+                            workerDetailed.setWorkerId(workerId);
+                            workerDetailed.setFactoryId(factoryId);
+                            //获取品牌id
+                            String mineType = worker.getMineType();
+                            Integer workerbrandId = workerTypeMap.get(mineType);
+                            workerDetailed.setWorkerbrandId(workerbrandId);
+                            workerDetailed.setFrameId(frameId);
+                            workerDetailed.setFrameNumber(Integer.valueOf(Number));
+                            workerDetailed.setMineId(mineId);
+                            workerDetailed.setIsComeIn(1);
+                            workerDetailed.setIsDelete(0);
+                            workerDetailed.setCreateTime(new Date());
+                            workerDetailed.setUpdateTime(new Date());
+                            workerDetailed.setWorkerIp(ip);
+                            list.add(workerDetailed);
+                        }
+                        OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory(null, mineId, workerId, null, new Date(), null, operatorId);
+                        operatorWorkerList.add(operatorWorkerHistory);
                     }
                 }
             }
@@ -896,7 +902,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                     mineNameSet.add(workerDetailedExample.getMineName());
                     frameNameSet.add(frameName);
                     String factoryName = workerDetailedExample.getFactoryName();
-                    if (!StringUtils.isEmpty(factoryName)){
+                    if (!StringUtils.isEmpty(factoryName)) {
                         factoryNameSet.add(factoryName);
                     }
                 }

@@ -141,6 +141,9 @@
         sys_role
     WHERE
         sys_role_user.user_id = sys_user.id
+        <if test="keyWord != null and keyWord != ''">
+          AND  (sys_user.username like  #{keyWord} or sys_role.name like #{keyWord})
+        </if>
         AND sys_role_user.role_id = sys_role.id
         GROUP BY user_id
   </select>

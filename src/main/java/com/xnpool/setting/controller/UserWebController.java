@@ -9,11 +9,8 @@ import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
-import com.xnpool.setting.domain.mapper.MineSettingMapper;
 import com.xnpool.setting.domain.model.WorkerDetailedModel;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
-import com.xnpool.setting.domain.pojo.SysUser;
-import com.xnpool.setting.domain.redismodel.SysUserRedisModel;
 import com.xnpool.setting.service.CustomerSettingService;
 import com.xnpool.setting.service.WorkerDetailedService;
 import com.xnpool.setting.service.impl.UserWebService;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

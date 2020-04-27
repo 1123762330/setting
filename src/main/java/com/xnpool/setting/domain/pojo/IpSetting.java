@@ -1,24 +1,32 @@
 package com.xnpool.setting.domain.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.Date;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
+ * <p>
+ * 
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/5 13:30
+ * @since 2020-04-27
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class IpSetting implements Serializable {
-    private static final long serialVersionUID = -3760031732088770526L;
+
+
+    private static final long serialVersionUID = -5242883243323913752L;
     /**
      * 编号
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -39,16 +47,22 @@ public class IpSetting implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 是否删除,0:否,1:是
      */
     private Integer isDelete;
+
+    /**
+     * 是否去整,1:是,默认:0
+     */
+    private Boolean isToInt;
+
 
 }

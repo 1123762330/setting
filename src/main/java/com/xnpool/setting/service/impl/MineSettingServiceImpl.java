@@ -1,5 +1,6 @@
 package com.xnpool.setting.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.DataExistException;
@@ -28,7 +29,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author zly
@@ -47,7 +48,7 @@ public class MineSettingServiceImpl extends ServiceImpl<MineSettingMapper, MineS
     @Transactional(rollbackFor = Exception.class)
     public void save(MineSetting mineSetting, String token) {
         Integer superMineId = baseController.getSuperMineId(token);
-        if (superMineId!=null&&superMineId==-1){
+        if (superMineId != null && superMineId == -1) {
             List<String> list = minesettingMapper.selectMineNameList(mineSetting.getId());
             if (list.contains(mineSetting.getMineName())) {
                 throw new DataExistException("数据已存在,请勿重复添加!");
@@ -56,7 +57,7 @@ public class MineSettingServiceImpl extends ServiceImpl<MineSettingMapper, MineS
             mineSetting.setCreateTime(LocalDateTime.now());
             MineSettingRedisModel mineSettingRedisModel = baseController.getMineSettingRedisModel(mineSetting);
             baseController.redisToInsert(rows, "mine_setting", mineSettingRedisModel, mineSetting.getId());
-        }else {
+        } else {
             throw new InsertException("只有管理员才能添加矿场");
         }
     }
@@ -77,8 +78,16 @@ public class MineSettingServiceImpl extends ServiceImpl<MineSettingMapper, MineS
         if (list.contains(mineSetting.getMineName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
+        int rows = 0;
+        if (StringUtils.isEmpty(mineSetting.getDescription())) {
+            UpdateWrapper updateWrapper = new UpdateWrapper();
+            updateWrapper.eq("id",mineSetting.getId());
+            updateWrapper.set("Description", null);
+            rows = minesettingMapper.update(mineSetting, updateWrapper);
+        } else {
+            rows = minesettingMapper.updateById(mineSetting);
+        }
 
-        int rows = minesettingMapper.updateById(mineSetting);
         MineSetting mineSetting_db = minesettingMapper.selectById(mineSetting.getId());
         MineSettingRedisModel mineSettingRedisModel = baseController.getMineSettingRedisModel(mineSetting_db);
         baseController.redisToUpdate(rows, "mine_setting", mineSettingRedisModel, mineSetting.getId());
@@ -92,10 +101,10 @@ public class MineSettingServiceImpl extends ServiceImpl<MineSettingMapper, MineS
             keyWord = "%" + keyWord + "%";
         }
         Page<MineSetting> page = new Page<>(pageNum, pageSize);
-        List<MineSetting> mineSettingList = minesettingMapper.selectByOther(keyWord,page);
+        List<MineSetting> mineSettingList = minesettingMapper.selectByOther(keyWord, page);
         for (MineSetting mineSetting : mineSettingList) {
             Integer id = mineSetting.getId();
-            if (mineIds.contains(id)){
+            if (mineIds.contains(id)) {
                 resultList.add(mineSetting);
             }
         }
@@ -106,12 +115,12 @@ public class MineSettingServiceImpl extends ServiceImpl<MineSettingMapper, MineS
     @Override
     public HashMap<Integer, String> selectMineNameByOther(String token) {
         List<Integer> mineIds = baseController.getMineId(token);
-        log.info("获取到的数据权限矿场id为:"+mineIds);
-        List<MineSetting> mineSettingList = minesettingMapper.selectByOther(null,null);
+        log.info("获取到的数据权限矿场id为:" + mineIds);
+        List<MineSetting> mineSettingList = minesettingMapper.selectByOther(null, null);
         HashMap<Integer, String> resultMap = new HashMap<>();
         mineSettingList.forEach(mineSetting -> {
             Integer id = mineSetting.getId();
-            if (mineIds.contains(id)){
+            if (mineIds.contains(id)) {
                 String mineName = mineSetting.getMineName();
                 resultMap.put(id, mineName);
             }

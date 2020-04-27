@@ -1,32 +1,28 @@
 package com.xnpool.setting.controller;
 
-import com.github.pagehelper.PageInfo;
+
 import com.xnpool.logaop.annotation.SystemLog;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
 import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.config.ApiContext;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
-import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.service.CustomerSettingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.*;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
- * 客户设置
+ * <p>
+ *  前端控制器
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/10 10:36
+ * @since 2020-04-27
  */
 @RestController
 @Slf4j
@@ -47,7 +43,7 @@ public class CustomerSettingController extends BaseController {
      */
     @SystemLog(value = "添加客户",type = LogType.SYSTEM)
     @PostMapping("/addCustomer")
-    public ResponseResult addCustomer(CustomerSetting customerSetting,HttpServletRequest request) {
+    public ResponseResult addCustomer(CustomerSetting customerSetting, HttpServletRequest request) {
         String token = writeLogUtil.getToken(request);
         customerSettingService.insertSelective(customerSetting,token);
         return new ResponseResult(SUCCESS);
@@ -77,7 +73,7 @@ public class CustomerSettingController extends BaseController {
     @SystemLog(value = "删除客户",type = LogType.SYSTEM)
     @DeleteMapping("/deleteCustomer")
     public ResponseResult deleteCustomer(int id) {
-        customerSettingService.updateById(id);
+        customerSettingService.deleteById(id);
         return new ResponseResult(SUCCESS);
     }
 
@@ -112,7 +108,7 @@ public class CustomerSettingController extends BaseController {
     @SystemLog(value = "客户认证",type = LogType.SYSTEM)
     @PutMapping("/attestationCustomer")
     public ResponseResult attestationCustomer(String cusId,Integer isPass) {
-       //首先根据根据管理者的企业ID去查询向企业请求认证的用户列表,如果authentication=0就是用户申请认证
+        //首先根据根据管理者的企业ID去查询向企业请求认证的用户列表,如果authentication=0就是用户申请认证
         //这个时候管理者可以选择通过认证,也可以选择拒绝认证,通过认证就是1,拒绝认证就是-1.
         customerSettingService.updateAttestationById(cusId,isPass);
         return new ResponseResult(SUCCESS);

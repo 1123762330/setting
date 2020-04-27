@@ -1,40 +1,37 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.model.CustomerSettingExample;import com.xnpool.setting.domain.pojo.CustomerSetting;import org.apache.ibatis.annotations.Param;import java.util.HashMap;import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xnpool.setting.domain.model.CustomerSettingExample;
+import com.xnpool.setting.domain.pojo.CustomerSetting;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/26 23:01
+ * @since 2020-04-27
  */
-public interface CustomerSettingMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface CustomerSettingMapper extends BaseMapper<CustomerSetting> {
 
-    int insert(CustomerSetting record);
+    List<HashMap> selectTenantList(Integer userId);
 
-    int insertSelective(CustomerSetting record);
+    Integer deleteByKeyId(int id);
 
-    CustomerSetting selectByPrimaryKey(Integer id);
+    List<CustomerSettingExample> selectByOther(Page<CustomerSettingExample> page);
 
-    int updateByPrimaryKeySelective(CustomerSetting record);
-
-    int updateByPrimaryKey(CustomerSetting record);
-
-    int updateById(int id);
-
-    List<CustomerSettingExample> selectByOther();
-
-    void updateAttestationById(@Param("list") List<String> list, @Param("isPass") int isPass);
+    void updateAttestationById(@Param("list") List<String> cusIdlist,@Param("isPass") int isPass);
 
     List<HashMap> selectUserList();
 
     List<HashMap> selectUserMap();
 
-    List<HashMap> selectTenantList(Integer userId);
-
-    List<HashMap> selectUserRole();
-
     void deleteAuthority(@Param("list") List<Long> list, @Param("userId") Integer userId);
 
-    Integer selectAuthorizedToYes(@Param("userId") Integer userId);
+    Integer selectAuthorizedToYes(Integer valueOf);
 }

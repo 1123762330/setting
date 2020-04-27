@@ -18,9 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -64,6 +68,9 @@ public class BaseController {
 
     @Autowired
     private MineSettingMapper mineSettingMapper;
+
+    @Autowired
+    private JedisPool jedisPool;
 
 
     //@ExceptionHandler({ServiceException.class})
@@ -148,6 +155,42 @@ public class BaseController {
             }
         } catch (Exception e) {
             throw new InsertException("添加缓存失败");
+        }
+    }
+
+    /**
+     * @return
+     * @Description 管道流批量添加
+     * @Author zly
+     * @Date 16:02 2020/2/26
+     * @Param
+     */
+    private void pipelinedToRedis(String table, String user, List recordList, Integer mineId) {
+        Jedis jedis = null;
+        try {
+            String orderIdPrefix = primaryKeyUtils.getOrderIdPrefix(new Date());
+            Long global_id = primaryKeyUtils.orderId(orderIdPrefix);
+            jedis = jedisPool.getResource();
+            Pipeline pipelined = jedis.pipelined();
+            for (Object obj : recordList) {
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("table", table);
+                hashMap.put("use", user);
+                hashMap.put("data", obj);
+                String jsonString = JSON.toJSONString(hashMap);
+                if (mineId == null) {
+                    pipelined.zadd("syncing:" + apiContext.getTenantId(), Double.valueOf(global_id), jsonString);
+                } else {
+                    pipelined.zadd("syncing:" + apiContext.getTenantId() + ":" + mineId, Double.valueOf(global_id), jsonString);
+                }
+            }
+            pipelined.sync();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -266,14 +309,10 @@ public class BaseController {
      * @Date 16:03 2020/2/26
      * @Param
      */
-    public void redisToBatchInsert(Integer rows, String table, Object recordList, Integer mineId) {
+    public void batchPipelinedToRedis(Integer rows, String table, List recordList, Integer mineId) {
         if (rows != 0) {
             //操作数据库成功,写缓存
-            HashMap<String, Object> hashMap = new HashMap<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            hashMap.put("list", recordList);
-            hashMap.put("updateTime", sdf.format(new Date()));
-            insertRedisToBatch(table, BATCHINSERT, hashMap, mineId);
+            pipelinedToRedis(table, BATCHINSERT, recordList, mineId);
         } else {
             throw new DeleteException("批量添加失败");
         }
@@ -426,15 +465,9 @@ public class BaseController {
         redisModel.setEnd_ip(record.getEndIp());
         redisModel.setMine_id(record.getMineId());
         redisModel.setIs_delete(record.getIsDelete());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (record.getUpdateTime() != null) {
-            String updateTime = sdf.format(record.getUpdateTime());
-            redisModel.setUpdate_time(updateTime);
-        }
-        if (record.getCreateTime() != null) {
-            String createTime = sdf.format(record.getCreateTime());
-            redisModel.setCreate_time(createTime);
-        }
+        redisModel.setUpdate_time(record.getUpdateTime());
+        redisModel.setCreate_time(record.getCreateTime());
+        redisModel.setIs_to_int(record.getIsToInt());
         return redisModel;
     }
 

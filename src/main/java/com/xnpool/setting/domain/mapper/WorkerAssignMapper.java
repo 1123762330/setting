@@ -23,7 +23,7 @@ public interface WorkerAssignMapper {
 
     int updateByPrimaryKey(WorkerAssign record);
 
-    List<UserRoleVO> selectByOther();
+    List<UserRoleVO> selectByOther(@Param("keyWord") String keyWord);
 
     int batchInsert(ArrayList<MineFactoryAndFraneId> list);
 

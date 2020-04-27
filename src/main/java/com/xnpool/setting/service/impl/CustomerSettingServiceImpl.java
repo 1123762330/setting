@@ -1,32 +1,26 @@
 package com.xnpool.setting.service.impl;
 
 import com.alibaba.fastjson.JSONPath;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DataExistException;
-import com.xnpool.logaop.service.exception.InsertException;
-import com.xnpool.logaop.util.JwtUtil;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
-import com.xnpool.setting.domain.mapper.WorkerAssignMapper;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
-import com.xnpool.setting.domain.pojo.UserRoleVO;
+import com.xnpool.setting.domain.pojo.CustomerSetting;
+import com.xnpool.setting.domain.mapper.CustomerSettingMapper;
 import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.AgreementSettingService;
+import com.xnpool.setting.service.CustomerSettingService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xnpool.setting.service.GroupSettingService;
 import com.xnpool.setting.utils.PageUtil;
-import com.xnpool.setting.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-
-import com.xnpool.setting.domain.mapper.CustomerSettingMapper;
-import com.xnpool.setting.domain.pojo.CustomerSetting;
-import com.xnpool.setting.service.CustomerSettingService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -34,16 +28,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * <p>
+ * 服务实现类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/10 10:35
+ * @since 2020-04-27
  */
 @Service
 @Slf4j
-public class CustomerSettingServiceImpl extends BaseController implements CustomerSettingService {
+public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMapper, CustomerSetting> implements CustomerSettingService {
 
-    @Resource
+    @Autowired
     private CustomerSettingMapper customerSettingMapper;
+
+    @Autowired
+    private BaseController baseController;
 
     @Autowired
     private AgreementSettingService agreementSettingService;
@@ -56,21 +56,10 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
 
     @Autowired
     private UserCenterAPI userCenterAPI;
-
-    @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return customerSettingMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int insert(CustomerSetting record) {
-        return customerSettingMapper.insert(record);
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int insertSelective(CustomerSetting record, String token) {
-        Integer userId = getUserId(token);
+    public Integer insertSelective(CustomerSetting record, String token) {
+        Integer userId = baseController.getUserId(token);
         record.setUserId(userId);
         List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
         List<Long> list = new ArrayList<>();
@@ -81,35 +70,19 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         if (list.contains(record.getTenantId())) {
             throw new DataExistException("该企业已经申请授权,请勿重复授权!");
         }
-        return customerSettingMapper.insertSelective(record);
-    }
-
-    @Override
-    public CustomerSetting selectByPrimaryKey(Integer id) {
-        return customerSettingMapper.selectByPrimaryKey(id);
+        return customerSettingMapper.insert(record);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateByPrimaryKeySelective(CustomerSetting record) {
-        int rows = customerSettingMapper.updateByPrimaryKeySelective(record);
-        //record.setUpdateTime(new Date());
-        //redisToUpdate(rows,"customer_setting",record,null);
-    }
-
-    @Override
-    public int updateByPrimaryKey(CustomerSetting record) {
-        return customerSettingMapper.updateByPrimaryKey(record);
+    public Integer updateByPrimaryKeySelective(CustomerSetting record) {
+        return customerSettingMapper.updateById(record);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateById(int id) {
-        int rows = customerSettingMapper.updateById(id);
-        //CustomerSetting record = new CustomerSetting();
-        //record.setUpdateTime(new Date());
-        //record.setId(id);
-        //redisToDelete(rows,"customer_setting",record,null);
+    public Integer deleteById(int id) {
+        return customerSettingMapper.deleteByKeyId(id);
     }
 
     @Override
@@ -117,11 +90,11 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = new ArrayList<>();
+        Page<CustomerSettingExample> page = new Page<>(pageNum,pageSize);
         if (StringUtils.isEmpty(username) & StringUtils.isEmpty(agreementName) & StringUtils.isEmpty(groupName)) {
-            PageHelper.startPage(pageNum, pageSize);
-            customerSettingExamples = customerSettingMapper.selectByOther();
+            customerSettingExamples = customerSettingMapper.selectByOther(page);
         } else {
-            customerSettingExamples = customerSettingMapper.selectByOther();
+            customerSettingExamples = customerSettingMapper.selectByOther(null);
         }
 
 
@@ -196,11 +169,11 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
             customerSettingExamples = customerSettingExamples.stream().filter(a -> groupName.equals(a.getGroupName())).collect(Collectors.toList());
         }
         if (StringUtils.isEmpty(username) & StringUtils.isEmpty(agreementName) & StringUtils.isEmpty(groupName)) {
-            PageInfo<CustomerSettingExample> pageInfo = new PageInfo<>(customerSettingExamples);
-            return pageInfo;
-        } else {
-            HashMap<String, Object> page = PageUtil.startPage(customerSettingExamples, pageNum, pageSize);
+            page.setRecords(customerSettingExamples);
             return page;
+        } else {
+            HashMap<String, Object> pageInfo = PageUtil.startPage(customerSettingExamples, pageNum, pageSize);
+            return pageInfo;
         }
 
     }
@@ -258,7 +231,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     public HashMap<Long, HashMap> selectTenantList(String token) {
         HashMap<Long, HashMap> resultMap = new HashMap<>();
-        Integer userId = getUserId(token);
+        Integer userId = baseController.getUserId(token);
         List<HashMap> hashMapList = customerSettingMapper.selectTenantList(userId);
         hashMapList.forEach(hashMap -> {
             String tenantName = String.valueOf(hashMap.get("tenant_name"));
@@ -274,7 +247,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
     @Override
     public void deleteAuthority(String tenantId, String token) {
         apiContext.setTenantId(Long.valueOf(tenantId));
-        Integer userId = getUserId(token);
+        Integer userId = baseController.getUserId(token);
         List<Long> list = new ArrayList<>();
         if (tenantId.contains(",")) {
             //多个企业id
@@ -288,11 +261,6 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         }
 
         customerSettingMapper.deleteAuthority(list, userId);
-    }
-
-    @Override
-    public int insertSelective(CustomerSetting record) {
-        return customerSettingMapper.insertSelective(record);
     }
 
     @Override
@@ -320,7 +288,7 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         HashSet<String> agreementSet = new HashSet<>();
         HashSet<String> groupSet = new HashSet<>();
-        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther();
+        List<CustomerSettingExample> customerSettingExamples = customerSettingMapper.selectByOther(null);
         if (authorize == 1) {
             customerSettingExamples = customerSettingExamples.stream().filter(a -> a.getAuthentication() == authorize).collect(Collectors.toList());
         }
@@ -366,15 +334,5 @@ public class CustomerSettingServiceImpl extends BaseController implements Custom
         resultMap.put("agreementList",agreementSet);
         return resultMap;
     }
+
 }
-
-
-
-
-
-
-
-
-
-
-

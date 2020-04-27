@@ -73,6 +73,11 @@ public class CustomerSettingExample implements Serializable {
     private String roleName;
 
     /**
+     * 客户级别
+     */
+    private String level;
+
+    /**
      * 认证,0:待审核,1:通过,2:不通过
      */
     private Integer authentication;
