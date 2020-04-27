@@ -62,6 +62,7 @@
             customer_setting.authentication,
             customer_setting.is_watch,
             customer_setting.manager_user_id,
+            t_customer_level.id AS cusLevelId,
             t_customer_level.`level`
         FROM
             sys_user,

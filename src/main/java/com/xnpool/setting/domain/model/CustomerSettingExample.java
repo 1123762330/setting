@@ -73,6 +73,11 @@ public class CustomerSettingExample implements Serializable {
     private String roleName;
 
     /**
+     * 客户级别id
+     */
+    private Integer cusLevelId;
+
+    /**
      * 客户级别
      */
     private String level;
