@@ -281,7 +281,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
             PageInfo<WorkerDetailedExample> pageInfo = new PageInfo<>(filterList);
             return pageInfo;
         } else {
-            HashMap<String, Object> page = PageUtil.startPage(filterList, pageNum, pageSize);
+            HashMap<String, Object> page = PageUtil.startPageByList(filterList, pageNum, pageSize);
             return page;
         }
 
@@ -309,8 +309,10 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer groupId = workerDetailedParam.getGroupId();
         String workerIp = workerDetailedParam.getWorkerIp();
         String remarks = workerDetailedParam.getRemarks();
-        //Integer workerIds = workerInfoMapper.selectWorkerIdByIp(workerIp, mineId);
         Integer workerIds = Integer.valueOf(workerDetailedParam.getWorkerId());
+        if (StringUtils.isEmpty(workerIds)){
+             workerIds = workerInfoMapper.selectWorkerIdByIp(workerIp, mineId);
+        }
         if (workerIds != null) {
             List<Integer> workerIdList = workerDetailedMapper.selectWorkerIdlist(1);
 
@@ -418,7 +420,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         //过滤已经上架的机器
         //List<WorkerExample> filterList = result.stream().filter(a -> a.getIsComeIn().equals("0")).collect(Collectors.toList());
-        HashMap<String, Object> startPage = PageUtil.startPage(result, pageNum, pageSize);
+        HashMap<String, Object> startPage = PageUtil.startPageByList(result, pageNum, pageSize);
 
         return startPage;
     }
