@@ -7,6 +7,7 @@ import com.xnpool.setting.domain.pojo.FrameSetting;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -23,6 +24,8 @@ public interface FrameSettingService extends IService<FrameSetting> {
     Integer addFrame(FrameSetting entity);
 
     Page<FrameSettingExample> selectByOther(String keyWord, int pageNum, int pageSize, String token);
+
+    List<HashMap> selectExistFrameByFactoryId(Integer factoryId);
 
     HashMap<Integer, String> selectFrameNameByFactoryId(Integer factoryId);
 

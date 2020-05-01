@@ -97,6 +97,16 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
             customerSettingExamples = customerSettingMapper.selectByOther(null);
         }
 
+        //获取客户级别map
+        HashMap<Integer, String> cusLevelMap = new HashMap<>();
+        List<HashMap> cusLevelList = customerSettingMapper.selectCusLevelList();
+        HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
+        HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
+        cusLevelList.forEach(hashMap -> {
+            Integer id = Integer.valueOf(hashMap.get("id").toString());
+            String level = hashMap.get("level").toString();
+            cusLevelMap.put(id,level);
+        });
 
         if (authorize == 1) {
             customerSettingExamples = customerSettingExamples.stream().filter(a -> a.getAuthentication() == authorize).collect(Collectors.toList());
@@ -106,7 +116,6 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
         customerSettingExamples.forEach(customerSettingExample -> {
             String agreementid = customerSettingExample.getAgreementId();
             if (!StringUtils.isEmpty(agreementid)) {
-                HashMap<Integer, String> agreementMap = agreementSettingService.selectAgreementMap();
                 if (agreementid.contains(",")) {
                     //多个协议ID,从协议IDMap集合里面取出相应的值,重新set进属性里面
                     String[] split = agreementid.split(",");
@@ -127,7 +136,6 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
             }
             String groupId = customerSettingExample.getGroupId();
             if (!StringUtils.isEmpty(groupId)) {
-                HashMap<Integer, String> groupNameHashMap = groupSettingService.selectGroupMap();
                 if (groupId.contains(",")) {
                     //多个分组ID,从分组IDMap集合里面取出相应的值,重新set进属性里面
                     String[] split = groupId.split(",");
@@ -145,6 +153,12 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
                     String groupName_db = groupNameHashMap.get(Integer.valueOf(groupId));
                     customerSettingExample.setGroupName(groupName_db);
                 }
+            }
+
+            Integer cusLevelId = customerSettingExample.getCusLevelId();
+            if (!StringUtils.isEmpty(cusLevelId)) {
+                String level = cusLevelMap.get(cusLevelId);
+                customerSettingExample.setLevel(level);
             }
         });
         //用户名不为空

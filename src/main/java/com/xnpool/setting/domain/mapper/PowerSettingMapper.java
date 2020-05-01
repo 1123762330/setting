@@ -24,5 +24,5 @@ public interface PowerSettingMapper {
 
     List<PowerSetting> selectByOther(@Param("keyWord") String keyWord);
 
-    List<String> selectNameList(@Param("id") Integer id);
+    List<Double> selectNameList(@Param("id") Integer id);
 }

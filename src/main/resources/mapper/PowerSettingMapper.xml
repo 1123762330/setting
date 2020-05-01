@@ -157,8 +157,8 @@
     </where>
   </select>
 
-  <select id="selectNameList" resultType="string">
-    select description FROM power_setting where  is_delete=0
+  <select id="selectNameList" resultType="double">
+    select price FROM power_setting where  is_delete=0
     <if test="id != null">
       AND id!=#{id}
     </if>

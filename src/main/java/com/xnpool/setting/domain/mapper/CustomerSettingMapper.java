@@ -34,4 +34,6 @@ public interface CustomerSettingMapper extends BaseMapper<CustomerSetting> {
     void deleteAuthority(@Param("list") List<Long> list, @Param("userId") Integer userId);
 
     Integer selectAuthorizedToYes(Integer valueOf);
+
+    List<HashMap> selectCusLevelList();
 }

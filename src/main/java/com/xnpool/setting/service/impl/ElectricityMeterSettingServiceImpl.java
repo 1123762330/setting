@@ -38,7 +38,7 @@ public class ElectricityMeterSettingServiceImpl implements ElectricityMeterSetti
     @Override
     public int insertSelective(ElectricityMeterSetting record) {
         List<String> list = electricityMeterSettingMapper.selectNameList(record.getId());
-        if (list.contains(record.getId())) {
+        if (list.contains(record.getElectricityMeterName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return electricityMeterSettingMapper.insertSelective(record);
@@ -52,7 +52,7 @@ public class ElectricityMeterSettingServiceImpl implements ElectricityMeterSetti
     @Override
     public int updateByPrimaryKeySelective(ElectricityMeterSetting record) {
         List<String> list = electricityMeterSettingMapper.selectNameList(record.getId());
-        if (list.contains(record.getId())) {
+        if (list.contains(record.getElectricityMeterName())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         return electricityMeterSettingMapper.updateByPrimaryKeySelective(record);

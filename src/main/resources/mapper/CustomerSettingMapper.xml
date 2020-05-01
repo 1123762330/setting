@@ -62,18 +62,16 @@
             customer_setting.authentication,
             customer_setting.is_watch,
             customer_setting.manager_user_id,
-            t_customer_level.id AS cusLevelId,
-            t_customer_level.`level`
+            customer_setting.cus_level_id
         FROM
+            customer_setting,
             sys_user,
-            sys_tenant,
-            customer_setting
-            LEFT JOIN t_customer_level ON customer_setting.cus_level_id = t_customer_level.id
-        WHERE
+            sys_tenant
+        where
             customer_setting.is_delete = 0
             AND customer_setting.user_id = sys_user.id
             AND customer_setting.tenant_id = sys_tenant.id
-            AND authentication !=2
+            AND authentication!=2
     </select>
 
     <!--  修改企业认证-->
@@ -130,5 +128,15 @@
         WHERE
         user_id = #{userId}
         AND authentication =1
+    </select>
+
+    <select id="selectCusLevelList" resultType="hashmap">
+        SELECT
+            id,
+            `level`
+        FROM
+            t_customer_level
+        WHERE
+            is_delete =0
     </select>
 </mapper>

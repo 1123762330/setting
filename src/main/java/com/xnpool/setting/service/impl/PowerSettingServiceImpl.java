@@ -47,8 +47,8 @@ public class PowerSettingServiceImpl implements PowerSettingService {
 
     @Override
     public int insertSelective(PowerSetting record) {
-        List<String> list = powerSettingMapper.selectNameList(record.getId());
-        if (list.contains(record.getDescription())) {
+        List<Double> list = powerSettingMapper.selectNameList(record.getId());
+        if (list.contains(record.getPrice())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
@@ -67,8 +67,8 @@ public class PowerSettingServiceImpl implements PowerSettingService {
 
     @Override
     public int updateByPrimaryKeySelective(PowerSetting record) {
-        List<String> list = powerSettingMapper.selectNameList(record.getId());
-        if (list.contains(record.getDescription())) {
+        List<Double> list = powerSettingMapper.selectNameList(record.getId());
+        if (list.contains(record.getPrice())) {
             throw new DataExistException("数据已存在,请勿重复添加!");
         }
         Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");

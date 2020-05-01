@@ -145,6 +145,11 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
     }
 
     @Override
+    public List<HashMap> selectExistFrameByFactoryId(Integer factoryId) {
+        return frameSettingMapper.selectFrameNameByFactoryId(factoryId);
+    }
+
+    @Override
     public HashMap<Integer, String> selectFrameNameByFactoryId(Integer factoryId) {
         List<HashMap> hashMaps = frameSettingMapper.selectFrameNameByFactoryId(factoryId);
         if (hashMaps.isEmpty()) {

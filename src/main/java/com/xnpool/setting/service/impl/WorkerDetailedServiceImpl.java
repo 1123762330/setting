@@ -792,7 +792,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         }
         long wstart = System.currentTimeMillis();
         if (!list.isEmpty() && list.size() != 0) {
-            //批量上架
+            //批量上架,一次入库3000条
             Map<String, List> groupList = groupList(list);
             Integer count = 0;
             for (Map.Entry<String, List> entry : groupList.entrySet()) {

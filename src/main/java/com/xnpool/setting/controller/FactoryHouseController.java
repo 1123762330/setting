@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -76,9 +77,8 @@ public class FactoryHouseController extends BaseController {
     @SystemLog(value = "删除厂房", type = LogType.SYSTEM)
     @DeleteMapping("/deleteFactoryHouse")
     public ResponseResult deleteFactoryHouse(int id) {
-
-        HashMap<Integer, String> frameNameMap = frameSettingService.selectFrameNameByFactoryId(id);
-        if (frameNameMap != null && !frameNameMap.isEmpty()) {
+        List<HashMap> hashMapList = frameSettingService.selectExistFrameByFactoryId(id);
+        if (hashMapList != null && !hashMapList.isEmpty()) {
             return new ResponseResult(FAIL, "该厂房下存在矿机架,请先移除该厂房下的矿机架");
         } else {
             factoryHouseService.deleteById(id);
