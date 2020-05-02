@@ -48,4 +48,9 @@ public class IpSettingExample implements Serializable {
      */
     private boolean isToInt;
 
+    /**
+     * 厂房编号
+     */
+    private Integer factoryNum;
+
 }

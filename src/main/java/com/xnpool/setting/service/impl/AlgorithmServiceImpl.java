@@ -105,7 +105,9 @@ public class AlgorithmServiceImpl extends BaseController implements AlgorithmSer
         for (String workerType : workertypeSet) {
             Integer algorithmId = workerbrandMap.get(workerType);
             String algorithmName = hashMap_db.get(algorithmId);
-            resultMap.put(algorithmId,algorithmName);
+            if(!StringUtils.isEmpty(algorithmId)){
+                resultMap.put(algorithmId,algorithmName);
+            }
         }
         return resultMap;
     }

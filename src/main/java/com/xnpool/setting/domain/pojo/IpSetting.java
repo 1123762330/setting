@@ -45,6 +45,11 @@ public class IpSetting implements Serializable {
     private Integer mineId;
 
     /**
+     * 厂房编号
+     */
+    private Integer factoryNum;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;

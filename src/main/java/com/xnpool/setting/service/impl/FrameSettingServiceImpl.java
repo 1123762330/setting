@@ -198,7 +198,10 @@ public class FrameSettingServiceImpl extends ServiceImpl<FrameSettingMapper, Fra
                 }
                 StringBuffer number = new StringBuffer(hashMap.get("number").toString());
                 StringBuffer resultStr = frameName.append("  1-" + number + "层");
-                resultMap.put(id, resultStr.toString());
+                List<HashMap> hashMapList = workerDetailedMapper.selectNullFrame(id);
+                if (!hashMapList.isEmpty()){
+                    resultMap.put(id, resultStr.toString());
+                }
             });
             return resultMap;
         }

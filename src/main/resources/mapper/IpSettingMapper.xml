@@ -12,11 +12,12 @@
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />
         <result column="is_to_int" property="isToInt" />
+        <result column="factory_num" property="factoryNum" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, start_ip, end_ip, mine_id, create_time, update_time, is_delete, is_to_int
+        id, start_ip, end_ip, mine_id, create_time, update_time, is_delete, is_to_int,factory_num
     </sql>
 
     <!--  软删除-->
@@ -31,7 +32,9 @@
         ip_setting.start_ip,
         ip_setting.end_ip,
         ip_setting.mine_id,
-        mine_setting.mine_name
+        mine_setting.mine_name,
+        ip_setting.is_to_int,
+        ip_setting.factory_num
         from ip_setting,
         mine_setting
         <where>
