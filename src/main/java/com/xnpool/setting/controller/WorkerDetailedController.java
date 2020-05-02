@@ -100,7 +100,7 @@ public class WorkerDetailedController extends BaseController {
     @SystemLog(value = "矿机上架",type = LogType.MINE)
     @PutMapping("/addWorkerToLibrary")
     public ResponseResult addWorkerToLibrary(WorkerDetailedParam workerDetailedParam,HttpServletRequest request) {
-        String token = request.getHeader("token");
+        String token = writeLogUtil.getToken(request);
         workerDetailedService.addWorkerToLibrary(workerDetailedParam,token);
         return new ResponseResult(SUCCESS);
     }

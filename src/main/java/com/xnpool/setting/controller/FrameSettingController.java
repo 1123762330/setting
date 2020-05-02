@@ -91,7 +91,7 @@ public class FrameSettingController extends BaseController {
      * @Date 14:58 2020/2/4
      * @Param
      */
-    //@SystemLog(value = "查询矿机架列表",type = LogType.SYSTEM)
+    @SystemLog(value = "查询矿机架列表",type = LogType.SYSTEM)
     @GetMapping("/selectFrameList")
     public ResponseResult selectFrameList(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,

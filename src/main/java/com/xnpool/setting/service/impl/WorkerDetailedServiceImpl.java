@@ -300,6 +300,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addWorkerToLibrary(WorkerDetailedParam workerDetailedParam, String token) {
+        log.info("单个上架的参数是:"+workerDetailedParam.toString());
         //后期从token中获取用户Id
         Integer operatorId = getUserId(token);
         Integer id = workerDetailedParam.getId();
@@ -309,7 +310,11 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         Integer groupId = workerDetailedParam.getGroupId();
         String workerIp = workerDetailedParam.getWorkerIp();
         String remarks = workerDetailedParam.getRemarks();
-        Integer workerIds = Integer.valueOf(workerDetailedParam.getWorkerId());
+        Integer workerIds =null;
+        if(!StringUtils.isEmpty(workerDetailedParam.getWorkerId())){
+            workerIds = Integer.valueOf(workerDetailedParam.getWorkerId());
+        }
+
         if (StringUtils.isEmpty(workerIds)){
              workerIds = workerInfoMapper.selectWorkerIdByIp(workerIp, mineId);
         }
