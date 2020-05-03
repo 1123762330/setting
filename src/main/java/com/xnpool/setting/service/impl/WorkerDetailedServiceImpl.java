@@ -339,7 +339,7 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
                 OperatorWorkerHistory operatorWorkerHistory = new OperatorWorkerHistory();
                 operatorWorkerHistory.setMineId(mineId);
                 operatorWorkerHistory.setWorkerId(workerIds);
-                operatorWorkerHistory.setMoveOutTime(new Date());
+                operatorWorkerHistory.setMoveOutTime(null);
                 operatorWorkerHistory.setComeInTime(new Date());
                 operatorWorkerHistory.setReason("");
                 operatorWorkerHistory.setOperatorId(operatorId);
@@ -449,7 +449,6 @@ public class WorkerDetailedServiceImpl extends BaseController implements WorkerD
         //同时需要记录到历史表中
         List<Integer> workerIdList = new ArrayList<>();
         int rows = workerDetailedMapper.updateMoveOutByid(list);
-        List<WorkerDetailedRedisModel> redisModels = new ArrayList<>();
         List<WorkerDetailed> workerDetaileds = workerDetailedMapper.selectWorkerDetailedList(list);
         for (WorkerDetailed workerDetailed : workerDetaileds) {
             WorkerDetailedRedisModel workerDetailedRedisModel = getWorkerDetailedRedisModel(workerDetailed);

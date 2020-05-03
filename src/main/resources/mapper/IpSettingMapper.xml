@@ -55,4 +55,8 @@
             AND id!=#{id}
         </if>
     </select>
+
+    <select id="selectIpByMineId" resultType="java.lang.String">
+        select start_ip FROM ip_setting where  is_delete=0 AND mine_id=#{mineId}
+    </select>
 </mapper>

@@ -19,14 +19,17 @@ public class IpParam {
     private Integer mineId;
 
     //厂房数量
-    Integer factorySize;
+    private Integer factorySize;
+
+    //厂房编号
+    private Integer factoryNum;
 
     //机架数量
-    Integer frameSize;
+    private Integer frameSize;
 
     //起始ip
-    Integer ipbegin;
+    private Integer ipbegin;
 
     //终止ip
-    Integer ipend;
+    private Integer ipend;
 }

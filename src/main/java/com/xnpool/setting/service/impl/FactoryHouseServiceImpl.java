@@ -1,7 +1,9 @@
 package com.xnpool.setting.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DataExistException;
+import com.xnpool.logaop.service.exception.DataNotExistException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
@@ -135,8 +137,8 @@ public class FactoryHouseServiceImpl extends ServiceImpl<FactoryHouseMapper, Fac
     }
 
     @Override
-    public List<FactoryHouse> selectByMineId(int id) {
-        List<FactoryHouse> factoryHouses = factoryHouseMapper.selectByMineId(id);
+    public List<FactoryHouse> selectByMineId(int mineId) {
+        List<FactoryHouse> factoryHouses = factoryHouseMapper.selectByMineId(mineId);
         return factoryHouses;
     }
 
@@ -148,5 +150,18 @@ public class FactoryHouseServiceImpl extends ServiceImpl<FactoryHouseMapper, Fac
         FactoryHouseRedisModel factoryHouseRedisModel = baseController.getFactoryHouseRedisModel(factoryHouse);
         baseController.redisToInsert(rows, "factory_house", factoryHouseRedisModel, record.getMineId());
         return record.getId();
+    }
+
+    @Override
+    public ArrayList<Integer> selectFactoryNumList(Integer mineId) {
+        ArrayList<Integer> list = new ArrayList<>();
+        List<FactoryHouse> factoryHouses = factoryHouseMapper.selectByMineId(mineId);
+        factoryHouses.forEach(factoryHouse -> {
+            list.add(factoryHouse.getFactoryNum());
+        });
+        if (list.isEmpty()||factoryHouses.isEmpty()){
+            throw new DataNotExistException("该矿场下暂无厂房编号,请新增厂房配置");
+        }
+        return list;
     }
 }

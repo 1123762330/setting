@@ -74,7 +74,7 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 		String filePath = path.getParentFile().getParentFile().getParent() + File.separator + "extPath" + File.separator + "static" + File.separator;
 		//addResourceHandler是指你想在url请求的路径
 		//addResourceLocations是图片存放的真实路径
-		System.out.println("文件路径:"+filePath);
+		//System.out.println("文件路径:"+filePath);
 		//registry.addResourceHandler("/image/**").addResourceLocations("file:D://java-work/xnProject/setting/extPath/static/");
 		registry.addResourceHandler(prifix+"**").addResourceLocations(filePath);
 		registry.addResourceHandler(prifix_2+"**").addResourceLocations(filePath);

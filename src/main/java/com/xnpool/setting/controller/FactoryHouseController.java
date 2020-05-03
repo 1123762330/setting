@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -116,5 +117,18 @@ public class FactoryHouseController extends BaseController {
     public ResponseResult selectFactoryNameList(Integer mineId) {
         HashMap<Integer, String> resultMap = factoryHouseService.selectFactoryNameByMineId(mineId);
         return new ResponseResult(SUCCESS, resultMap);
+    }
+
+    /**
+     * @Description 查询厂房编号
+     * @Author zly
+     * @Date 17:59 2020/5/3
+     * @Param
+     * @return
+     */
+    @GetMapping("/selectFactoryNumList")
+    public ResponseResult selectFactoryNumList(Integer mineId) {
+        ArrayList<Integer> factoryNumList = factoryHouseService.selectFactoryNumList(mineId);
+        return new ResponseResult(SUCCESS, factoryNumList);
     }
 }

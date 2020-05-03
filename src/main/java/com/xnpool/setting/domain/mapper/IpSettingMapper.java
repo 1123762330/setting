@@ -24,4 +24,6 @@ public interface IpSettingMapper extends BaseMapper<IpSetting> {
     List<IpSettingExample> selectByOther(@Param("keyWord") String keyWord,@Param("mineId") Integer mineId, Page<IpSettingExample> page);
 
     List<String> selectNameList(@Param("id")Integer id);
+
+    List<String> selectIpByMineId(@Param("mineId")Integer mineId);
 }

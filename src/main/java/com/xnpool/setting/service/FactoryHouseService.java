@@ -6,6 +6,7 @@ import com.xnpool.setting.domain.model.FactoryHouseExample;
 import com.xnpool.setting.domain.pojo.FactoryHouse;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,4 +35,6 @@ public interface FactoryHouseService extends IService<FactoryHouse> {
     List<FactoryHouse> selectByMineId(int id);
 
     Integer insertSelectiveToBatch(FactoryHouse factoryHouse);
+
+    ArrayList<Integer> selectFactoryNumList(Integer mineId);
 }

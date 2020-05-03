@@ -134,6 +134,7 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
 
     @Override
     public void batchSaveIp(IpParam ipParam) {
+        Integer factoryNum = ipParam.getFactoryNum();
         Integer mineId = ipParam.getMineId();
         Integer factorySize = ipParam.getFactorySize();
         Integer frameSize = ipParam.getFrameSize();
@@ -150,6 +151,9 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
         //第一步,读取矿场所附带的ip前缀,+厂房递增+机架递增+ipbegin+ipend
         ArrayList<IpSetting> list = new ArrayList<>();
         MineSetting mineSetting = mineSettingMapper.selectById(mineId);
+        //查看已经添加了的ip有哪些
+        List<String> ipList = ipSettingMapper.selectIpByMineId(mineId);
+        //从矿场表里面直接获取ip前缀
         Integer ipPrefix = mineSetting.getIpPrefix();
         for (Integer i = 1; i <= factorySize; i++) {
             for (Integer j = 1; j <= frameSize; j++) {
@@ -163,7 +167,10 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
                 ipSetting.setUpdateTime(LocalDateTime.now());
                 ipSetting.setIsDelete(0);
                 ipSetting.setIsToInt(false);
-                list.add(ipSetting);
+                ipSetting.setFactoryNum(factoryNum);
+                if (!ipList.contains(startIp.toString())){
+                    list.add(ipSetting);
+                }
             }
         }
 

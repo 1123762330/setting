@@ -29,5 +29,5 @@ public interface FactoryHouseMapper extends BaseMapper<FactoryHouse> {
 
     Integer equalsFactoryNum(@Param("factoryNum")String factoryNum,@Param("mineId") Integer mineId);
 
-    List<FactoryHouse> selectByMineId(int id);
+    List<FactoryHouse> selectByMineId(@Param("mineId") int mineId);
 }

@@ -89,7 +89,7 @@ public class OperatorWorkerHistoryServiceImpl extends BaseController implements 
 
                 }
                 if (moveouttime != null) {
-                    long totalTime = (comeintime.getTime() - moveouttime.getTime()) / 1000;
+                    long totalTime = (moveouttime.getTime()-comeintime.getTime()) / 1000;
                     String DateTimes = calculTime(totalTime);
                     operatorWorkerHistoryExample.setTotalTime(DateTimes);
                 } else {
