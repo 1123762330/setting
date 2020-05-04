@@ -56,6 +56,7 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
 
     @Autowired
     private UserCenterAPI userCenterAPI;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer insertSelective(CustomerSetting record, String token) {
@@ -90,7 +91,7 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
         //这里需要解析token,然后拿到当前管理的Id,查询属于他的客户列表
         //这里后面合并需要做关联查询,查询客户的一些基本信息
         List<CustomerSettingExample> customerSettingExamples = new ArrayList<>();
-        Page<CustomerSettingExample> page = new Page<>(pageNum,pageSize);
+        Page<CustomerSettingExample> page = new Page<>(pageNum, pageSize);
         if (StringUtils.isEmpty(username) & StringUtils.isEmpty(agreementName) & StringUtils.isEmpty(groupName)) {
             customerSettingExamples = customerSettingMapper.selectByOther(page);
         } else {
@@ -105,7 +106,7 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
         cusLevelList.forEach(hashMap -> {
             Integer id = Integer.valueOf(hashMap.get("id").toString());
             String level = hashMap.get("level").toString();
-            cusLevelMap.put(id,level);
+            cusLevelMap.put(id, level);
         });
 
         if (authorize == 1) {
@@ -282,16 +283,19 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
         Integer userId_db = customerSettingMapper.selectAuthorizedToYes(Integer.valueOf(userId));
         log.info("userId_db是:" + userId_db);
         String access_token = "";
-        if (Integer.valueOf(userId) == userId_db) {
-            //用户一致,可以发送授权token
-            JSONObject jsonObject = userCenterAPI.authorizeToken(userId);
-            log.info("fegin请求返回的数据:" + jsonObject);
-            if (!StringUtils.isEmpty(jsonObject)) {
-                access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
-
-            }
+        if (userId_db == null) {
+            throw new CheckException("该用户还未通过审核认证,请先认证");
         } else {
-            throw new CheckException("该用户和你不属于同一个企业");
+            if (Integer.valueOf(userId) == userId_db) {
+                //用户一致,可以发送授权token
+                JSONObject jsonObject = userCenterAPI.authorizeToken(userId);
+                log.info("fegin请求返回的数据:" + jsonObject);
+                if (!StringUtils.isEmpty(jsonObject)) {
+                    access_token = JSONPath.eval(jsonObject, "$.datas.access_token").toString();
+                }
+            } else {
+                throw new CheckException("该用户和你不属于同一个企业");
+            }
         }
         return access_token;
     }
@@ -344,8 +348,8 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
             }
         });
         HashMap<String, HashSet<String>> resultMap = new HashMap<>();
-        resultMap.put("groupList",groupSet);
-        resultMap.put("agreementList",agreementSet);
+        resultMap.put("groupList", groupSet);
+        resultMap.put("agreementList", agreementSet);
         return resultMap;
     }
 

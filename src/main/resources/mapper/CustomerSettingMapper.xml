@@ -126,7 +126,8 @@
         FROM
         customer_setting
         WHERE
-        user_id = #{userId}
+        is_delete=0
+        AND user_id = #{userId}
         AND authentication =1
     </select>
 
