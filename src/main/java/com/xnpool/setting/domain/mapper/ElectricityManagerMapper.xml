@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.ElectricityManagerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.ElectricityManager">
+        <id column="id" property="id" />
+        <result column="customer_id" property="customerId" />
+        <result column="user_id" property="userId" />
+        <result column="type" property="type" />
+        <result column="bill_type" property="billType" />
+        <result column="factory_id" property="factoryId" />
+        <result column="meter_id" property="meterId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="tenant_id" property="tenantId" />
+        <result column="mine_id" property="mineId" />
+        <result column="is_delete" property="isDelete" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, customer_id, user_id, type, bill_type, factory_id, meter_id, create_time, update_time, tenant_id, mine_id, is_delete
+    </sql>
+
+</mapper>

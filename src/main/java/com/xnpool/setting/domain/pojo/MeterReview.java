@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,65 +21,41 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ElectricityMeterSetting implements Serializable {
+@TableName("z_meter_review")
+public class MeterReview implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -3319744091256678449L;
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 电表名称
+     * 电表id
      */
-    private String electricityMeterName;
+    private Integer electricityId;
 
     /**
-     * 所属矿场
+     * 起码
      */
-    private Integer mineId;
+    private Double start;
 
     /**
-     * 所属厂房
+     * 止码
      */
-    private Integer factoryId;
+    private Double end;
 
     /**
-     * 初始码数
+     * 用电量
      */
-    private String electricityStart;
+    private Double usePower;
 
     /**
-     * 当前止码
+     * 拍照图片路径
      */
-    private String nowCode;
-
-    /**
-     * 上次起码
-     */
-    private String lastCode;
+    private String path;
 
     /**
      * 抄表时间
-     */
-    private LocalDateTime readingTime;
-
-    /**
-     * 线损
-     */
-    private Double lineLoss;
-
-    /**
-     * 倍率
-     */
-    private Integer multiple;
-
-    /**
-     * 是否删除,0:否,1:是
-     */
-    private Integer isDelete;
-
-    /**
-     * 创建时间
      */
     private LocalDateTime createTime;
 
@@ -85,6 +63,11 @@ public class ElectricityMeterSetting implements Serializable {
      * 修改时间
      */
     private LocalDateTime updateTime;
+
+    /**
+     * 是否删除,0:否,1:是
+     */
+    private Integer isDelete;
 
     /**
      * 企业id

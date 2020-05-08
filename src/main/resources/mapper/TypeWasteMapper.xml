@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.TypeWasteMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.TypeWaste">
+        <id column="id" property="id" />
+        <result column="brand" property="brand" />
+        <result column="type" property="type" />
+        <result column="waste" property="waste" />
+        <result column="is_delete" property="isDelete" />
+        <result column="mine_id" property="mineId" />
+        <result column="is_open" property="isOpen" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, brand, type, waste, is_delete, mine_id, is_open, create_time, update_time, tenant_id
+    </sql>
+
+
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.model.TypeWasteExample">
+        SELECT
+            z_type_waste.id,
+            z_type_waste.brand,
+            z_type_waste.type,
+            z_type_waste.waste,
+            z_type_waste.mine_id,
+            mine_setting.mine_name,
+            z_type_waste.is_open
+        FROM
+            z_type_waste,
+            mine_setting
+        WHERE
+            z_type_waste.is_delete = 0
+            AND z_type_waste.mine_id = mine_setting.id
+    </select>
+
+</mapper>

@@ -1,36 +1,28 @@
 package com.xnpool.setting.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
 import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/2/7 15:38
+ * @since 2020-05-04
  */
-public interface ElectricityMeterSettingService {
+public interface ElectricityMeterSettingService extends IService<ElectricityMeterSetting> {
 
+    int insertSelective(ElectricityMeterSetting electricityMeterSetting);
 
-    int deleteByPrimaryKey(Integer id);
+    int updateByPrimaryKeySelective(ElectricityMeterSetting electricityMeterSetting);
 
-    int insert(ElectricityMeterSetting record);
+    int deleteById(int id);
 
-    int insertSelective(ElectricityMeterSetting record);
+    Page<ElectricityMeterSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
 
-    ElectricityMeterSetting selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(ElectricityMeterSetting record);
-
-    int updateByPrimaryKey(ElectricityMeterSetting record);
-
-    void updateById(int id);
-
-    PageInfo<ElectricityMeterSettingExample> selectByOther(String keyWord, int pageNum, int pageSize);
+    String generateQRCodeImage(Integer id);
 }
-
-
-
-
-
-

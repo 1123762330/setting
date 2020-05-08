@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnpool.setting.domain.mapper.MeterReviewMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.MeterReview">
+        <id column="id" property="id" />
+        <result column="electricity_id" property="electricityId" />
+        <result column="start" property="start" />
+        <result column="end" property="end" />
+        <result column="use_power" property="usePower" />
+        <result column="path" property="path" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, electricity_id, start, end, use_power, path, create_time, update_time, is_delete, tenant_id
+    </sql>
+
+    <select id="selectByOther" resultType="com.xnpool.setting.domain.model.MeterReviewExample">
+        SELECT
+            z_meter_review.id,
+            z_meter_review.electricity_id,
+            factory_house.factory_name,
+            electricity_meter_setting.electricity_meter_name,
+            z_meter_review.`start`,
+            z_meter_review.`end`,
+            electricity_meter_setting.multiple,
+            z_meter_review.use_power,
+            z_meter_review.path,
+            z_meter_review.create_time
+        FROM
+            z_meter_review,
+            electricity_meter_setting,
+            factory_house
+        WHERE
+            z_meter_review.is_delete = 0
+            AND z_meter_review.electricity_id = electricity_meter_setting.id
+            AND electricity_meter_setting.factory_id = factory_house.id
+    </select>
+
+    <update id="deleteByKeyId">
+        update z_meter_review set is_delete = 1 where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <insert id="batchSave">
+        INSERT INTO z_meter_review(electricity_id, `start`, `end`, use_power, path, create_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.electricityId,jdbcType=INTEGER},#{item.start,jdbcType=DOUBLE},#{item.end,jdbcType=DOUBLE},#{item.usePower,jdbcType=DOUBLE},
+            #{item.path,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+</mapper>

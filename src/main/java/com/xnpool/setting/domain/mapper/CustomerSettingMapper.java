@@ -36,4 +36,6 @@ public interface CustomerSettingMapper extends BaseMapper<CustomerSetting> {
     Integer selectAuthorizedToYes(Integer valueOf);
 
     List<HashMap> selectCusLevelList();
+
+    List<CustomerSetting> selectCustomerById(List<String> cusIdlist);
 }

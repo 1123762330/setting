@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 
 /**
@@ -94,5 +95,19 @@ public class PowerSettingController extends BaseController {
         String token = writeLogUtil.getToken(request);
         PageInfo<PowerSettingExample> pageInfo = powerSettingService.selectByOther(keyWord, pageNum, pageSize,token);
         return new ResponseResult(SUCCESS, pageInfo);
+    }
+
+    /**
+     * @Description 查询电费单价下拉列表
+     * @Author zly
+     * @Date 14:57 2020/5/4
+     * @Param
+     * @return
+     */
+    @SystemLog(value = "查询电费单价下拉列表",type = LogType.SYSTEM)
+    @GetMapping("/selectPowerPriceList")
+    public ResponseResult selectPowerPriceList() {
+        HashMap<Integer, String> resultMap = powerSettingService.selectPowerPriceList();
+        return new ResponseResult(SUCCESS,resultMap);
     }
 }

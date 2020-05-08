@@ -114,7 +114,8 @@ public class CodeGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);    //表名生成策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略, 未指定按照 naming 执行
         //strategy.setCapitalMode(true);            // 全局大写命名 ORACLE 注意
-        //strategy.setTablePrefix(new String[]{"sys_"});// 此处可以修改为您的表前缀
+        strategy.setTablePrefix("t_");// 此处可以修改为您的表前缀
+        //strategy.setTablePrefix(pc.getModuleName() + "_");    //是否生成实体时，生成字段注解
         //strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");    //自定义继承的Entity类全称，带包名
         //strategy.setSuperEntityColumns(new String[]{"test_id", "age"});    //自定义实体，公共字段
         strategy.setEntityLombokModel(true);    //【实体】是否为lombok模型（默认 false
@@ -124,7 +125,6 @@ public class CodeGenerator {
         //strategy.setInclude(new String[] { "user" }); // 需要生成的表可以多张表
         //strategy.setExclude(new String[]{"test"}); // 排除生成的表
         strategy.setControllerMappingHyphenStyle(true);    //驼峰转连字符
-        strategy.setTablePrefix(pc.getModuleName() + "_");    //是否生成实体时，生成字段注解
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();

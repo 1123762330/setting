@@ -44,12 +44,7 @@ public class ElectricityMeterSettingExample implements Serializable {
     /**
      * 所属客户
      */
-    private Integer customerId;
-
-    /**
-     * 所属客户姓名
-     */
-    private String userName;
+    private Integer multiple;
 
     /**
      * 初始码数
@@ -59,5 +54,5 @@ public class ElectricityMeterSettingExample implements Serializable {
     /**
      * 线损
      */
-    private Double lineLoss;
+    private String lineLoss;
 }

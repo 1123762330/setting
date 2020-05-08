@@ -4,19 +4,19 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.xnpool.setting.domain.pojo.CustomerSetting">
-        <id column="id" property="id" />
-        <result column="user_id" property="userId" />
-        <result column="agreement_id" property="agreementId" />
-        <result column="group_id" property="groupId" />
-        <result column="authentication" property="authentication" />
-        <result column="is_watch" property="isWatch" />
-        <result column="remarks" property="remarks" />
-        <result column="is_delete" property="isDelete" />
-        <result column="create_time" property="createTime" />
-        <result column="update_time" property="updateTime" />
-        <result column="manager_user_id" property="managerUserId" />
-        <result column="cus_level_id" property="cusLevelId" />
-        <result column="tenant_id" property="tenantId" />
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="agreement_id" property="agreementId"/>
+        <result column="group_id" property="groupId"/>
+        <result column="authentication" property="authentication"/>
+        <result column="is_watch" property="isWatch"/>
+        <result column="remarks" property="remarks"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="manager_user_id" property="managerUserId"/>
+        <result column="cus_level_id" property="cusLevelId"/>
+        <result column="tenant_id" property="tenantId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -62,16 +62,20 @@
             customer_setting.authentication,
             customer_setting.is_watch,
             customer_setting.manager_user_id,
-            customer_setting.cus_level_id
+            customer_setting.cus_level_id,
+            power_setting.id AS powerId,
+            power_setting.price
         FROM
             customer_setting,
             sys_user,
-            sys_tenant
-        where
+            sys_tenant,
+            power_setting
+        WHERE
             customer_setting.is_delete = 0
             AND customer_setting.user_id = sys_user.id
+            AND customer_setting.power_id = power_setting.id
             AND customer_setting.tenant_id = sys_tenant.id
-            AND authentication!=2
+            AND authentication != 2
     </select>
 
     <!--  修改企业认证-->
@@ -139,5 +143,15 @@
             t_customer_level
         WHERE
             is_delete =0
+    </select>
+
+    <select id="selectCustomerById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_setting
+        where id in
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
     </select>
 </mapper>

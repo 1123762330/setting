@@ -154,12 +154,15 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
         //查看已经添加了的ip有哪些
         List<String> ipList = ipSettingMapper.selectIpByMineId(mineId);
         //从矿场表里面直接获取ip前缀
-        Integer ipPrefix = mineSetting.getIpPrefix();
+        String ipPrefix ="0";
+        if (!StringUtils.isEmpty( mineSetting.getIpPrefix())){
+            ipPrefix=String.valueOf(mineSetting.getIpPrefix());
+        }
         for (Integer i = 1; i <= factorySize; i++) {
             for (Integer j = 1; j <= frameSize; j++) {
                 IpSetting ipSetting = new IpSetting();
-                StringBuffer startIp = new StringBuffer(ipPrefix).append(".").append(i).append(".").append(j).append(ipbegin);
-                StringBuffer endIp = new StringBuffer(ipPrefix).append(".").append(i).append(".").append(j).append(ipend);
+                StringBuffer startIp = new StringBuffer(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipbegin);
+                StringBuffer endIp = new StringBuffer(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipend);
                 ipSetting.setStartIp(startIp.toString());
                 ipSetting.setEndIp(endIp.toString());
                 ipSetting.setMineId(mineId);

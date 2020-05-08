@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xnpool.setting.domain.model.PowerSettingExample;
 import com.xnpool.setting.domain.pojo.PowerSetting;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,6 +30,8 @@ public interface PowerSettingService {
     int updateById(int id);
 
     PageInfo<PowerSettingExample> selectByOther(String keyWord, int pageNum, int pageSize,String token);
+
+    HashMap<Integer, String> selectPowerPriceList();
 }
 
 

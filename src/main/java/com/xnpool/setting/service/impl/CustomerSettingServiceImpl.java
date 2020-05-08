@@ -8,9 +8,11 @@ import com.xnpool.logaop.service.exception.CheckException;
 import com.xnpool.logaop.service.exception.DataExistException;
 import com.xnpool.setting.common.BaseController;
 import com.xnpool.setting.config.ApiContext;
+import com.xnpool.setting.domain.mapper.ElectricityManagerMapper;
 import com.xnpool.setting.domain.model.CustomerSettingExample;
 import com.xnpool.setting.domain.pojo.CustomerSetting;
 import com.xnpool.setting.domain.mapper.CustomerSettingMapper;
+import com.xnpool.setting.domain.pojo.ElectricityManager;
 import com.xnpool.setting.fegin.UserCenterAPI;
 import com.xnpool.setting.service.AgreementSettingService;
 import com.xnpool.setting.service.CustomerSettingService;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +59,9 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
 
     @Autowired
     private UserCenterAPI userCenterAPI;
+
+    @Autowired
+    private ElectricityManagerMapper electricityManagerMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -194,15 +200,30 @@ public class CustomerSettingServiceImpl extends ServiceImpl<CustomerSettingMappe
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateAttestationById(String cusId, int isPass) {
+        List<String> cusIdlist = new ArrayList<>();
         if (cusId.contains(",")) {
             String[] split = cusId.split(",");
-            List<String> cusIdlist = Arrays.asList(split);
+            cusIdlist = Arrays.asList(split);
             customerSettingMapper.updateAttestationById(cusIdlist, isPass);
         } else {
-            List<String> cusIdlist = new ArrayList<>();
             cusIdlist.add(cusId);
             customerSettingMapper.updateAttestationById(cusIdlist, isPass);
+        }
+
+        //只有授权为1时,才会添加数据到t_electricity_manager表中
+        if (isPass==1){
+            List<CustomerSetting> customerSettingList = customerSettingMapper.selectCustomerById(cusIdlist);
+            customerSettingList.forEach(customerSetting -> {
+                Integer userId = customerSetting.getUserId();
+                Integer id = customerSetting.getId();
+                ElectricityManager electricityManager = new ElectricityManager();
+                electricityManager.setCustomerId(Long.valueOf(id));
+                electricityManager.setUserId(Long.valueOf(userId));
+                electricityManager.setCreateTime(LocalDateTime.now());
+                electricityManagerMapper.insert(electricityManager);
+            });
         }
 
     }

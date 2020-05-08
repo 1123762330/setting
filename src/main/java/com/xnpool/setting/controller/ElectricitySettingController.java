@@ -1,18 +1,26 @@
 package com.xnpool.setting.controller;
 
-import com.github.pagehelper.PageInfo;
 
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.zxing.WriterException;
 import com.xnpool.logaop.annotation.SystemLog;
+import com.xnpool.logaop.service.exception.CheckException;
+import com.xnpool.logaop.service.exception.IOException;
+import com.xnpool.logaop.service.exception.ServiceException;
 import com.xnpool.logaop.util.LogType;
 import com.xnpool.logaop.util.ResponseResult;
+import com.xnpool.logaop.util.WriteLogUtil;
 import com.xnpool.setting.common.BaseController;
-import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
 import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
 import com.xnpool.setting.service.ElectricityMeterSettingService;
+import com.xnpool.setting.utils.QRCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 电表设置
@@ -23,10 +31,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/electricityMeter")
-public class ElectricityMeterController extends BaseController {
+public class ElectricitySettingController extends BaseController {
     @Autowired
     private ElectricityMeterSettingService electricityMeterSettingService;
 
+    @Autowired
+    private WriteLogUtil writeLogUtil;
     /**
      * @Description 添加电表设置
      * @Author zly
@@ -65,7 +75,7 @@ public class ElectricityMeterController extends BaseController {
     @SystemLog(value = "删除电表设置",type = LogType.SYSTEM)
     @DeleteMapping("/deleteElectricityMeter")
     public ResponseResult deleteElectricityMeter(int id) {
-        electricityMeterSettingService.updateById(id);
+        electricityMeterSettingService.deleteById(id);
         return new ResponseResult(SUCCESS);
     }
 
@@ -81,7 +91,21 @@ public class ElectricityMeterController extends BaseController {
     public ResponseResult selectElectricityMeter(@RequestParam(value = "keyWord", required = false, defaultValue = "") String keyWord,
                                                  @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                                  @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
-        PageInfo<ElectricityMeterSettingExample> pageInfo = electricityMeterSettingService.selectByOther(keyWord, pageNum, pageSize);
-        return new ResponseResult(SUCCESS,pageInfo);
+        Page<ElectricityMeterSettingExample> page = electricityMeterSettingService.selectByOther(keyWord, pageNum, pageSize);
+        return new ResponseResult(SUCCESS,page);
+    }
+
+    /**
+     * @Description 生成二维码
+     * @Author zly
+     * @Date 16:44 2020/5/4
+     * @Param
+     * @return
+     */
+    @SystemLog(value = "生成电表二维码",type = LogType.SYSTEM)
+    @GetMapping("/generateQRCodeImage")
+    public ResponseResult generateQRCodeImage(Integer id){
+        String path = electricityMeterSettingService.generateQRCodeImage(id);
+        return new ResponseResult(SUCCESS,null,path);
     }
 }

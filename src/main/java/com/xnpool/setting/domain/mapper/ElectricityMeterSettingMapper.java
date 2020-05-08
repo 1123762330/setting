@@ -1,28 +1,29 @@
 package com.xnpool.setting.domain.mapper;
 
-import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xnpool.setting.domain.model.ElectricityMeterSettingExample;
+import com.xnpool.setting.domain.pojo.ElectricityMeterSetting;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
  * @author zly
- * @version 1.0
- * @date 2020/3/5 20:52
+ * @since 2020-05-04
  */
-public interface ElectricityMeterSettingMapper {
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(ElectricityMeterSetting record);
-
-    int insertSelective(ElectricityMeterSetting record);
-
-    ElectricityMeterSetting selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(ElectricityMeterSetting record);
-
-    int updateByPrimaryKey(ElectricityMeterSetting record);
-
-    void updateById(int id);
-
-    List<ElectricityMeterSettingExample> selectByOther(@Param("keyWord") String keyWord);
+public interface ElectricityMeterSettingMapper extends BaseMapper<ElectricityMeterSetting> {
 
     List<String> selectNameList(@Param("id") Integer id);
+
+    int deleteByKeyId(int id);
+
+    List<ElectricityMeterSettingExample> selectByOther(@Param("keyWord") String keyWord, Page<ElectricityMeterSettingExample> page);
+
+    HashMap selectOtherById(Integer id);
 }

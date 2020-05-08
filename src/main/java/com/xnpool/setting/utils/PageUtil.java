@@ -46,8 +46,8 @@ public class PageUtil {
             resultMap.put("total", count);
             resultMap.put("pages", pageCount);
             resultMap.put("records", null);
-            resultMap.put("pageNum", pageNum);
-            resultMap.put("pageSize", pageSize);
+            resultMap.put("current", pageNum);
+            resultMap.put("size", pageSize);
             return resultMap;
         }
 
@@ -62,8 +62,8 @@ public class PageUtil {
         resultMap.put("total", count);
         resultMap.put("pages", pageCount);
         resultMap.put("records", pageList);
-        resultMap.put("pageNum", pageNum);
-        resultMap.put("pageSize", pageSize);
+        resultMap.put("current", pageNum);
+        resultMap.put("size", pageSize);
         return resultMap;
 
     }

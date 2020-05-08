@@ -78,6 +78,16 @@ public class CustomerSettingExample implements Serializable {
     private Integer cusLevelId;
 
     /**
+     * 电费id
+     */
+    private Integer powerId;
+
+    /**
+     * 电费单价
+     */
+    private Double price;
+
+    /**
      * 客户级别
      */
     private String level;

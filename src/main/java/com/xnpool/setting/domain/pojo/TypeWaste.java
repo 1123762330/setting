@@ -1,5 +1,6 @@
 package com.xnpool.setting.domain.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
@@ -14,22 +15,41 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author zly
- * @since 2020-05-04
+ * @since 2020-05-05
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ElectricityMeterSetting implements Serializable {
+@TableName("z_type_waste")
+public class TypeWaste implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 型号功耗id
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 电表名称
+     * 品牌
      */
-    private String electricityMeterName;
+    private String brand;
+
+    /**
+     * 型号
+     */
+    private String type;
+
+    /**
+     * 功耗
+     */
+    private Integer waste;
+
+    /**
+     * 是否删除 0未删除 1 已删除
+     */
+    private Integer isDelete;
 
     /**
      * 所属矿场
@@ -37,44 +57,9 @@ public class ElectricityMeterSetting implements Serializable {
     private Integer mineId;
 
     /**
-     * 所属厂房
+     * 是否启用,0:启用,1:禁用
      */
-    private Integer factoryId;
-
-    /**
-     * 初始码数
-     */
-    private String electricityStart;
-
-    /**
-     * 当前止码
-     */
-    private String nowCode;
-
-    /**
-     * 上次起码
-     */
-    private String lastCode;
-
-    /**
-     * 抄表时间
-     */
-    private LocalDateTime readingTime;
-
-    /**
-     * 线损
-     */
-    private Double lineLoss;
-
-    /**
-     * 倍率
-     */
-    private Integer multiple;
-
-    /**
-     * 是否删除,0:否,1:是
-     */
-    private Integer isDelete;
+    private Integer isOpen;
 
     /**
      * 创建时间

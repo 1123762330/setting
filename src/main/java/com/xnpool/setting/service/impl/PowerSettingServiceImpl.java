@@ -115,6 +115,16 @@ public class PowerSettingServiceImpl implements PowerSettingService {
         return pageInfo;
     }
 
+    @Override
+    public HashMap<Integer, String> selectPowerPriceList() {
+        HashMap<Integer, String> resultMap = new HashMap<>();
+        List<PowerSetting> powerSettings = powerSettingMapper.selectByOther(null);
+        for (PowerSetting powerSetting : powerSettings) {
+            resultMap.put(powerSetting.getId(),powerSetting.getPrice()+"-"+powerSetting.getDescription());
+        }
+        return resultMap;
+    }
+
 }
 
 

@@ -84,6 +84,11 @@ public class CustomerSetting implements Serializable {
     private Integer cusLevelId;
 
     /**
+     * 电费id
+     */
+    private Integer powerId;
+
+    /**
      * 企业id
      */
     private Long tenantId;
