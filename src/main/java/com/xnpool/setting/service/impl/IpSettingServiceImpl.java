@@ -158,11 +158,24 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
         if (!StringUtils.isEmpty( mineSetting.getIpPrefix())){
             ipPrefix=String.valueOf(mineSetting.getIpPrefix());
         }
+
+        int num=factoryNum-1;
         for (Integer i = 1; i <= factorySize; i++) {
+            num = num + 1;
             for (Integer j = 1; j <= frameSize; j++) {
                 IpSetting ipSetting = new IpSetting();
-                StringBuffer startIp = new StringBuffer(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipbegin);
-                StringBuffer endIp = new StringBuffer(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipend);
+
+                StringBuffer startIp =new StringBuffer();
+                StringBuffer endIp =new StringBuffer();
+                if (factoryNum==0){
+                    //如果厂房编号为0,那就代表从1开始
+                    startIp = startIp.append(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipbegin);
+                    endIp = endIp.append(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipend);
+                }else {
+                    //如果厂房编号为选中的数字,那就代表从选中的数字开始递增
+                    startIp = startIp.append(ipPrefix).append(".").append(num).append(".").append(j).append(".").append(ipbegin);
+                    endIp = endIp.append(ipPrefix).append(".").append(num).append(".").append(j).append(".").append(ipend);
+                }
                 ipSetting.setStartIp(startIp.toString());
                 ipSetting.setEndIp(endIp.toString());
                 ipSetting.setMineId(mineId);

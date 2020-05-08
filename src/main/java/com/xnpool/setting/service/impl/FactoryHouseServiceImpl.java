@@ -155,12 +155,12 @@ public class FactoryHouseServiceImpl extends ServiceImpl<FactoryHouseMapper, Fac
     @Override
     public ArrayList<Integer> selectFactoryNumList(Integer mineId) {
         ArrayList<Integer> list = new ArrayList<>();
+        list.add(0);
         List<FactoryHouse> factoryHouses = factoryHouseMapper.selectByMineId(mineId);
-        factoryHouses.forEach(factoryHouse -> {
-            list.add(factoryHouse.getFactoryNum());
-        });
-        if (list.isEmpty()||factoryHouses.isEmpty()){
-            throw new DataNotExistException("该矿场下暂无厂房编号,请新增厂房配置");
+        if(factoryHouses!=null&&!factoryHouses.isEmpty()){
+            factoryHouses.forEach(factoryHouse -> {
+                list.add(factoryHouse.getFactoryNum());
+            });
         }
         return list;
     }
