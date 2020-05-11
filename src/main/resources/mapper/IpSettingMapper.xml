@@ -34,7 +34,7 @@
         ip_setting.mine_id,
         mine_setting.mine_name,
         ip_setting.is_to_int,
-        ip_setting.factory_num,
+        ip_setting.factory_num
         from ip_setting,
         mine_setting
         <where>

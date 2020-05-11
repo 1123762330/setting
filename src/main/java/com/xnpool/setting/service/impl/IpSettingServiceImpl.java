@@ -171,10 +171,12 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
                     //如果厂房编号为0,那就代表从1开始
                     startIp = startIp.append(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipbegin);
                     endIp = endIp.append(ipPrefix).append(".").append(i).append(".").append(j).append(".").append(ipend);
+                    ipSetting.setFactoryNum(i);
                 }else {
                     //如果厂房编号为选中的数字,那就代表从选中的数字开始递增
                     startIp = startIp.append(ipPrefix).append(".").append(num).append(".").append(j).append(".").append(ipbegin);
                     endIp = endIp.append(ipPrefix).append(".").append(num).append(".").append(j).append(".").append(ipend);
+                    ipSetting.setFactoryNum(num);
                 }
                 ipSetting.setStartIp(startIp.toString());
                 ipSetting.setEndIp(endIp.toString());
@@ -183,7 +185,6 @@ public class IpSettingServiceImpl extends ServiceImpl<IpSettingMapper, IpSetting
                 ipSetting.setUpdateTime(LocalDateTime.now());
                 ipSetting.setIsDelete(0);
                 ipSetting.setIsToInt(false);
-                ipSetting.setFactoryNum(factoryNum);
                 if (!ipList.contains(startIp.toString())){
                     list.add(ipSetting);
                 }
