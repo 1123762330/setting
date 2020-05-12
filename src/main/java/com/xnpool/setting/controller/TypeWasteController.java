@@ -90,7 +90,7 @@ public class TypeWasteController extends BaseController {
     @SystemLog(value = "矿场型号功耗列表",type = LogType.SYSTEM)
     @GetMapping("/list")
     public ResponseResult selectList(@RequestParam(value = "mineName", required = false, defaultValue = "") String mineName,
-                                     @RequestParam(value = "isOpen", required = false, defaultValue = "1") String isOpen,
+                                     @RequestParam(value = "isOpen", required = false, defaultValue = "") String isOpen,
                                      @RequestParam(value = "brand", required = false, defaultValue = "") String brand,
                                           @RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
