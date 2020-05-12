@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -96,5 +97,18 @@ public class TypeWasteController extends BaseController {
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize) {
         Object typeWastePage = typeWasteService.selectByOther(mineName,isOpen,brand, pageNum, pageSize);
         return new ResponseResult(SUCCESS, typeWastePage);
+    }
+
+    /**
+     * @Description 功耗列表下拉搜索
+     * @Author zly
+     * @Date 15:33 2020/5/12
+     * @Param
+     * @return
+     */
+    @GetMapping("/drop_list")
+    public ResponseResult drop_list() {
+        HashMap<String, Object> resultMap = typeWasteService.drop_list();
+        return new ResponseResult(SUCCESS, resultMap);
     }
 }

@@ -5,6 +5,8 @@ import com.xnpool.setting.domain.model.TypeWasteExample;
 import com.xnpool.setting.domain.pojo.TypeWaste;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.HashMap;
+
 /**
  * <p>
  *  服务类
@@ -16,4 +18,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface TypeWasteService extends IService<TypeWaste> {
 
     Object selectByOther(String mineName, String isOpen, String brand, int pageNum, int pageSize);
+
+    HashMap<String, Object> drop_list();
 }

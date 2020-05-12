@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,5 +56,20 @@ public class TypeWasteServiceImpl extends ServiceImpl<TypeWasteMapper, TypeWaste
             return startPage;
         }
 
+    }
+
+    @Override
+    public HashMap<String, Object> drop_list() {
+        HashSet<String> mineNameSet = new HashSet<>();
+        HashSet<String> brandSet = new HashSet<>();
+        List<TypeWasteExample> TypeWasteList = typeWasteMapper.selectByOther(null);
+        TypeWasteList.forEach(typeWasteExample -> {
+            mineNameSet.add(typeWasteExample.getMineName());
+            brandSet.add(typeWasteExample.getBrand());
+        });
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("mineName",mineNameSet);
+        resultMap.put("brand",brandSet);
+        return resultMap;
     }
 }
