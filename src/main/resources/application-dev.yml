@@ -144,7 +144,7 @@ zlt:
       - workerbrand_setting
     ignoreSqls:
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.selectTenantList
-      - com.xnpool.setting.domain.mapper.CustomerSettingMapper.insertSelective
+      - com.xnpool.setting.domain.mapper.CustomerSettingMapper.insert
       - com.xnpool.setting.domain.mapper.CustomerSettingMapper.deleteAuthority
 
 ---
